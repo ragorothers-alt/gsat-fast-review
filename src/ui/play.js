@@ -1,13 +1,15 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, schedule, shuffle } from '../srs.js';
-import { MODES, advance, createSession, current, isCorrect, submit, tick, multiplier } from '../session.js';
+import { MODES, advance, createSession, current, extend, isCorrect, submit, tick, multiplier } from '../session.js';
 import { recordAnswer, today } from '../stats.js';
 import { richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
 
 const RIGHT_DELAY = 650;
 const SWIPE_THRESHOLD = 80;
+/** 自由練習補題時，最近答過的幾題先不出 */
+const RECENT = 8;
 
 export function initPlay(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -37,13 +39,24 @@ export function initPlay(ctx) {
   let raf = 0;
   let lastT = 0;
 
-  ctx.startRound = (mode) => {
+  /** 依目前選的單元組一批題目；exclude 是這批先不出的題目 id */
+  function queueFor(mode, { subjects = ctx.state.settings.subjects, exclude = [] } = {}) {
     const cfg = MODES[mode];
-    const opts = { formulaOnly: cfg.formulaOnly, weakOnly: cfg.weakOnly, size: cfg.size, now: Date.now() };
-    const { subjects, excludedUnits } = ctx.state.settings;
-    let queue = buildQueue(ctx.bank, ctx.state.cards, { ...opts, subjects, excludedUnits });
+    return buildQueue(ctx.bank, ctx.state.cards, {
+      subjects,
+      excludedUnits: ctx.state.settings.excludedUnits,
+      exclude,
+      formulaOnly: cfg.formulaOnly,
+      weakOnly: cfg.weakOnly,
+      size: cfg.size,
+      now: Date.now(),
+    });
+  }
+
+  ctx.startRound = (mode) => {
+    let queue = queueFor(mode);
     if (!queue.length && mode === 'formula') {
-      queue = buildQueue(ctx.bank, ctx.state.cards, { ...opts, subjects: SUBJECTS.map((x) => x.id), excludedUnits });
+      queue = queueFor(mode, { subjects: SUBJECTS.map((x) => x.id) });
       if (queue.length) ctx.toast('選的科目沒有公式題，改出全部科目的公式題');
     }
     if (!queue.length) {
@@ -91,11 +104,13 @@ export function initPlay(ctx) {
     el.explain.hidden = true;
     el.next.hidden = true;
     el.skip.hidden = false;
-    el.progress.textContent = s.timeLeft === null ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
+    const counted = s.timeLeft === null && !MODES[s.mode].endless;
+    el.progress.textContent = counted ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
     el.card.classList.toggle('swipeable', q.type === 'tf');
     resetCardDrag();
     restartAnimation(el.card, 'enter');
     renderAnswers();
+    ctx.scratch.newPage();
     ctx.world.setFocusSubject(q.subject);
     if (s.timeLeft !== null) renderTimer();
   }
@@ -164,24 +179,24 @@ export function initPlay(ctx) {
     ctx.world.setCombo(s.combo);
 
     const color = SUBJECT_BY_ID[q.subject].color;
+    ctx.world.react(outcome);
+    ctx.scratch.answered();
     if (outcome === 'right') {
       const rect = buttonFor(correctValue).getBoundingClientRect();
       ctx.world.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, color, 30 + Math.min(s.combo, 10) * 4);
-      ctx.world.react('right');
       sfx.right(s.combo);
       showPop(`+${points}`);
-      el.skip.hidden = true;
-      autoNext = setTimeout(next, RIGHT_DELAY);
-      return;
-    }
-
-    if (outcome === 'wrong') {
+      if (!MODES[s.mode].explainAlways) {
+        el.skip.hidden = true;
+        autoNext = setTimeout(next, RIGHT_DELAY);
+        return;
+      }
+    } else if (outcome === 'wrong') {
       ctx.world.shake();
       sfx.wrong();
       restartAnimation(el.flash, 'on');
       restartAnimation(el.card, 'shake');
     }
-    ctx.world.react(outcome);
     el.explain.innerHTML = `<b>💡 ${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
@@ -194,8 +209,15 @@ export function initPlay(ctx) {
   function next() {
     clearTimeout(autoNext);
     if (phase !== 'feedback') return;
+    if (MODES[s.mode].endless && s.index + 1 >= s.queue.length) refill();
     if (!advance(s)) return finish();
     showQuestion();
+  }
+
+  /** 自由練習：出完一批就再組一批；剛答過的先不出，題目太少時才允許重複 */
+  function refill() {
+    const more = queueFor(s.mode, { exclude: s.log.slice(-RECENT).map((e) => e.id) });
+    extend(s, more.length ? more : queueFor(s.mode));
   }
 
   function finish() {
@@ -261,9 +283,10 @@ export function initPlay(ctx) {
     if (active && Math.abs(dx) >= SWIPE_THRESHOLD && phase === 'answering') {
       const outcome = choose(dx > 0);
       el.card.classList.remove('dragging');
-      // 答對就讓卡片順勢飛出；答錯拉回中間看解析
+      // 答對且馬上換題就讓卡片順勢飛出；要看解析的拉回中間
       const dir = Math.sign(dx);
-      el.card.style.transform = outcome === 'right' ? `translateX(${dir * 120}%) rotate(${dir * 16}deg)` : '';
+      const flyOut = outcome === 'right' && !MODES[s.mode].explainAlways;
+      el.card.style.transform = flyOut ? `translateX(${dir * 120}%) rotate(${dir * 16}deg)` : '';
     } else resetCardDrag();
   };
   el.card.addEventListener('pointerup', endDrag);

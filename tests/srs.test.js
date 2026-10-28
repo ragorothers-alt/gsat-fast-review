@@ -87,6 +87,11 @@ describe('buildQueue', () => {
     expect(out.map((x) => x.id).sort()).toEqual(['u1', 'u3']);
   });
 
+  it('exclude 的題目這批先不出', () => {
+    const out = buildQueue(bank, {}, { subjects: ['math'], exclude: ['m1', 'm3'], size: 10, now: NOW, rng: seeded() });
+    expect(out.map((x) => x.id).sort()).toEqual(['m2', 'm4']);
+  });
+
   it('公式特訓只出 formula 題', () => {
     const out = buildQueue(bank, {}, { subjects: ['math', 'physics', 'chinese'], formulaOnly: true, size: 10, now: NOW, rng: seeded() });
     expect(out.map((x) => x.id).sort()).toEqual(['m4', 'p1']);

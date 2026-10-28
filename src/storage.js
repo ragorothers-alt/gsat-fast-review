@@ -10,7 +10,8 @@ export function freshState() {
     daily: {},
     streak: { count: 0, last: null },
     best: { blitz: 0 },
-    settings: { subjects: SUBJECTS.map((s) => s.id), excludedUnits: [], goal: 30, sound: false },
+    // scratch：平板上草稿區要不要展開（手機上一律收起）
+    settings: { subjects: SUBJECTS.map((s) => s.id), excludedUnits: [], goal: 30, sound: false, scratch: true },
   };
 }
 

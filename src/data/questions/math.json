@@ -4296,5 +4296,2089 @@
     "explain": "設狀態 $1$ 機率為 $p$，兩方向流量須相等：$p/4=(1-p)/2$，得 $p=2/3$。",
     "formula": false,
     "level": 3
+  },
+  {
+    "id": "math-281",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "當 $x\\ne1$ 時，$\\frac{x^2-1}{x-1}$ 可化簡為何？",
+    "choices": [
+      "$x+1$",
+      "$x^2+1$",
+      "$x-1$",
+      "$1$"
+    ],
+    "answer": 0,
+    "explain": "分子分解為 $(x-1)(x+1)$；因 $x\\ne1$，可約去 $x-1$，得到 $x+1$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-282",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "tf",
+    "q": "對任意實數 $a,b$，只要 $a<b$，就一定有 $|a|<|b|$。",
+    "answer": false,
+    "explain": "取 $a=-3,b=1$，雖然 $-3<1$，卻有 $|-3|=3>|1|=1$；絕對值的大小由到原點的距離決定。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-283",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "使 $\\sqrt{3-x}$ 在實數範圍內有意義的 $x$ 範圍為何？",
+    "choices": [
+      "$x<3$",
+      "$x\\ge3$",
+      "$x\\le3$",
+      "$x>3$"
+    ],
+    "answer": 2,
+    "explain": "實數平方根的被開方數須非負，所以 $3-x\\ge0$，即 $x\\le3$；$x=3$ 也可以。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-284",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "tf",
+    "q": "非零有理數 $a$ 與無理數 $b$ 的乘積 $ab$ 一定是無理數。",
+    "answer": true,
+    "explain": "若 $ab$ 是有理數，則 $b=(ab)/a$ 也會是有理數，與題設矛盾；非零條件不可省略。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-285",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "$x^3+8$ 的因式分解為何？",
+    "choices": [
+      "$(x+2)(x^2+2x+4)$",
+      "$(x+2)(x^2-2x+4)$",
+      "$(x+2)(x^2-4)$",
+      "$(x-2)(x^2+2x+4)$"
+    ],
+    "answer": 1,
+    "explain": "利用立方和公式 $a^3+b^3=(a+b)(a^2-ab+b^2)$，取 $a=x,b=2$ 即得答案。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-286",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "tf",
+    "q": "不等式 $x^2+1>0$ 的解集是所有實數。",
+    "answer": true,
+    "explain": "任意實數的平方都非負，因此 $x^2+1\\ge1>0$，沒有需要排除的實數。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-287",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "若 $-1\\le x<2$，則 $2x+1$ 的取值範圍為何？",
+    "choices": [
+      "$-1<2x+1\\le5$",
+      "$-3\\le2x+1<3$",
+      "$-1\\le2x+1<5$",
+      "$0\\le2x+1<5$"
+    ],
+    "answer": 2,
+    "explain": "原不等式各邊同乘正數 $2$ 再加 $1$，得到 $-1\\le2x+1<5$；端點是否包含不變。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-288",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "$\\sqrt{7-4\\sqrt3}$ 等於何者？",
+    "choices": [
+      "$2+\\sqrt3$",
+      "$2-\\sqrt3$",
+      "$\\sqrt3-2$",
+      "$4-\\sqrt3$"
+    ],
+    "answer": 1,
+    "explain": "因 $(2-\\sqrt3)^2=7-4\\sqrt3$，且 $2-\\sqrt3>0$，取非負平方根即為 $2-\\sqrt3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-289",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "tf",
+    "q": "若 $0<a<1$，則必有 $a^2>a$。",
+    "answer": false,
+    "explain": "把 $a<1$ 兩邊乘以正數 $a$，得到 $a^2<a$；例如 $(1/2)^2=1/4<1/2$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-290",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "實數 $x$ 滿足 $|x-1|+|x-3|=2$，則 $x$ 的範圍為何？",
+    "choices": [
+      "$1\\le x\\le3$",
+      "$x=2$",
+      "$x\\le1$ 或 $x\\ge3$",
+      "$-1\\le x\\le1$"
+    ],
+    "answer": 0,
+    "explain": "兩絕對值分別是 $x$ 到 $1,3$ 的距離；和等於兩定點的距離 $2$，恰在 $x$ 位於兩點之間（含端點）時成立。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-291",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "正數 $a,b$ 滿足 $a+b=6$，則 $(a+1)(b+1)$ 的最大值為何？",
+    "choices": [
+      "$15$",
+      "$18$",
+      "$16$",
+      "$25$"
+    ],
+    "answer": 2,
+    "explain": "展開得 $ab+7$。由 $ab\\le((a+b)/2)^2=9$，最大值為 $16$，在 $a=b=3$ 時取到。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-292",
+    "subject": "math",
+    "topic": "數與式",
+    "type": "mc",
+    "q": "實數方程式 $\\sqrt{x+1}=x-1$ 的解為何？",
+    "choices": [
+      "$0$",
+      "$-1$",
+      "$1$",
+      "$3$"
+    ],
+    "answer": 3,
+    "explain": "右邊須非負，故 $x\\ge1$。平方得 $x(x-3)=0$，排除不符條件的 $0$，只剩 $x=3$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-293",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "多項式 $2x^3-x^2+4x-7$ 各項係數的總和為何？",
+    "choices": [
+      "$2$",
+      "$14$",
+      "$-2$",
+      "$-7$"
+    ],
+    "answer": 2,
+    "explain": "各項係數相加為 $2-1+4-7=-2$；也可將 $x=1$ 代入，讓每個次方都變成 $1$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-294",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "tf",
+    "q": "非零常數多項式 $f(x)=7$ 的次數為 $0$。",
+    "answer": true,
+    "explain": "可寫成 $7x^0$，最高非零項的指數為 $0$；不要和次數未定義的零多項式混淆。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-295",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "已知多項式 $f(1)=3,f(-1)=1$，則 $f(x)$ 除以 $x^2-1$ 的餘式為何？",
+    "choices": [
+      "$x-2$",
+      "$2x+1$",
+      "$x+2$",
+      "$2-x$"
+    ],
+    "answer": 2,
+    "explain": "餘式設為 $ax+b$，代入 $x=1,-1$ 得 $a+b=3,-a+b=1$，故 $a=1,b=2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-296",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "函數 $f(x)=(x-2)^2(x+1)$ 的圖形在點 $(2,0)$ 附近如何接觸 $x$ 軸？",
+    "choices": [
+      "穿越，從負值變成正值",
+      "穿越，從正值變成負值",
+      "不與 $x$ 軸相交",
+      "接觸，但不穿越"
+    ],
+    "answer": 3,
+    "explain": "在 $x=2$ 左右，$x+1$ 都為正，平方因式也非負；兩側函數值都為正，所以接觸但不穿越。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-297",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "tf",
+    "q": "若實係數三次多項式 $f(x)$ 滿足 $f(0)>0,f(1)>0$，則 $0<x<1$ 內一定沒有零點。",
+    "answer": false,
+    "explain": "取 $f(x)=(2x-1)^2(x+1)$，有 $f(0)=1,f(1)=2$，但 $f(1/2)=0$；同號端點不能排除內部零點。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-298",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "方程式 $x^2-3x+1=0$ 的兩根為 $\\alpha,\\beta$，則 $\\frac1\\alpha+\\frac1\\beta$ 為何？",
+    "choices": [
+      "$\\frac13$",
+      "$-3$",
+      "$1$",
+      "$3$"
+    ],
+    "answer": 3,
+    "explain": "根和為 $3$、根積為 $1$，所以 $\\frac1\\alpha+\\frac1\\beta=\\frac{\\alpha+\\beta}{\\alpha\\beta}=3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-299",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "使 $x^2+2x+k\\ge0$ 對所有實數 $x$ 都成立的 $k$ 範圍為何？",
+    "choices": [
+      "$k>1$",
+      "$k\\ge1$",
+      "$k\\le1$",
+      "$k\\ge-1$"
+    ],
+    "answer": 1,
+    "explain": "配方得 $(x+1)^2+k-1$，最小值為 $k-1$，因此須且只須 $k\\ge1$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-300",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "tf",
+    "q": "若多項式 $f(x)$ 除以 $x-1$ 的餘式為 $2$，則 $f(f(x))$ 除以 $x-1$ 的餘式一定為 $4$。",
+    "answer": false,
+    "explain": "新餘式是 $f(f(1))=f(2)$，條件沒有指定其值；例如 $f(x)=2$ 時，新餘式為 $2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-301",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "直線 $y=mx-3$ 與拋物線 $y=x^2-4x+1$ 恰有一個交點。所有可能的 $m$ 值之和為何？",
+    "choices": [
+      "$-4$",
+      "$-8$",
+      "$0$",
+      "$8$"
+    ],
+    "answer": 1,
+    "explain": "交點滿足 $x^2-(m+4)x+4=0$。令判別式為 $0$，得 $(m+4)^2=16$，故 $m=0,-8$，總和為 $-8$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-302",
+    "subject": "math",
+    "topic": "多項式函數",
+    "type": "mc",
+    "q": "首項係數為 $1$ 的二次函數 $f(x)$ 有兩根 $1,5$。滿足 $f(x)\\le-3$ 的整數 $x$ 有幾個？",
+    "choices": [
+      "$2$",
+      "$3$",
+      "$4$",
+      "$5$"
+    ],
+    "answer": 1,
+    "explain": "$f(x)=(x-1)(x-5)=(x-3)^2-4$。因此 $(x-3)^2\\le1$，整數解為 $2,3,4$，共有 $3$ 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-303",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "點 $(2,-1)$ 關於直線 $y=x$ 的對稱點為何？",
+    "choices": [
+      "$(2,1)$",
+      "$(-2,-1)$",
+      "$(1,-2)$",
+      "$(-1,2)$"
+    ],
+    "answer": 3,
+    "explain": "關於直線 $y=x$ 鏡射時，橫、縱坐標互換，因此對稱點為 $(-1,2)$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-304",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "tf",
+    "q": "圓心向一條非直徑的弦作垂線，垂足一定是該弦的中點。",
+    "answer": true,
+    "explain": "圓心到弦兩端的距離都是半徑，因此圓心在弦的中垂線上；垂足就是弦中點。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-305",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "tf",
+    "q": "通過圓內的一個點，可以作出兩條該圓的切線。",
+    "answer": false,
+    "explain": "通過圓內點的任一直線都與圓有兩個交點，不能相切；可作兩條切線的是圓外點。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-306",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "圓心為 $(-1,2)$ 的圓與 $x$ 軸相切，其方程式為何？",
+    "choices": [
+      "$(x+1)^2+(y-2)^2=2$",
+      "$(x-1)^2+(y+2)^2=4$",
+      "$(x+1)^2+(y-2)^2=4$",
+      "$(x+1)^2+(y-2)^2=1$"
+    ],
+    "answer": 2,
+    "explain": "圓心到 $x$ 軸的距離是 $2$，故半徑為 $2$；代入圓的標準式，右邊為 $2^2=4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-307",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "直線 $\\frac{x}{4}+\\frac{y}{3}=1$ 與兩坐標軸圍成的三角形面積為何？",
+    "choices": [
+      "$12$",
+      "$6$",
+      "$24$",
+      "$7$"
+    ],
+    "answer": 1,
+    "explain": "由截距式讀出兩截距為 $4,3$，形成兩股長為 $4,3$ 的直角三角形，面積為 $\\frac12\\times4\\times3=6$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-308",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "圓 $(x-1)^2+(y-2)^2=4$ 上的點，到直線 $x=5$ 的最遠距離為何？",
+    "choices": [
+      "$2$",
+      "$4$",
+      "$6$",
+      "$8$"
+    ],
+    "answer": 2,
+    "explain": "圓心到直線的距離為 $4$，半徑為 $2$；最遠的圓上點是 $(-1,2)$，距離為 $4+2=6$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-309",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "tf",
+    "q": "若直線 $y=mx+b$ 與圓 $x^2+y^2=1$ 相切，則必有 $b^2=1+m^2$。",
+    "answer": true,
+    "explain": "相切時圓心到直線的距離為半徑 $1$，所以 $|b|/\\sqrt{m^2+1}=1$，平方得 $b^2=1+m^2$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-310",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "將圓 $(x-1)^2+(y-2)^2=9$ 向右平移 $2$、向下平移 $1$ 單位，新方程式為何？",
+    "choices": [
+      "$(x+1)^2+(y-3)^2=9$",
+      "$(x-3)^2+(y-1)^2=3$",
+      "$(x-2)^2+(y+1)^2=9$",
+      "$(x-3)^2+(y-1)^2=9$"
+    ],
+    "answer": 3,
+    "explain": "圓心由 $(1,2)$ 移到 $(3,1)$，半徑仍為 $3$，所以方程式為 $(x-3)^2+(y-1)^2=9$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-311",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "直線 $x+y=k$ 在圓 $x^2+y^2=25$ 上截得長為 $6$ 的弦，則 $k^2$ 為何？",
+    "choices": [
+      "$8$",
+      "$16$",
+      "$32$",
+      "$64$"
+    ],
+    "answer": 2,
+    "explain": "半弦長為 $3$，圓心到直線的距離平方為 $25-9=16$。又此距離平方為 $k^2/2$，故 $k^2=32$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-312",
+    "subject": "math",
+    "topic": "直線與圓",
+    "type": "mc",
+    "q": "通過 $(0,0),(4,0),(0,2)$ 的圓與直線 $y=x$ 相交，兩交點的 $x$ 坐標之和為何？",
+    "choices": [
+      "$1$",
+      "$3$",
+      "$4$",
+      "$2$"
+    ],
+    "answer": 1,
+    "explain": "三點形成直角三角形，圓心為斜邊中點 $(2,1)$，故圓為 $x^2+y^2-4x-2y=0$。代入 $y=x$ 得 $2x(x-3)=0$，兩根為 $0,3$，和為 $3$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-313",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "數列的通項為 $a_n=2n+1$，則 $a_{n+1}$ 應表示為何？",
+    "choices": [
+      "$2n+3$",
+      "$2n+1$",
+      "$2n+2$",
+      "$2n-1$"
+    ],
+    "answer": 0,
+    "explain": "把通項中的 $n$ 整個換成 $n+1$，得 $a_{n+1}=2(n+1)+1=2n+3$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-314",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "tf",
+    "q": "將兩個等差數列的對應項相乘，所得數列一定也是等差數列。",
+    "answer": false,
+    "explain": "取兩數列皆為 $1,2,3,\\ldots$，逐項相乘得 $1,4,9,\\ldots$；相鄰差為 $3,5,\\ldots$，並不固定。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-315",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "某有限等差數列的首項為 $1$、末項為 $19$，其所有項的算術平均數為何？",
+    "choices": [
+      "$9$",
+      "$10$",
+      "$19$",
+      "$20$"
+    ],
+    "answer": 1,
+    "explain": "等差數列總和為項數乘以首末平均，因此再除以項數，平均數就是 $(1+19)/2=10$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-316",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "已知正整數 $n$ 滿足 $\\sum_{k=1}^{n}k=10$，則 $\\sum_{k=1}^{n}k^3$ 為何？",
+    "choices": [
+      "$1000$",
+      "$10$",
+      "$30$",
+      "$100$"
+    ],
+    "answer": 3,
+    "explain": "利用立方和公式 $\\sum_{k=1}^{n}k^3=(\\sum_{k=1}^{n}k)^2$，直接得 $10^2=100$，不必先求 $n$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-317",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "數列滿足 $a_1=1,a_2=2$，且 $a_n=a_{n-1}+a_{n-2}$（$n\\ge3$）。則 $a_4$ 為何？",
+    "choices": [
+      "$3$",
+      "$4$",
+      "$6$",
+      "$5$"
+    ],
+    "answer": 3,
+    "explain": "先由前兩項得 $a_3=1+2=3$，再由第二、三項得 $a_4=2+3=5$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-318",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "tf",
+    "q": "每一項都是 $1$ 的數列，同時是等差數列與等比數列。",
+    "answer": true,
+    "explain": "相鄰兩項的差固定為 $0$、比固定為 $1$，所以同時符合兩種數列的定義。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-319",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "等比數列各項皆非零，且 $a_2a_6=9$、$a_4<0$，則 $a_4$ 為何？",
+    "choices": [
+      "$-3$",
+      "$3$",
+      "$-9$",
+      "$9$"
+    ],
+    "answer": 0,
+    "explain": "等比數列對稱項的乘積相等，故 $a_4^2=a_2a_6=9$。由 $a_4<0$，得 $a_4=-3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-320",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "級數 $1-2+3-4+\\cdots+99-100$ 的和為何？",
+    "choices": [
+      "$50$",
+      "$0$",
+      "$-50$",
+      "$-100$"
+    ],
+    "answer": 2,
+    "explain": "依序每兩項配成一組，如 $1-2=-1$、$3-4=-1$，共有 $50$ 組，總和為 $-50$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-321",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "等差數列首項為 $2$，前三項和為 $12$。若前 $n$ 項和大於 $50$，最小的正整數 $n$ 為何？",
+    "choices": [
+      "$5$",
+      "$7$",
+      "$6$",
+      "$8$"
+    ],
+    "answer": 1,
+    "explain": "由 $2+(2+d)+(2+2d)=12$ 得 $d=2$，故 $S_n=n(n+1)$。因 $S_6=42,S_7=56$，最小為 $7$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-322",
+    "subject": "math",
+    "topic": "數列與級數",
+    "type": "mc",
+    "q": "數列滿足 $a_1=1,a_{n+1}=2a_n+3$。若 $b_n=a_n+c$ 為等比數列，則 $c+a_4$ 為何？",
+    "choices": [
+      "$26$",
+      "$29$",
+      "$32$",
+      "$35$"
+    ],
+    "answer": 2,
+    "explain": "令 $b_{n+1}=2b_n$，由 $3+c=2c$ 得 $c=3$。此時 $b_1=4,b_4=32$，所以 $c+a_4=b_4=32$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-323",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "平面四個相異點中，恰有三點共線。這四點兩兩連線，可得到幾條相異直線？",
+    "choices": [
+      "$3$",
+      "$5$",
+      "$4$",
+      "$6$"
+    ],
+    "answer": 2,
+    "explain": "共線三點只決定一條直線；第四點與前三點各決定一條新直線，共 $1+3=4$ 條。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-324",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "tf",
+    "q": "一群人彼此各握手一次；把每個人的握手次數相加，會把每次握手計算兩次。",
+    "answer": true,
+    "explain": "每次握手都有兩位參與者，會各記在一人的握手次數中，因此被計算兩次。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-325",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "五顆相同糖果全分給甲、乙、丙，每人至少一顆，且甲至多兩顆，共有幾種分法？",
+    "choices": [
+      "$5$",
+      "$6$",
+      "$3$",
+      "$9$"
+    ],
+    "answer": 0,
+    "explain": "甲得一顆時，乙丙有三種分法；甲得兩顆時，乙丙有兩種分法，共 $3+2=5$ 種。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-326",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "$(2x+\\frac1x)^3$ 展開式中，$x$ 的係數為何？",
+    "choices": [
+      "$6$",
+      "$12$",
+      "$4$",
+      "$8$"
+    ],
+    "answer": 1,
+    "explain": "得到 $x$ 須選兩個 $2x$ 與一個 $1/x$，係數為 $C_1^3\\times2^2=12$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-327",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "tf",
+    "q": "三封不同的信投入兩個不同郵筒，每個郵筒都至少一封，共有三種投法。",
+    "answer": false,
+    "explain": "每封信各有兩種去向，共八種；扣除全投同一郵筒的兩種，剩 $8-2=6$ 種。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-328",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "以數字 $1,2,3$ 各用一次形成的六個三位數，其總和為何？",
+    "choices": [
+      "$666$",
+      "$1332$",
+      "$1236$",
+      "$1998$"
+    ],
+    "answer": 1,
+    "explain": "每個數字在每一位都出現兩次，故總和為 $2(1+2+3)(100+10+1)=1332$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-329",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "tf",
+    "q": "正整數 $n,r$ 滿足 $r\\le n$，則 $rC_r^n=nC_{r-1}^{n-1}$。",
+    "answer": true,
+    "explain": "兩邊都在數從 $n$ 人選出 $r$ 人並指定一位隊長的方法；可先選隊伍，或先選隊長。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-330",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "從 $(0,0)$ 到 $(3,2)$，每步只能向右或向上移一單位。若不可經過 $(1,1)$，共有幾條最短路徑？",
+    "choices": [
+      "$4$",
+      "$10$",
+      "$6$",
+      "$2$"
+    ],
+    "answer": 0,
+    "explain": "全部有 $C_2^5=10$ 條；經過禁點的有 $C_1^2C_1^3=6$ 條，故剩 $10-6=4$ 條。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-331",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "$(1+x)^3(1-x)^2$ 展開式中，$x^2$ 的係數為何？",
+    "choices": [
+      "$3$",
+      "$-2$",
+      "$2$",
+      "$-6$"
+    ],
+    "answer": 1,
+    "explain": "$x^2$ 來自 $x^2\\times1$、$x\\times x$、$1\\times x^2$，係數和為 $3-6+1=-2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-332",
+    "subject": "math",
+    "topic": "排列組合",
+    "type": "mc",
+    "q": "將標有 $0,0,1,2$ 的四張卡各用一次排成四位偶數，共可得到幾個不同整數？",
+    "choices": [
+      "$6$",
+      "$4$",
+      "$8$",
+      "$5$"
+    ],
+    "answer": 3,
+    "explain": "末位為 $0$ 時有四個；末位為 $2$ 時只有 $1002$。因此共 $4+1=5$ 個。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-333",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "獨立擲兩顆公平六面骰子，下列哪一個點數和的出現機率最大？",
+    "choices": [
+      "$2$",
+      "$4$",
+      "$12$",
+      "$6$"
+    ],
+    "answer": 3,
+    "explain": "點數和為 $2,4,6,12$ 的有序結果數依序為 $1,3,5,1$；分母相同，故點數和六最可能。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-334",
+    "subject": "math",
+    "topic": "機率",
+    "type": "tf",
+    "q": "袋中有兩紅一白，逐顆等機率不放回抽兩球；未得知第一球顏色前，第二球為紅的機率是 $\\frac23$。",
+    "answer": true,
+    "explain": "每顆球出現在第二次的機會相同，三顆中有兩顆紅球，故第二球為紅的機率仍是 $2/3$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-335",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "甲、乙兩燈泡故障與否互相獨立，甲故障機率為 $\\frac12$，至少一顆故障的機率為 $\\frac34$。乙故障的機率為何？",
+    "choices": [
+      "$\\frac38$",
+      "$\\frac14$",
+      "$\\frac34$",
+      "$\\frac12$"
+    ],
+    "answer": 3,
+    "explain": "兩顆都正常的機率為 $1/4$；甲正常的機率為 $1/2$，由獨立性可知乙正常也是 $1/2$，故乙故障率為 $1/2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-336",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "獨立擲兩顆公平六面骰子，已知點數和為 $7$，第一顆點數大於第二顆的機率為何？",
+    "choices": [
+      "$\\frac13$",
+      "$\\frac7{12}$",
+      "$\\frac12$",
+      "$\\frac56$"
+    ],
+    "answer": 2,
+    "explain": "和為七的六個等可能結果中，沒有兩顆相等；交換兩顆會配成一大一小的兩類，因此各占一半。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-337",
+    "subject": "math",
+    "topic": "機率",
+    "type": "tf",
+    "q": "公平硬幣每次投擲互相獨立；已連續出現五次正面，下一次反面的機率便大於一半。",
+    "answer": false,
+    "explain": "獨立表示下一次機率不受先前結果影響，所以反面機率仍是 $1/2$，沒有補償前次結果的機制。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-338",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "袋中有兩紅兩白，等機率不放回取兩球。抽得紅球顆數的期望值為何？",
+    "choices": [
+      "$1$",
+      "$\\frac23$",
+      "$2$",
+      "$\\frac12$"
+    ],
+    "answer": 0,
+    "explain": "兩次抽球各有一半機會為紅；紅球數的期望值為 $1/2+1/2=1$，不需假設兩次獨立。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-339",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "四張卡分別標有 $1,2,3,4$，等機率抽出兩張且不放回。兩數乘積為偶數的機率為何？",
+    "choices": [
+      "$\\frac12$",
+      "$\\frac56$",
+      "$\\frac23$",
+      "$\\frac34$"
+    ],
+    "answer": 1,
+    "explain": "六種無序卡對中，只有 $\\{1,3\\}$ 的乘積為奇數；因此乘積為偶數的機率為 $5/6$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-340",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "等機率選甲、乙一袋；甲有三紅一白，乙有一紅三白。從所選袋等機率放回取球兩次，已知兩球皆紅，選甲的機率為何？",
+    "choices": [
+      "$\\frac34$",
+      "$\\frac9{10}$",
+      "$\\frac12$",
+      "$\\frac9{16}$"
+    ],
+    "answer": 1,
+    "explain": "甲、乙連取兩紅的機率分別為 $9/16,1/16$；兩袋先驗機率相同，故所求為 $9/(9+1)=9/10$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-341",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "袋中兩紅兩白，等機率不放回取兩球。同色得 $6$ 分，異色失去 $3$ 分，一次遊戲得分的期望值為何？",
+    "choices": [
+      "$1$",
+      "$0$",
+      "$-1$",
+      "$2$"
+    ],
+    "answer": 1,
+    "explain": "六種球對中，同色有兩種、異色有四種；期望得分為 $6\\times2/6-3\\times4/6=0$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-342",
+    "subject": "math",
+    "topic": "機率",
+    "type": "tf",
+    "q": "$P(A),P(B)>0$；若 $P(A\\mid B)>P(A)$，就必有 $P(B\\mid A)<P(B)$。",
+    "answer": false,
+    "explain": "前提等價於 $P(A\\cap B)>P(A)P(B)$；除以 $P(A)$ 後，反而得到 $P(B\\mid A)>P(B)$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-343",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "資料 $1,1,2,3,3$ 的所有眾數為何？",
+    "choices": [
+      "$1$",
+      "$3$",
+      "沒有眾數",
+      "$1$ 與 $3$"
+    ],
+    "answer": 3,
+    "explain": "眾數是出現次數最多的數值；一與三都出現兩次，因此兩者都是眾數。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-344",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "tf",
+    "q": "兩組資料的全距與四分位距相同，就表示兩組的平均數也相同。",
+    "answer": false,
+    "explain": "將一組資料每筆都加一，全距與四分位距皆不變，但平均數增加一，所以不能由離散程度決定平均數。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-345",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "十筆資料的平均數為 $8$，將每筆資料各減去 $8$ 後，這十個差值的總和為何？",
+    "choices": [
+      "$8$",
+      "$80$",
+      "$10$",
+      "$0$"
+    ],
+    "answer": 3,
+    "explain": "資料總和為 $10\\times8=80$；十筆各減八，總共減八十，因此差值總和為零。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-346",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "將一組資料的每筆都再抄一份，使筆數加倍。以離均差平方的平均計算變異數，平均數與標準差如何改變？",
+    "choices": [
+      "平均數加倍，標準差不變",
+      "平均數不變，標準差加倍",
+      "兩者都不變",
+      "兩者都加倍"
+    ],
+    "answer": 2,
+    "explain": "總和與筆數同時加倍，平均數不變；離均差平方和與分母也同時加倍，因此標準差不變。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-347",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "一組資料的平均數為 $3$，各筆數值平方的平均為 $13$。以資料筆數為分母，其標準差為何？",
+    "choices": [
+      "$\\sqrt{10}$",
+      "$4$",
+      "$2$",
+      "$10$"
+    ],
+    "answer": 2,
+    "explain": "變異數等於平方的平均減平均的平方，即 $13-3^2=4$；標準差為 $\\sqrt4=2$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-348",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "tf",
+    "q": "對橫坐標不全相同的資料，以含截距的最適直線預測 $y$；各筆實際 $y$ 值減預測值的總和為 $0$。",
+    "answer": true,
+    "explain": "最適直線通過平均點，因此預測值的平均等於實際值的平均，兩者總和相同，誤差總和為零。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-349",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "兩變數 $x,y$ 的標準差皆非零，相關係數為 $0.4$。交換兩變數的角色後，新相關係數為何？",
+    "choices": [
+      "$-0.4$",
+      "$0.4$",
+      "$2.5$",
+      "$0.16$"
+    ],
+    "answer": 1,
+    "explain": "相關係數對兩變數是對稱的；交換角色不改變離均差乘積與標準差乘積，因此仍為 $0.4$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-350",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "$y$ 對 $x$ 的最適直線為 $y=2x+1$。令 $X=x+3,Y=2y$，則 $Y$ 對 $X$ 的最適直線為何？",
+    "choices": [
+      "$Y=4X+2$",
+      "$Y=4X+14$",
+      "$Y=2X-5$",
+      "$Y=4X-10$"
+    ],
+    "answer": 3,
+    "explain": "代入 $x=X-3$，再將整個預測式乘二，得 $Y=2[2(X-3)+1]=4X-10$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-351",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "某資料的 $x$ 僅介於 $0$ 至 $10$；用其最適直線預測 $x=100$ 時的 $y$，下列判斷何者最適當？",
+    "choices": [
+      "外插太遠，原有線性趨勢未必延續",
+      "應先把輸入的一百改成觀測最大值十",
+      "最適直線的誤差最小，外插也會同樣準確",
+      "只要相關係數接近一，就能放心採用"
+    ],
+    "answer": 0,
+    "explain": "預測點遠離觀測範圍，屬於外插；資料只支持原觀測範圍內的趨勢，不能保證遠處仍適用。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-352",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "tf",
+    "q": "比較兩組資料時，最適直線的斜率絕對值較大，就表示兩變數的線性相關程度較強。",
+    "answer": false,
+    "explain": "斜率受變數單位與標準差比例影響；例如只將 $y$ 乘十，斜率也乘十，但相關係數不變。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-353",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "甲、乙兩組各兩筆資料，平均數分別為 $0,4$，標準差均為 $1$。變異數皆以筆數為分母，合併後標準差為何？",
+    "choices": [
+      "$1$",
+      "$2$",
+      "$\\sqrt5$",
+      "$\\sqrt2$"
+    ],
+    "answer": 2,
+    "explain": "合併平均為 $2$；每組平均離它都是二，故合併變異數為 $1^2+2^2=5$，標準差為 $\\sqrt5$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-354",
+    "subject": "math",
+    "topic": "數據分析",
+    "type": "mc",
+    "q": "資料有 $\\bar x=1,\\bar y=2,\\sigma_x=2,\\sigma_y=4,r=\\frac12$。以最適直線預測時，觀測點 $(5,9)$ 的實際值減預測值為何？",
+    "choices": [
+      "$3$",
+      "$6$",
+      "$-3$",
+      "$4$"
+    ],
+    "answer": 0,
+    "explain": "斜率為 $\\frac12\\times4/2=1$，通過平均點可得預測式 $y=x+1$；故誤差為 $9-6=3$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-355",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "在平坦地面觀測高於眼睛的同一塔頂，沿直線走近塔底，且眼睛高度不變，仰角會如何改變？",
+    "choices": [
+      "變大",
+      "不變",
+      "先變大再變小",
+      "變小"
+    ],
+    "answer": 0,
+    "explain": "塔頂與眼睛的高度差固定，水平距離縮短，直角三角形中的仰角就會變大。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-356",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "tf",
+    "q": "在銳角範圍內，正弦值愈大，角度也愈大。",
+    "answer": true,
+    "explain": "正弦在 $0^\\circ$ 到 $90^\\circ$ 間嚴格遞增，因此在銳角範圍可用正弦值比較角度。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-357",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "三角形兩邊長為 $3,4$，面積為 $3$，且這兩邊夾角為鈍角。該夾角的餘弦值為何？",
+    "choices": [
+      "$-\\frac12$",
+      "$-\\frac{\\sqrt3}{2}$",
+      "$\\frac12$",
+      "$\\frac{\\sqrt3}{2}$"
+    ],
+    "answer": 1,
+    "explain": "由面積公式得夾角正弦為 $3/(3\\times4/2)=1/2$；夾角是鈍角，故餘弦為 $-\\sqrt3/2$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-358",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "在 $\\triangle ABC$ 中，$AB=2,AC=3$，角 $A$ 的內角平分線交 $BC$ 於 $D$，則 $BD:DC$ 為何？",
+    "choices": [
+      "$2:3$",
+      "$3:2$",
+      "$1:1$",
+      "$4:9$"
+    ],
+    "answer": 0,
+    "explain": "兩小三角形共用 $AD$，且夾角相等，面積比為 $AB:AC=2:3$；它們對 $BC$ 的高相同，底邊比也是 $2:3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-359",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "菱形邊長為 $2$，一內角為 $60^\\circ$，較長的對角線長為何？",
+    "choices": [
+      "$2\\sqrt3$",
+      "$2$",
+      "$\\sqrt3$",
+      "$4$"
+    ],
+    "answer": 0,
+    "explain": "較長對角線所對的三角形夾角為 $120^\\circ$；由餘弦定理，其平方為 $4+4-8(-1/2)=12$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-360",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "tf",
+    "q": "甲三角形的一角等於乙的一角，且甲該角的兩鄰邊分別為乙對應邊的兩倍、三倍，則甲面積是乙的五倍。",
+    "answer": false,
+    "explain": "夾角的正弦相同，面積隨兩鄰邊乘積變化，因此甲面積應為乙的 $2\\times3=6$ 倍。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-361",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "觀測點與塔底等高，距塔底 $10$ 公尺時，塔頂仰角為 $45^\\circ$。沿直線遠離塔底 $10$ 公尺後，仰角的正切值為何？",
+    "choices": [
+      "$\\frac1{\\sqrt3}$",
+      "$1$",
+      "$2$",
+      "$\\frac12$"
+    ],
+    "answer": 3,
+    "explain": "原仰角四十五度表示塔高為十公尺；後退後水平距離為二十公尺，因此正切值為 $10/20=1/2$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-362",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "三角形兩內角為 $30^\\circ,60^\\circ$，周長為 $6+2\\sqrt3$，其面積為何？",
+    "choices": [
+      "$4\\sqrt3$",
+      "$2\\sqrt3$",
+      "$6$",
+      "$3\\sqrt3$"
+    ],
+    "answer": 1,
+    "explain": "三邊比為 $1:\\sqrt3:2$，由周長得三邊為 $2,2\\sqrt3,4$；兩短邊垂直，面積為 $2\\sqrt3$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-363",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "在 $\\triangle ABC$ 中，$AB=AC=5,BC=6$，則 $\\sin\\angle BAC$ 為何？",
+    "choices": [
+      "$\\frac35$",
+      "$\\frac45$",
+      "$\\frac7{25}$",
+      "$\\frac{24}{25}$"
+    ],
+    "answer": 3,
+    "explain": "底邊中點將底分成各三，高為四，面積為十二；故 $\\sin\\angle BAC=2\\times12/(5\\times5)=24/25$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-364",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "tf",
+    "q": "三角形中，若兩內角 $A,B$ 的正弦值相等，則 $A=B$。",
+    "answer": true,
+    "explain": "內角正弦相等時，兩角相等或互補；若互補，第三角會是零度，不成三角形，因此只能相等。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-365",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "tf",
+    "q": "角 $-\\frac{3\\pi}{2}$ 與 $\\frac\\pi2$ 的終邊相同。",
+    "answer": true,
+    "explain": "兩角相差 $2\\pi$，也就是一整圈，因此終邊相同。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-366",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "一個非定值正弦波，最高點到緊接著下一個最低點的水平距離為 $\\frac\\pi4$，最小正週期為何？",
+    "choices": [
+      "$\\frac\\pi4$",
+      "$\\pi$",
+      "$2\\pi$",
+      "$\\frac\\pi2$"
+    ],
+    "answer": 3,
+    "explain": "相鄰最高點與最低點相隔半個週期，因此週期為 $2\\times\\frac\\pi4=\\frac\\pi2$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-367",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "銳角 $\\alpha,\\beta$ 滿足 $\\tan\\alpha=\\frac12$、$\\tan\\beta=\\frac13$，則 $\\tan(\\alpha+\\beta)$ 為何？",
+    "choices": [
+      "$\\frac56$",
+      "$1$",
+      "$\\frac15$",
+      "$\\frac57$"
+    ],
+    "answer": 1,
+    "explain": "正切和角公式給出 $\\frac{\\frac12+\\frac13}{1-\\frac12\\cdot\\frac13}=\\frac{5/6}{5/6}=1$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-368",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "tf",
+    "q": "將 $y=\\sin x$ 圖形上每一點的橫坐標放大為原來的 $2$ 倍，會得到 $y=\\sin2x$。",
+    "answer": false,
+    "explain": "橫向放大後，原橫坐標是新橫坐標的一半，故新圖形是 $y=\\sin\\frac x2$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-369",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "某摩天輪座艙高度為 $h(t)=10+6\\sin\\frac{\\pi t}{4}$ 公尺，$t$ 以秒計。從 $t=0$ 起，首次到最高點需幾秒？",
+    "choices": [
+      "$1$",
+      "$4$",
+      "$2$",
+      "$8$"
+    ],
+    "answer": 2,
+    "explain": "首次達最高點時正弦首次等於 $1$，故 $\\frac{\\pi t}{4}=\\frac\\pi2$，得 $t=2$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-370",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "函數 $y=|\\sin x|$ 的最小正週期為何？以弧度表示。",
+    "choices": [
+      "$2\\pi$",
+      "$\\pi$",
+      "$\\frac\\pi2$",
+      "$4\\pi$"
+    ],
+    "answer": 1,
+    "explain": "正弦每隔 $\\pi$ 變號，取絕對值後圖形即重複；相鄰零點相距 $\\pi$，不能有更小的正週期。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-371",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "tf",
+    "q": "對所有實數 $x$，都有 $\\sin(x+\\frac\\pi2)=\\cos x$。",
+    "answer": true,
+    "explain": "用正弦和角公式展開，$\\sin x\\cos\\frac\\pi2+\\cos x\\sin\\frac\\pi2=\\cos x$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-372",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "在 $-\\frac\\pi2<x<\\frac\\pi2$ 中，方程式 $\\tan x=2$ 有幾個實數解？",
+    "choices": [
+      "$0$",
+      "$1$",
+      "$2$",
+      "無限多個"
+    ],
+    "answer": 1,
+    "explain": "正切函數在此區間連續且嚴格遞增，值域為全體實數，因此每個實數值都恰好對應一個解。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-373",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "在 $0\\le x<2\\pi$ 中，方程式 $2\\sin^2x-3\\sin x+1=0$ 的所有解相加為何？",
+    "choices": [
+      "$\\frac{5\\pi}2$",
+      "$\\pi$",
+      "$2\\pi$",
+      "$\\frac{3\\pi}2$"
+    ],
+    "answer": 3,
+    "explain": "分解為 $(2\\sin x-1)(\\sin x-1)=0$，解為 $\\frac\\pi6,\\frac\\pi2,\\frac{5\\pi}6$，總和為 $\\frac{3\\pi}2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-374",
+    "subject": "math",
+    "topic": "三角函數",
+    "type": "mc",
+    "q": "在 $0\\le x\\le\\frac\\pi2$ 上，$2\\sin x+2\\sqrt3\\cos x$ 於 $x=\\alpha$ 達最大值，則 $\\sin2\\alpha$ 為何？",
+    "choices": [
+      "$\\frac{\\sqrt3}2$",
+      "$1$",
+      "$-\\frac{\\sqrt3}2$",
+      "$\\frac12$"
+    ],
+    "answer": 0,
+    "explain": "原式為 $4\\sin(x+\\frac\\pi3)$，在 $\\alpha=\\frac\\pi6$ 取最大值 $4$，故 $\\sin2\\alpha=\\frac{\\sqrt3}2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-375",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "tf",
+    "q": "對函數 $f(x)=a^x$（$a>0$），橫坐標每增加 $1$，函數值都乘上同一個常數 $a$。",
+    "answer": true,
+    "explain": "$f(x+1)=a^{x+1}=a\\,f(x)$，所以相鄰一單位的函數值比固定為 $a$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-376",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "正數 $N$ 滿足 $\\log_{10}N=-2.4$，則 $N$ 落在哪個範圍？",
+    "choices": [
+      "$0.001<N<0.01$",
+      "$0.01<N<0.1$",
+      "$100<N<1000$",
+      "$0<N<0.001$"
+    ],
+    "answer": 0,
+    "explain": "因為 $-3<-2.4<-2$，取以 $10$ 為底的指數後，得 $0.001<N<0.01$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-377",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "函數 $y=\\log_2|x|$ 的圖形關於哪一條直線對稱？",
+    "choices": [
+      "$y$ 軸",
+      "$x$ 軸",
+      "$y=x$",
+      "$y=-x$"
+    ],
+    "answer": 0,
+    "explain": "因為 $|-x|=|x|$，把非零的 $x$ 換成 $-x$，函數值不變，所以關於 $y$ 軸對稱。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-378",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "tf",
+    "q": "對函數 $y=\\log_2x$，只要橫坐標增加 $1$，縱坐標就一定增加 $1$。",
+    "answer": false,
+    "explain": "例如 $x$ 從 $2$ 增為 $3$，縱坐標從 $1$ 增為 $\\log_2 3<2$；真數乘以 $2$ 才使對數增加 $1$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-379",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "某感測器的讀數定為 $S=\\log_{10}\\frac{I}{I_0}$，其中 $I,I_0>0$。兩次讀數相差 $2$，較大強度是較小強度的幾倍？",
+    "choices": [
+      "$100$",
+      "$20$",
+      "$2$",
+      "$10$"
+    ],
+    "answer": 0,
+    "explain": "設較大、較小強度為 $I_1,I_2$，則 $\\log_{10}\\frac{I_1}{I_2}=2$，故強度比為 $100$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-380",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "函數 $y=\\log_a(x-1)$（$a>0,a\\ne1$）的圖形通過 $(3,1)$，也必通過下列哪一點？",
+    "choices": [
+      "$(2,1)$",
+      "$(4,2)$",
+      "$(5,2)$",
+      "$(3,2)$"
+    ],
+    "answer": 2,
+    "explain": "由 $\\log_a2=1$ 得 $a=2$，而 $\\log_2(5-1)=2$，故通過 $(5,2)$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-381",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "tf",
+    "q": "若正數 $A,B$ 滿足 $\\log_{10}A-\\log_{10}B$ 為整數，則 $\\frac AB$ 必為正整數。",
+    "answer": false,
+    "explain": "取 $A=1,B=10$，對數差為整數 $-1$，但 $\\frac AB=\\frac1{10}$ 不是整數。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-382",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "若 $\\log_2(\\log_2x)=1$，則 $x$ 為何？",
+    "choices": [
+      "$2$",
+      "$4$",
+      "$8$",
+      "$16$"
+    ],
+    "answer": 1,
+    "explain": "先得 $\\log_2x=2^1=2$，再得 $x=2^2=4$；此時內外真數都為正。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-383",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "方程式 $4^x-5\\cdot2^x+4=0$ 的所有實數解之和為何？",
+    "choices": [
+      "$0$",
+      "$1$",
+      "$2$",
+      "$4$"
+    ],
+    "answer": 2,
+    "explain": "令 $t=2^x>0$，得 $(t-1)(t-4)=0$，故 $2^x=1$ 或 $4$，對應 $x=0,2$，解之和為 $2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-384",
+    "subject": "math",
+    "topic": "指數與對數",
+    "type": "mc",
+    "q": "實數 $x$ 滿足 $\\log_2(x-1)+\\log_2(x+1)=3$，則 $x$ 為何？",
+    "choices": [
+      "$5$",
+      "$-3$",
+      "$\\sqrt7$",
+      "$3$"
+    ],
+    "answer": 3,
+    "explain": "真數為正要求 $x>1$；合併後 $(x-1)(x+1)=8$，得 $x=\\pm3$，只有 $x=3$ 合法。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-385",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "tf",
+    "q": "兩個非零平面向量不平行時，任意平面向量都能以它們的線性組合表示，而且表示方式不唯一。",
+    "answer": false,
+    "explain": "不平行的兩向量可表示任意平面向量；若有兩組係數，兩式相減會迫使兩向量平行，故係數必相同，表示方式唯一。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-386",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "若 $G$ 是三角形 $ABC$ 的重心，則 $\\overrightarrow{GA}+\\overrightarrow{GB}+\\overrightarrow{GC}$ 為何？",
+    "choices": [
+      "$\\overrightarrow{AB}$",
+      "$\\overrightarrow{AC}$",
+      "$\\vec0$",
+      "$\\overrightarrow{BC}$"
+    ],
+    "answer": 2,
+    "explain": "重心位置向量是三頂點位置向量的平均，因此由重心指向三頂點的向量和為 $\\vec0$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-387",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "平面向量 $\\vec p$ 滿足 $\\vec p\\cdot(2,1)=5$、$\\vec p\\cdot(1,-2)=0$，則 $\\vec p$ 為何？",
+    "choices": [
+      "$(2,1)$",
+      "$(-2,-1)$",
+      "$(1,2)$",
+      "$(1,-2)$"
+    ],
+    "answer": 0,
+    "explain": "第二式使 $\\vec p$ 平行 $(2,1)$；設 $\\vec p=k(2,1)$，第一式給 $5k=5$，故 $\\vec p=(2,1)$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-388",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "tf",
+    "q": "三點 $A,B,C$ 不共線。若 $\\overrightarrow{AP}=\\frac23\\overrightarrow{AB}+\\frac13\\overrightarrow{AC}$，則 $P$ 在線段 $BC$ 上。",
+    "answer": true,
+    "explain": "位置向量可改寫成 $\\vec p=\\frac23\\vec b+\\frac13\\vec c$，兩係數非負且和為 $1$，故在 $BC$ 上。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-389",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "$\\vec a$ 在非零向量 $\\vec b$ 上的正射影向量為 $\\vec p$。下列何式必恆成立？",
+    "choices": [
+      "$|\\vec a-\\vec p|=|\\vec a|+|\\vec p|$",
+      "$(\\vec a+\\vec p)\\cdot\\vec b=0$",
+      "$\\vec a-\\vec p\\parallel\\vec b$",
+      "$(\\vec a-\\vec p)\\cdot\\vec b=0$"
+    ],
+    "answer": 3,
+    "explain": "投影分量滿足 $\\vec p\\cdot\\vec b=\\vec a\\cdot\\vec b$，所以扣除後的分量與 $\\vec b$ 內積為零。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-390",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "平行四邊形 $ABCD$ 中，$P$ 在 $BC$ 上且 $BP:PC=1:2$。若 $\\overrightarrow{AP}=m\\overrightarrow{AB}+n\\overrightarrow{AD}$，則 $(m,n)$ 為何？",
+    "choices": [
+      "$(1,\\frac13)$",
+      "$(\\frac13,1)$",
+      "$(1,\\frac23)$",
+      "$(\\frac23,1)$"
+    ],
+    "answer": 0,
+    "explain": "$\\overrightarrow{BP}=\\frac13\\overrightarrow{AD}$，沿 $A\\to B\\to P$ 首尾相接，得 $m=1,n=\\frac13$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-391",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "tf",
+    "q": "對不平行的平面向量 $\\vec a,\\vec b$，有 $\\det(\\vec a+\\vec b,\\vec a-\\vec b)=-2\\det(\\vec a,\\vec b)$。",
+    "answer": true,
+    "explain": "展開後同向量的行列式為零，餘下 $-\\det(\\vec a,\\vec b)+\\det(\\vec b,\\vec a)=-2\\det(\\vec a,\\vec b)$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-392",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "$A=(1,1),B=(5,1),C=(2,4)$。點 $P$ 在線段 $BC$ 上且 $BP:PC=1:2$，則三角形 $APC$ 的面積為何？",
+    "choices": [
+      "$2$",
+      "$3$",
+      "$6$",
+      "$4$"
+    ],
+    "answer": 3,
+    "explain": "$P=(4,2)$，故面積為 $\\frac12|\\det((3,1),(1,3))|=\\frac12|9-1|=4$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-393",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "已知 $\\vec a\\ne\\vec0$，且 $\\vec a\\cdot\\vec b=\\vec a\\cdot\\vec c$、$\\det(\\vec a,\\vec b)=\\det(\\vec a,\\vec c)$，下列何者必成立？",
+    "choices": [
+      "$\\vec b\\parallel\\vec a$",
+      "$\\vec a\\cdot\\vec b=0$",
+      "$\\vec b=\\vec c$",
+      "$|\\vec b-\\vec c|=|\\vec a|$"
+    ],
+    "answer": 2,
+    "explain": "$\\vec b-\\vec c$ 同時垂直且平行於非零向量 $\\vec a$，只能是零向量，故 $\\vec b=\\vec c$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-394",
+    "subject": "math",
+    "topic": "平面向量",
+    "type": "mc",
+    "q": "平面上 $A=(2,3)$、$P=(t,2-t)$，其中 $t$ 為實數。使線段 $AP$ 長最小的 $t$ 為何？",
+    "choices": [
+      "$\\frac12$",
+      "$1$",
+      "$-\\frac12$",
+      "$2$"
+    ],
+    "answer": 0,
+    "explain": "$P$ 沿方向 $(1,-1)$ 移動，距離最短時 $\\overrightarrow{AP}=(t-2,-t-1)$ 與此方向垂直。內積為零得 $2t-1=0$，故 $t=\\frac12$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-395",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "tf",
+    "q": "空間中，兩條相異直線若都垂直於同一平面，則兩直線必相交。",
+    "answer": false,
+    "explain": "兩直線的方向都平行於該平面的法向量，因此相異的兩直線互相平行，不相交。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-396",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "第一卦限內的點 $P$，到 $yz$、$xz$、$xy$ 平面的距離依序為 $1,2,3$，則 $P$ 的坐標為何？",
+    "choices": [
+      "$(1,2,3)$",
+      "$(3,2,1)$",
+      "$(-1,2,3)$",
+      "$(1,3,2)$"
+    ],
+    "answer": 0,
+    "explain": "到三個坐標平面的距離分別為 $|x|,|y|,|z|$；第一卦限中各坐標皆正，故 $P=(1,2,3)$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-397",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "非平行的空間向量 $\\vec a,\\vec b$ 滿足 $|\\vec a\\times\\vec b|=K$，則 $|(2\\vec a)\\times(3\\vec b)|$ 為何？",
+    "choices": [
+      "$5K$",
+      "$\\frac32K$",
+      "$36K$",
+      "$6K$"
+    ],
+    "answer": 3,
+    "explain": "外積對兩個純量分別提出，故 $(2\\vec a)\\times(3\\vec b)=6(\\vec a\\times\\vec b)$，長度為 $6K$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-398",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "tf",
+    "q": "兩個非零空間向量 $\\vec a,\\vec b$ 若滿足 $|\\vec a\\times\\vec b|=|\\vec a|\\,|\\vec b|$，則 $\\vec a\\cdot\\vec b=0$。",
+    "answer": true,
+    "explain": "外積長為 $|\\vec a|\\,|\\vec b|\\sin\\theta$，等號迫使 $\\theta=90^\\circ$，故內積為零。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-399",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "兩平行平面 $x+2y+2z=3$ 與 $x+2y+2z=12$ 的距離為何？",
+    "choices": [
+      "$9$",
+      "$3$",
+      "$\\frac43$",
+      "$\\sqrt3$"
+    ],
+    "answer": 1,
+    "explain": "兩平面左側係數相同，距離為 $\\frac{|12-3|}{\\sqrt{1^2+2^2+2^2}}=\\frac93=3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-400",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "空間直線通過 $A=(1,0,0)$、$B=(0,1,1)$，下列哪個平面包含整條直線？",
+    "choices": [
+      "$x+z=0$",
+      "$x+y=1$",
+      "$y+z=0$",
+      "$x-y+z=1$"
+    ],
+    "answer": 1,
+    "explain": "$A,B$ 都滿足 $x+y=1$；平面包含兩相異點，就包含通過這兩點的整條直線。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-401",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "平面 $x+y+z=1$ 與 $x-y+z=3$ 的交線，必與哪一個向量平行？",
+    "choices": [
+      "$(1,0,1)$",
+      "$(1,0,-1)$",
+      "$(0,1,0)$",
+      "$(1,1,1)$"
+    ],
+    "answer": 1,
+    "explain": "交線方向須同時垂直法向量 $(1,1,1)$ 與 $(1,-1,1)$；$(1,0,-1)$ 與兩者的內積都為 $0$，故與交線平行。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-402",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "下列哪一點位於空間直線 $(x,y,z)=(1+t,1-t,2t)$ 上？其中 $t$ 為實數。",
+    "choices": [
+      "$(2,0,2)$",
+      "$(1,1,2)$",
+      "$(0,0,-2)$",
+      "$(2,0,1)$"
+    ],
+    "answer": 0,
+    "explain": "取 $t=1$ 得 $(2,0,2)$；一個點的三個坐標必須能由同一個參數值同時得到。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-403",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "空間中 $A=(1,0,1),B=(3,0,1),C=(2,3,1),P=(2,1,5)$，四面體 $PABC$ 的體積為何？",
+    "choices": [
+      "$12$",
+      "$6$",
+      "$2$",
+      "$4$"
+    ],
+    "answer": 3,
+    "explain": "$AB$ 長為 $2$，底面 $ABC$ 面積為 $\\frac12\\times2\\times3=3$；底面為 $z=1$，高為 $4$，體積為 $\\frac13\\times3\\times4=4$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-404",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "空間中，點 $P=(3,3,0)$ 關於平面 $x+y+z=3$ 的對稱點為何？",
+    "choices": [
+      "$(0,0,-3)$",
+      "$(2,2,-1)$",
+      "$(1,1,-2)$",
+      "$(1,1,2)$"
+    ],
+    "answer": 2,
+    "explain": "沿法向量 $(1,1,1)$ 求得垂足 $H=(2,2,-1)$；對稱點為 $2H-P=(1,1,-2)$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-405",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "tf",
+    "q": "可逆二階方陣所表示的平面線性變換，可能把兩個相異的點變成同一個點。",
+    "answer": false,
+    "explain": "若兩點的像相同，再施以反方陣的變換，便會得到兩點相同，與相異的條件矛盾。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-406",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "二階行列式 $\\begin{vmatrix}2&-1\\\\3&1\\end{vmatrix}$ 的值為何？",
+    "choices": [
+      "$1$",
+      "$-1$",
+      "$5$",
+      "$-5$"
+    ],
+    "answer": 2,
+    "explain": "二階行列式為主對角線乘積減去另一對角線乘積，故 $2\\times1-(-1)\\times3=5$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-407",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "矩陣 $Q$ 的列依序代表甲、乙店，行依序代表飯、麵的銷量；$p$ 是依飯、麵順序排列的單價直行矩陣。兩店營收的直行矩陣為何？",
+    "choices": [
+      "$pQ$",
+      "$Qp$",
+      "$Q+p$",
+      "$Q-p$"
+    ],
+    "answer": 1,
+    "explain": "每店的各品項銷量乘對應單價再相加，正是 $Qp$ 中各列的內積。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-408",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "線性變換將每點 $(x,y)$ 變成 $(x,0)$，其幾何意義為何？",
+    "choices": [
+      "關於 $x$ 軸鏡射",
+      "關於原點對稱",
+      "向 $x$ 軸作正射影",
+      "向 $y$ 軸作正射影"
+    ],
+    "answer": 2,
+    "explain": "橫坐標不變、縱坐標變成零，因此每點都沿鉛直方向投影到 $x$ 軸。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-409",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "設 $A=\\begin{pmatrix}1&2\\\\0&1\\end{pmatrix}$，則 $A^3$ 的第一列第二行元素為何？",
+    "choices": [
+      "$6$",
+      "$2$",
+      "$4$",
+      "$8$"
+    ],
+    "answer": 0,
+    "explain": "此矩陣每作用一次便把 $x$ 增加 $2y$，且 $y$ 不變；三次共增加 $6y$，故該元素為 $6$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-410",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "tf",
+    "q": "對任意可逆二階方陣 $A,B$，恆有 $(AB)^{-1}=A^{-1}B^{-1}$。",
+    "answer": false,
+    "explain": "反方陣的順序要反過來：$(AB)^{-1}=B^{-1}A^{-1}$，才能逐次消去 $B$ 與 $A$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-411",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "設 $N=\\begin{pmatrix}0&1\\\\0&0\\end{pmatrix}$，$I,O$ 分別為二階單位方陣、零矩陣。$(I+N)(I-N)$ 等於何者？",
+    "choices": [
+      "$I$",
+      "$I-2N$",
+      "$O$",
+      "$I+2N$"
+    ],
+    "answer": 0,
+    "explain": "直接相乘得 $N^2=O$；分配律給出 $(I+N)(I-N)=I-N^2=I$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-412",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "tf",
+    "q": "轉移矩陣 $P=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ 以直行表示轉出狀態。任意初始機率分布經兩步後，都恢復原分布。",
+    "answer": true,
+    "explain": "每一步都交換兩個狀態，交換兩次便恢復原狀，亦即 $P^2=I$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-413",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "實數 $x,y,z$ 滿足 $x+y=3$、$y+z=5$、$z+x=4$，則 $x+y+z$ 為何？",
+    "choices": [
+      "$4$",
+      "$5$",
+      "$6$",
+      "$12$"
+    ],
+    "answer": 2,
+    "explain": "將三式相加得 $2(x+y+z)=3+5+4=12$，所以 $x+y+z=6$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-414",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "有甲、乙兩狀態，初始各占一半。第一步甲有一半轉乙、乙全留乙；第二步甲全留甲、乙有一半轉甲。第二步後甲占多少？",
+    "choices": [
+      "$\\frac58$",
+      "$\\frac38$",
+      "$\\frac12$",
+      "$\\frac34$"
+    ],
+    "answer": 0,
+    "explain": "第一步後甲、乙占 $\\frac14,\\frac34$；第二步甲占 $\\frac14+\\frac12\\times\\frac34=\\frac58$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-415",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "矩陣 $A$ 的兩個直行依序為 $\\vec u,\\vec v$。令 $S=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$，則 $AS$ 的兩個直行依序為何？",
+    "choices": [
+      "$\\vec u,\\vec v$",
+      "$-\\vec u,-\\vec v$",
+      "$\\vec v,\\vec u$",
+      "$\\vec u+\\vec v,\\vec u-\\vec v$"
+    ],
+    "answer": 2,
+    "explain": "右乘 $S$ 的第一直行會選出 $A$ 的第二直行，第二直行會選出第一直行，故兩直行互換。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-416",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "兩狀態每步各有 $\\frac34$ 留在原狀態、$\\frac14$ 轉到另一狀態。一步後狀態 $1$ 的機率為 $\\frac58$，則初始狀態 $1$ 的機率為何？",
+    "choices": [
+      "$\\frac12$",
+      "$\\frac14$",
+      "$\\frac58$",
+      "$\\frac34$"
+    ],
+    "answer": 3,
+    "explain": "設初始機率為 $p$，則 $\\frac34p+\\frac14(1-p)=\\frac58$，化簡得 $p=\\frac34$。",
+    "formula": false,
+    "level": 2
   }
 ]

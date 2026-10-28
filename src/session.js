@@ -1,7 +1,12 @@
 // 一輪遊戲的狀態：計分、連擊、計時。純邏輯，UI 只負責呼叫。
 
+/**
+ * endless：題目快用完時由 UI 補下一批，玩家自己按結束才結算
+ * explainAlways：答對也停下來看解析，按「繼續」才換題
+ */
 export const MODES = {
   blitz: { name: '60 秒快閃', size: 80, timeLimit: 60 },
+  free: { name: '自由練習', size: 20, endless: true, explainAlways: true },
   ten: { name: '10 題一輪', size: 10 },
   formula: { name: '公式特訓', size: 10, formulaOnly: true },
   review: { name: '錯題複習', size: 15, weakOnly: true },
@@ -52,6 +57,11 @@ export function submit(s, outcome, chosen = null) {
   }
   s.log.push({ id: q.id, outcome, chosen });
   return points;
+}
+
+/** 無盡模式補題：接在佇列最後 */
+export function extend(s, questions) {
+  s.queue.push(...questions);
 }
 
 /** 前進到下一題；回傳是否還有題目可作答 */

@@ -416,6 +416,28 @@ p {
   color: rgba(59, 47, 42, 0.75);
 }
 
+.mode-pair {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 10px;
+}
+
+.mode-pair .mode {
+  min-height: 70px;
+}
+
+.mode-pair .mode .mode-title {
+  font-size: 1.2rem;
+}
+
+.mode.free {
+  background: color-mix(in srgb, var(--good) 24%, var(--card));
+}
+
+.mode.free .mode-sub {
+  color: rgba(59, 47, 42, 0.75);
+}
+
 .mode-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -937,6 +959,174 @@ p {
   font-weight: 800;
 }
 
+/* ── 草稿區 ─────────────────────────────────────────── */
+.icon-btn[aria-pressed='true'] {
+  background: var(--accent);
+}
+
+.scratch {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.play.scratch-open .scratch {
+  display: flex;
+}
+
+.scratch-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+.scratch-tools {
+  display: flex;
+  gap: 6px;
+  margin-right: auto;
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.tool i {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.tool[data-tool='red'] i {
+  background: var(--bad);
+}
+
+.tool[aria-pressed='true'] {
+  background: var(--accent);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.tool-btn {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.tool:active,
+.tool-btn:active {
+  transform: translate(1px, 1px);
+}
+
+.scratch-sheet {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--card);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  border: 2px solid var(--ink);
+  border-radius: var(--hand);
+  box-shadow: 4px 5px 0 var(--ink);
+}
+
+#scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+  -webkit-touch-callout: none;
+}
+
+.scratch-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.scratch-hint small {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.scratch-hint[hidden] {
+  display: none;
+}
+
+/* 手機：草稿拉出來時先收起選項，題目縮在上方 */
+.play[data-dock=''].scratch-open .answers,
+.play[data-dock=''].scratch-open .play-foot {
+  display: none;
+}
+
+.play[data-dock=''].scratch-open .card-wrap,
+.play[data-dock='bottom'].scratch-open .card-wrap {
+  flex: none;
+}
+
+.play[data-dock=''].scratch-open .card {
+  max-height: 40vh;
+}
+
+.play[data-dock=''].scratch-open .scratch {
+  flex: 1 1 0;
+  min-height: 220px;
+}
+
+/* 平板橫放：左邊作答、右邊草稿（:not([hidden]) 免得蓋掉隱藏畫面的 display: none） */
+.play-bar { grid-area: bar; }
+.timer { grid-area: timer; }
+.card-wrap { grid-area: card; }
+.answers { grid-area: answers; }
+.play-foot { grid-area: foot; }
+.scratch { grid-area: pad; }
+
+.play[data-dock='side'].scratch-open:not([hidden]) {
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: minmax(340px, 500px) minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  grid-template-areas: 'bar pad' 'timer pad' 'card pad' 'answers pad' 'foot pad';
+  column-gap: 24px;
+}
+
+/* 平板直放：草稿接在選項下面 */
+.play[data-dock='bottom'].scratch-open {
+  max-width: 760px;
+}
+
+.play[data-dock='bottom'].scratch-open .card {
+  max-height: 34vh;
+}
+
+.play[data-dock='bottom'].scratch-open .scratch {
+  flex: 1 1 0;
+  min-height: 300px;
+}
+
 #flash {
   position: fixed;
   inset: 0;
@@ -1162,7 +1352,7 @@ p {
   .screen { gap: 8px; }
   .stage { min-height: 110px; }
   .mode { min-height: 54px; }
-  .mode.primary { min-height: 60px; }
+  .mode-pair .mode { min-height: 60px; }
   .answer { min-height: 48px; }
   .answers.tf .answer { min-height: 62px; }
   .card-wrap { padding-top: 30px; }
@@ -1173,6 +1363,7 @@ p {
   .chip-name { font-size: 0.85rem; }
   .chip-name::before { display: none; }
   .brand h1 { font-size: 1.05rem; }
+  .mode-pair .mode .mode-title { font-size: 1.02rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {

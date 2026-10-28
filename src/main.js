@@ -6,6 +6,7 @@ import { loadState, saveState, requestPersistence } from './storage.js';
 import { initHome } from './ui/home.js';
 import { initPlay } from './ui/play.js';
 import { initResult } from './ui/result.js';
+import { initScratch } from './ui/scratch.js';
 
 const state = loadState();
 // 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣
@@ -37,8 +38,10 @@ const ctx = {
   goHome: null,
   startRound: null,
   showResult: null,
+  scratch: null,
 };
 
+initScratch(ctx);
 initHome(ctx);
 initPlay(ctx);
 initResult(ctx);

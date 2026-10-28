@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#fbf5ea" />
-    <meta name="description" content="學測全範圍快問快答：不用紙筆、單手就能刷題，離線也能玩。" />
+    <meta name="description" content="學測全範圍快問快答：手機免紙筆刷題、平板內建草稿區，離線也能玩。" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -60,14 +60,20 @@
         </section>
 
         <nav class="modes" aria-label="遊戲模式">
-          <button class="mode primary" type="button" data-mode="blitz">
-            <span class="mode-title">⚡ 60 秒快閃</span>
-            <span class="mode-sub">最高 <b id="best-blitz">0</b> 分</span>
-          </button>
+          <div class="mode-pair">
+            <button class="mode primary" type="button" data-mode="blitz">
+              <span class="mode-title">⚡ 60 秒快閃</span>
+              <span class="mode-sub">最高 <b id="best-blitz">0</b> 分</span>
+            </button>
+            <button class="mode free" type="button" data-mode="free">
+              <span class="mode-title">🐾 自由練習</span>
+              <span class="mode-sub">不限時・想停就停</span>
+            </button>
+          </div>
           <div class="mode-row">
             <button class="mode" type="button" data-mode="ten">
               <span class="mode-title">10 題一輪</span>
-              <span class="mode-sub">不計時</span>
+              <span class="mode-sub">短短一輪</span>
             </button>
             <button class="mode" type="button" data-mode="formula">
               <span class="mode-title">公式特訓</span>
@@ -89,6 +95,7 @@
           <span id="play-progress" class="play-progress"></span>
           <span id="combo" class="combo" hidden></span>
           <span class="score"><span id="score">0</span><span id="score-pop" class="score-pop"></span></span>
+          <button id="scratch-toggle" class="icon-btn" type="button" aria-label="草稿區" aria-pressed="false">✏️</button>
         </header>
         <div class="timer" id="timer" hidden><i id="timer-fill"></i></div>
 
@@ -111,6 +118,24 @@
           <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
           <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
         </footer>
+
+        <!-- 草稿區：平板上常駐，手機上按 ✏️ 拉出來 -->
+        <aside id="scratch" class="scratch" aria-label="草稿區">
+          <div class="scratch-bar">
+            <div class="scratch-tools" role="group" aria-label="筆">
+              <button class="tool" type="button" data-tool="ink" aria-pressed="true" aria-label="黑筆"><i></i></button>
+              <button class="tool" type="button" data-tool="red" aria-pressed="false" aria-label="紅筆"><i></i></button>
+              <button class="tool" type="button" data-tool="eraser" aria-pressed="false" aria-label="橡皮擦">擦</button>
+            </div>
+            <button id="scratch-undo" class="tool-btn" type="button" aria-label="復原">↶</button>
+            <button id="scratch-clear" class="tool-btn" type="button">清空</button>
+            <button id="scratch-close" class="tool-btn" type="button">收起</button>
+          </div>
+          <div class="scratch-sheet">
+            <canvas id="scratch-canvas"></canvas>
+            <p id="scratch-hint" class="scratch-hint">在這裡演算<small>換題會翻新頁，按 ↶ 可以找回上一頁</small></p>
+          </div>
+        </aside>
       </section>
 
       <!-- 結算 -->

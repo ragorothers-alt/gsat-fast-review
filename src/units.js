@@ -2,7 +2,7 @@
 // 跟 subjects.js 一樣不能依賴瀏覽器 API，驗證腳本會在 Node 端 import 它。
 
 /** 每個單元至少要有幾題，驗證器會擋下不足的單元 */
-export const MIN_PER_UNIT = 20;
+export const MIN_PER_UNIT = 30;
 
 export const UNITS = {
   chinese: ['字音字形', '成語與詞語運用', '文言字詞', '修辭', '核心古文', '論孟選讀', '詩詞曲', '文學常識', '應用文與語文常識'],

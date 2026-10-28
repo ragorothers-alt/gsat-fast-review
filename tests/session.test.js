@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advance, createSession, current, isCorrect, isOver, multiplier, submit, tick } from '../src/session.js';
+import { advance, createSession, current, extend, isCorrect, isOver, multiplier, submit, tick } from '../src/session.js';
 import { currentStreak, dayKey, recordAnswer, today } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -31,6 +31,16 @@ describe('session', () => {
     expect(advance(s)).toBe(true);
     expect(advance(s)).toBe(false);
     expect(isOver(s)).toBe(true);
+  });
+
+  it('自由練習不計時，補題後可以一直往下出', () => {
+    const s = createSession('free', queue.slice(0, 1));
+    expect(s.timeLeft).toBeNull();
+    submit(s, 'wrong');
+    extend(s, queue.slice(1, 3));
+    expect(advance(s)).toBe(true);
+    expect(current(s).id).toBe('b');
+    expect(s.queue).toHaveLength(3);
   });
 
   it('快閃模式時間到就結束，不會變負數', () => {
