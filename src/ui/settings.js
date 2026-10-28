@@ -4,6 +4,7 @@ import { dayKey } from '../stats.js';
 import { DEFAULT_EXAM_DATE } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { exportBackup, mergeState, parseBackup } from '../sync.js';
+import { copyText } from './clipboard.js';
 import { setSoundEnabled } from './feedback.js';
 import { richHTML } from './rich.js';
 
@@ -197,25 +198,4 @@ function flagReport(qs) {
     lines.push(`目前答案：${answer}`, `解析：${q.explain}`);
   });
   return lines.join('\n');
-}
-
-async function copyText(text) {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    // 舊瀏覽器或沒有剪貼簿權限時，改用隱藏的文字框複製
-    const ta = Object.assign(document.createElement('textarea'), { value: text, readOnly: true });
-    ta.style.cssText = 'position:fixed;opacity:0';
-    document.body.append(ta);
-    ta.select();
-    let ok = false;
-    try {
-      ok = document.execCommand('copy');
-    } catch {
-      ok = false;
-    }
-    ta.remove();
-    return ok;
-  }
 }

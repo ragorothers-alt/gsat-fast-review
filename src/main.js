@@ -1,6 +1,6 @@
 import 'katex/dist/katex.min.css';
 import './styles.css';
-import { BANK } from './data/bank.js';
+import { loadBank } from './data/bank.js';
 import { createWorld } from './scene.js';
 import { loadState, saveState, requestPersistence } from './storage.js';
 import { initHome } from './ui/home.js';
@@ -26,7 +26,7 @@ let toastTimer = 0;
 const ctx = {
   state,
   world,
-  bank: BANK,
+  bank: [],
   save: () => saveState(state),
   show(id) {
     for (const el of screens) el.hidden = el.id !== id;
@@ -56,22 +56,35 @@ const ctx = {
   scratch: null,
 };
 
-initScratch(ctx);
-initHome(ctx);
-initPlay(ctx);
-initResult(ctx);
-initStats(ctx);
-ctx.goHome();
-requestPersistence();
+function start(bank) {
+  ctx.bank = bank;
+  initScratch(ctx);
+  initHome(ctx);
+  initPlay(ctx);
+  initResult(ctx);
+  initStats(ctx);
+  ctx.goHome();
+  document.querySelector('#boot').hidden = true;
 
-try {
-  if (sessionStorage.getItem(UPDATED_KEY)) {
-    sessionStorage.removeItem(UPDATED_KEY);
-    ctx.toast('已更新到最新版本 ✨');
+  try {
+    if (sessionStorage.getItem(UPDATED_KEY)) {
+      sessionStorage.removeItem(UPDATED_KEY);
+      ctx.toast('已更新到最新版本 ✨');
+    }
+  } catch {
+    // 私密瀏覽等情況讀不到 sessionStorage，略過提示
   }
-} catch {
-  // 私密瀏覽等情況讀不到 sessionStorage，略過提示
 }
+
+// 題庫要先下載（裝成 App 後從快取讀，幾乎是瞬間）；第一次開又剛好斷線時，讓玩家可以重試
+function boot() {
+  const box = document.querySelector('#boot');
+  box.classList.remove('failed');
+  loadBank().then(start, () => box.classList.add('failed'));
+}
+document.querySelector('#boot-retry').addEventListener('click', boot);
+boot();
+requestPersistence();
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   // 新版 sw 下載完並接手後：在首頁（沒開面板）就直接換新版，作答中等回首頁再換

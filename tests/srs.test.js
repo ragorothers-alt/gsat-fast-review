@@ -37,15 +37,22 @@ describe('schedule', () => {
     expect(c.wrong).toBe(1);
   });
 
-  it('看解答不改盒子，但放進錯題本且立即到期', () => {
+  it('按「不會」等同答錯：回到第 0 盒、進錯題本，但不算答錯次數', () => {
     let c = schedule(undefined, 'right', NOW);
+    c = schedule(c, 'right', NOW); // 第 3 盒
     c = schedule(c, 'skip', NOW + 5);
-    expect(c.box).toBe(2);
-    expect(c.parked).toBe(true);
-    expect(c.due).toBe(NOW + 5);
+    expect(c).toMatchObject({ box: 0, parked: true, wrong: 0, due: NOW + 5 + INTERVALS[0] });
     expect(isWeak(c)).toBe(true);
-    // 之後答對就離開錯題本
-    expect(isWeak(schedule(c, 'right', NOW + 10))).toBe(false);
+  });
+
+  it('按「不會」之後，答對一次還不能離開錯題本，要升到第 3 盒', () => {
+    let c = schedule(undefined, 'skip', NOW);
+    c = schedule(c, 'right', NOW); // 1
+    expect(isWeak(c)).toBe(true);
+    c = schedule(c, 'right', NOW); // 2
+    expect(isWeak(c)).toBe(true);
+    c = schedule(c, 'right', NOW); // 3
+    expect(isWeak(c)).toBe(false);
   });
 
   it('答錯後要升到第 3 盒才離開錯題本', () => {

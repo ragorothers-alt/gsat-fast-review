@@ -111,6 +111,7 @@
             <div class="card-tag">
               <span id="q-subject" class="tag"></span>
               <span id="q-topic" class="topic"></span>
+              <button id="copy-q" class="copy-btn" type="button" aria-label="複製題目（可以貼給 ChatGPT 問）" title="複製題目，貼給 ChatGPT 問">📋</button>
               <button id="flag" class="flag-btn" type="button" aria-pressed="false" aria-label="回報這題有問題" title="這題怪怪的？">🚩</button>
             </div>
             <div id="q-text" class="q-text"></div>
@@ -124,6 +125,7 @@
         <div id="answers" class="answers"></div>
         <footer class="play-foot">
           <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
+          <button id="related" class="related-btn" type="button" hidden title="接著練 3 題同單元的類似題">🔁 練 3 題類似題</button>
           <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
         </footer>
 
@@ -161,6 +163,7 @@
             </div>
           </header>
           <h2 id="r-review-title" class="r-title"></h2>
+          <button id="r-related" class="related-btn wide" type="button" hidden>🔁 用這些錯題找類似題來練</button>
           <ol id="r-list" class="r-list"></ol>
         </div>
         <nav class="result-actions">
@@ -263,6 +266,14 @@
       </div>
     </div>
 
+    <!-- 開啟時下載題庫 -->
+    <div id="boot" class="boot" role="status">
+      <p class="boot-card">
+        <span class="boot-loading">題庫載入中…</span>
+        <span class="boot-error">題庫下載失敗，請確認網路連線。</span>
+        <button id="boot-retry" class="boot-error secondary-btn" type="button">重試</button>
+      </p>
+    </div>
     <div id="toast" role="status" aria-live="polite"></div>
     <script type="module" src="./src/main.js"></script>
   </body>

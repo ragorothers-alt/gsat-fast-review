@@ -9,6 +9,8 @@ export const MAX_BOX = INTERVALS.length - 1;
 
 /**
  * 依作答結果更新一張卡片的排程。
+ * 按「不會？看解答」（skip）在排程上等同答錯：回到第 0 盒、1 分鐘後到期；
+ * 只是不算進答錯次數（wrong），也不打斷畫面的節奏。
  * @param {object|undefined} card 舊紀錄（沒看過則為 undefined）
  * @param {'right'|'wrong'|'skip'} outcome skip = 不會、直接看解答
  * @param {number} now
@@ -22,19 +24,22 @@ export function schedule(card, outcome, now) {
     // 第一次見到就答對：直接跳到隔天再考
     c.box = c.seen === 1 ? 2 : Math.min(MAX_BOX, c.box + 1);
     c.parked = false;
-  } else if (outcome === 'wrong') {
-    c.wrong++;
-    c.box = 0;
   } else {
-    c.parked = true;
+    if (outcome === 'wrong') c.wrong++;
+    // parked：最近一次是按「不會」
+    c.parked = outcome === 'skip';
+    c.box = 0;
   }
-  c.due = now + (outcome === 'skip' ? 0 : INTERVALS[c.box]);
+  c.due = now + INTERVALS[c.box];
   return c;
 }
 
-/** 錯題本：答錯後還沒穩定答對，或按過「看解答」的題目 */
+/**
+ * 錯題本：答錯或按過「不會」（seen > right），而且還沒升到第 3 盒——
+ * 也就是之後要隔開時間再答對兩三次，才算真的學會、離開錯題本。
+ */
 export function isWeak(card) {
-  return !!card && (card.parked || (card.wrong > 0 && card.box < 3));
+  return !!card && (card.parked || ((card.wrong > 0 || card.seen > card.right) && card.box < 3));
 }
 
 /** 熟練度 0–1：每題的盒子數平均，沒看過算 0 */

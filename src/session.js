@@ -11,6 +11,8 @@ export const MODES = {
   formula: { name: '公式特訓', size: 10, formulaOnly: true },
   review: { name: '錯題複習', size: 15, weakOnly: true },
   weak: { name: '弱點加強', size: 15, explainAlways: true },
+  // 從結算畫面的錯題出發，練同單元裡最像的題目
+  related: { name: '錯題延伸', size: 15, explainAlways: true },
 };
 
 export function createSession(mode, queue) {

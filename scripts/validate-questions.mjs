@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// 題庫格式驗證：node scripts/validate-questions.mjs [檔案...]
-// 不帶參數時檢查 src/data/questions/ 底下全部 JSON。有錯誤時 exit code 1。
+// 題庫格式驗證：node scripts/validate-questions.mjs [--partial] [檔案...]
+// 不帶檔案時檢查 src/data/questions/ 底下全部 JSON。有錯誤時 exit code 1。
 // topic 必須是 src/units.js 列出的單元，且每個單元至少 MIN_PER_UNIT 題。
+// --partial：只檢查格式，不檢查單元題數（用來驗證還沒併入題庫的新題檔，檔名仍須是 <科目>.json）。
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -20,11 +21,12 @@ const CONTROL_CHARS = /[\u0000-\u0009\u000b-\u001f]/;
 const CJK = /[㐀-鿿]/;
 const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level']);
 
-const files = process.argv.length > 2
-  ? process.argv.slice(2)
-  : readdirSync(QUESTION_DIR).filter((f) => f.endsWith('.json')).map((f) => join(QUESTION_DIR, f));
+const args = process.argv.slice(2);
+const partial = args.includes('--partial');
+const named = args.filter((a) => !a.startsWith('--'));
+const files = named.length ? named : readdirSync(QUESTION_DIR).filter((f) => f.endsWith('.json')).map((f) => join(QUESTION_DIR, f));
 
-if (process.argv.length <= 2) {
+if (!named.length) {
   const present = new Set(files.map((f) => basename(f, '.json')));
   for (const s of SUBJECTS) if (!present.has(s.id)) console.error(`✗ 缺少題庫檔 ${s.id}.json`);
 }
@@ -108,8 +110,10 @@ for (const file of files) {
     }
   });
 
-  for (const [unit, count] of stats.topics) {
-    if (count < MIN_PER_UNIT) errors.push(`單元「${unit}」只有 ${count} 題，至少要 ${MIN_PER_UNIT} 題`);
+  if (!partial) {
+    for (const [unit, count] of stats.topics) {
+      if (count < MIN_PER_UNIT) errors.push(`單元「${unit}」只有 ${count} 題，至少要 ${MIN_PER_UNIT} 題`);
+    }
   }
 
   const n = items.length;

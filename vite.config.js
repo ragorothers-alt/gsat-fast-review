@@ -6,8 +6,8 @@ import { join, relative } from 'node:path';
 export default defineConfig({
   // 相對路徑：放在任何子路徑（GitHub Pages 等）都能跑
   base: './',
-  // 題庫（約 3 千題）直接打包進主程式，裝成 PWA 後一次快取，所以單檔偏大是預期的
-  build: { target: 'es2020', chunkSizeWarningLimit: 2500 },
+  // 題庫是另外下載的 JSON（見 src/data/bank.js）；主程式約 900 kB 幾乎都是 three.js 與 KaTeX，一次快取就好，不再拆
+  build: { target: 'es2020', chunkSizeWarningLimit: 1000 },
   plugins: [precacheServiceWorker()],
 });
 
@@ -46,8 +46,18 @@ const CACHE = ${JSON.stringify(version)};
 const PRECACHE = ${JSON.stringify(urls, null, 2)};
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE).then((c) => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
+  event.waitUntil(
+    caches
+      .open(CACHE)
+      .then((c) => Promise.all(PRECACHE.map((url) => reuse(url).then((hit) => (hit ? c.put(url, hit) : c.add(url))))))
+      .then(() => self.skipWaiting()),
+  );
 });
+
+// assets/ 底下的檔名含內容雜湊，內容不會變：舊版快取裡有就直接沿用，改版時只下載真的變了的檔案（例如某一科題庫）
+function reuse(url) {
+  return url.startsWith('assets/') ? caches.match(url) : Promise.resolve(undefined);
+}
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(

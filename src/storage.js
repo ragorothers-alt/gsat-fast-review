@@ -33,6 +33,8 @@ export function loadState() {
     if (!raw) return freshState();
     const saved = JSON.parse(raw);
     const base = freshState();
+    // 舊版按「不會」不會降盒子；現在等同答錯，舊紀錄一併拉回第 0 盒
+    for (const c of Object.values(saved.cards ?? {})) if (c.parked && c.box > 0) c.box = 0;
     return {
       ...base,
       ...saved,

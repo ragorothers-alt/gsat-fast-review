@@ -3,7 +3,10 @@ import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, submit, tick, multiplier } from '../session.js';
+import { questionPrompt } from '../prompt.js';
+import { relatedQuestions, relatedQueue } from '../related.js';
 import { recordAnswer, today } from '../stats.js';
+import { copyQuestion } from './clipboard.js';
 import { richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
 
@@ -11,6 +14,10 @@ const RIGHT_DELAY = 650;
 const SWIPE_THRESHOLD = 80;
 /** 自由練習補題時，最近答過的幾題先不出 */
 const RECENT = 8;
+/** 找類似題時，這段時間內答過的題目先不出 */
+const RECENT_MS = 30 * 60_000;
+/** 答錯後「練類似題」一次插入幾題 */
+const RELATED_COUNT = 3;
 
 export function initPlay(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -31,11 +38,15 @@ export function initPlay(ctx) {
     timerFill: $('#timer-fill'),
     flash: $('#flash'),
     flag: $('#flag'),
+    copy: $('#copy-q'),
+    related: $('#related'),
   };
+  const byId = new Map(ctx.bank.map((x) => [x.id, x]));
 
   let s = null;
   let q = null;
   let order = null; // 單選題：畫面上第 i 個按鈕 → 原始選項索引
+  let pendingRelated = []; // 這題答錯後可以接著練的類似題
   let phase = 'idle'; // idle | answering | feedback
   let autoNext = 0;
   let raf = 0;
@@ -60,9 +71,17 @@ export function initPlay(ctx) {
     });
   }
 
+  /** 不出的題目：被回報的，以及剛答過的（找類似題時才不會又抽到剛做完的） */
+  function avoidIds(now) {
+    const ids = Object.keys(ctx.state.flags);
+    for (const [id, c] of Object.entries(ctx.state.cards)) if (c.last > now - RECENT_MS) ids.push(id);
+    return ids;
+  }
+
   /**
    * @param {string} mode
-   * @param {{ units?: string[] }} [opts] units：指定要練的單元（從學習分析點單元進來時）
+   * @param {{ units?: string[], seeds?: string[] }} [opts]
+   *   units：指定要練的單元（從學習分析點單元進來時）；seeds：錯題延伸要從哪幾題錯題找類似題
    */
   ctx.startRound = (mode, opts = {}) => {
     let units = opts.units ?? null;
@@ -74,18 +93,28 @@ export function initPlay(ctx) {
         return;
       }
     }
-    let queue = queueFor(mode, { units });
+    let queue =
+      mode === 'related'
+        ? relatedQueue(ctx.bank, opts.seeds.map((id) => byId.get(id)).filter(Boolean), {
+            size: MODES.related.size,
+            exclude: avoidIds(Date.now()),
+          })
+        : queueFor(mode, { units });
     if (!queue.length && mode === 'formula') {
       queue = queueFor(mode, { subjects: SUBJECTS.map((x) => x.id) });
       if (queue.length) ctx.toast('選的科目沒有公式題，改出全部科目的公式題');
     }
     if (!queue.length) {
-      ctx.toast(mode === 'review' ? '目前沒有待練的錯題，太穩了 🎉' : '選到的單元沒有題目');
+      ctx.toast(
+        mode === 'review' ? '目前沒有待練的錯題，太穩了 🎉' : mode === 'related' ? '類似的題目剛剛都練過了，晚點再來' : '選到的單元沒有題目',
+      );
       return;
     }
     s = createSession(mode, queue);
-    // 指定單元進來的，「再來一輪」時沿用同樣的單元；從首頁進來的則重新找弱點
-    s.units = opts.units ?? null;
+    // 「再來一輪」時沿用：指定的單元、錯題延伸的錯題（剛練過的類似題會自動避開）；從首頁進來的弱點加強則重新找
+    s.opts = opts;
+    // 作答中按「練 3 題類似題」插進來的題目
+    s.extra = new Set();
     el.timer.hidden = s.timeLeft === null;
     el.score.textContent = '0';
     renderCombo();
@@ -121,10 +150,12 @@ export function initPlay(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    el.topic.textContent = q.topic;
+    el.topic.textContent = s.extra.has(q.id) ? `🔁 ${q.topic}・類似題` : q.topic;
     el.text.innerHTML = richHTML(q.q);
     el.explain.hidden = true;
     el.next.hidden = true;
+    el.related.hidden = true;
+    pendingRelated = [];
     el.skip.hidden = false;
     const counted = s.timeLeft === null && !MODES[s.mode].endless;
     el.progress.textContent = counted ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
@@ -225,9 +256,27 @@ export function initPlay(ctx) {
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
     el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     el.skip.hidden = true;
+    // 答錯或不會：可以馬上再練幾題同單元的類似題（快閃模式在計時，不打斷）
+    pendingRelated =
+      outcome === 'right' || s.timeLeft !== null
+        ? []
+        : relatedQuestions(ctx.bank, q, { count: RELATED_COUNT, exclude: avoidIds(now) });
+    el.related.hidden = !pendingRelated.length;
+    el.related.textContent = `🔁 練 ${pendingRelated.length} 題類似題`;
     el.next.hidden = false;
     el.next.focus({ preventScroll: true });
   }
+
+  el.related.addEventListener('click', () => {
+    if (phase !== 'feedback' || !pendingRelated.length) return;
+    const ids = new Set(pendingRelated.map((x) => x.id));
+    // 已經排在後面的就提前，不重複出
+    const rest = s.queue.slice(s.index + 1).filter((x) => !ids.has(x.id));
+    s.queue.splice(s.index + 1, Infinity, ...pendingRelated, ...rest);
+    for (const id of ids) s.extra.add(id);
+    pendingRelated = [];
+    next();
+  });
 
   function next() {
     clearTimeout(autoNext);
@@ -247,6 +296,14 @@ export function initPlay(ctx) {
   function renderFlag() {
     el.flag.setAttribute('aria-pressed', String(!!ctx.state.flags[q.id]));
   }
+
+  // ── 複製題目給 AI 家教 ────────────────────────────────
+  el.copy.addEventListener('click', () => {
+    if (!q) return;
+    // 作答後附上自己的答案、正解與解析；作答前只給題目，請它教怎麼解
+    const entry = phase === 'feedback' ? s.log[s.log.length - 1] : null;
+    copyQuestion(questionPrompt(q, { order: q.type === 'mc' ? order : undefined, ...entry }), ctx.toast);
+  });
 
   el.flag.addEventListener('click', () => {
     if (!q) return;
