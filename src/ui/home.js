@@ -2,7 +2,9 @@
 import { SUBJECTS } from '../subjects.js';
 import { isWeak, mastery } from '../srs.js';
 import { currentStreak, today } from '../stats.js';
+import { UNITS, unitKey } from '../units.js';
 import { setSoundEnabled } from './feedback.js';
+import { initUnitSheet } from './units.js';
 
 export function initHome(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -18,7 +20,7 @@ export function initHome(ctx) {
     btn.className = 'chip';
     btn.dataset.subject = s.id;
     btn.style.setProperty('--c', s.color);
-    btn.innerHTML = `<span class="chip-name">${s.name}</span><span class="chip-meter"><i></i></span>`;
+    btn.innerHTML = `<span class="chip-name">${s.name}</span><span class="chip-meter"><i></i></span><span class="chip-units" hidden></span>`;
     btn.addEventListener('click', () => toggle(s.id));
     chipsEl.append(btn);
     return btn;
@@ -32,7 +34,10 @@ export function initHome(ctx) {
     render();
   }
 
-  ctx.world.onPlanetTap = toggle;
+  ctx.world.onCatTap = toggle;
+
+  const unitSheet = initUnitSheet(ctx, () => render());
+  $('#open-units').addEventListener('click', () => unitSheet.open());
 
   $('#toggle-all').addEventListener('click', () => {
     const all = settings.subjects.length === SUBJECTS.length;
@@ -56,7 +61,8 @@ export function initHome(ctx) {
     const now = Date.now();
     const { cards } = ctx.state;
     const selected = new Set(settings.subjects);
-    const inSelection = ctx.bank.filter((q) => selected.has(q.subject));
+    const off = new Set(settings.excludedUnits);
+    const inSelection = ctx.bank.filter((q) => selected.has(q.subject) && !off.has(unitKey(q.subject, q.topic)));
 
     chips.forEach((chip) => {
       const id = chip.dataset.subject;
@@ -64,7 +70,13 @@ export function initHome(ctx) {
       const m = Math.round(mastery(qs, cards) * 100);
       chip.setAttribute('aria-pressed', String(selected.has(id)));
       chip.querySelector('i').style.width = `${m}%`;
-      chip.title = qs.length ? `熟練度 ${m}%・${qs.length} 題` : '題庫準備中';
+      // 只練部分單元時，右上角標出練幾個單元
+      const units = UNITS[id] || [];
+      const onUnits = units.filter((u) => !off.has(unitKey(id, u))).length;
+      const badge = chip.querySelector('.chip-units');
+      badge.hidden = !selected.has(id) || onUnits === units.length;
+      badge.textContent = onUnits;
+      chip.title = qs.length ? `熟練度 ${m}%・${qs.length} 題・練 ${onUnits}/${units.length} 個單元` : '題庫準備中';
     });
     $('#toggle-all').textContent = selected.size === SUBJECTS.length ? '清除' : '全選';
 

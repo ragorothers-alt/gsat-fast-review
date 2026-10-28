@@ -81,6 +81,12 @@ describe('buildQueue', () => {
     expect(out.every((x) => x.subject === 'math')).toBe(true);
   });
 
+  it('關掉的單元不出題', () => {
+    const units = [q('u1', 'math', { topic: '機率' }), q('u2', 'math', { topic: '矩陣' }), q('u3', 'physics', { topic: '矩陣' })];
+    const out = buildQueue(units, {}, { subjects: ['math', 'physics'], excludedUnits: ['math/矩陣'], size: 10, now: NOW, rng: seeded() });
+    expect(out.map((x) => x.id).sort()).toEqual(['u1', 'u3']);
+  });
+
   it('公式特訓只出 formula 題', () => {
     const out = buildQueue(bank, {}, { subjects: ['math', 'physics', 'chinese'], formulaOnly: true, size: 10, now: NOW, rng: seeded() });
     expect(out.map((x) => x.id).sort()).toEqual(['m4', 'p1']);

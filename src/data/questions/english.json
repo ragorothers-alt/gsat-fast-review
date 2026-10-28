@@ -2,7 +2,7 @@
   {
     "id": "english-001",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The clock shows the exact time, so it is ____.",
     "choices": [
@@ -19,7 +19,7 @@
   {
     "id": "english-002",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Every room is booked tonight, so none is ____ for anyone else to book.",
     "choices": [
@@ -36,7 +36,7 @@
   {
     "id": "english-003",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Water is ____ for survival; people cannot live without it.",
     "choices": [
@@ -53,7 +53,7 @@
   {
     "id": "english-004",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Nothing unusual happened; it was just an ____ day.",
     "choices": [
@@ -70,7 +70,7 @@
   {
     "id": "english-005",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Mia is ____; she gladly shares her food and money with others.",
     "choices": [
@@ -87,7 +87,7 @@
   {
     "id": "english-006",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "This is a ____ office; we will leave it when repairs to our building are finished.",
     "choices": [
@@ -104,7 +104,7 @@
   {
     "id": "english-007",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Although she knew the answer, fear of being wrong made her ____ before speaking.",
     "choices": [
@@ -121,7 +121,7 @@
   {
     "id": "english-008",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The museum controls light and temperature to ____ its ancient paintings from damage.",
     "choices": [
@@ -138,7 +138,7 @@
   {
     "id": "english-009",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The twins look so alike that I cannot ____ one from the other.",
     "choices": [
@@ -155,7 +155,7 @@
   {
     "id": "english-010",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "After a week of rest, Leo began to ____ from the flu and felt much better.",
     "choices": [
@@ -172,7 +172,7 @@
   {
     "id": "english-011",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "This machine does the same work with less energy, making it more ____.",
     "choices": [
@@ -189,7 +189,7 @@
   {
     "id": "english-012",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "My skin is ____ to this soap; it becomes red and sore.",
     "choices": [
@@ -206,7 +206,7 @@
   {
     "id": "english-013",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Eva was ____ to lend her car, so she agreed only after repeated requests.",
     "choices": [
@@ -223,7 +223,7 @@
   {
     "id": "english-014",
     "subject": "english",
-    "topic": "單字",
+    "topic": "進階單字",
     "type": "mc",
     "q": "An ____ delay is one that cannot be prevented, no matter what we do.",
     "choices": [
@@ -240,7 +240,7 @@
   {
     "id": "english-015",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "To remain ____, the judge relied on evidence rather than personal feelings.",
     "choices": [
@@ -257,7 +257,7 @@
   {
     "id": "english-016",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "His account stayed ____; every retelling contained the same details.",
     "choices": [
@@ -274,7 +274,7 @@
   {
     "id": "english-017",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The repairs cost a ____ amount, so the final bill was extremely high.",
     "choices": [
@@ -291,7 +291,7 @@
   {
     "id": "english-018",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The treatment has ____ benefits, but further tests must show whether it actually helps.",
     "choices": [
@@ -308,7 +308,7 @@
   {
     "id": "english-019",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "Without exact figures, we can only ____ how much the repairs will cost.",
     "choices": [
@@ -325,7 +325,7 @@
   {
     "id": "english-020",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The teacher repeated the warning to ____ the importance of online safety.",
     "choices": [
@@ -342,7 +342,7 @@
   {
     "id": "english-021",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "A ____ is a result of an action; for example, missing class may lead to falling behind.",
     "choices": [
@@ -359,7 +359,7 @@
   {
     "id": "english-022",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "We cannot use Plan A, so we need an ____, such as Plan B.",
     "choices": [
@@ -376,7 +376,7 @@
   {
     "id": "english-023",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "When water is scarce, there is plenty of it.",
     "answer": false,
@@ -387,7 +387,7 @@
   {
     "id": "english-024",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "A precise measurement is exact rather than rough.",
     "answer": true,
@@ -398,7 +398,7 @@
   {
     "id": "english-025",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "To assume something is to accept it as true without being certain.",
     "answer": true,
@@ -409,7 +409,7 @@
   {
     "id": "english-026",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "In 'We eventually arrived after several delays,' eventually means immediately.",
     "answer": false,
@@ -420,7 +420,7 @@
   {
     "id": "english-027",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "In 'Please reserve a table for six,' reserve means book in advance.",
     "answer": true,
@@ -431,7 +431,7 @@
   {
     "id": "english-028",
     "subject": "english",
-    "topic": "單字",
+    "topic": "進階單字",
     "type": "tf",
     "q": "In 'She politely declined the invitation,' declined means accepted.",
     "answer": false,
@@ -442,7 +442,7 @@
   {
     "id": "english-029",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "In 'The project produced a modest profit,' modest means enormous.",
     "answer": false,
@@ -453,7 +453,7 @@
   {
     "id": "english-030",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "In 'The business plans to expand abroad,' expand means become larger.",
     "answer": true,
@@ -566,7 +566,7 @@
   {
     "id": "english-037",
     "subject": "english",
-    "topic": "片語與搭配詞",
+    "topic": "不定詞、動名詞與分詞",
     "type": "mc",
     "q": "I look forward to ____ from you soon.",
     "choices": [
@@ -774,7 +774,7 @@
   {
     "id": "english-051",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "mc",
     "q": "Listen! Someone ____ at the door right now.",
     "choices": [
@@ -791,7 +791,7 @@
   {
     "id": "english-052",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "mc",
     "q": "I ____ my grandparents yesterday afternoon.",
     "choices": [
@@ -808,7 +808,7 @@
   {
     "id": "english-053",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "mc",
     "q": "Nora ____ in Taipei since 2020 and still lives there.",
     "choices": [
@@ -825,7 +825,7 @@
   {
     "id": "english-054",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "mc",
     "q": "I missed the train because it ____ before I reached the station.",
     "choices": [
@@ -842,7 +842,7 @@
   {
     "id": "english-055",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "mc",
     "q": "I will call you as soon as I ____ home tomorrow.",
     "choices": [
@@ -859,7 +859,7 @@
   {
     "id": "english-056",
     "subject": "english",
-    "topic": "文法",
+    "topic": "子句與連接詞",
     "type": "mc",
     "q": "The girl ____ won the race is my sister.",
     "choices": [
@@ -876,7 +876,7 @@
   {
     "id": "english-057",
     "subject": "english",
-    "topic": "文法",
+    "topic": "子句與連接詞",
     "type": "mc",
     "q": "I know a student ____ father teaches at our school.",
     "choices": [
@@ -893,7 +893,7 @@
   {
     "id": "english-058",
     "subject": "english",
-    "topic": "文法",
+    "topic": "子句與連接詞",
     "type": "mc",
     "q": "The bus, ____ was already full, drove past us.",
     "choices": [
@@ -910,7 +910,7 @@
   {
     "id": "english-059",
     "subject": "english",
-    "topic": "文法",
+    "topic": "不定詞、動名詞與分詞",
     "type": "mc",
     "q": "____ by the sudden noise, the baby began to cry.",
     "choices": [
@@ -927,7 +927,7 @@
   {
     "id": "english-060",
     "subject": "english",
-    "topic": "文法",
+    "topic": "不定詞、動名詞與分詞",
     "type": "mc",
     "q": "____ all her money, Nina could not afford a bus ticket.",
     "choices": [
@@ -944,7 +944,7 @@
   {
     "id": "english-061",
     "subject": "english",
-    "topic": "文法",
+    "topic": "假設語氣與特殊句構",
     "type": "mc",
     "q": "If I ____ you, I would apologize to her.",
     "choices": [
@@ -961,7 +961,7 @@
   {
     "id": "english-062",
     "subject": "english",
-    "topic": "文法",
+    "topic": "假設語氣與特殊句構",
     "type": "mc",
     "q": "If Ben had set an alarm, he ____ the early train yesterday.",
     "choices": [
@@ -978,7 +978,7 @@
   {
     "id": "english-063",
     "subject": "english",
-    "topic": "文法",
+    "topic": "假設語氣與特殊句構",
     "type": "mc",
     "q": "I wish I ____ more time now, but the deadline is in an hour.",
     "choices": [
@@ -995,7 +995,7 @@
   {
     "id": "english-064",
     "subject": "english",
-    "topic": "文法",
+    "topic": "假設語氣與特殊句構",
     "type": "mc",
     "q": "Never ____ such a beautiful sunset before.",
     "choices": [
@@ -1012,7 +1012,7 @@
   {
     "id": "english-065",
     "subject": "english",
-    "topic": "文法",
+    "topic": "子句與連接詞",
     "type": "mc",
     "q": "____ it was raining, the players continued the game instead of stopping.",
     "choices": [
@@ -1029,7 +1029,7 @@
   {
     "id": "english-066",
     "subject": "english",
-    "topic": "文法",
+    "topic": "假設語氣與特殊句構",
     "type": "mc",
     "q": "This bag is much ____ than that one.",
     "choices": [
@@ -1046,7 +1046,7 @@
   {
     "id": "english-067",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "mc",
     "q": "The classroom must ____ before the visitors arrive.",
     "choices": [
@@ -1063,7 +1063,7 @@
   {
     "id": "english-068",
     "subject": "english",
-    "topic": "文法",
+    "topic": "不定詞、動名詞與分詞",
     "type": "mc",
     "q": "She avoided ____ the question because she did not know the answer.",
     "choices": [
@@ -1080,7 +1080,7 @@
   {
     "id": "english-069",
     "subject": "english",
-    "topic": "文法",
+    "topic": "詞性與構詞",
     "type": "tf",
     "q": "'Children' is the plural form of 'child'.",
     "answer": true,
@@ -1091,7 +1091,7 @@
   {
     "id": "english-070",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "tf",
     "q": "'She don't like coffee' is grammatically correct in standard written English.",
     "answer": false,
@@ -1102,7 +1102,7 @@
   {
     "id": "english-071",
     "subject": "english",
-    "topic": "文法",
+    "topic": "時態與語態",
     "type": "tf",
     "q": "In 'Neither of the answers is correct,' the singular verb 'is' is correct.",
     "answer": true,
@@ -1113,7 +1113,7 @@
   {
     "id": "english-072",
     "subject": "english",
-    "topic": "文法",
+    "topic": "假設語氣與特殊句構",
     "type": "tf",
     "q": "'There is few milk left' is grammatically correct in standard written English.",
     "answer": false,
@@ -1124,7 +1124,7 @@
   {
     "id": "english-073",
     "subject": "english",
-    "topic": "文法",
+    "topic": "子句與連接詞",
     "type": "tf",
     "q": "'She asked where did he live' has correct word order in standard written English.",
     "answer": false,
@@ -1135,7 +1135,7 @@
   {
     "id": "english-074",
     "subject": "english",
-    "topic": "文法",
+    "topic": "不定詞、動名詞與分詞",
     "type": "tf",
     "q": "'I saw him crossing the street' can describe an action in progress.",
     "answer": true,
@@ -1146,7 +1146,7 @@
   {
     "id": "english-075",
     "subject": "english",
-    "topic": "文法",
+    "topic": "不定詞、動名詞與分詞",
     "type": "tf",
     "q": "In 'She had her bike repaired,' she necessarily repaired the bike herself.",
     "answer": false,
@@ -1293,7 +1293,7 @@
   {
     "id": "english-084",
     "subject": "english",
-    "topic": "單字",
+    "topic": "進階單字",
     "type": "mc",
     "q": "The word 'abundant' is closest in meaning to ____.",
     "choices": [
@@ -1310,7 +1310,7 @@
   {
     "id": "english-085",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "mc",
     "q": "The opposite of 'optimistic' is ____.",
     "choices": [
@@ -1377,7 +1377,7 @@
   {
     "id": "english-090",
     "subject": "english",
-    "topic": "單字",
+    "topic": "核心單字",
     "type": "tf",
     "q": "'Obtain' and 'acquire' can both mean get something.",
     "answer": true,
@@ -1388,7 +1388,7 @@
   {
     "id": "english-091",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "A: Could you help me carry this box? B: ____",
     "choices": [
@@ -1405,7 +1405,7 @@
   {
     "id": "english-092",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "A: Thanks for lending me your notes. B: ____",
     "choices": [
@@ -1422,7 +1422,7 @@
   {
     "id": "english-093",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "We expected the small room to be uncomfortable; ____, we found it pleasant.",
     "choices": [
@@ -1439,7 +1439,7 @@
   {
     "id": "english-094",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "The last bus had left; ____, we had to walk home.",
     "choices": [
@@ -1456,7 +1456,7 @@
   {
     "id": "english-095",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "'Otherwise' in 'Hurry; otherwise, you will miss the train' means ____.",
     "choices": [
@@ -1473,7 +1473,7 @@
   {
     "id": "english-096",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "A: Do you mind if I sit here? B: ____ The seat is free.",
     "choices": [
@@ -1490,7 +1490,7 @@
   {
     "id": "english-097",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "mc",
     "q": "A: I missed the deadline and cannot apply. B: ____",
     "choices": [
@@ -1507,7 +1507,7 @@
   {
     "id": "english-098",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "tf",
     "q": "Saying 'I am afraid I cannot' is a polite way to refuse a request.",
     "answer": true,
@@ -1518,7 +1518,7 @@
   {
     "id": "english-099",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "轉折語與篇章",
     "type": "tf",
     "q": "'In addition' introduces a contrast between two opposing ideas.",
     "answer": false,
@@ -1529,12 +1529,2158 @@
   {
     "id": "english-100",
     "subject": "english",
-    "topic": "情境用語與轉折",
+    "topic": "子句與連接詞",
     "type": "tf",
     "q": "'You cannot enter unless you have a ticket' means a ticket is required for entry.",
     "answer": true,
     "explain": "unless 意為「除非、如果不」；本句表示沒有票就不能進入，票是入場必要條件，未保證有票就一定能入場。",
     "formula": false,
     "level": 3
+  },
+  {
+    "id": "english-101",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Keep the ____ as proof that you paid for the shoes.",
+    "choices": [
+      "recipe",
+      "request",
+      "receipt",
+      "review"
+    ],
+    "answer": 2,
+    "explain": "receipt 是「收據」，可作為付款證明；recipe 是「食譜」，容易因拼字相近而混淆。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-102",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The performers bowed to the ____, the people watching the show.",
+    "choices": [
+      "audience",
+      "crew",
+      "staff",
+      "cast"
+    ],
+    "answer": 0,
+    "explain": "audience 是「觀眾、聽眾」，指觀看表演的人；cast 是「全體演員」，crew 是「工作人員」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-103",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Too little sleep can ____ your ability to concentrate.",
+    "choices": [
+      "effect",
+      "accept",
+      "expect",
+      "affect"
+    ],
+    "answer": 3,
+    "explain": "affect 是動詞「影響」；effect 作動詞時是「使發生、實現」，不能表示影響專注能力。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-104",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Our ____ principal retired last year; a new principal now leads the school.",
+    "choices": [
+      "current",
+      "former",
+      "latter",
+      "following"
+    ],
+    "answer": 1,
+    "explain": "former 在此是「前任的」，指已退休的校長；current 是「現任的」，latter 是「後者的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-105",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "You need your parents' ____ before joining this overnight trip.",
+    "choices": [
+      "prediction",
+      "permission",
+      "impression",
+      "description"
+    ],
+    "answer": 1,
+    "explain": "permission 是「許可」，參加過夜旅行須先取得家長同意；prediction 是「預測」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-106",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Some desert plants ____ to dry conditions by storing water.",
+    "choices": [
+      "adopt",
+      "attach",
+      "attract",
+      "adapt"
+    ],
+    "answer": 3,
+    "explain": "adapt to 是「適應」，儲水能幫助植物適應乾燥環境；adopt 是「採用、收養」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-107",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Human error was the ____ cause, contributing more than any other factor.",
+    "choices": [
+      "principal",
+      "principle",
+      "secondary",
+      "minor"
+    ],
+    "answer": 0,
+    "explain": "principal 作形容詞是「主要的」，符合影響最大的線索；principle 是名詞「原則」，secondary 是「次要的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-108",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "If I lend you my umbrella, you receive it from me temporarily.",
+    "answer": true,
+    "explain": "lend 是「借出」，傘由我暫時交給你；borrow 是「借入」，方向相反。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-109",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "An expense is money received as payment for work.",
+    "answer": false,
+    "explain": "expense 是「支出、費用」，不是工作所得；income 才是「收入」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-110",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "The latest news means the most recent news, not necessarily the final news.",
+    "answer": true,
+    "explain": "latest 是「最新的」，不表示最終一次；final 才是「最後的、最終的」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-111",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Her explanation was ____; every point connected logically to the next.",
+    "choices": [
+      "contradictory",
+      "scattered",
+      "coherent",
+      "irrelevant"
+    ],
+    "answer": 2,
+    "explain": "coherent 是「連貫的」，各要點有合理連結；contradictory 是「相互矛盾的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-112",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The plan is ____, meaning it can actually be carried out with our available resources.",
+    "choices": [
+      "urgent",
+      "desirable",
+      "feasible",
+      "compulsory"
+    ],
+    "answer": 2,
+    "explain": "feasible 是「可行的」，表示現有資源足以付諸實行；desirable 是「值得期待的」，不等於做得到。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-113",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The donation was ____; it covered nearly half the hospital's annual costs.",
+    "choices": [
+      "substantial",
+      "symbolic",
+      "minimal",
+      "moderate"
+    ],
+    "answer": 0,
+    "explain": "substantial 是「大量的、相當可觀的」，能支付近半年度費用；symbolic 在此是「象徵性的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-114",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Without strong passwords, accounts are more ____ to attacks.",
+    "choices": [
+      "resistant",
+      "immune",
+      "indifferent",
+      "vulnerable"
+    ],
+    "answer": 3,
+    "explain": "vulnerable 是「易受傷害的」，密碼不夠強就容易遭攻擊；resistant 是「有抵抗力的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-115",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The rules are ____; they clearly state exactly what visitors may do.",
+    "choices": [
+      "implicit",
+      "explicit",
+      "ambiguous",
+      "vague"
+    ],
+    "answer": 1,
+    "explain": "explicit 是「明確的、明白表達的」；implicit 是「隱含的」，ambiguous 是「模稜兩可的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-116",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The final point was ____ because it decided who won the match.",
+    "choices": [
+      "optional",
+      "crucial",
+      "minor",
+      "irrelevant"
+    ],
+    "answer": 1,
+    "explain": "crucial 是「關鍵的」，最後一分決定勝負；minor 是「次要的」，optional 是「非必要的」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-117",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Unlike the plain entrance, the ceiling had ____ patterns with hundreds of tiny details.",
+    "choices": [
+      "crude",
+      "plain",
+      "simple",
+      "elaborate"
+    ],
+    "answer": 3,
+    "explain": "elaborate 作形容詞是「精細複雜的」，符合大量細節；crude 是「粗糙的」，plain 是「樸素的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-118",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The editor wanted to ____ the photograph's quality, making it better than before.",
+    "choices": [
+      "enhance",
+      "assess",
+      "maintain",
+      "reduce"
+    ],
+    "answer": 0,
+    "explain": "enhance 是「提升、增強」，此處指改善照片品質；assess 是「評估」，maintain 是「維持」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-119",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The school will ____ its approved recycling plan by placing bins in every classroom.",
+    "choices": [
+      "propose",
+      "postpone",
+      "implement",
+      "reject"
+    ],
+    "answer": 2,
+    "explain": "implement 是「實施」；在每間教室放置回收桶是落實計畫的具體行動，postpone 是「延後」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-120",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Repeated broken promises can ____ trust, even if each promise seems small.",
+    "choices": [
+      "establish",
+      "restore",
+      "undermine",
+      "reinforce"
+    ],
+    "answer": 2,
+    "explain": "undermine 是「逐漸損害、削弱」，屢次失信會破壞信任；reinforce 是「加強」，restore 是「恢復」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-121",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Clear signs ____ travel by helping visitors find their way quickly.",
+    "choices": [
+      "facilitate",
+      "complicate",
+      "interrupt",
+      "restrict"
+    ],
+    "answer": 0,
+    "explain": "facilitate 是「使更容易、促進」，清楚標示能讓旅行更便利；complicate 是「使複雜化」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-122",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "We ____ heavy traffic tomorrow, so we plan to leave early.",
+    "choices": [
+      "recall",
+      "overlook",
+      "deny",
+      "anticipate"
+    ],
+    "answer": 3,
+    "explain": "anticipate 是「預期」，先預料塞車而提早出發；recall 是「回想」，overlook 是「忽略」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-123",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The airline paid money to ____ passengers for their lost luggage.",
+    "choices": [
+      "charge",
+      "compensate",
+      "blame",
+      "fine"
+    ],
+    "answer": 1,
+    "explain": "compensate 是「補償」，航空公司因行李遺失付錢給乘客；charge 是「收費」，fine 是「罰款」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-124",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Both sides gave up some demands to reach a ____.",
+    "choices": [
+      "command",
+      "compromise",
+      "competition",
+      "complaint"
+    ],
+    "answer": 1,
+    "explain": "compromise 是「妥協、折衷」，雙方各自讓步以達成協議；command 是「命令」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-125",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The manager must ____ the budget among three departments.",
+    "choices": [
+      "calculate",
+      "accumulate",
+      "eliminate",
+      "allocate"
+    ],
+    "answer": 3,
+    "explain": "allocate 是「分配」，預算要分給三個部門；calculate 是「計算」，accumulate 是「累積」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-126",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "During the serious speech, Leo tried to ____ a laugh by covering his mouth.",
+    "choices": [
+      "suppress",
+      "provoke",
+      "imitate",
+      "express"
+    ],
+    "answer": 0,
+    "explain": "suppress 是「抑制」，遮嘴是為了忍住笑；provoke 是「引起」，imitate 是「模仿」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-127",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "To keep its meal service running at the present level, the charity needs funds to ____ it.",
+    "choices": [
+      "suspend",
+      "launch",
+      "sustain",
+      "expand"
+    ],
+    "answer": 2,
+    "explain": "sustain 是「維持」，指讓服務以現有規模繼續運作；suspend 是「暫停」，launch 是「開始推行」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-128",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "After years of conflict, the brothers finally managed to ____ and become friends again.",
+    "choices": [
+      "compete",
+      "separate",
+      "reconcile",
+      "retaliate"
+    ],
+    "answer": 2,
+    "explain": "reconcile 在此是「和解」，兄弟衝突後恢復友好；retaliate 是「報復」，separate 是「分開」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-129",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The scientist chose to ____ her mistake by openly admitting that she had made it.",
+    "choices": [
+      "acknowledge",
+      "conceal",
+      "justify",
+      "repeat"
+    ],
+    "answer": 0,
+    "explain": "acknowledge 是「承認」；openly admitting「公開承認」直接說明字義，justify 是「為……辯護」，不等於認錯。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-130",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Lena was ____ of the claim, doubting it until she saw evidence that it was true.",
+    "choices": [
+      "convinced",
+      "supportive",
+      "certain",
+      "skeptical"
+    ],
+    "answer": 3,
+    "explain": "skeptical 是「懷疑的」，取得可靠證據前不輕信；convinced 是「確信的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-131",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The illness is highly ____, so it can spread easily from person to person.",
+    "choices": [
+      "chronic",
+      "contagious",
+      "inherited",
+      "fatal"
+    ],
+    "answer": 1,
+    "explain": "contagious 是「有傳染性的」，指容易在人與人之間傳播；chronic 是「慢性的」，fatal 是「致命的」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-132",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Every detail was checked through ____ testing before the device went on sale.",
+    "choices": [
+      "casual",
+      "rigorous",
+      "superficial",
+      "random"
+    ],
+    "answer": 1,
+    "explain": "rigorous 是「嚴謹的」，逐項檢查細節符合嚴格測試；superficial 是「表面的、不深入的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-133",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "To stay financially ____, the store must earn enough to cover its running costs.",
+    "choices": [
+      "vulnerable",
+      "unstable",
+      "dependent",
+      "viable"
+    ],
+    "answer": 3,
+    "explain": "viable 在此是「能持續經營的」，營收須足以支應營運成本；vulnerable 是「易受傷害的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-134",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "These medical records are ____; only authorized staff may read them.",
+    "choices": [
+      "confidential",
+      "accessible",
+      "ordinary",
+      "collective"
+    ],
+    "answer": 0,
+    "explain": "confidential 是「機密的」，只有獲授權的人能閱覽；accessible 是「可取得、可使用的」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-135",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The vote was ____; every member supported the proposal.",
+    "choices": [
+      "divided",
+      "partial",
+      "unanimous",
+      "contradictory"
+    ],
+    "answer": 2,
+    "explain": "unanimous 是「全體一致的」，所有成員都支持；divided 是「意見分歧的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-136",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The customer returned extra change nobody had noticed, showing ____.",
+    "choices": [
+      "vanity",
+      "hostility",
+      "integrity",
+      "curiosity"
+    ],
+    "answer": 2,
+    "explain": "integrity 是「正直、誠信」，無人察覺仍歸還多找的錢；vanity 是「虛榮」，hostility 是「敵意」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-137",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Judging applicants by gender rather than ability shows ____.",
+    "choices": [
+      "prejudice",
+      "tolerance",
+      "expertise",
+      "sympathy"
+    ],
+    "answer": 0,
+    "explain": "prejudice 是「偏見」，以性別而非能力判斷應徵者並不公平；expertise 是「專業知識」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-138",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A trivial error is an extremely serious error.",
+    "answer": false,
+    "explain": "trivial 是「微不足道的、不重要的」，不是 extremely serious「極嚴重的」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-139",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A tentative plan may still change before it becomes final.",
+    "answer": true,
+    "explain": "tentative 是「暫定的、尚未確定的」，計畫在定案前仍可能調整；final 是「最終的、確定的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-140",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "Innovation means copying an old method without changing anything.",
+    "answer": false,
+    "explain": "innovation 是「創新」，涉及新方法或新想法，不是完全照抄舊方法。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-141",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A dilemma can involve choosing between two equally unpleasant options.",
+    "answer": true,
+    "explain": "dilemma 是「兩難」，可指必須在兩個都不理想的選項之間抉擇；unpleasant 是「令人不快的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-142",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A consensus is a general agreement within a group.",
+    "answer": true,
+    "explain": "consensus 是「共識」，指團體形成大致一致的看法；general agreement 是「普遍的認同」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-143",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "Winning on three consecutive days means winning on three days in a row.",
+    "answer": true,
+    "explain": "consecutive 是「連續的」，in a row 也是「連續地」，中間沒有間隔日。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-144",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "Plants indigenous to an island occur there naturally rather than being introduced by people.",
+    "answer": true,
+    "explain": "indigenous 是「原生的、當地固有的」，指自然存在於當地；introduced 在此是「人為引入的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-145",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A spontaneous decision is always carefully planned weeks in advance.",
+    "answer": false,
+    "explain": "spontaneous 是「自發的、未經事先安排的」，不是提前數週縝密規劃；in advance 是「事先」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-146",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A compulsory course is one students are required to take.",
+    "answer": true,
+    "explain": "compulsory 是「必須的、強制的」，compulsory course 就是「必修課」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-147",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "To act without consent is to act with permission.",
+    "answer": false,
+    "explain": "consent 是「同意、許可」，without consent 是「未經同意」，不是獲得許可。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-148",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Our picnic plans depend ____ the weather.",
+    "choices": [
+      "at",
+      "for",
+      "with",
+      "on"
+    ],
+    "answer": 3,
+    "explain": "depend on 意為「取決於、依靠」，此處表示野餐計畫取決於天氣，介系詞用 on。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-149",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Please ____ attention to the safety instructions.",
+    "choices": [
+      "spend",
+      "pay",
+      "cost",
+      "take"
+    ],
+    "answer": 1,
+    "explain": "pay attention to 是「注意」的固定搭配；instructions 是「指示、說明」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-150",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The scientists will ____ the experiment exactly as planned.",
+    "choices": [
+      "carry off",
+      "carry out",
+      "carry over",
+      "carry away"
+    ],
+    "answer": 1,
+    "explain": "carry out 意為「執行、進行」，可搭配 experiment「實驗」；carry over 是「延續、留到之後」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-151",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "With rent rising, the family struggles to ____ on one salary.",
+    "choices": [
+      "make up its mind",
+      "make a difference",
+      "make room",
+      "make ends meet"
+    ],
+    "answer": 3,
+    "explain": "make ends meet 是「使收支平衡」，一家人靠一份薪水難以維持生計；salary 是「薪水」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-152",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "If you delete a file by accident, you delete it deliberately.",
+    "answer": false,
+    "explain": "by accident 是「意外地、無意間」，不是 deliberately「故意地」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-153",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "Success at the expense of health means success gained while harming health.",
+    "answer": true,
+    "explain": "at the expense of 是「以……為代價」，表示成功伴隨健康受損；harming 是「傷害」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-154",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The prefix in disapprove changes approve to mean ____.",
+    "choices": [
+      "not approve",
+      "approve again",
+      "approve beforehand",
+      "approve together"
+    ],
+    "answer": 0,
+    "explain": "dis- 在 disapprove「不贊同」中表示否定；approve 是「贊同、核准」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-155",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The city plans to ____ this narrow road.",
+    "choices": [
+      "wide",
+      "width",
+      "widen",
+      "widely"
+    ],
+    "answer": 2,
+    "explain": "plan to 後接原形動詞；widen 是「拓寬」，由 wide「寬的」加字尾 -en 構成。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-156",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Her ____ made the frightened child feel welcome.",
+    "choices": [
+      "kind",
+      "kindly",
+      "kindness",
+      "kinder"
+    ],
+    "answer": 2,
+    "explain": "所有格 Her 後需名詞 kindness「親切、善意」作主詞；-ness 可把形容詞 kind 轉為名詞。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-157",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Regular exercise can increase muscle ____.",
+    "choices": [
+      "strength",
+      "strong",
+      "strongly",
+      "strengthen"
+    ],
+    "answer": 0,
+    "explain": "muscle strength 是「肌力」，此處需名詞 strength「力量」；strengthen 是動詞「增強」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-158",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "He could ____ hear the speaker because the microphone was broken.",
+    "choices": [
+      "hard",
+      "hardness",
+      "harder",
+      "hardly"
+    ],
+    "answer": 3,
+    "explain": "hardly 是「幾乎不」，符合麥克風壞掉而聽不清楚的情境；hard 作副詞是「努力地」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-159",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Replacing the damaged engine was a ____ repair.",
+    "choices": [
+      "cost",
+      "costly",
+      "costing",
+      "costliness"
+    ],
+    "answer": 1,
+    "explain": "修飾名詞 repair「修理」需形容詞 costly「昂貴的」；不是所有 -ly 結尾的字都是副詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-160",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The root bio- in biology refers to ____.",
+    "choices": [
+      "sound",
+      "life",
+      "earth",
+      "light"
+    ],
+    "answer": 1,
+    "explain": "字根 bio- 表示「生命」，biology 是「生物學」；-logy 表示某門學問。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-161",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "tf",
+    "q": "To redo a task is to do it again.",
+    "answer": true,
+    "explain": "redo 是「重做」，字首 re- 表示「再次」，task 是「任務」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-162",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "tf",
+    "q": "Independent means relying on others for support.",
+    "answer": false,
+    "explain": "independent 是「獨立的、不依賴的」；dependent 才是「依賴的」，此處字首 in- 表示否定。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-163",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "tf",
+    "q": "'Invaluable' means extremely useful or valuable, rather than worthless.",
+    "answer": true,
+    "explain": "invaluable 是「極有價值的、無價的」，不是「沒有價值」；worthless 才是「無價值的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-164",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "On weekdays, Ray usually ____ the bus to school.",
+    "choices": [
+      "are taking",
+      "taking",
+      "take",
+      "takes"
+    ],
+    "answer": 3,
+    "explain": "usually「通常」表示習慣，用現在簡單式；主詞 Ray 為第三人稱單數，動詞用 takes「搭乘」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-165",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "At the moment the lights went out, we ____ dinner.",
+    "choices": [
+      "were eating",
+      "have eaten",
+      "will eat",
+      "are eating"
+    ],
+    "answer": 0,
+    "explain": "停電是過去某一瞬間，當時吃晚餐正在進行，用過去進行式 were eating「正在吃」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-166",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "She ____ for two hours and is still running.",
+    "choices": [
+      "have been running",
+      "has been run",
+      "has been running",
+      "has running"
+    ],
+    "answer": 2,
+    "explain": "for two hours「持續兩小時」且現在仍在跑，用現在完成進行式 has been running 強調持續中的活動。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-167",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "By next Friday, we ____ all ten chapters.",
+    "choices": [
+      "had finished",
+      "have finished",
+      "will have finished",
+      "were finishing"
+    ],
+    "answer": 2,
+    "explain": "by next Friday 是「到下週五為止」，用未來完成式 will have finished 表示屆時已完成。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-168",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "These rooms ____ every morning by the cleaning staff.",
+    "choices": [
+      "are cleaned",
+      "clean",
+      "cleaned",
+      "are cleaning"
+    ],
+    "answer": 0,
+    "explain": "房間是「被打掃」，且 every morning「每天早上」表示例行工作，用現在簡單式被動 are cleaned。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-169",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "At noon yesterday, the bridge ____ by a repair crew.",
+    "choices": [
+      "was repairing",
+      "has been repairing",
+      "had repairing",
+      "was being repaired"
+    ],
+    "answer": 3,
+    "explain": "橋梁是「被修理」，過去中午正在施工，用過去進行式被動 was being repaired。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-170",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "The missing keys ____ already ____ by the guard.",
+    "choices": [
+      "have / found",
+      "have / been found",
+      "has / been found",
+      "are / finding"
+    ],
+    "answer": 1,
+    "explain": "keys「鑰匙」是複數且被警衛找到，用現在完成式被動 have been found；already 是「已經」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-171",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "This time tomorrow, we ____ to Taipei by train.",
+    "choices": [
+      "had traveled",
+      "will be traveling",
+      "were traveling",
+      "have traveled"
+    ],
+    "answer": 1,
+    "explain": "this time tomorrow「明天這個時候」表示未來某時正在進行的動作，用未來進行式 will be traveling「將正在前往」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-172",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "A number of students ____ waiting outside now.",
+    "choices": [
+      "is",
+      "was",
+      "be",
+      "are"
+    ],
+    "answer": 3,
+    "explain": "a number of 是「許多」，後接複數名詞時動詞用複數 are；the number of「……的數量」才用單數。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-173",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "'The news are encouraging' has correct subject-verb agreement.",
+    "answer": false,
+    "explain": "news「消息」雖以 s 結尾，仍用單數動詞 is；encouraging 是「令人振奮的」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-174",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "'The police is investigating' uses the correct verb in standard written English.",
+    "answer": false,
+    "explain": "police「警方」作主詞時用複數動詞，應為 The police are investigating「警方正在調查」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-175",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "'Ella has been to Kyoto' can mean she visited Kyoto and has returned.",
+    "answer": true,
+    "explain": "have been to 表示「曾去過」某地，通常已返回；have gone to 表示「已前往」而尚未回來。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-176",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "In 'She used to live here,' used to describes a present habit.",
+    "answer": false,
+    "explain": "used to 加原形動詞表示「過去曾經、過去常常」，本句是過去住這裡，不是現在的習慣。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-177",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "This is the café ____ we first met.",
+    "choices": [
+      "where",
+      "when",
+      "which",
+      "what"
+    ],
+    "answer": 0,
+    "explain": "café「咖啡館」是地點，子句 we first met 不缺主詞或受詞，用關係副詞 where 表「在那裡」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-178",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "I remember the day ____ we first spoke to each other.",
+    "choices": [
+      "where",
+      "who",
+      "when",
+      "whose"
+    ],
+    "answer": 2,
+    "explain": "先行詞 the day「那一天」表示時間，子句不缺主詞或受詞，用關係副詞 when「在那時」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-179",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The reason ____ she left remains unknown.",
+    "choices": [
+      "when",
+      "whose",
+      "why",
+      "which"
+    ],
+    "answer": 2,
+    "explain": "the reason 後用關係副詞 why 說明「……的原因」；remains unknown 是「仍然不明」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-180",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "In formal English: The teacher to ____ I spoke was helpful.",
+    "choices": [
+      "whom",
+      "that",
+      "whose",
+      "which"
+    ],
+    "answer": 0,
+    "explain": "介系詞 to 後指人的關係代名詞用 whom「誰」，不能用 that；spoke to 是「與……交談」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-181",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "I understood ____ you said, but I disagreed.",
+    "choices": [
+      "that",
+      "which",
+      "whether",
+      "what"
+    ],
+    "answer": 3,
+    "explain": "what 相當於 the thing that「……的事」，兼作名詞子句引導詞與 said 的受詞，不需另加先行詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-182",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "Our decision depends on ____ we can get enough support.",
+    "choices": [
+      "if",
+      "whether",
+      "that",
+      "what"
+    ],
+    "answer": 1,
+    "explain": "介系詞 on 後表示「是否」用 whether，不用 if；get enough support 是「獲得足夠支持」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-183",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "____ arrives first may choose a seat.",
+    "choices": [
+      "Whomever",
+      "Whoever",
+      "Whose",
+      "Whoever's"
+    ],
+    "answer": 1,
+    "explain": "Whoever 是「任何……的人」，在子句中作 arrives 的主詞；Whomever 為受格，不能作此主詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-184",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "Keep stirring ____ the sugar has completely dissolved; then stop.",
+    "choices": [
+      "because",
+      "although",
+      "since",
+      "until"
+    ],
+    "answer": 3,
+    "explain": "until 是「直到」，表示攪拌持續到糖完全溶解才停止；dissolved 是「溶解了」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-185",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "To show simultaneous actions: Dad cooked ____ Mom washed the dishes.",
+    "choices": [
+      "while",
+      "because",
+      "unless",
+      "after"
+    ],
+    "answer": 0,
+    "explain": "while 在此是「當……的同時」，連接同時進行的活動；simultaneous 是「同時發生的」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-186",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "To state the purpose: Speak clearly ____ everyone can hear you.",
+    "choices": [
+      "even though",
+      "as if",
+      "so that",
+      "now that"
+    ],
+    "answer": 2,
+    "explain": "so that 表示「以便」，引出說清楚的目的；even though 是「雖然、儘管」，now that 是「既然」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-187",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "To express a precaution: Take a spare key ____ you lose the original.",
+    "choices": [
+      "now that",
+      "as though",
+      "in case",
+      "because"
+    ],
+    "answer": 2,
+    "explain": "in case 是「以防」，先帶備用鑰匙預防原鑰匙遺失；spare key 是「備用鑰匙」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-188",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "She neither called ____ sent a message.",
+    "choices": [
+      "nor",
+      "or",
+      "but",
+      "and"
+    ],
+    "answer": 0,
+    "explain": "neither ... nor ... 是「既不……也不……」，連接兩個並列動作；sent a message 是「傳了訊息」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-189",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The fact ____ he apologized surprised me.",
+    "choices": [
+      "what",
+      "which",
+      "whom",
+      "that"
+    ],
+    "answer": 3,
+    "explain": "that 引導同位語子句，說明 fact「事實」的內容，不在子句中作成分；apologized 是「道歉了」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-190",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "____ tired you are, you must check the lock.",
+    "choices": [
+      "No matter what",
+      "No matter how",
+      "No matter who",
+      "No matter where"
+    ],
+    "answer": 1,
+    "explain": "No matter how 加形容詞表示「無論多麼……」；tired 是「疲倦的」，how 用來修飾程度。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-191",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "tf",
+    "q": "In 'The book I borrowed is interesting,' a relative pronoun has been omitted.",
+    "answer": true,
+    "explain": "book「書」是 borrowed 的受詞，限定關係子句的受格關係代名詞 that 或 which 可以省略。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-192",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "tf",
+    "q": "In 'He arrived late, which upset us,' 'which' refers only to the person who arrived.",
+    "answer": false,
+    "explain": "which 指前面「他遲到」整件事，這件事讓我們不高興，不是只指 he「他」這個人。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-193",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "tf",
+    "q": "In 'The task was hard, but I finished it,' but signals a contrast.",
+    "answer": true,
+    "explain": "but 是「但是」，連接任務困難與仍完成的對比；task 是「任務」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-194",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "tf",
+    "q": "'Both Tom and Amy came' means Tom came but Amy did not.",
+    "answer": false,
+    "explain": "both ... and ... 是「……和……兩者都」，本句表示湯姆與艾咪都有來。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-195",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "tf",
+    "q": "'Whether Mia agrees or not, we will leave' means we will leave only if she agrees.",
+    "answer": false,
+    "explain": "whether ... or not 在此是「不論是否」，表示無論米雅同不同意都會離開，並非以同意為條件。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-196",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "We went to the station ____ our guests.",
+    "choices": [
+      "meeting",
+      "to meet",
+      "met",
+      "meet"
+    ],
+    "answer": 1,
+    "explain": "to meet 是表目的的不定詞，表示「為了迎接」客人；went 是主要動詞，不能直接再接原形 meet。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-197",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Could you show me how ____ this app?",
+    "choices": [
+      "use",
+      "using",
+      "used",
+      "to use"
+    ],
+    "answer": 3,
+    "explain": "how to use 是「如何使用」，疑問詞 how 後可接不定詞，整體作 show 的受詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-198",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Let me ____ the answer before you explain it.",
+    "choices": [
+      "guess",
+      "to guess",
+      "guessing",
+      "guessed"
+    ],
+    "answer": 0,
+    "explain": "使役動詞 let 後接「受詞加原形動詞」，Let me guess 是「讓我猜猜」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-199",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The students were made ____ the room after the activity.",
+    "choices": [
+      "clean",
+      "cleaning",
+      "to clean",
+      "cleaned"
+    ],
+    "answer": 2,
+    "explain": "make 的使役句改為被動時須補回 to：were made to clean 是「被要求打掃」。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-200",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Remember ____ the door before you leave; it is still unlocked.",
+    "choices": [
+      "locking",
+      "locked",
+      "to lock",
+      "lock"
+    ],
+    "answer": 2,
+    "explain": "remember to lock 是「記得去鎖」，門尚未鎖，動作未做；remember locking 是「記得曾鎖過」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-201",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "It is important ____ calm during an emergency.",
+    "choices": [
+      "to stay",
+      "stayed",
+      "stay",
+      "to staying"
+    ],
+    "answer": 0,
+    "explain": "It 是虛主詞，真正主詞為不定詞片語 to stay calm「保持冷靜」；句意是緊急時保持冷靜很重要。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-202",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "They persuaded me ____ the school choir.",
+    "choices": [
+      "join",
+      "joining",
+      "joined",
+      "to join"
+    ],
+    "answer": 3,
+    "explain": "persuade someone to V 是「說服某人做……」；choir 是「合唱團」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-203",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "____ every day improves your balance.",
+    "choices": [
+      "Practices",
+      "Practicing",
+      "Practiced",
+      "To practicing"
+    ],
+    "answer": 1,
+    "explain": "Practicing 是動名詞，可作主詞，表示「每天練習」這件事；balance 在此是「平衡感」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-204",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The boy ____ by the window is my cousin.",
+    "choices": [
+      "stands",
+      "standing",
+      "stand",
+      "was standing"
+    ],
+    "answer": 1,
+    "explain": "standing by the window 是「站在窗邊的」，現在分詞片語修飾 boy，等於 who is standing。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-205",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The bridge ____ last year is now open.",
+    "choices": [
+      "building",
+      "builds",
+      "to build",
+      "built"
+    ],
+    "answer": 3,
+    "explain": "bridge「橋」是被建造的，用過去分詞 built 修飾，等於 which was built；last year 是「去年」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-206",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "She seems ____ the news already; she knew every detail.",
+    "choices": [
+      "to have heard",
+      "to hear",
+      "hearing",
+      "hear"
+    ],
+    "answer": 0,
+    "explain": "to have heard 是完成式不定詞，表示「似乎已經聽說」，聽到消息早於目前的判斷。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-207",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Which sentence avoids a dangling participle?",
+    "choices": [
+      "Walking home, the sky turned dark.",
+      "Walking home, the streetlights came on.",
+      "Walking home, I saw a rainbow.",
+      "Walking home, the bus was late."
+    ],
+    "answer": 2,
+    "explain": "分詞構句的隱含主詞須與主句主詞一致；Walking home 是「走路回家」，能做此動作的是 I「我」。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-208",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "In 'The plan is worth trying,' 'trying' is the correct form after 'worth'.",
+    "answer": true,
+    "explain": "be worth V-ing 表示「值得……」，worth 後接動名詞；worth trying 是「值得嘗試」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-209",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "'This shirt needs washing' can mean 'This shirt needs to be washed'.",
+    "answer": true,
+    "explain": "need 後接動名詞可表被動；needs washing 等於 needs to be washed「需要清洗」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-210",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "In 'Would you mind my opening the window?' 'my' identifies the person who would open it.",
+    "answer": true,
+    "explain": "動名詞 opening 前的所有格 my 表示開窗的人是「我」；此句是在問對方是否介意我開窗。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-211",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "'He asked me not to leave' means he asked me to depart.",
+    "answer": false,
+    "explain": "not to leave 是「不要離開」，與 depart「離開」相反；不定詞否定式可將 not 放在 to 前。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-212",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "In 'The book is easy to read,' 'read' must be changed to 'be read'.",
+    "answer": false,
+    "explain": "easy to read 是「容易閱讀」；此句用主動形式的不定詞描述書被閱讀，不必改成 to be read。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-213",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "I wish I ____ my umbrella yesterday; I got soaked.",
+    "choices": [
+      "bring",
+      "will bring",
+      "had brought",
+      "have brought"
+    ],
+    "answer": 2,
+    "explain": "對過去的事表示遺憾，wish 後用過去完成式 had brought「當時有帶」；got soaked 是「淋濕了」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-214",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "If I had accepted that job last year, I ____ in Tokyo now.",
+    "choices": [
+      "would be",
+      "will be",
+      "would have been",
+      "had been"
+    ],
+    "answer": 0,
+    "explain": "條件是假設過去接受工作，結果是假設現在的所在地，屬混合假設句，主句用 would be「現在會在」。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-215",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "____ I known about the delay, I would have left later.",
+    "choices": [
+      "Have",
+      "Did",
+      "Were",
+      "Had"
+    ],
+    "answer": 3,
+    "explain": "Had I known 等於 If I had known「如果我當時知道」，省略 if 時將 had 移到主詞前。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-216",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "I would rather you ____ here tonight instead of driving home.",
+    "choices": [
+      "staying",
+      "stayed",
+      "will stay",
+      "have stayed"
+    ],
+    "answer": 1,
+    "explain": "would rather 加另一主詞時，表達現在或未來的偏好用過去式 stayed，意為「我寧願你留下」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-217",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "It is time we ____ home; it is getting late.",
+    "choices": [
+      "going",
+      "went",
+      "will go",
+      "have gone"
+    ],
+    "answer": 1,
+    "explain": "It is time 加主詞與過去式，表示「該……了」，此處是現在該回家，不是敘述過去。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-218",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Use the subjunctive for a recommendation: The doctor suggested that he ____ more water.",
+    "choices": [
+      "drinks",
+      "drank",
+      "drinking",
+      "drink"
+    ],
+    "answer": 3,
+    "explain": "題目指定建議句的假設語氣，that 子句用原形動詞 drink「喝」，也可用 should drink。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-219",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "It was Mia ____ found the missing key.",
+    "choices": [
+      "that",
+      "which",
+      "what",
+      "whom"
+    ],
+    "answer": 0,
+    "explain": "It was ... that ... 是強調句型，強調 Mia「米雅」找到鑰匙；此處 that 在子句中作主詞。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-220",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The more you practice, ____ you become.",
+    "choices": [
+      "the best",
+      "better than",
+      "the better",
+      "as good"
+    ],
+    "answer": 2,
+    "explain": "the 加比較級的兩個子句搭配，表示「越……越……」；the better 是「越好」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-221",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "She is one of the ____ players on the team.",
+    "choices": [
+      "goodest",
+      "good",
+      "best",
+      "well"
+    ],
+    "answer": 2,
+    "explain": "one of the 加最高級與複數名詞，表示「最……的其中之一」；best 是 good「好的」的最高級。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-222",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "You had better ____ now, or you will be late.",
+    "choices": [
+      "leave",
+      "to leave",
+      "leaving",
+      "left"
+    ],
+    "answer": 0,
+    "explain": "had better 加原形動詞，表示「最好……」；leave now 是「現在離開」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-223",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The box is too heavy for me ____ alone.",
+    "choices": [
+      "lifting",
+      "lift",
+      "lifted",
+      "to lift"
+    ],
+    "answer": 3,
+    "explain": "too ... to V 是「太……而無法……」；for me 指動作者，to lift alone 是「獨自抬起」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-224",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "You have finished the task, ____ you?",
+    "choices": [
+      "didn't",
+      "haven't",
+      "don't",
+      "aren't"
+    ],
+    "answer": 1,
+    "explain": "肯定句的附加問句通常用否定形式；主句用 have 構成現在完成式，因此用 haven't you「你已完成，對吧」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-225",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "tf",
+    "q": "In 'Sam can swim, and I can too,' swim is omitted after the second can.",
+    "answer": true,
+    "explain": "第二個 can 後省略重複的 swim「游泳」，I can too 表示「我也會」，是助動詞後的省略。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-226",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "tf",
+    "q": "'Not all students agreed' means no students agreed.",
+    "answer": false,
+    "explain": "not all 是「並非全部」，屬部分否定，不能等同 no students「沒有任何學生」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-227",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "tf",
+    "q": "'I would rather to walk than drive' is grammatically correct.",
+    "answer": false,
+    "explain": "would rather 後接原形 walk，不加 to；would rather walk than drive 是「寧願走路也不開車」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-228",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "tf",
+    "q": "If no runner is faster than Jane, Jane must be faster than every other runner.",
+    "answer": false,
+    "explain": "no runner is faster 是「沒有跑者比她快」，仍可能有人與她同速，不能推論她是唯一最快的跑者。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-229",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "I did not order coffee. ____, I chose tea.",
+    "choices": [
+      "Otherwise",
+      "Instead",
+      "Moreover",
+      "Similarly"
+    ],
+    "answer": 1,
+    "explain": "instead 是「改為、反而」，表示以茶取代咖啡；otherwise 是「否則」，similarly 是「同樣地」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-230",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Nina plans her study time and finishes tasks before deadlines. Which statement best sums this up?",
+    "choices": [
+      "Nina never takes breaks.",
+      "Nina only studies before tests.",
+      "Nina always works faster than others.",
+      "Nina manages her study time well."
+    ],
+    "answer": 3,
+    "explain": "安排讀書時間並在期限前完成工作，重點是善於管理時間；其餘選項加入文中未提的休息、考前讀書或速度比較。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-231",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "I stirred the soup. ____, my sister was setting the table at that very moment.",
+    "choices": [
+      "Meanwhile",
+      "Consequently",
+      "Instead",
+      "Nevertheless"
+    ],
+    "answer": 0,
+    "explain": "meanwhile 是「與此同時」，描述兩人同時做不同工作；set the table 是「擺餐具」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-232",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Some metals are attracted to magnets. ____, iron is one such metal.",
+    "choices": [
+      "By contrast",
+      "As a result",
+      "For example",
+      "In conclusion"
+    ],
+    "answer": 2,
+    "explain": "for example 是「例如」，用鐵作為前句的實例；magnets 是「磁鐵」，by contrast 是「相較之下」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-233",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The service is available around the clock. ____, it operates twenty-four hours a day.",
+    "choices": [
+      "On the contrary",
+      "In the meantime",
+      "In other words",
+      "As a result"
+    ],
+    "answer": 2,
+    "explain": "in other words 是「換句話說」，後句重新解釋 around the clock「全天候」，不是因果或相反說法。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-234",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A sign says, 'Wet paint. Please do not touch the bench.' What is its purpose?",
+    "choices": [
+      "To warn people about wet paint",
+      "To invite people to help paint",
+      "To advertise a painting class",
+      "To sell a newly painted bench"
+    ],
+    "answer": 0,
+    "explain": "告示提醒人們不要碰油漆未乾的長椅，目的是警告；warn 是「警告、提醒」，不是招募、課程或商品廣告。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-235",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "I put wet towels beside dry shirts. They still needed drying. 'They' refers to ____.",
+    "choices": [
+      "the shirts",
+      "both groups",
+      "neither group",
+      "the towels"
+    ],
+    "answer": 3,
+    "explain": "They 指「濕毛巾」，因為仍需晾乾；dry shirts 是「乾襯衫」，不符合仍需乾燥的語意。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-236",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The river flooded the street. This forced residents to leave. 'This' refers to ____.",
+    "choices": [
+      "the residents",
+      "the flooding",
+      "the departure",
+      "the river's location"
+    ],
+    "answer": 1,
+    "explain": "This 指前句「河水淹沒街道」這件事，導致居民離開；flooding 是「淹水」，不是指居民本身。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-237",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The trail is closed after the storm. ____. Please choose another route.",
+    "choices": [
+      "Many hikers enjoy the scenery",
+      "Fallen trees block the path",
+      "The mountain is famous for its sunrise",
+      "The park opens early every morning"
+    ],
+    "answer": 1,
+    "explain": "「倒下的樹擋住步道」能解釋封閉與改道的原因，連貫前後句；trail、path 都可指「步道」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-238",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "'In conclusion' usually introduces a summary near the end of a text.",
+    "answer": true,
+    "explain": "in conclusion 是「總而言之、最後」，常在文章末段引出總結，不是用來列舉個別例子。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-239",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "In 'Lina lost her gloves, so she bought new ones,' ones refers to gloves.",
+    "answer": true,
+    "explain": "ones 代替前面出現的複數名詞 gloves「手套」，new ones 是「新的手套」，避免重複。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-240",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Afterwards signals that an event happened before the event just mentioned.",
+    "answer": false,
+    "explain": "afterwards 是「之後、後來」，表示接下來的事件；before 是「在……之前」，時間順序相反。",
+    "formula": false,
+    "level": 2
   }
 ]

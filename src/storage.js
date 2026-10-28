@@ -10,7 +10,7 @@ export function freshState() {
     daily: {},
     streak: { count: 0, last: null },
     best: { blitz: 0 },
-    settings: { subjects: SUBJECTS.map((s) => s.id), goal: 30, sound: false },
+    settings: { subjects: SUBJECTS.map((s) => s.id), excludedUnits: [], goal: 30, sound: false },
   };
 }
 

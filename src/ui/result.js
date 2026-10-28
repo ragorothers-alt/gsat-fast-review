@@ -32,6 +32,13 @@ export function initResult(ctx) {
     $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題 🎉';
     $('#r-list').innerHTML = misses.map((e) => reviewItem(byId.get(e.id), e)).join('');
 
+    // 這輪出現最多的科目，牠們的貓會趴在成績卡上
+    const counts = new Map();
+    for (const e of s.log) {
+      const subject = byId.get(e.id).subject;
+      counts.set(subject, (counts.get(subject) || 0) + 1);
+    }
+    ctx.world.setCast([...counts].sort((a, b) => b[1] - a[1]).map(([id]) => id));
     ctx.show('result');
     sfx.finish();
     if (record || (answered && !misses.length)) ctx.world.celebrate();

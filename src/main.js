@@ -8,7 +8,12 @@ import { initPlay } from './ui/play.js';
 import { initResult } from './ui/result.js';
 
 const state = loadState();
-const world = createWorld(document.querySelector('#world'));
+// 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣
+const world = createWorld(document.querySelector('#world'), {
+  home: () => document.querySelector('#home .stage').getBoundingClientRect(),
+  play: () => document.querySelector('#card').getBoundingClientRect(),
+  result: () => document.querySelector('#result .result-head').getBoundingClientRect(),
+});
 const screens = [...document.querySelectorAll('.screen')];
 const toastEl = document.querySelector('#toast');
 let toastTimer = 0;

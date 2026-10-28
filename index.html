@@ -3,11 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#070a1c" />
+    <meta name="theme-color" content="#fbf5ea" />
     <meta name="description" content="學測全範圍快問快答：不用紙筆、單手就能刷題，離線也能玩。" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="快問快答" />
     <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
@@ -35,7 +35,7 @@
           </div>
         </header>
 
-        <div class="daily" id="daily">
+        <div class="daily paper" id="daily">
           <svg class="ring" viewBox="0 0 36 36" aria-hidden="true">
             <circle class="ring-bg" cx="18" cy="18" r="15.9" />
             <circle class="ring-fg" id="daily-ring" cx="18" cy="18" r="15.9" pathLength="100" />
@@ -46,14 +46,15 @@
           </div>
         </div>
 
-        <div class="stage" aria-hidden="true">
-          <p class="stage-hint">點星球或下方按鈕選科目</p>
-        </div>
+        <div class="stage" aria-hidden="true"></div>
 
-        <section class="panel">
+        <section class="panel paper">
           <div class="panel-head">
-            <h2>科目</h2>
-            <button id="toggle-all" class="link-btn" type="button">全選</button>
+            <h2>科目<small>點貓咪也能叫醒／哄睡</small></h2>
+            <div class="panel-actions">
+              <button id="open-units" class="link-btn" type="button">單元 ›</button>
+              <button id="toggle-all" class="link-btn" type="button">全選</button>
+            </div>
           </div>
           <div id="subject-chips" class="chips" role="group" aria-label="選擇科目"></div>
         </section>
@@ -135,6 +136,23 @@
         </nav>
       </section>
     </main>
+
+    <!-- 單元選擇 -->
+    <div id="units-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="units-title">
+        <header class="sheet-head">
+          <h2 id="units-title">選單元</h2>
+          <button id="units-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <p class="sheet-tip">只練打勾的單元；全部取消等於不練這一科。</p>
+        <div id="units-tabs" class="sheet-tabs" role="tablist" aria-label="科目"></div>
+        <ul id="units-list" class="unit-list"></ul>
+        <nav class="sheet-foot">
+          <button id="units-all" class="secondary-btn" type="button">全選</button>
+          <button id="units-done" class="primary-btn" type="button">好了</button>
+        </nav>
+      </div>
+    </div>
 
     <div id="toast" role="status" aria-live="polite"></div>
     <script type="module" src="./src/main.js"></script>

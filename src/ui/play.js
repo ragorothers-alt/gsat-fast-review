@@ -40,13 +40,14 @@ export function initPlay(ctx) {
   ctx.startRound = (mode) => {
     const cfg = MODES[mode];
     const opts = { formulaOnly: cfg.formulaOnly, weakOnly: cfg.weakOnly, size: cfg.size, now: Date.now() };
-    let queue = buildQueue(ctx.bank, ctx.state.cards, { ...opts, subjects: ctx.state.settings.subjects });
+    const { subjects, excludedUnits } = ctx.state.settings;
+    let queue = buildQueue(ctx.bank, ctx.state.cards, { ...opts, subjects, excludedUnits });
     if (!queue.length && mode === 'formula') {
-      queue = buildQueue(ctx.bank, ctx.state.cards, { ...opts, subjects: SUBJECTS.map((x) => x.id) });
+      queue = buildQueue(ctx.bank, ctx.state.cards, { ...opts, subjects: SUBJECTS.map((x) => x.id), excludedUnits });
       if (queue.length) ctx.toast('選的科目沒有公式題，改出全部科目的公式題');
     }
     if (!queue.length) {
-      ctx.toast(mode === 'review' ? '目前沒有待練的錯題，太穩了 🎉' : '這些科目還沒有題目');
+      ctx.toast(mode === 'review' ? '目前沒有待練的錯題，太穩了 🎉' : '選到的單元沒有題目');
       return;
     }
     s = createSession(mode, queue);
@@ -166,7 +167,7 @@ export function initPlay(ctx) {
     if (outcome === 'right') {
       const rect = buttonFor(correctValue).getBoundingClientRect();
       ctx.world.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, color, 30 + Math.min(s.combo, 10) * 4);
-      ctx.world.pulse();
+      ctx.world.react('right');
       sfx.right(s.combo);
       showPop(`+${points}`);
       el.skip.hidden = true;
@@ -180,6 +181,7 @@ export function initPlay(ctx) {
       restartAnimation(el.flash, 'on');
       restartAnimation(el.card, 'shake');
     }
+    ctx.world.react(outcome);
     el.explain.innerHTML = `<b>💡 ${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外

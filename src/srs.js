@@ -1,4 +1,5 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
+import { unitKey } from './units.js';
 
 export const MINUTE = 60_000;
 export const DAY = 86_400_000;
@@ -48,11 +49,13 @@ export function mastery(questions, cards) {
  * 組出一輪的題目順序：到期該複習的題目與新題交錯出現，其餘依到期時間補上。
  * @param {object[]} bank
  * @param {Record<string, object>} cards
- * @param {{ subjects: string[], formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
+ * @param {{ subjects: string[], excludedUnits?: string[], formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
+ *   excludedUnits：關掉的單元（unitKey 格式）
  */
-export function buildQueue(bank, cards, { subjects, formulaOnly = false, weakOnly = false, size, now, rng = Math.random }) {
+export function buildQueue(bank, cards, { subjects, excludedUnits = [], formulaOnly = false, weakOnly = false, size, now, rng = Math.random }) {
   const wanted = new Set(subjects);
-  const pool = bank.filter((q) => wanted.has(q.subject) && (!formulaOnly || q.formula));
+  const off = new Set(excludedUnits);
+  const pool = bank.filter((q) => wanted.has(q.subject) && !off.has(unitKey(q.subject, q.topic)) && (!formulaOnly || q.formula));
 
   if (weakOnly) {
     const weak = pool.filter((q) => isWeak(cards[q.id]));

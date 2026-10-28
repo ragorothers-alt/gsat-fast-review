@@ -6,7 +6,8 @@ import { join, relative } from 'node:path';
 export default defineConfig({
   // 相對路徑：放在任何子路徑（GitHub Pages 等）都能跑
   base: './',
-  build: { target: 'es2020', chunkSizeWarningLimit: 1500 },
+  // 題庫（約 2 千題）直接打包進主程式，裝成 PWA 後一次快取，所以單檔偏大是預期的
+  build: { target: 'es2020', chunkSizeWarningLimit: 2500 },
   plugins: [precacheServiceWorker()],
 });
 
