@@ -30,7 +30,7 @@ node scripts/validate-questions.mjs src/data/questions/math.json
 
 | 欄位 | 型別 | 說明 |
 | --- | --- | --- |
-| `id` | string | `<科目>-001` 起，三位數流水號，同檔內不可重複 |
+| `id` | string | `<科目>-001` 起的流水號（三或四位數），同檔內不可重複 |
 | `subject` | string | 與檔名相同：`chinese` `english` `math` `physics` `chemistry` `biology` `earth` `history` `geography` `civics` |
 | `topic` | string | 單元名稱，必須**逐字**取自 `src/units.js` 該科的清單（例如「三角函數」「孟德爾遺傳」） |
 | `type` | `"mc"` / `"tf"` | `mc` 四選一；`tf` 是非題 |
@@ -45,8 +45,9 @@ node scripts/validate-questions.mjs src/data/questions/math.json
 
 ## 單元與題量
 
-- 單元清單在 `src/units.js`，玩家可以只練某幾個單元，所以**每個單元至少 30 題**（`MIN_PER_UNIT`），驗證器會擋下不足的單元。
+- 單元清單在 `src/units.js`，玩家可以只練某幾個單元，所以**每個單元至少 100 題**（`MIN_PER_UNIT`），驗證器會擋下不足的單元。
 - 同一單元內的題目要分散在不同考點；同一個知識點換句話說、只改數字的題目算重複，不要灌水。
+- 題量大時先列出單元的考點清單，再依清單出題：同一考點最多 3 題，而且切入方式要不同（正向計算、反推條件、比較兩者、概念辨析、生活或實驗情境、常見迷思）。
 - 已經有玩家作答紀錄的題目（既有 id）不可改 id，也不要改題意，進度是用 id 記的。
 
 ## 撰寫規則
