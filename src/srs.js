@@ -49,16 +49,23 @@ export function mastery(questions, cards) {
  * 組出一輪的題目順序：到期該複習的題目與新題交錯出現，其餘依到期時間補上。
  * @param {object[]} bank
  * @param {Record<string, object>} cards
- * @param {{ subjects: string[], excludedUnits?: string[], exclude?: Iterable<string>, formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
- *   excludedUnits：關掉的單元（unitKey 格式）；exclude：這次先不出的題目 id（例如剛答過的）
+ * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
+ *   excludedUnits：關掉的單元；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
+ *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）
  */
-export function buildQueue(bank, cards, { subjects, excludedUnits = [], exclude = [], formulaOnly = false, weakOnly = false, size, now, rng = Math.random }) {
+export function buildQueue(
+  bank,
+  cards,
+  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, weakOnly = false, size, now, rng = Math.random },
+) {
   const wanted = new Set(subjects);
   const off = new Set(excludedUnits);
+  const only = onlyUnits && new Set(onlyUnits);
   const skip = new Set(exclude);
-  const pool = bank.filter(
-    (q) => wanted.has(q.subject) && !off.has(unitKey(q.subject, q.topic)) && !skip.has(q.id) && (!formulaOnly || q.formula),
-  );
+  const pool = bank.filter((q) => {
+    const key = unitKey(q.subject, q.topic);
+    return wanted.has(q.subject) && !off.has(key) && (!only || only.has(key)) && !skip.has(q.id) && (!formulaOnly || q.formula);
+  });
 
   if (weakOnly) {
     const weak = pool.filter((q) => isWeak(cards[q.id]));

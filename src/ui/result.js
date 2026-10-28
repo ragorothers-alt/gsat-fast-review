@@ -8,10 +8,10 @@ import { sfx } from './feedback.js';
 export function initResult(ctx) {
   const $ = (sel) => document.querySelector(sel);
   const byId = new Map(ctx.bank.map((q) => [q.id, q]));
-  let lastMode = 'blitz';
+  let last = { mode: 'blitz', units: null };
 
   ctx.showResult = (s) => {
-    lastMode = s.mode;
+    last = { mode: s.mode, units: s.units };
     const answered = s.right + s.wrong;
     const isBlitz = s.mode === 'blitz';
     const record = isBlitz && s.score > ctx.state.best.blitz;
@@ -30,7 +30,7 @@ export function initResult(ctx) {
 
     const misses = s.log.filter((e) => e.outcome !== 'right');
     $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題 🎉';
-    $('#r-list').innerHTML = misses.map((e) => reviewItem(byId.get(e.id), e)).join('');
+    $('#r-list').innerHTML = misses.map((e) => reviewItem(byId.get(e.id), e, !!ctx.state.flags[e.id])).join('');
 
     // 這輪出現最多的科目，牠們的貓會趴在成績卡上
     const counts = new Map();
@@ -44,11 +44,24 @@ export function initResult(ctx) {
     if (record || (answered && !misses.length)) ctx.world.celebrate();
   };
 
-  $('#r-again').addEventListener('click', () => ctx.startRound(lastMode));
+  $('#r-again').addEventListener('click', () => ctx.startRound(last.mode, last.units ? { units: last.units } : {}));
   $('#r-home').addEventListener('click', () => ctx.goHome());
+
+  // 錯題清單裡也能回報題目
+  $('#r-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-flag]');
+    if (!btn) return;
+    const id = btn.dataset.flag;
+    const { flags } = ctx.state;
+    if (flags[id]) delete flags[id];
+    else flags[id] = Date.now();
+    ctx.save();
+    btn.setAttribute('aria-pressed', String(!!flags[id]));
+    ctx.toast(flags[id] ? '已回報這題，之後先不出' : '已取消回報');
+  });
 }
 
-function reviewItem(q, entry) {
+function reviewItem(q, entry, flagged) {
   const subj = SUBJECT_BY_ID[q.subject];
   const answer = q.type === 'tf' ? (q.answer ? '⭕ 對' : '❌ 錯') : richHTML(q.choices[q.answer]);
   const mine =
@@ -56,7 +69,7 @@ function reviewItem(q, entry) {
       ? '<span class="r-mine skip">看了解答</span>'
       : `<span class="r-mine">你選：${q.type === 'tf' ? (entry.chosen ? '⭕ 對' : '❌ 錯') : richHTML(q.choices[entry.chosen])}</span>`;
   return `<li class="r-item" style="--c:${subj.color}">
-    <div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${q.topic}</span></div>
+    <div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${q.topic}</span><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">🚩</button></div>
     <div class="r-q">${richHTML(q.q)}</div>
     <div class="r-ans">${mine}<span class="r-right">正解：${answer}</span></div>
     <div class="r-explain">${richHTML(q.explain)}</div>

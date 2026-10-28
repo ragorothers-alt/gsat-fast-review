@@ -39,7 +39,7 @@ const NOOP_WORLD = {
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @param {Record<'home'|'play'|'result', () => DOMRect | null>} anchors 各畫面貓咪要對齊的 DOM 區塊
+ * @param {Record<'home'|'play'|'result'|'stats', () => DOMRect | null>} anchors 各畫面貓咪要對齊的 DOM 區塊
  */
 export function createWorld(canvas, anchors) {
   let renderer;
@@ -311,7 +311,7 @@ export function createWorld(canvas, anchors) {
       mode = name;
       if (name !== 'play') api.setCombo(0);
       for (const cat of cats) cat.ducking = false;
-      if (name === 'result') for (const id of cast) catById[id].entering = true;
+      if (name === 'result' || name === 'stats') for (const id of cast) catById[id].entering = true;
     },
     setSelected(ids) {
       const next = new Set(ids);

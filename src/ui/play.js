@@ -1,4 +1,5 @@
-// 作答畫面：出題、點選／滑動作答、回饋、計時
+// 作答畫面：出題、點選／滑動作答、回饋、計時、回報題目
+import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, submit, tick, multiplier } from '../session.js';
@@ -29,6 +30,7 @@ export function initPlay(ctx) {
     timer: $('#timer'),
     timerFill: $('#timer-fill'),
     flash: $('#flash'),
+    flag: $('#flag'),
   };
 
   let s = null;
@@ -39,13 +41,18 @@ export function initPlay(ctx) {
   let raf = 0;
   let lastT = 0;
 
-  /** 依目前選的單元組一批題目；exclude 是這批先不出的題目 id */
-  function queueFor(mode, { subjects = ctx.state.settings.subjects, exclude = [] } = {}) {
+  /**
+   * 依目前選的單元組一批題目。被回報的題目一律先不出。
+   * @param {{ subjects?: string[], units?: string[] | null, exclude?: string[] }} [opts]
+   *   units：只出這些單元（弱點加強用）；exclude：這批先不出的題目 id
+   */
+  function queueFor(mode, { subjects = ctx.state.settings.subjects, units = null, exclude = [] } = {}) {
     const cfg = MODES[mode];
     return buildQueue(ctx.bank, ctx.state.cards, {
       subjects,
       excludedUnits: ctx.state.settings.excludedUnits,
-      exclude,
+      onlyUnits: units,
+      exclude: [...exclude, ...Object.keys(ctx.state.flags)],
       formulaOnly: cfg.formulaOnly,
       weakOnly: cfg.weakOnly,
       size: cfg.size,
@@ -53,8 +60,21 @@ export function initPlay(ctx) {
     });
   }
 
-  ctx.startRound = (mode) => {
-    let queue = queueFor(mode);
+  /**
+   * @param {string} mode
+   * @param {{ units?: string[] }} [opts] units：指定要練的單元（從學習分析點單元進來時）
+   */
+  ctx.startRound = (mode, opts = {}) => {
+    let units = opts.units ?? null;
+    if (mode === 'weak' && !units) {
+      const { subjects, excludedUnits } = ctx.state.settings;
+      units = weakUnits(ctx.bank, ctx.state.cards, { subjects, excludedUnits }).map((u) => u.key);
+      if (!units.length) {
+        ctx.toast('作答紀錄還不夠，先多練幾輪就找得出弱點單元');
+        return;
+      }
+    }
+    let queue = queueFor(mode, { units });
     if (!queue.length && mode === 'formula') {
       queue = queueFor(mode, { subjects: SUBJECTS.map((x) => x.id) });
       if (queue.length) ctx.toast('選的科目沒有公式題，改出全部科目的公式題');
@@ -64,6 +84,8 @@ export function initPlay(ctx) {
       return;
     }
     s = createSession(mode, queue);
+    // 指定單元進來的，「再來一輪」時沿用同樣的單元；從首頁進來的則重新找弱點
+    s.units = opts.units ?? null;
     el.timer.hidden = s.timeLeft === null;
     el.score.textContent = '0';
     renderCombo();
@@ -107,6 +129,7 @@ export function initPlay(ctx) {
     const counted = s.timeLeft === null && !MODES[s.mode].endless;
     el.progress.textContent = counted ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
     el.card.classList.toggle('swipeable', q.type === 'tf');
+    renderFlag();
     resetCardDrag();
     restartAnimation(el.card, 'enter');
     renderAnswers();
@@ -220,6 +243,21 @@ export function initPlay(ctx) {
     extend(s, more.length ? more : queueFor(s.mode));
   }
 
+  // ── 回報題目 ─────────────────────────────────────────
+  function renderFlag() {
+    el.flag.setAttribute('aria-pressed', String(!!ctx.state.flags[q.id]));
+  }
+
+  el.flag.addEventListener('click', () => {
+    if (!q) return;
+    const { flags } = ctx.state;
+    if (flags[q.id]) delete flags[q.id];
+    else flags[q.id] = Date.now();
+    ctx.save();
+    renderFlag();
+    ctx.toast(flags[q.id] ? '已回報這題，之後先不出；清單在首頁 ⚙️ 設定裡' : '已取消回報');
+  });
+
   function finish() {
     cancelAnimationFrame(raf);
     clearTimeout(autoNext);
@@ -261,7 +299,8 @@ export function initPlay(ctx) {
   // ── 是非題：卡片左右滑 ────────────────────────────────
   let drag = null;
   el.card.addEventListener('pointerdown', (e) => {
-    if (phase !== 'answering' || q.type !== 'tf') return;
+    // 卡片上的按鈕（🚩）不能被滑動手勢搶走指標，否則點不到
+    if (phase !== 'answering' || q.type !== 'tf' || e.target.closest('button')) return;
     drag = { x: e.clientX, y: e.clientY, dx: 0, active: false };
     el.card.setPointerCapture(e.pointerId);
   });

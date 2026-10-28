@@ -87,6 +87,12 @@ describe('buildQueue', () => {
     expect(out.map((x) => x.id).sort()).toEqual(['u1', 'u3']);
   });
 
+  it('onlyUnits 只出指定的單元', () => {
+    const units = [q('u1', 'math', { topic: '機率' }), q('u2', 'math', { topic: '矩陣' }), q('u3', 'physics', { topic: '矩陣' })];
+    const out = buildQueue(units, {}, { subjects: ['math', 'physics'], onlyUnits: ['physics/矩陣'], size: 10, now: NOW, rng: seeded() });
+    expect(out.map((x) => x.id)).toEqual(['u3']);
+  });
+
   it('exclude 的題目這批先不出', () => {
     const out = buildQueue(bank, {}, { subjects: ['math'], exclude: ['m1', 'm3'], size: 10, now: NOW, rng: seeded() });
     expect(out.map((x) => x.id).sort()).toEqual(['m2', 'm4']);

@@ -1,9 +1,10 @@
-// 首頁：科目選擇、今日進度、模式入口
+// 首頁：科目選擇、今日進度、學測倒數、模式入口
+import { daysUntil, weakUnits } from '../analysis.js';
 import { SUBJECTS } from '../subjects.js';
 import { isWeak, mastery } from '../srs.js';
 import { currentStreak, today } from '../stats.js';
 import { UNITS, unitKey } from '../units.js';
-import { setSoundEnabled } from './feedback.js';
+import { initSettings } from './settings.js';
 import { initUnitSheet } from './units.js';
 
 export function initHome(ctx) {
@@ -46,12 +47,9 @@ export function initHome(ctx) {
     render();
   });
 
-  const soundBtn = $('#sound-toggle');
-  soundBtn.addEventListener('click', () => {
-    settings.sound = !settings.sound;
-    ctx.save();
-    render();
-  });
+  const settingsSheet = initSettings(ctx, () => render());
+  $('#open-settings').addEventListener('click', () => settingsSheet.open());
+  $('#daily').addEventListener('click', () => ctx.showStats());
 
   document.querySelectorAll('#home [data-mode]').forEach((btn) => {
     btn.addEventListener('click', () => ctx.startRound(btn.dataset.mode));
@@ -59,10 +57,11 @@ export function initHome(ctx) {
 
   function render() {
     const now = Date.now();
-    const { cards } = ctx.state;
+    const { cards, flags } = ctx.state;
     const selected = new Set(settings.subjects);
     const off = new Set(settings.excludedUnits);
-    const inSelection = ctx.bank.filter((q) => selected.has(q.subject) && !off.has(unitKey(q.subject, q.topic)));
+    // 被回報的題目暫時不出，也不算進題數
+    const inSelection = ctx.bank.filter((q) => selected.has(q.subject) && !off.has(unitKey(q.subject, q.topic)) && !flags[q.id]);
 
     chips.forEach((chip) => {
       const id = chip.dataset.subject;
@@ -91,9 +90,16 @@ export function initHome(ctx) {
     $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : '今天還沒開始，來一輪吧！';
     $('#daily').classList.toggle('done', day.answered >= goal);
 
+    // 考完就不再倒數
+    const left = daysUntil(settings.examDate, now);
+    $('#countdown').hidden = left < 0;
+    $('#countdown-days').textContent = left;
+
     $('#best-blitz').textContent = ctx.state.best.blitz;
     $('#formula-count').textContent = inSelection.filter((q) => q.formula).length;
     $('#weak-count').textContent = inSelection.filter((q) => isWeak(cards[q.id])).length;
+    const weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits });
+    $('#weak-units-sub').textContent = weak.length ? `最弱 ${weak.length} 單元` : '先多練幾輪';
 
     const disabled = !inSelection.length;
     document.querySelectorAll('#home [data-mode]').forEach((b) => (b.disabled = disabled));
@@ -103,14 +109,12 @@ export function initHome(ctx) {
         : `已選 ${selected.size} 科・${inSelection.length} 題（題庫共 ${ctx.bank.length} 題）`
       : '題庫準備中…';
 
-    soundBtn.textContent = settings.sound ? '🔊' : '🔇';
-    soundBtn.setAttribute('aria-label', `音效：${settings.sound ? '開' : '關'}`);
-    setSoundEnabled(settings.sound);
-
     ctx.world.setSelected(settings.subjects);
   }
 
   ctx.goHome = () => {
+    // 新版已在背景下載好：趁回到首頁時換上，不打斷作答
+    if (ctx.updateReady) return ctx.applyUpdate();
     render();
     ctx.show('home');
   };

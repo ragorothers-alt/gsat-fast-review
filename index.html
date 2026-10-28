@@ -31,20 +31,23 @@
           </div>
           <div class="top-actions">
             <span class="pill" id="streak" title="連續練習天數">🔥 <b>0</b> 天</span>
-            <button id="sound-toggle" class="icon-btn" type="button" aria-label="音效：關">🔇</button>
+            <button id="open-settings" class="icon-btn" type="button" aria-label="設定">⚙️</button>
           </div>
         </header>
 
-        <div class="daily paper" id="daily">
+        <!-- 點今日進度卡進學習分析 -->
+        <button class="daily paper" id="daily" type="button" aria-label="今日進度，點一下看學習分析">
           <svg class="ring" viewBox="0 0 36 36" aria-hidden="true">
             <circle class="ring-bg" cx="18" cy="18" r="15.9" />
             <circle class="ring-fg" id="daily-ring" cx="18" cy="18" r="15.9" pathLength="100" />
           </svg>
-          <div class="daily-text">
+          <span class="daily-text">
             <span>今日 <b id="daily-count">0</b> / <span id="daily-goal">30</span> 題</span>
             <small id="daily-acc"></small>
-          </div>
-        </div>
+          </span>
+          <span class="countdown" id="countdown" hidden><small>距學測</small><b id="countdown-days">0</b><small>天</small></span>
+          <span class="daily-more" aria-hidden="true">分析 ›</span>
+        </button>
 
         <div class="stage" aria-hidden="true"></div>
 
@@ -83,6 +86,10 @@
               <span class="mode-title">錯題複習</span>
               <span class="mode-sub"><b id="weak-count">0</b> 題待練</span>
             </button>
+            <button class="mode" type="button" data-mode="weak">
+              <span class="mode-title">弱點加強</span>
+              <span class="mode-sub" id="weak-units-sub">最弱的單元</span>
+            </button>
           </div>
         </nav>
         <p class="foot" id="bank-info"></p>
@@ -104,6 +111,7 @@
             <div class="card-tag">
               <span id="q-subject" class="tag"></span>
               <span id="q-topic" class="topic"></span>
+              <button id="flag" class="flag-btn" type="button" aria-pressed="false" aria-label="回報這題有問題" title="這題怪怪的？">🚩</button>
             </div>
             <div id="q-text" class="q-text"></div>
             <div id="q-explain" class="explain" hidden></div>
@@ -160,6 +168,33 @@
           <button id="r-again" class="primary-btn" type="button">再來一輪</button>
         </nav>
       </section>
+
+      <!-- 學習分析 -->
+      <section id="stats" class="screen stats" hidden>
+        <header class="stats-bar">
+          <button id="stats-back" class="icon-btn" type="button" aria-label="回首頁">‹</button>
+          <h2>學習分析</h2>
+        </header>
+        <div class="stats-scroll">
+          <div class="stats-head" id="stats-tiles"></div>
+
+          <section class="stats-block paper">
+            <h3>弱點單元<small>依首頁選的科目；看解答也算失誤</small></h3>
+            <ol id="stats-weak" class="weak-list"></ol>
+            <button id="stats-train" class="primary-btn" type="button">練最弱的 3 個單元</button>
+          </section>
+
+          <section class="stats-block paper">
+            <h3>近 14 天<small id="stats-trend"></small></h3>
+            <div id="stats-chart" class="bars" role="img"></div>
+          </section>
+
+          <section class="stats-block paper">
+            <h3>各科<small>練過題數・正確率・熟練度</small></h3>
+            <ul id="stats-subjects" class="subject-stats"></ul>
+          </section>
+        </div>
+      </section>
     </main>
 
     <!-- 單元選擇 -->
@@ -176,6 +211,55 @@
           <button id="units-all" class="secondary-btn" type="button">全選</button>
           <button id="units-done" class="primary-btn" type="button">好了</button>
         </nav>
+      </div>
+    </div>
+
+    <!-- 設定 -->
+    <div id="settings-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <header class="sheet-head">
+          <h2 id="settings-title">設定</h2>
+          <button id="settings-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <div class="settings-scroll">
+          <section class="set-group">
+            <h3>每日目標</h3>
+            <div id="goal-options" class="seg" role="group" aria-label="每日目標題數"></div>
+          </section>
+
+          <section class="set-group">
+            <h3>學測日期<small id="exam-left"></small></h3>
+            <div class="set-row">
+              <input id="exam-date" class="date-input" type="date" />
+              <button id="exam-reset" class="link-btn" type="button">改回 116 學測</button>
+            </div>
+          </section>
+
+          <section class="set-group">
+            <h3>音效</h3>
+            <button id="sound-toggle" class="switch" type="button" role="switch" aria-checked="false">
+              <span>答對、答錯的提示音</span><i aria-hidden="true"></i>
+            </button>
+          </section>
+
+          <section class="set-group">
+            <h3>進度備份與同步</h3>
+            <p class="set-note">在一台裝置匯出，存成檔案傳到另一台（AirDrop、LINE、雲端硬碟都可以）再匯入。同一題保留較新的紀錄，重複匯入也不會重複計算；兩台都練過的話，兩邊各匯入一次對方的檔案就一致了。</p>
+            <div class="set-actions">
+              <button id="export-progress" class="secondary-btn" type="button">匯出進度</button>
+              <button id="import-progress" class="secondary-btn" type="button">匯入進度</button>
+            </div>
+            <input id="import-file" type="file" accept=".json,application/json" hidden />
+          </section>
+
+          <section class="set-group">
+            <h3>回報的題目<small id="flag-count"></small></h3>
+            <p class="set-note">作答時覺得題目有錯，按題目卡右上角的 🚩。回報的題目先不會再出，複製清單交給題庫維護者就能修正。</p>
+            <ul id="flag-list" class="flag-list"></ul>
+            <button id="copy-flags" class="secondary-btn" type="button">複製回報清單</button>
+            <textarea id="flag-report" class="flag-report" readonly hidden aria-label="回報清單"></textarea>
+          </section>
+        </div>
       </div>
     </div>
 

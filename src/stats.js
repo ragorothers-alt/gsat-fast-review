@@ -12,6 +12,12 @@ function previousDayKey(ts) {
   return dayKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1).getTime());
 }
 
+/** 日期字串往前／後推幾天：shiftDay('2026-03-01', -1) === '2026-02-28' */
+export function shiftDay(key, delta) {
+  const [y, m, d] = key.split('-').map(Number);
+  return dayKey(new Date(y, m - 1, d + delta).getTime());
+}
+
 /** 記一次作答（「看解答」不算作答量，但算今天有練習） */
 export function recordAnswer(state, outcome, now) {
   const key = dayKey(now);

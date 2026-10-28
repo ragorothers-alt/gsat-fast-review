@@ -3,6 +3,9 @@ import { SUBJECTS } from './subjects.js';
 
 const KEY = 'gsat-quiz:v1';
 
+/** 116 學年度學測首日（大考中心簡章：2027/1/22–24）；玩家可在設定裡改成自己的考試日期 */
+export const DEFAULT_EXAM_DATE = '2027-01-22';
+
 export function freshState() {
   return {
     version: 1,
@@ -10,8 +13,17 @@ export function freshState() {
     daily: {},
     streak: { count: 0, last: null },
     best: { blitz: 0 },
+    // 玩家回報有問題的題目：id → 回報時間；回報後先不出這題
+    flags: {},
     // scratch：平板上草稿區要不要展開（手機上一律收起）
-    settings: { subjects: SUBJECTS.map((s) => s.id), excludedUnits: [], goal: 30, sound: false, scratch: true },
+    settings: {
+      subjects: SUBJECTS.map((s) => s.id),
+      excludedUnits: [],
+      goal: 30,
+      sound: false,
+      scratch: true,
+      examDate: DEFAULT_EXAM_DATE,
+    },
   };
 }
 
