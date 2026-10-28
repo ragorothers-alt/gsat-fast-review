@@ -64,9 +64,9 @@ export function initPlay(ctx) {
   function loop(t) {
     const dt = (t - lastT) / 1000;
     lastT = t;
-    // 看解答、動畫期間與切到背景時不扣時間
+    // 看解答、動畫期間與切到背景時不扣時間；上限 1 秒是為了切回前景的第一幀，卡頓的手機仍照實扣時
     if (phase === 'answering' && !document.hidden) {
-      tick(s, Math.min(dt, 0.25));
+      tick(s, Math.min(dt, 1));
       renderTimer();
       if (s.timeLeft <= 0) return finish();
     }
