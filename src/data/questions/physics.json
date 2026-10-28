@@ -1,0 +1,920 @@
+[
+  {
+    "id": "physics-001",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "下列哪一個是國際單位制（SI）中，質量的基本單位？",
+    "choices": [
+      "公克（g）",
+      "牛頓（N）",
+      "公斤（kg）",
+      "焦耳（J）"
+    ],
+    "answer": 2,
+    "explain": "SI 的質量基本單位是公斤；牛頓是力的單位，焦耳是能量的單位。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-002",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "由 $F=ma$ 判斷，力的 SI 單位牛頓，可寫成哪一種基本單位組合？",
+    "choices": [
+      "$\\mathrm{kg\\cdot m\\cdot s^{-2}}$",
+      "$\\mathrm{kg\\cdot m\\cdot s^{-1}}$",
+      "$\\mathrm{kg\\cdot m^2\\cdot s^{-2}}$",
+      "$\\mathrm{kg\\cdot m^{-1}\\cdot s^{-2}}$"
+    ],
+    "answer": 0,
+    "explain": "質量乘以加速度，因此 $1\\,\\mathrm{N}=1\\,\\mathrm{kg\\cdot m\\cdot s^{-2}}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-003",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "原子大小約 $10^{-10}$ 公尺，原子核大小約 $10^{-15}$ 公尺。兩者大小相差幾個數量級？",
+    "choices": [
+      "3 個",
+      "4 個",
+      "6 個",
+      "5 個"
+    ],
+    "answer": 3,
+    "explain": "兩者大小之比約為 $10^5$，所以相差 5 個數量級。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-004",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "tf",
+    "q": "科學假說只要能解釋已知現象，就不必再接受後續觀察或實驗的檢驗。",
+    "answer": false,
+    "explain": "科學假說仍須接受新證據檢驗；若預測與可靠的實驗結果不符，就需重新檢討。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-005",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "使月球維持繞地球運動的主要基本交互作用為何？",
+    "choices": [
+      "電磁力",
+      "重力",
+      "強力",
+      "弱力"
+    ],
+    "answer": 1,
+    "explain": "地球與月球之間的萬有引力，提供月球繞地球運動所需的向心力。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-006",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "原子中，帶負電的電子與帶正電的原子核之間的吸引，主要屬於哪一種基本交互作用？",
+    "choices": [
+      "重力",
+      "電磁力",
+      "強力",
+      "弱力"
+    ],
+    "answer": 1,
+    "explain": "電子與原子核帶異種電荷，彼此以電力吸引；電力屬於電磁交互作用。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-007",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "原子核內的質子彼此有電力排斥，仍能與中子結合成穩定原子核，主要靠哪一種作用？",
+    "choices": [
+      "核子間的重力",
+      "核子間的弱力",
+      "質子間的電磁力",
+      "核子間的強力"
+    ],
+    "answer": 3,
+    "explain": "在原子核尺度，核子間的強力可克服質子間的電力排斥，使核子結合。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-008",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "自由中子會自發衰變成質子及其他粒子，這個過程主要涉及哪一種基本交互作用？",
+    "choices": [
+      "弱力",
+      "強力",
+      "電磁力",
+      "重力"
+    ],
+    "answer": 0,
+    "explain": "自由中子的貝他衰變涉及弱作用，會產生質子、電子及反微中子。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-009",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "tf",
+    "q": "核子間強力的有效作用範圍很短，主要在原子核尺度內顯著。",
+    "answer": true,
+    "explain": "核子間強力具有短程性，不能像重力一樣在天體間的距離維持顯著作用。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-010",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "tf",
+    "q": "日常生活中的摩擦力，從微觀角度看，主要源於物質間的電磁交互作用。",
+    "answer": true,
+    "explain": "接觸物體內的原子與電子透過電磁交互作用影響彼此；摩擦力是這些微觀作用的巨觀表現。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-011",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "依克卜勒第一定律，行星沿橢圓軌道繞太陽運動時，太陽位於何處？",
+    "choices": [
+      "橢圓的中心",
+      "橢圓長軸的一個端點",
+      "橢圓的一個焦點",
+      "橢圓短軸的一個端點"
+    ],
+    "answer": 2,
+    "explain": "克卜勒第一定律指出，太陽位於行星橢圓軌道的一個焦點。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-012",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "tf",
+    "q": "行星繞太陽運動時，在相等時間內，行星與太陽連線所掃過的面積相等。",
+    "answer": true,
+    "explain": "這是克卜勒第二定律，亦稱等面積定律；等時間不代表沿軌道走過等長距離。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-013",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "克卜勒發現行星運動三大定律時，主要依據下列哪一項？",
+    "choices": [
+      "長期累積的行星位置觀測資料",
+      "先接受牛頓萬有引力定律，再做數學演繹",
+      "先假定所有行星都做等速圓周運動",
+      "先假定所有行星的公轉週期完全相同"
+    ],
+    "answer": 0,
+    "explain": "克卜勒根據前人累積的行星觀測資料歸納規律；牛頓之後才用運動定律與萬有引力解釋。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-014",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "忽略行星質量。兩行星繞同一恆星運動，甲軌道半長軸為乙的 4 倍，甲的公轉週期是乙的幾倍？",
+    "choices": [
+      "2 倍",
+      "4 倍",
+      "8 倍",
+      "16 倍"
+    ],
+    "answer": 2,
+    "explain": "依 $T^2\\propto a^3$，半長軸變 4 倍，週期變為 $\\sqrt{4^3}=8$ 倍。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-015",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "兩質點的質量均不變，彼此距離變為原來的 2 倍時，萬有引力大小變為原來的幾倍？",
+    "choices": [
+      "$\\frac{1}{2}$ 倍",
+      "$\\frac{1}{4}$ 倍",
+      "2 倍",
+      "4 倍"
+    ],
+    "answer": 1,
+    "explain": "由 $F=\\frac{GMm}{r^2}$，距離變 2 倍，引力變為 $\\frac{1}{2^2}=\\frac{1}{4}$ 倍。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-016",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "只考慮太陽對行星的萬有引力時，這個力的方向為何？",
+    "choices": [
+      "沿行星瞬時速度的方向",
+      "垂直於行星軌道平面",
+      "由行星朝遠離太陽的方向",
+      "由行星指向太陽"
+    ],
+    "answer": 3,
+    "explain": "萬有引力是吸引力，方向沿兩物體的連線；太陽對行星的引力指向太陽，不必與行星速度同向。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-017",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "tf",
+    "q": "在繞地球運行的太空站內，太空人失重是因為該處已沒有地球引力。",
+    "answer": false,
+    "explain": "太空站與太空人一起受引力而持續自由落下；失重不代表沒有引力。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-018",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "兩個互不接觸的均勻球體互相吸引。在 $F=\\frac{GMm}{r^2}$ 中，$r$ 是哪一段距離？",
+    "choices": [
+      "兩球表面間的最短距離",
+      "較大球體的半徑",
+      "兩球球心間的距離",
+      "兩球半徑的總和"
+    ],
+    "answer": 2,
+    "explain": "球對稱物體在球外的引力，可視為質量集中於球心；距離須從球心量起。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "physics-019",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "tf",
+    "q": "牛頓的萬有引力定律以同一套理論，解釋近地表物體下落與行星繞太陽的運動。",
+    "answer": true,
+    "explain": "萬有引力不只作用於地表；結合牛頓運動定律，可統一解釋地面落體與天體運動。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-020",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "公車原本直線前進，突然煞車時，未扶穩的乘客因慣性，身體相對車廂通常往哪個方向傾？",
+    "choices": [
+      "車頭方向",
+      "車尾方向",
+      "車廂左側",
+      "車廂右側"
+    ],
+    "answer": 0,
+    "explain": "乘客的身體傾向維持原本向前的運動狀態，因此相對減速中的車廂向前傾。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-021",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "tf",
+    "q": "在慣性參考系中，物體所受合力為零時，它的速度一定等於零。",
+    "answer": false,
+    "explain": "合力為零表示加速度為零；物體可以靜止，也可以做等速度運動。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-022",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "質量為 2 公斤的物體，受到大小為 6 牛頓的合力，其加速度大小是多少？",
+    "choices": [
+      "$\\frac{1}{3}\\,\\mathrm{m/s^2}$",
+      "$6\\,\\mathrm{m/s^2}$",
+      "$12\\,\\mathrm{m/s^2}$",
+      "$3\\,\\mathrm{m/s^2}$"
+    ],
+    "answer": 3,
+    "explain": "由 $a=F/m$，加速度為 $6/2=3\\,\\mathrm{m/s^2}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-023",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "物體放在斜面上且與斜面接觸。斜面對物體的正向力，方向為何？",
+    "choices": [
+      "鉛直向下",
+      "鉛直向上",
+      "平行斜面向上",
+      "垂直斜面並離開斜面"
+    ],
+    "answer": 3,
+    "explain": "正向力是接觸面沿垂直表面方向施加的支持力；斜面上的正向力不一定鉛直向上。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-024",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "大卡車與小轎車碰撞時，兩車對彼此的碰撞力大小有何關係？",
+    "choices": [
+      "卡車對轎車的力較大",
+      "每一瞬間都一樣大",
+      "轎車對卡車的力較大",
+      "須知道兩車質量才能比較"
+    ],
+    "answer": 1,
+    "explain": "兩車互施的碰撞力是一對作用力與反作用力，大小相等；質量不同可使加速度不同。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-025",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "tf",
+    "q": "一對作用力與反作用力分別作用在不同物體上，因此不會在同一物體的受力分析中互相抵銷。",
+    "answer": true,
+    "explain": "判斷單一物體的合力，只能加總作用在該物體上的力，不能加入它對別的物體所施的力。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-026",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "箱子在粗糙水平面上向右滑動。地面對箱子的滑動摩擦力方向為何？",
+    "choices": [
+      "向右",
+      "向左",
+      "鉛直向上",
+      "鉛直向下"
+    ],
+    "answer": 1,
+    "explain": "滑動摩擦力反抗兩接觸面的相對滑動；箱子相對地面向右滑動，因此地面對箱子的摩擦力向左。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-027",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "tf",
+    "q": "忽略空氣阻力，鉛直上拋的球到達最高點時，因瞬間速度為零，所以加速度也為零。",
+    "answer": false,
+    "explain": "最高點的瞬間速度雖為零，球仍受重力，加速度仍鉛直向下。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "physics-028",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "同一輛車的速率變為原來的 2 倍，其動能變為原來的幾倍？",
+    "choices": [
+      "4 倍",
+      "2 倍",
+      "8 倍",
+      "$\\frac{1}{2}$ 倍"
+    ],
+    "answer": 0,
+    "explain": "由 $K=\\frac{1}{2}mv^2$，質量不變時，動能與速率平方成正比。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-029",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "近地表重力加速度視為定值。同一物體從地面升高 $h$ 或 $2h$，後者增加的重力位能是前者的幾倍？",
+    "choices": [
+      "1 倍",
+      "4 倍",
+      "2 倍",
+      "$\\frac{1}{2}$ 倍"
+    ],
+    "answer": 2,
+    "explain": "由 $\\Delta U=mg\\Delta h$，質量與重力加速度不變，升高量變 2 倍，位能增加量也變 2 倍。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-030",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "tf",
+    "q": "手以鉛直向上的力提著書包，書包只做水平位移時，這個向上的力對書包作的功為零。",
+    "answer": true,
+    "explain": "此力與位移互相垂直，力在位移方向沒有分量，所以作功為零。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-031",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "兩部機器作相同的功，甲所花的時間只有乙的一半。甲的平均功率是乙的幾倍？",
+    "choices": [
+      "2 倍",
+      "$\\frac{1}{2}$ 倍",
+      "1 倍",
+      "4 倍"
+    ],
+    "answer": 0,
+    "explain": "平均功率 $P=W/t$；作功相同而時間減半，功率變為 2 倍。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-032",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "tf",
+    "q": "滑塊在粗糙水平面滑行後停下。若系統包含滑塊與地面，且不與外界交換能量，摩擦會使系統總能量減少。",
+    "answer": false,
+    "explain": "摩擦使滑塊的動能轉為接觸物體的內能等；系統沒有與外界交換能量，總能量仍守恆。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-033",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "兩物體因接觸而自發交換熱量時，淨熱傳遞的方向由哪一項決定？",
+    "choices": [
+      "溫度高低",
+      "內能總量大小",
+      "質量大小",
+      "體積大小"
+    ],
+    "answer": 0,
+    "explain": "熱因溫度差而傳遞，淨熱量由高溫處傳往低溫處；總內能較多，不代表溫度一定較高。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-034",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "水庫的水向下流動、帶動水輪機，再由發電機發電。主要的能量轉換順序為何？",
+    "choices": [
+      "電能→動能→重力位能",
+      "重力位能→動能→電能",
+      "內能→電能→重力位能",
+      "化學能→內能→電能"
+    ],
+    "answer": 1,
+    "explain": "高處水的重力位能先轉為流動與轉動的動能，再經發電機轉為電能。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-035",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "兩個釋能核反應中，甲反應前後的總靜止質量減少量為乙的 2 倍。甲釋放的總能量是乙的幾倍？",
+    "choices": [
+      "1 倍",
+      "4 倍",
+      "$\\frac{1}{2}$ 倍",
+      "2 倍"
+    ],
+    "answer": 3,
+    "explain": "由 $\\Delta E=\\Delta m c^2$，光速固定，釋能量與總靜止質量減少量成正比。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-036",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "鈾原子核吸收中子後，分裂成兩個較輕的原子核，並放出能量與中子。這個過程稱為什麼？",
+    "choices": [
+      "核融合",
+      "原子游離",
+      "核分裂",
+      "化學燃燒"
+    ],
+    "answer": 2,
+    "explain": "重原子核分裂成較輕原子核稱為核分裂；核融合則是輕原子核結合。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-037",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "太陽核心持續釋放能量的主要來源為何？",
+    "choices": [
+      "輕原子核的核融合",
+      "重原子核的核分裂",
+      "氫氣與氧氣的化學燃燒",
+      "原子失去電子的游離"
+    ],
+    "answer": 0,
+    "explain": "太陽核心主要透過氫核融合成氦核的過程，將部分質量轉為釋出的能量。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-038",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "一個氦-4 原子核的靜止質量，與 2 個自由質子及 2 個自由中子的靜止質量總和相比，有何關係？",
+    "choices": [
+      "原子核的靜止質量較大",
+      "兩者必定完全相同",
+      "無法比較，因為質子與中子質量不同",
+      "原子核的靜止質量較小"
+    ],
+    "answer": 3,
+    "explain": "核子結合形成原子核時會釋放能量，結合後的靜止質量較小，差值稱為質量虧損。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-039",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "tf",
+    "q": "核分裂放出的中子若完全無法再引發其他原子核分裂，核分裂連鎖反應仍能自行持續。",
+    "answer": false,
+    "explain": "連鎖反應須由前一次分裂釋出的中子引發後續核分裂；中子若不再引發分裂，反應鏈就會中斷。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-040",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "在同一輻射源與其他條件相同時，下列哪個做法有助於降低體外曝露的累積劑量？",
+    "choices": [
+      "延長接近輻射源的時間",
+      "縮短接近輻射源的時間",
+      "移除原有的有效屏蔽",
+      "縮短人與輻射源的距離"
+    ],
+    "answer": 1,
+    "explain": "體外輻射防護可採縮短曝露時間、增加距離與適當屏蔽；其他條件相同時，縮短曝露時間可降低累積劑量。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-041",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "把指南針放在直導線旁，導線通電時磁針偏轉，斷電後恢復。這項實驗主要顯示什麼？",
+    "choices": [
+      "只有交流電會產生磁場",
+      "電流周圍會產生磁場",
+      "磁場方向必與直導線平行",
+      "導線通電後一定變成永久磁鐵"
+    ],
+    "answer": 1,
+    "explain": "厄斯特實驗顯示，電流具有磁效應，通電導線的磁場會影響磁針方向。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-042",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "一條長直導線垂直手機螢幕，電流方向朝向你。從你的視角看，導線周圍的磁場沿哪個方向環繞？",
+    "choices": [
+      "順時針方向",
+      "由導線向外放射",
+      "由四周指向導線",
+      "逆時針方向"
+    ],
+    "answer": 3,
+    "explain": "用右手握住導線，拇指朝向你，其餘四指彎曲的逆時針方向就是磁場方向。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-043",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "tf",
+    "q": "磁鐵與閉合線圈都固定不動，且無其他變動磁場時，線圈必定會因磁鐵而持續產生感應電流。",
+    "answer": false,
+    "explain": "電磁感應需要穿過線圈的磁場有變化；磁鐵與線圈相對靜止且磁場不變時，不會因此產生感應電流。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-044",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "兩個帶電量不為零的點電荷，距離固定。其中一個的電荷量加倍，另一個不變，兩者間的電力大小變為原來的幾倍？",
+    "choices": [
+      "2 倍",
+      "$\\frac{1}{2}$ 倍",
+      "4 倍",
+      "1 倍"
+    ],
+    "answer": 0,
+    "explain": "由 $F=k\\frac{|q_1q_2|}{r^2}$，距離不變且只有一個電荷量加倍，電力大小變為 2 倍。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-045",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "依馬克士威理論，即使某處沒有導線中的電流，隨時間變動的電場仍可在周圍產生什麼？",
+    "choices": [
+      "重力場",
+      "只有靜電場",
+      "磁場",
+      "核子間的強力"
+    ],
+    "answer": 2,
+    "explain": "變動的電場會產生磁場，變動的磁場也會產生電場；磁場的來源不只限於導線中的電流。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-046",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "電動機通電後轉動，主要利用下列哪個原理？",
+    "choices": [
+      "載流線圈在磁場中受力",
+      "磁場變動產生感應電流",
+      "電阻把電能轉為內能",
+      "金屬受光照後釋出電子"
+    ],
+    "answer": 0,
+    "explain": "電動機利用磁場對載流線圈的作用力產生轉動，主要將電能轉為機械能。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-047",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "下列四種電磁波中，哪一種頻率最高？",
+    "choices": [
+      "無線電波",
+      "紅外線",
+      "伽瑪射線",
+      "可見光"
+    ],
+    "answer": 2,
+    "explain": "這四種電磁波的頻率由低到高為無線電波、紅外線、可見光、伽瑪射線。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-048",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "tf",
+    "q": "電磁波可在真空中傳播，不需要像聲波一樣依靠物質介質。",
+    "answer": true,
+    "explain": "電磁波是電場與磁場的擾動，可以在真空傳播；聲波則需物質介質傳遞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-049",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "甲單色光的頻率為乙的 2 倍，甲的單一光子能量是乙的幾倍？",
+    "choices": [
+      "$\\frac{1}{2}$ 倍",
+      "2 倍",
+      "1 倍",
+      "4 倍"
+    ],
+    "answer": 1,
+    "explain": "依 $E=hf$，單一光子能量與頻率成正比，不是與波長成正比。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-050",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "tf",
+    "q": "在單光子光電效應中，入射光頻率低於金屬的底限頻率時，只要增加光的強度，就能使該金屬放出光電子。",
+    "answer": false,
+    "explain": "光的強度增加只會增加入射光子數；頻率低於底限時，每個光子的能量仍不足以使電子逸出。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-051",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "牛頓力學無法完整解釋原子內電子的能階。描述這類微觀現象，主要應採用哪個理論？",
+    "choices": [
+      "幾何光學",
+      "流體力學",
+      "熱力學",
+      "量子力學"
+    ],
+    "answer": 3,
+    "explain": "原子尺度會出現能量量子化等現象，須用量子力學描述；古典牛頓力學無法完整說明。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-052",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "哪一組現象分別支持光具有「波動性」與「粒子性」？",
+    "choices": [
+      "光電效應、干涉",
+      "反射、折射",
+      "干涉、光電效應",
+      "繞射、干涉"
+    ],
+    "answer": 2,
+    "explain": "干涉及繞射顯示光的波動性；光電效應需以光子能量解釋，支持光的粒子性。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-053",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "逐顆發射的電子通過雙狹縫後，長時間累積在偵測屏上形成干涉條紋。這些條紋主要顯示什麼？",
+    "choices": [
+      "電子也具有波動性",
+      "電子不具有粒子性",
+      "電子一定須彼此碰撞才會形成條紋",
+      "電子只能沿兩條固定直線前進"
+    ],
+    "answer": 0,
+    "explain": "即使逐顆發射電子，累積結果仍會呈現干涉，顯示電子具有波動性；這不表示電子失去粒子性。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-054",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "未知稀薄氣體受激發後，出現與氫原子相同的一組特徵譜線。這最直接支持哪項判斷？",
+    "choices": [
+      "氣體中含有氫元素",
+      "氣體中只有氫元素",
+      "氣體的溫度必與實驗室完全相同",
+      "氣體中的電子能量可取任意連續值"
+    ],
+    "answer": 0,
+    "explain": "不同元素有各自的原子特徵光譜；比對譜線可辨認元素，但不能僅據此斷定氣體只含一種元素。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-055",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "氫原子三個能階滿足 $E_1<E_2<E_3$。只考慮這三個能階間的直接躍遷，哪個過程放出光子的波長最短？",
+    "choices": [
+      "$E_3\\to E_2$",
+      "$E_3\\to E_1$",
+      "$E_2\\to E_1$",
+      "$E_1\\to E_3$"
+    ],
+    "answer": 1,
+    "explain": "$E_3\\to E_1$ 的能階差最大，放出的光子能量最高；由 $E=hc/\\lambda$，波長最短。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-056",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "tf",
+    "q": "在氫原子的理想能階模型中，束縛電子只能具有某些特定能量，因此發射光譜呈離散譜線。",
+    "answer": true,
+    "explain": "束縛電子的能量不連續，能階差只對應特定光子能量，因此形成離散譜線。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "physics-057",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "某繩波的頻率為 5 赫茲，波長為 2 公尺，波速是多少？",
+    "choices": [
+      "$2.5\\,\\mathrm{m/s}$",
+      "$10\\,\\mathrm{m/s}$",
+      "$5\\,\\mathrm{m/s}$",
+      "$7\\,\\mathrm{m/s}$"
+    ],
+    "answer": 1,
+    "explain": "由 $v=f\\lambda$，波速為 $5\\times2=10\\,\\mathrm{m/s}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-058",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "下列哪種聲音現象主要由都卜勒效應造成？",
+    "choices": [
+      "山谷中的聲音反射形成回聲",
+      "距離拉遠時，聽到的音量變小",
+      "聲音穿過牆壁後變弱",
+      "固定頻率鳴笛的救護車靠近靜止路人，路人聽到的頻率高於聲源頻率"
+    ],
+    "answer": 3,
+    "explain": "聲源接近靜止觀察者時，波峰到達的時間間隔變短，因此聽到的頻率較高；這是都卜勒效應。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "physics-059",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "單色光由空氣進入靜止玻璃，若在玻璃中的速率為原來的一半，頻率與波長各如何改變？",
+    "choices": [
+      "頻率不變，波長減半",
+      "頻率減半，波長不變",
+      "頻率不變，波長加倍",
+      "頻率加倍，波長不變"
+    ],
+    "answer": 0,
+    "explain": "光通過靜止介面時頻率不變；由 $v=f\\lambda$，速率減半，波長也減半。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-060",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "tf",
+    "q": "在真空中，頻率較高的電磁波，傳播速率也一定較大。",
+    "answer": false,
+    "explain": "各種頻率的電磁波在真空中具有相同速率，頻率較高不代表傳得較快。",
+    "formula": false,
+    "level": 2
+  }
+]

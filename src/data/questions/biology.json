@@ -1,0 +1,920 @@
+[
+  {
+    "id": "biology-001",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "下列哪一項最能區分細菌細胞與一般動物細胞？",
+    "choices": [
+      "是否具有細胞膜",
+      "是否具有遺傳物質",
+      "是否具有核膜包圍的細胞核",
+      "是否具有核糖體"
+    ],
+    "answer": 2,
+    "explain": "細菌是原核生物，沒有核膜包圍的細胞核；一般動物細胞是真核細胞。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-002",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "tf",
+    "q": "植物細胞具有細胞壁，因此細胞壁內側不再具有細胞膜。",
+    "answer": false,
+    "explain": "植物細胞同時具有細胞壁與細胞膜；細胞壁提供支持，細胞膜調節物質進出。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-003",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "心肌細胞需要持續大量供應 ATP。哪個胞器與有氧呼吸產生大量 ATP 最有關？",
+    "choices": [
+      "高基氏體",
+      "粒線體",
+      "液泡",
+      "細胞核"
+    ],
+    "answer": 1,
+    "explain": "粒線體參與有氧呼吸，將有機物中的化學能轉移至 ATP，供細胞利用。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-004",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "植物葉綠體進行光合作用時，主要完成哪一種能量轉換？",
+    "choices": [
+      "有機物的化學能轉為熱能",
+      "熱能轉為光能",
+      "ATP 的化學能轉為光能",
+      "光能轉為有機物中的化學能"
+    ],
+    "answer": 3,
+    "explain": "光合作用把光能轉為化學能，貯存在合成的有機物中。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-005",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "某細胞大量製造要分泌到細胞外的蛋白質，通常哪種構造較發達？",
+    "choices": [
+      "粗糙內質網",
+      "平滑內質網",
+      "中央液泡",
+      "葉綠體"
+    ],
+    "answer": 0,
+    "explain": "粗糙內質網表面附有核糖體，與分泌蛋白質的合成及運送有關。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-006",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "某細胞仍可合成蛋白質，卻無法正常將分泌蛋白質分類、包裝成囊泡。最可能是哪個胞器功能受損？",
+    "choices": [
+      "粒線體",
+      "細胞核",
+      "高基氏體",
+      "核糖體"
+    ],
+    "answer": 2,
+    "explain": "高基氏體負責修飾、分類與包裝蛋白質；仍可合成蛋白質，表示不能直接判定核糖體失效。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-007",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "tf",
+    "q": "植物所有活細胞都具有葉綠體，包括一般不受光的根部細胞。",
+    "answer": false,
+    "explain": "並非所有植物細胞都有葉綠體；一般根部細胞通常沒有葉綠體，但仍有粒線體。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-008",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "成熟植物細胞的大型中央液泡吸收水分後，最直接有助於哪項功能？",
+    "choices": [
+      "產生 ATP",
+      "維持細胞膨壓",
+      "包裝分泌蛋白質",
+      "複製 DNA"
+    ],
+    "answer": 1,
+    "explain": "液泡儲存水分；細胞吸水產生膨壓，配合細胞壁可支持植物體。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-009",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "mc",
+    "q": "細菌與動物細胞都能合成蛋白質。兩者共同具有哪個直接參與蛋白質合成的構造？",
+    "choices": [
+      "高基氏體",
+      "細胞核",
+      "粗糙內質網",
+      "核糖體"
+    ],
+    "answer": 3,
+    "explain": "原核與真核細胞都有核糖體，可依據 RNA 訊息合成蛋白質；細菌沒有細胞核與內質網。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-010",
+    "subject": "biology",
+    "topic": "細胞構造與功能",
+    "type": "tf",
+    "q": "綠色植物的葉肉細胞在白天有光時，可同時進行光合作用與呼吸作用。",
+    "answer": true,
+    "explain": "光合作用需要光，呼吸作用則日夜都可進行；白天並不會停止呼吸作用。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-011",
+    "subject": "biology",
+    "topic": "細胞膜與物質運輸",
+    "type": "mc",
+    "q": "氧氣可穿過細胞膜。當細胞外氧氣濃度高於細胞內時，氧氣經簡單擴散的淨移動方向為何？",
+    "choices": [
+      "由細胞內移向細胞外",
+      "內外沒有淨移動",
+      "由細胞外移向細胞內，不需消耗 ATP",
+      "由細胞外移向細胞內，必須消耗 ATP"
+    ],
+    "answer": 2,
+    "explain": "簡單擴散的淨移動方向為由高濃度處到低濃度處，不需細胞額外供應能量。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-012",
+    "subject": "biology",
+    "topic": "細胞膜與物質運輸",
+    "type": "mc",
+    "q": "某動物細胞的膜可讓水通過，但內外溶質均不能通過。若外液的溶質總粒子濃度高於細胞內，初期細胞最可能如何變化？",
+    "choices": [
+      "淨吸水而膨脹",
+      "淨失水而縮小",
+      "溶質大量進入而膨脹",
+      "水分沒有淨移動"
+    ],
+    "answer": 1,
+    "explain": "外液中不能穿膜的溶質總粒子濃度較高，水會因滲透作用淨流出細胞，使細胞縮小。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-013",
+    "subject": "biology",
+    "topic": "細胞膜與物質運輸",
+    "type": "mc",
+    "q": "下列哪一項最符合細胞膜調節物質進出的特性？",
+    "choices": [
+      "對所有物質都完全不通透",
+      "所有物質都以相同速率通過",
+      "只允許水通過，其他物質都不能通過",
+      "對不同物質有不同的通透性"
+    ],
+    "answer": 3,
+    "explain": "細胞膜具有選擇性通透性，不同物質通過細胞膜的難易程度不同。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-014",
+    "subject": "biology",
+    "topic": "細胞膜與物質運輸",
+    "type": "tf",
+    "q": "細胞與外液達到滲透平衡後，水分子就會完全停止穿過細胞膜。",
+    "answer": false,
+    "explain": "滲透平衡時，水仍會雙向通過細胞膜；進出量相等，所以沒有淨移動。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-015",
+    "subject": "biology",
+    "topic": "細胞膜與物質運輸",
+    "type": "tf",
+    "q": "將具有完整細胞壁的植物細胞放入純水，細胞壁可限制過度膨脹，通常不會像紅血球一樣因吸水而破裂。",
+    "answer": true,
+    "explain": "植物細胞吸水後產生膨壓，細胞壁提供支持並限制膨脹；紅血球沒有細胞壁。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-016",
+    "subject": "biology",
+    "topic": "細胞分裂",
+    "type": "mc",
+    "q": "人體皮膚受傷後，周圍細胞增加以修補傷口，主要依賴哪一過程？",
+    "choices": [
+      "有絲分裂",
+      "減數分裂",
+      "細胞分化",
+      "受精作用"
+    ],
+    "answer": 0,
+    "explain": "有絲分裂可增加體細胞數量，參與生長與組織修補。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-017",
+    "subject": "biology",
+    "topic": "細胞分裂",
+    "type": "tf",
+    "q": "一般減數分裂在分裂前複製一次 DNA，接著連續分裂兩次，兩次分裂之間不再複製 DNA。",
+    "answer": true,
+    "explain": "減數分裂是一次 DNA 複製配合兩次分裂，最後使染色體套數減半。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-018",
+    "subject": "biology",
+    "topic": "細胞分裂",
+    "type": "mc",
+    "q": "人類正常精子與卵各有 23 條染色體。受精對染色體數目的意義為何？",
+    "choices": [
+      "使精子的染色體數再減半",
+      "讓受精卵只保留母方染色體",
+      "恢復為體細胞的染色體數目",
+      "使每一代的染色體數目減半"
+    ],
+    "answer": 2,
+    "explain": "正常受精時，精卵各提供 23 條染色體，受精卵恢復為 46 條。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-019",
+    "subject": "biology",
+    "topic": "細胞分裂",
+    "type": "mc",
+    "q": "某動物正常體細胞有 8 條染色體。若一個含 5 條染色體的異常精子與正常卵結合，受精卵共有幾條染色體？",
+    "choices": [
+      "4 條",
+      "8 條",
+      "13 條",
+      "9 條"
+    ],
+    "answer": 3,
+    "explain": "正常卵有 $8\\div2=4$ 條染色體，受精卵共有 $5+4=9$ 條。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "biology-020",
+    "subject": "biology",
+    "topic": "細胞分裂",
+    "type": "tf",
+    "q": "人體細胞正常完成有絲分裂後，兩個子細胞的染色體數目都與原細胞相同。",
+    "answer": true,
+    "explain": "有絲分裂使複製後的染色體平均分配，維持子細胞的染色體數目。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-021",
+    "subject": "biology",
+    "topic": "細胞分裂",
+    "type": "mc",
+    "q": "同一個人由受精卵發育出的神經細胞與肌肉細胞，功能不同的主要原因為何？",
+    "choices": [
+      "分化使兩者的染色體數目不同",
+      "兩者表現的基因不完全相同",
+      "分化使兩者保留完全不同的全部基因",
+      "不同細胞使用完全不同的遺傳密碼"
+    ],
+    "answer": 1,
+    "explain": "分化細胞通常保有相同的遺傳資訊，但表現的基因不完全相同，因此形成不同的構造與功能。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-022",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "依分離律，基因型為 $Aa$ 的個體正常形成配子時，對這一對等位基因的敘述何者正確？",
+    "choices": [
+      "每個配子同時具有 A 與 a",
+      "只有顯性基因 A 會進入配子",
+      "每個配子只具有 A 或 a 其中之一",
+      "A 與 a 會融合成新的等位基因"
+    ],
+    "answer": 2,
+    "explain": "形成配子時，成對的等位基因分離，因此每個配子只取得其中一個。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-023",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "某性狀由一對等位基因控制，A 對 a 為完全顯性。$Aa\\times Aa$ 的子代呈隱性表徵的機率為何？",
+    "choices": [
+      "$\\frac{1}{4}$",
+      "$\\frac{1}{2}$",
+      "$\\frac{3}{4}$",
+      "$1$"
+    ],
+    "answer": 0,
+    "explain": "隱性表徵須為 $aa$，親代各傳出 a 的機率為 $\\frac{1}{2}$，故為 $\\frac{1}{4}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "biology-024",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "某性狀為完全顯性。欲以試交判斷一株顯性表徵植株是 $AA$ 還是 $Aa$，應與哪種基因型植株交配？",
+    "choices": [
+      "$AA$",
+      "$Aa$",
+      "另一株基因型未知的顯性植株",
+      "$aa$"
+    ],
+    "answer": 3,
+    "explain": "試交使用隱性同型合子 aa；若子代出現隱性表徵，即可判定待測親代為 Aa。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-025",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "tf",
+    "q": "某等位基因對另一等位基因呈顯性，就表示它在族群中一定比較常見。",
+    "answer": false,
+    "explain": "顯隱性描述異型合子的表徵，不能據此判定等位基因在族群中的多寡。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-026",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "金魚草的 $RR$ 開紅花、$rr$ 開白花，$Rr$ 開粉紅花。此例最符合哪種遺傳方式？",
+    "choices": [
+      "完全顯性",
+      "不完全顯性",
+      "共顯性",
+      "多基因遺傳"
+    ],
+    "answer": 1,
+    "explain": "異型合子呈現介於兩種同型合子之間的表徵，稱為不完全顯性。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-027",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "A/a 與 B/b 兩對等位基因符合獨立分配律。$AaBb\\times aabb$ 的子代為 $aabb$ 的機率為何？",
+    "choices": [
+      "$\\frac{1}{16}$",
+      "$\\frac{1}{2}$",
+      "$\\frac{1}{4}$",
+      "$\\frac{3}{4}$"
+    ],
+    "answer": 2,
+    "explain": "子代為 aa 與 bb 的機率各為 $\\frac{1}{2}$，獨立相乘得 $\\frac{1}{4}$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "biology-028",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "紅綠色盲為 X 染色體隱性遺傳。母親為帶因者、父親正常；若已知孩子是男孩，他為色盲的機率為何？",
+    "choices": [
+      "$\\frac{1}{2}$",
+      "$\\frac{1}{4}$",
+      "$0$",
+      "$1$"
+    ],
+    "answer": 0,
+    "explain": "兒子從父親得到 Y；母親兩條 X 中有一條帶色盲基因，傳給兒子的機率為 $\\frac{1}{2}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "biology-029",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "tf",
+    "q": "遺傳的染色體學說，將孟德爾提出的遺傳因子與細胞內的染色體聯繫起來。",
+    "answer": true,
+    "explain": "遺傳因子位於染色體上；染色體在形成配子時的行為，可解釋遺傳因子的傳遞。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-030",
+    "subject": "biology",
+    "topic": "孟德爾遺傳",
+    "type": "mc",
+    "q": "依一般 ABO 血型遺傳，AB 型與 O 型的人生育子女，不考慮罕見變異，子女可能有哪些血型？",
+    "choices": [
+      "只有 AB 型",
+      "只有 O 型",
+      "A 型或 O 型",
+      "A 型或 B 型"
+    ],
+    "answer": 3,
+    "explain": "AB 型可提供 A 或 B 等位基因，O 型只能提供 i，因此子女可為 A 型或 B 型。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "biology-031",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "mc",
+    "q": "下列哪一項是 DNA 核苷酸的組成？",
+    "choices": [
+      "核糖、磷酸與含氮鹼基",
+      "去氧核糖、磷酸與含氮鹼基",
+      "去氧核糖、胺基酸與脂肪酸",
+      "核糖、胺基酸與含氮鹼基"
+    ],
+    "answer": 1,
+    "explain": "DNA 的核苷酸由去氧核糖、磷酸與一個含氮鹼基組成；RNA 使用的糖則是核糖。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-032",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "mc",
+    "q": "一段雙股 DNA 中，腺嘌呤（A）占全部鹼基的 20%。胞嘧啶（C）占全部鹼基的比例為何？",
+    "choices": [
+      "10%",
+      "20%",
+      "40%",
+      "30%"
+    ],
+    "answer": 3,
+    "explain": "雙股 DNA 中 A 與 T 等量，C 與 G 等量，因此 A 與 C 合占 50%；C 占 $50\\%-20\\%=30\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "biology-033",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "tf",
+    "q": "DNA 半保留複製完成後，每個子代雙股 DNA 都含有一條原有股與一條新合成股。",
+    "answer": true,
+    "explain": "原有兩股各作為模板合成互補的新股，因此每個子代 DNA 保留一條原有股。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-034",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "mc",
+    "q": "中心法則中的「轉錄」，是以哪種分子為模板合成哪種分子？",
+    "choices": [
+      "以 DNA 為模板合成 RNA",
+      "以 RNA 為模板合成 DNA",
+      "以 RNA 為模板組合蛋白質",
+      "以 DNA 為模板合成 DNA"
+    ],
+    "answer": 0,
+    "explain": "轉錄是以 DNA 為模板合成 RNA；以 RNA 訊息組合蛋白質則是轉譯。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-035",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "mc",
+    "q": "細胞進行轉譯時，核糖體依據 mRNA 的訊息，將哪種小分子依序連接？",
+    "choices": [
+      "去氧核苷酸",
+      "核糖核苷酸",
+      "胺基酸",
+      "葡萄糖"
+    ],
+    "answer": 2,
+    "explain": "轉譯依照 mRNA 的訊息連接胺基酸，形成多肽，進而構成蛋白質。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-036",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "tf",
+    "q": "一段 DNA 的鹼基序列只要發生突變，就一定會使生物產生有利的性狀。",
+    "answer": false,
+    "explain": "突變可能有利、有害或沒有明顯影響；其效果也可能因環境而不同。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-037",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "mc",
+    "q": "將某菌株的純化 DNA 導入另一菌株後，受體菌出現可傳給後代的新性狀。這最支持 DNA 的哪項功能？",
+    "choices": [
+      "作為細胞生理作用的主要直接能源",
+      "攜帶並傳遞遺傳資訊",
+      "直接催化所有蛋白質合成反應",
+      "構成細胞膜的主要成分"
+    ],
+    "answer": 1,
+    "explain": "導入 DNA 後出現可遺傳的新性狀，支持 DNA 能攜帶並傳遞控制性狀的遺傳資訊。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-038",
+    "subject": "biology",
+    "topic": "DNA 與中心法則",
+    "type": "mc",
+    "q": "某人的突變只出現在一小群皮膚細胞，精子或卵的 DNA 均未改變。此突變能否直接經精卵遺傳給子女？",
+    "choices": [
+      "能，因為皮膚細胞與生殖細胞屬於同一人",
+      "能，只要皮膚細胞繼續有絲分裂",
+      "不能，因為皮膚細胞沒有遺傳物質",
+      "不能，因為該突變沒有進入精子或卵的 DNA"
+    ],
+    "answer": 3,
+    "explain": "有性生殖由精卵傳遞遺傳資訊；只存在皮膚細胞中的突變，不能直接經精卵遺傳。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-039",
+    "subject": "biology",
+    "topic": "生物技術",
+    "type": "mc",
+    "q": "同一段蛋白質編碼序列經適當處理後，可讓細菌與人類細胞製造相同胺基酸序列。這主要反映什麼？",
+    "choices": [
+      "不同生物的遺傳密碼大致共通",
+      "細菌與人類的染色體數相同",
+      "細菌與人類都以細胞核進行轉譯",
+      "不同生物的全部基因序列相同"
+    ],
+    "answer": 0,
+    "explain": "多數生物對相同密碼子的解讀相同，這是利用基因轉殖生產蛋白質的重要基礎。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-040",
+    "subject": "biology",
+    "topic": "生物技術",
+    "type": "mc",
+    "q": "人類胰島素基因經適當處理後，轉入細菌並使其表現。此技術最主要的用途為何？",
+    "choices": [
+      "用 DNA 片段直接替代胰島素治療",
+      "讓細菌合成人類的全部蛋白質",
+      "利用細菌大量製造胰島素",
+      "用細菌製造的 mRNA 直接充當胰島素"
+    ],
+    "answer": 2,
+    "explain": "基因轉殖可讓細菌依轉入基因的訊息合成特定蛋白質，例如供醫療使用的胰島素。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-041",
+    "subject": "biology",
+    "topic": "生物技術",
+    "type": "tf",
+    "q": "只要某株玉米與未經基因轉殖的玉米外觀相同，就足以判定它也未經基因轉殖。",
+    "answer": false,
+    "explain": "基因轉殖不一定改變可見外觀，不能只靠外觀判定是否含轉殖基因。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-042",
+    "subject": "biology",
+    "topic": "生物技術",
+    "type": "mc",
+    "q": "想比較某抗蟲基改稻與原品系稻的抗蟲能力，下列哪個實驗設計最能減少干擾？",
+    "choices": [
+      "基改稻放室內，原品系稻放室外",
+      "兩組稻株只改變待比較品系，蟲量與栽培條件相同",
+      "兩組稻株使用不同蟲量，其餘條件相同",
+      "基改稻用幼苗，原品系稻用成熟植株"
+    ],
+    "answer": 1,
+    "explain": "保留待比較的品系差異，控制蟲量、株齡與栽培條件，才能較合理比較抗蟲能力。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-043",
+    "subject": "biology",
+    "topic": "演化",
+    "type": "mc",
+    "q": "達爾文天擇說中，判斷某個體較能適應特定環境時，下列哪項是最重要的判準？",
+    "choices": [
+      "在該環境中的體型較大",
+      "能在該環境中留下較多可存活的後代",
+      "單一個體的壽命必定較長",
+      "構造必定比其他個體複雜"
+    ],
+    "answer": 1,
+    "explain": "天擇重視生存與繁殖的結果；體型大或壽命長，不一定代表能留下較多後代。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-044",
+    "subject": "biology",
+    "topic": "演化",
+    "type": "tf",
+    "q": "天擇必然使族群的每一種性狀都朝向構造更複雜的方向演變。",
+    "answer": false,
+    "explain": "天擇取決於當時環境中的生存與繁殖差異，沒有必然朝向構造更複雜的方向。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-045",
+    "subject": "biology",
+    "topic": "演化",
+    "type": "mc",
+    "q": "用藥前的細菌族群已有少數具可遺傳抗藥性的個體。使用抗生素後，其比例上升，最合理的解釋為何？",
+    "choices": [
+      "抗藥菌較能存活並繁殖",
+      "抗生素使所有細菌朝抗藥方向突變",
+      "每隻細菌因需要而學會抗藥",
+      "抗生素使無抗藥性的細菌繁殖較快"
+    ],
+    "answer": 0,
+    "explain": "抗生素形成選擇壓力，原有抗藥個體較能留下後代，使抗藥性比例上升。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-046",
+    "subject": "biology",
+    "topic": "演化",
+    "type": "mc",
+    "q": "人的上肢、鯨的胸鰭與蝙蝠的前肢，功能不同卻有相似的基本骨骼排列。這類證據最支持什麼？",
+    "choices": [
+      "三者一定生活在相同環境",
+      "三者一定屬於同一物種",
+      "三者可能由共同祖先的前肢構造演變而來",
+      "使用功能不同的構造必定互不相關"
+    ],
+    "answer": 2,
+    "explain": "功能可隨環境改變，但相似的基本構造仍可反映共同祖先，屬於同源構造的證據。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-047",
+    "subject": "biology",
+    "topic": "演化",
+    "type": "tf",
+    "q": "化石可提供過去生物與環境變化的線索，但不能假設所有曾存在的物種都留下化石紀錄。",
+    "answer": true,
+    "explain": "化石形成與保存需要適當條件，因此紀錄並不完整，仍可提供演化的重要線索。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-048",
+    "subject": "biology",
+    "topic": "演化",
+    "type": "mc",
+    "q": "已知此例以能否互交產生可育後代判別物種。兩動物族群長期隔離後，下列哪項最支持它們已形成不同物種？",
+    "choices": [
+      "分別住在山的兩側",
+      "相遇時仍無法互交產生可育後代",
+      "平均體重略有不同",
+      "主要食物種類不同"
+    ],
+    "answer": 1,
+    "explain": "依題目提供的判準，生殖隔離比居住地、體重或食物差異更能支持物種已分化。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "biology-049",
+    "subject": "biology",
+    "topic": "生物多樣性與分類",
+    "type": "mc",
+    "q": "甲與乙外形相似，但多項獨立演化證據均顯示甲與丙共享更近期的共同祖先。依親緣關係分類，何者最合理？",
+    "choices": [
+      "只依外形將甲與乙歸為最近親",
+      "只依棲地決定甲與誰較近親",
+      "三者都必須歸為同一物種",
+      "將甲與丙視為彼此較近的親緣群"
+    ],
+    "answer": 3,
+    "explain": "現代分類重視演化親緣；共享較近期共同祖先，表示彼此親緣較近。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-050",
+    "subject": "biology",
+    "topic": "生物多樣性與分類",
+    "type": "mc",
+    "q": "依三域分類系統，人類、香菇與水稻都屬於哪一域？",
+    "choices": [
+      "真核生物域",
+      "細菌域",
+      "古菌域",
+      "原核生物域"
+    ],
+    "answer": 0,
+    "explain": "動物、真菌與植物都屬真核生物域；三域為細菌域、古菌域及真核生物域。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-051",
+    "subject": "biology",
+    "topic": "生物多樣性與分類",
+    "type": "tf",
+    "q": "真菌不具有葉綠體，不能像綠色植物一樣利用葉綠體進行光合作用製造有機養分。",
+    "answer": true,
+    "explain": "真菌是異營生物，通常藉分泌酵素分解外界有機物，再吸收養分。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-052",
+    "subject": "biology",
+    "topic": "生物多樣性與分類",
+    "type": "mc",
+    "q": "在界到種的分類階層中，依序為界、門、綱、目、科、屬、種。已知甲與乙同屬、甲與丙同科但不同屬，何者正確？",
+    "choices": [
+      "甲與乙必為同一物種",
+      "甲與丙必為同一物種",
+      "甲與乙也必定同科",
+      "甲與乙必定不同目"
+    ],
+    "answer": 2,
+    "explain": "屬是科之下的分類階層，因此同屬必定同科；同屬不代表同種。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-053",
+    "subject": "biology",
+    "topic": "生物多樣性與分類",
+    "type": "mc",
+    "q": "人類學名 Homo sapiens 依二名法命名，其中 Homo 代表哪個分類階層的名稱？",
+    "choices": [
+      "科",
+      "屬",
+      "種小名",
+      "目"
+    ],
+    "answer": 1,
+    "explain": "二名法由屬名與種小名組成；Homo 是屬名，sapiens 是種小名。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-054",
+    "subject": "biology",
+    "topic": "生物多樣性與分類",
+    "type": "mc",
+    "q": "臺灣同一種水稻的不同品系，具有可遺傳的耐旱、耐鹽差異。這最直接呈現生物多樣性的哪個面向？",
+    "choices": [
+      "物種多樣性",
+      "生態系多樣性",
+      "群集的物種豐富度",
+      "遺傳多樣性"
+    ],
+    "answer": 3,
+    "explain": "同一物種內不同品系的可遺傳差異，屬於遺傳多樣性。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-055",
+    "subject": "biology",
+    "topic": "生態",
+    "type": "mc",
+    "q": "池塘中的魚、藻類與微生物，連同池水、陽光等非生物環境因素，合稱為什麼？",
+    "choices": [
+      "生態系",
+      "族群",
+      "群集",
+      "生物圈"
+    ],
+    "answer": 0,
+    "explain": "生態系包含一地的生物群集，以及與其交互作用的非生物環境。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "biology-056",
+    "subject": "biology",
+    "topic": "生態",
+    "type": "tf",
+    "q": "同一池塘內所有蝌蚪即使來自不同蛙類物種，仍合稱為一個族群。",
+    "answer": false,
+    "explain": "族群是同一時間、同一地區的同種生物集合；不同物種不能合為一個族群。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-057",
+    "subject": "biology",
+    "topic": "生態",
+    "type": "mc",
+    "q": "某草地群集中，兩種草的根系都利用同一處有限的水分，導致彼此生長受限。這屬於何種關係？",
+    "choices": [
+      "互利共生",
+      "捕食",
+      "種間競爭",
+      "寄生"
+    ],
+    "answer": 2,
+    "explain": "不同物種使用相同且有限的資源，並對彼此造成不利影響，屬於種間競爭。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-058",
+    "subject": "biology",
+    "topic": "生態",
+    "type": "tf",
+    "q": "生態系中的能量可像碳元素一樣，經分解者回到生產者後反覆循環利用。",
+    "answer": false,
+    "explain": "碳等物質可循環；能量在傳遞中逐步以熱散失，生態系需要持續的能量輸入。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "biology-059",
+    "subject": "biology",
+    "topic": "生態",
+    "type": "mc",
+    "q": "某食物鏈為草→蝗蟲→青蛙。若每一營養階層都僅將能量的 10% 傳給下一階層，草有 1000 單位能量，青蛙可獲多少？",
+    "choices": [
+      "100 單位",
+      "10 單位",
+      "1 單位",
+      "900 單位"
+    ],
+    "answer": 1,
+    "explain": "經過兩次傳遞，能量為 $1000\\times0.1\\times0.1=10$ 單位；10% 是本題設定。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "biology-060",
+    "subject": "biology",
+    "topic": "生態",
+    "type": "mc",
+    "q": "森林落葉被持續清除且不補充肥料，即使光照與水量足夠，樹木生長仍可能受限。最合理的原因為何？",
+    "choices": [
+      "樹木失去由根直接吸收落葉蛋白質的來源",
+      "樹木無法再從土壤取得全部碳源",
+      "分解者不能再將呼吸釋出的熱能轉回給樹木",
+      "由落葉分解返回土壤的無機養分減少"
+    ],
+    "answer": 3,
+    "explain": "落葉中的元素可經分解者作用回到環境；持續移除落葉會減少養分回流，可能限制生長。",
+    "formula": false,
+    "level": 3
+  }
+]

@@ -1,0 +1,920 @@
+[
+  {
+    "id": "chemistry-001",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "下列哪一種純物質屬於元素？",
+    "choices": [
+      "氯化鈉",
+      "水",
+      "葡萄糖",
+      "銅"
+    ],
+    "answer": 3,
+    "explain": "銅只由銅元素組成；水、氯化鈉與葡萄糖都由兩種以上元素組成，屬於化合物。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-002",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "tf",
+    "q": "外觀均勻的物質一定是純物質。",
+    "answer": false,
+    "explain": "均勻不代表純物質。例如空氣外觀均勻，卻含有氮氣、氧氣等多種成分。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-003",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "下列哪項性質可用來判定某純物質是化合物？",
+    "choices": [
+      "受熱時可由固態熔化為液態",
+      "可溶於水形成均勻溶液",
+      "在常溫下有固定的顏色",
+      "可用化學方法分解成不同元素的物質"
+    ],
+    "answer": 3,
+    "explain": "化合物由不同元素組成，可用化學方法分解；熔化、溶解與顏色都不能單獨判定是否為化合物。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-004",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "要從食鹽水中取得不含食鹽的液態水，最適合使用哪種方法？",
+    "choices": [
+      "蒸發至乾後收集殘留固體",
+      "過濾",
+      "靜置後用分液漏斗分離",
+      "蒸餾"
+    ],
+    "answer": 3,
+    "explain": "蒸餾使水汽化後再冷凝，食鹽留在原容器中；蒸發至乾則是取得食鹽。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-005",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "tf",
+    "q": "以濾紙過濾食鹽水，可將已溶解的食鹽留在濾紙上。",
+    "answer": false,
+    "explain": "溶解的鈉離子與氯離子會隨水通過濾紙；過濾適合分離液體與不溶性固體。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-006",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "比較原子或離子時，下列哪個數值相同，就可確定它們屬於同一元素？",
+    "choices": [
+      "質子數",
+      "質子與中子的總數",
+      "中子數",
+      "電子數"
+    ],
+    "answer": 0,
+    "explain": "同一元素的質子數必相同；不同元素的離子也可能有相同電子數，所以不能只看電子數。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-007",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "tf",
+    "q": "任何電中性原子的電子數都等於中子數。",
+    "answer": false,
+    "explain": "電中性原子的電子數等於質子數，中子數不一定與兩者相同。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-008",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "某原子含有 8 個質子與 8 個中子，其質量數是多少？",
+    "choices": [
+      "24",
+      "16",
+      "0",
+      "8"
+    ],
+    "answer": 1,
+    "explain": "質量數 $A=Z+N$，即質子數加中子數，因此為 $8+8=16$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-009",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "下列哪一組粒子互為同位素？",
+    "choices": [
+      "$^{12}_{6}\\mathrm{C}$ 與 $^{14}_{6}\\mathrm{C}$",
+      "$^{23}_{11}\\mathrm{Na}$ 與 $^{24}_{12}\\mathrm{Mg}$",
+      "$^{14}_{6}\\mathrm{C}$ 與 $^{14}_{7}\\mathrm{N}$",
+      "$^{16}_{8}\\mathrm{O}$ 與 $^{19}_{9}\\mathrm{F}$"
+    ],
+    "answer": 0,
+    "explain": "同位素的質子數相同、中子數不同。碳－12 與碳－14 的原子序同為 6，質量數不同。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-010",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "tf",
+    "q": "同一元素的各種同位素都具有放射性。",
+    "answer": false,
+    "explain": "同位素不一定具有放射性。例如碳－12 與碳－13 是穩定同位素，碳－14 才具有放射性。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-011",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "某碳樣品只含碳－12 與碳－13，原子數各占一半。兩者相對原子質量近似為 12、13，樣品的平均原子量約為何？",
+    "choices": [
+      "12",
+      "12.5",
+      "13",
+      "25"
+    ],
+    "answer": 1,
+    "explain": "平均原子量依原子數比例加權；兩者各占一半，所以為 $\\frac{12+13}{2}=12.5$，原子量沒有單位。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-012",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "哪項發現顯示道耳頓「原子不可再分」的模型需要修正？",
+    "choices": [
+      "原子內含帶負電的電子",
+      "化學反應前後總質量守恆",
+      "水受熱會變成水蒸氣",
+      "氫與氧可反應生成水"
+    ],
+    "answer": 0,
+    "explain": "電子的發現顯示原子具有內部結構，不能再視為不可分割的實心粒子。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-013",
+    "subject": "chemistry",
+    "topic": "週期表與元素性質",
+    "type": "tf",
+    "q": "現代週期表主要依元素的原子序由小到大排列。",
+    "answer": true,
+    "explain": "原子序就是質子數；現代週期表依原子序排列，而不是依原子量排列。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-014",
+    "subject": "chemistry",
+    "topic": "週期表與元素性質",
+    "type": "mc",
+    "q": "某元素位於週期表第三週期、第 17 族。「第三週期」表示它位於哪個位置？",
+    "choices": [
+      "由上往下數的第 3 橫列",
+      "由左往右數的第 3 直行",
+      "由上往下數的第 17 橫列",
+      "由左往右數的第 17 直行"
+    ],
+    "answer": 0,
+    "explain": "週期是橫列，族是直行；第三週期就是由上往下數的第 3 橫列。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-015",
+    "subject": "chemistry",
+    "topic": "週期表與元素性質",
+    "type": "mc",
+    "q": "鈉、鎂、鋁、矽同位於第三週期，其中哪個元素的金屬性最強？",
+    "choices": [
+      "鋁",
+      "矽",
+      "鎂",
+      "鈉"
+    ],
+    "answer": 3,
+    "explain": "同一週期由左向右，元素的金屬性一般逐漸減弱，因此鈉的金屬性最強。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-016",
+    "subject": "chemistry",
+    "topic": "週期表與元素性質",
+    "type": "mc",
+    "q": "鋰、鈉、鉀都是鹼金屬，它們形成常見陽離子時，通常有何共同變化？",
+    "choices": [
+      "失去 2 個電子",
+      "得到 1 個電子",
+      "得到 2 個電子",
+      "失去 1 個電子"
+    ],
+    "answer": 3,
+    "explain": "鹼金屬的最外層有 1 個電子，通常失去它形成一價陽離子。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-017",
+    "subject": "chemistry",
+    "topic": "週期表與元素性質",
+    "type": "tf",
+    "q": "氦、氖、氬屬於第 18 族，在一般條件下化學反應性低。",
+    "answer": true,
+    "explain": "第 18 族又稱惰性氣體，其最外層電子排列穩定，因此通常不易反應。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-018",
+    "subject": "chemistry",
+    "topic": "週期表與元素性質",
+    "type": "mc",
+    "q": "下列哪個元素屬於類金屬？",
+    "choices": [
+      "硫",
+      "銅",
+      "鋁",
+      "矽"
+    ],
+    "answer": 3,
+    "explain": "矽屬於類金屬，具有部分金屬與非金屬的性質；銅、鋁屬金屬，硫屬非金屬。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-019",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "氯化鈉中，鈉離子與氯離子之間主要以哪種化學鍵結合？",
+    "choices": [
+      "共價鍵",
+      "離子鍵",
+      "氫鍵",
+      "金屬鍵"
+    ],
+    "answer": 1,
+    "explain": "帶正電的鈉離子與帶負電的氯離子，藉由異性電荷間的靜電吸引形成離子鍵。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-020",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "tf",
+    "q": "共價鍵是原子間藉由共用電子對所形成的化學鍵。",
+    "answer": true,
+    "explain": "共用電子對同時受到兩原子核吸引，使原子彼此結合。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-021",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "銅線在固態時能導電，主要與哪項微觀特性有關？",
+    "choices": [
+      "具有可移動的電子",
+      "電流由自由移動的質子傳遞",
+      "銅離子可在固體中自由移動",
+      "銅原子整體沿導線移動"
+    ],
+    "answer": 0,
+    "explain": "金屬具有可移動的電子，可在外加電場下傳遞電荷；固態金屬的離子不能自由流動。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-022",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "tf",
+    "q": "水沸騰變成水蒸氣時，水分子內的氫氧共價鍵仍然保留。",
+    "answer": true,
+    "explain": "沸騰是物理變化，主要克服分子間作用力；水分子內的氫氧共價鍵仍保留。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-023",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某固體只由 $\\mathrm{Mg^{2+}}$ 與 $\\mathrm{Cl^-}$ 組成，整體不帶電。下列描述何者正確？",
+    "choices": [
+      "化學式為 $\\mathrm{MgCl_2}$，由獨立分子構成",
+      "化學式為 $\\mathrm{Mg_2Cl}$，屬離子化合物",
+      "化學式為 $\\mathrm{MgCl_2}$，屬離子化合物",
+      "化學式為 $\\mathrm{Mg_2Cl}$，由獨立分子構成"
+    ],
+    "answer": 2,
+    "explain": "每個鎂離子須搭配 2 個氯離子才電中性，化學式為 $\\mathrm{MgCl_2}$；離子晶體並非由獨立分子構成。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "chemistry-024",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "碳、氧的原子量分別為 12、16，則 $\\mathrm{CO_2}$ 的莫耳質量為多少？",
+    "choices": [
+      "32 g/mol",
+      "28 g/mol",
+      "44 g/mol",
+      "56 g/mol"
+    ],
+    "answer": 2,
+    "explain": "莫耳質量為各原子量依個數加總：$M=12+2\\times16=44\\ \\mathrm{g/mol}$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "chemistry-025",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "tf",
+    "q": "1 莫耳二氧化碳與 1 莫耳氧氣所含的分子數相同。",
+    "answer": true,
+    "explain": "1 莫耳任何指定粒子都含有亞佛加厥數個該粒子，與分子的種類無關。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-026",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "水的莫耳質量為 18 g/mol，9 g 水的莫耳數為多少？",
+    "choices": [
+      "9 mol",
+      "2 mol",
+      "0.5 mol",
+      "0.05 mol"
+    ],
+    "answer": 2,
+    "explain": "由 $n=\\frac{m}{M}$，可得 $n=\\frac{9}{18}=0.5\\ \\mathrm{mol}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-027",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "某純水樣品含氫 2 g、氧 16 g。另一純水樣品含氫 1 g，其所含氧的質量為多少？",
+    "choices": [
+      "8 g",
+      "16 g",
+      "2 g",
+      "32 g"
+    ],
+    "answer": 0,
+    "explain": "同一化合物中各元素的質量比固定；水中氫與氧為 $2:16=1:8$，故 1 g 氫對應 8 g 氧。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-028",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "某化合物中，碳與氫的原子數比為 1：2，其實驗式（最簡式）為何？",
+    "choices": [
+      "$\\mathrm{CH_4}$",
+      "$\\mathrm{CH}$",
+      "$\\mathrm{CH_2}$",
+      "$\\mathrm{C_2H_4}$"
+    ],
+    "answer": 2,
+    "explain": "實驗式表示元素原子數的最簡整數比；碳與氫為 1：2，故為 $\\mathrm{CH_2}$，不能寫成未約簡的 $\\mathrm{C_2H_4}$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-029",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "0.5 mol 二氧化碳（$\\mathrm{CO_2}$）中的氧原子共有多少莫耳？",
+    "choices": [
+      "1.5 mol",
+      "2 mol",
+      "1 mol",
+      "0.5 mol"
+    ],
+    "answer": 2,
+    "explain": "每個二氧化碳分子有 2 個氧原子，因此氧原子的莫耳數為 $0.5\\times2=1\\ \\mathrm{mol}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-030",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "反應為 $\\mathrm{N_2+3H_2\\rightarrow2NH_3}$。氮氣足量，6 mol 氫氣完全反應可生成多少莫耳氨？",
+    "choices": [
+      "9 mol",
+      "4 mol",
+      "6 mol",
+      "2 mol"
+    ],
+    "answer": 1,
+    "explain": "係數比等於莫耳數比，氫氣與氨為 $3:2$，故氨為 $6\\times\\frac{2}{3}=4\\ \\mathrm{mol}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-031",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "tf",
+    "q": "化學反應前後，各物質的總莫耳數一定守恆。",
+    "answer": false,
+    "explain": "例如 $\\mathrm{2H_2+O_2\\rightarrow2H_2O}$，恰按比例完全反應時，總莫耳數由 3 mol 變成 2 mol；各元素的原子數才守恆。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-032",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "反應為 $\\mathrm{H_2+Cl_2\\rightarrow2HCl}$。將 2 mol 氫氣與 1 mol 氯氣充分反應，限量試劑與最多生成的氯化氫為何？",
+    "choices": [
+      "氯氣；2 mol",
+      "氯氣；1 mol",
+      "氫氣；2 mol",
+      "氫氣；4 mol"
+    ],
+    "answer": 0,
+    "explain": "氫氣與氯氣以 1：1 反應，氯氣先用完。1 mol 氯氣最多生成 2 mol 氯化氫。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-033",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "碳、氫的原子量分別為 12、1。甲烷（$\\mathrm{CH_4}$）中碳的質量百分率是多少？",
+    "choices": [
+      "25%",
+      "20%",
+      "75%",
+      "80%"
+    ],
+    "answer": 2,
+    "explain": "甲烷莫耳質量為 $12+4=16\\ \\mathrm{g/mol}$，碳占其質量的 $\\frac{12}{16}\\times100\\%=75\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-034",
+    "subject": "chemistry",
+    "topic": "化學反應式",
+    "type": "mc",
+    "q": "將 $\\mathrm{H_2+O_2\\rightarrow H_2O}$ 配成最簡整數係數時，水的係數是多少？",
+    "choices": [
+      "3",
+      "4",
+      "1",
+      "2"
+    ],
+    "answer": 3,
+    "explain": "平衡式為 $\\mathrm{2H_2+O_2\\rightarrow2H_2O}$，兩側各有 4 個氫原子與 2 個氧原子。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-035",
+    "subject": "chemistry",
+    "topic": "化學反應式",
+    "type": "tf",
+    "q": "化學反應式中的狀態符號 $\\mathrm{(aq)}$ 表示該物質呈氣態。",
+    "answer": false,
+    "explain": "$\\mathrm{(aq)}$ 表示物質溶於水形成水溶液；氣態的狀態符號是 $\\mathrm{(g)}$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-036",
+    "subject": "chemistry",
+    "topic": "化學反應式",
+    "type": "mc",
+    "q": "密閉容器內的物質反應前總質量為 20 g。反應後沉澱為 6 g，其餘所有物質的總質量是多少？",
+    "choices": [
+      "26 g",
+      "20 g",
+      "6 g",
+      "14 g"
+    ],
+    "answer": 3,
+    "explain": "密閉系統遵守質量守恆，反應後總質量仍為 20 g，其餘物質為 $20-6=14\\ \\mathrm{g}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-037",
+    "subject": "chemistry",
+    "topic": "化學反應式",
+    "type": "mc",
+    "q": "碳酸鈣受熱發生 $\\mathrm{CaCO_3\\rightarrow CaO+CO_2}$，此反應屬於哪種類型？",
+    "choices": [
+      "分解反應",
+      "置換反應",
+      "酸鹼中和反應",
+      "化合反應"
+    ],
+    "answer": 0,
+    "explain": "一種化合物分解為兩種或更多種物質，屬於分解反應。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-038",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "某化學反應向周圍放出熱。關於反應物與產物的能量總和，下列何者正確？",
+    "choices": [
+      "產物較低，屬放熱反應",
+      "產物較高，屬放熱反應",
+      "產物較低，屬吸熱反應",
+      "產物較高，屬吸熱反應"
+    ],
+    "answer": 0,
+    "explain": "放熱反應將部分能量傳給周圍，因此產物的能量總和較反應物低。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-039",
+    "subject": "chemistry",
+    "topic": "溶液濃度",
+    "type": "mc",
+    "q": "將 5 g 食鹽完全溶於 95 g 水，所得溶液的重量百分率為多少？",
+    "choices": [
+      "5%",
+      "約 95%",
+      "約 5.3%",
+      "0.05%"
+    ],
+    "answer": 0,
+    "explain": "溶液質量為 $5+95=100\\ \\mathrm{g}$，重量百分率為 $\\frac{5}{100}\\times100\\%=5\\%$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "chemistry-040",
+    "subject": "chemistry",
+    "topic": "溶液濃度",
+    "type": "tf",
+    "q": "計算體積莫耳濃度 $C_M=\\frac{n}{V}$ 時，$V$ 代表溶劑的體積。",
+    "answer": false,
+    "explain": "$V$ 應為溶液的總體積，以 L 表示；$n$ 則是溶質的莫耳數。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-041",
+    "subject": "chemistry",
+    "topic": "溶液濃度",
+    "type": "mc",
+    "q": "以質量比定義 ppm，1 kg 水溶液中含有 2 mg 溶質，其濃度是多少？",
+    "choices": [
+      "0.2 ppm",
+      "2000 ppm",
+      "0.002 ppm",
+      "2 ppm"
+    ],
+    "answer": 3,
+    "explain": "質量比的 $1\\ \\mathrm{ppm}=1\\ \\mathrm{mg/kg}$，因此 2 mg 溶質分布於 1 kg 溶液即為 2 ppm。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-042",
+    "subject": "chemistry",
+    "topic": "溶液濃度",
+    "type": "mc",
+    "q": "將 0.2 mol 葡萄糖溶於水並配成 500 mL 溶液，體積莫耳濃度是多少？",
+    "choices": [
+      "0.1 mol/L",
+      "2.5 mol/L",
+      "0.4 mol/L",
+      "0.0004 mol/L"
+    ],
+    "answer": 2,
+    "explain": "$500\\ \\mathrm{mL}=0.5\\ \\mathrm{L}$，由 $C_M=\\frac{n}{V}$ 得 $\\frac{0.2}{0.5}=0.4\\ \\mathrm{mol/L}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-043",
+    "subject": "chemistry",
+    "topic": "溶液濃度",
+    "type": "mc",
+    "q": "取 0.2 mol/L 食鹽水 50 mL，加水稀釋至總體積 200 mL，新濃度是多少？",
+    "choices": [
+      "0.2 mol/L",
+      "0.05 mol/L",
+      "0.8 mol/L",
+      "0.04 mol/L"
+    ],
+    "answer": 1,
+    "explain": "稀釋前後溶質莫耳數不變，由 $C_1V_1=C_2V_2$ 得 $C_2=0.2\\times\\frac{50}{200}=0.05\\ \\mathrm{mol/L}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-044",
+    "subject": "chemistry",
+    "topic": "溶解度與平衡",
+    "type": "mc",
+    "q": "某物質在 60 ℃、20 ℃ 的溶解度分別為每 100 g 水可溶 40 g、20 g。含 100 g 水的 60 ℃ 飽和溶液冷卻至 20 ℃，達平衡且水未蒸發，析出多少克溶質？",
+    "choices": [
+      "0 g",
+      "20 g",
+      "40 g",
+      "60 g"
+    ],
+    "answer": 1,
+    "explain": "原本溶有 40 g，降溫後同樣 100 g 水最多溶解 20 g，故析出 $40-20=20\\ \\mathrm{g}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-045",
+    "subject": "chemistry",
+    "topic": "溶解度與平衡",
+    "type": "mc",
+    "q": "定溫下，某飽和食鹽水底部仍有食鹽晶體，且已達溶解平衡。下列何者正確？",
+    "choices": [
+      "晶體持續溶解，但沒有食鹽結晶",
+      "溶解與結晶都已停止",
+      "溶解與結晶速率相等",
+      "食鹽持續結晶，但晶體不再溶解"
+    ],
+    "answer": 2,
+    "explain": "溶解平衡是動態平衡，溶解與結晶仍持續且速率相等，所以溶液濃度及晶體總量維持不變。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-046",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "tf",
+    "q": "依阿瑞尼斯酸鹼學說，物質溶於水中可解離出 $\\mathrm{OH^-}$，屬於鹼。",
+    "answer": true,
+    "explain": "阿瑞尼斯定義中，酸在水中可解離出 $\\mathrm{H^+}$，鹼在水中可解離出 $\\mathrm{OH^-}$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-047",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "某水溶液的 $[\\mathrm{H^+}]=10^{-3}\\ \\mathrm{mol/L}$，其 pH 為多少？",
+    "choices": [
+      "3",
+      "－3",
+      "0.001",
+      "11"
+    ],
+    "answer": 0,
+    "explain": "由 $\\mathrm{pH}=-\\log[\\mathrm{H^+}]$，得 $-\\log10^{-3}=3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-048",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "甲、乙水溶液的 pH 分別為 2、4。甲的氫離子濃度為乙的多少倍？",
+    "choices": [
+      "10 倍",
+      "2 倍",
+      "100 倍",
+      "0.01 倍"
+    ],
+    "answer": 2,
+    "explain": "兩者 pH 相差 2，氫離子濃度相差 $10^2=100$ 倍；pH 較小的甲濃度較高。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-049",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "在水溶液中，判定一種酸為強酸的主要依據是什麼？",
+    "choices": [
+      "每個分子都能解離出多個氫離子",
+      "溶於水的部分幾乎完全解離",
+      "溶液的濃度一定很高",
+      "溶液的 pH 一定小於 1"
+    ],
+    "answer": 1,
+    "explain": "酸的強弱取決於在水中的解離程度，不是溶液濃度，也不是每個分子所含氫原子的數目。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-050",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "tf",
+    "q": "25 ℃、pH 為 7 的純水中，不含 $\\mathrm{H^+}$。",
+    "answer": false,
+    "explain": "水會自解離。25 ℃ 的中性純水中，$[\\mathrm{H^+}]=[\\mathrm{OH^-}]=10^{-7}\\ \\mathrm{mol/L}$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-051",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "鹽酸與氫氧化鈉水溶液中和時，主要由哪兩種離子反應生成水？",
+    "choices": [
+      "$\\mathrm{Na^+}$ 與 $\\mathrm{Cl^-}$",
+      "$\\mathrm{H^+}$ 與 $\\mathrm{OH^-}$",
+      "$\\mathrm{H^+}$ 與 $\\mathrm{Cl^-}$",
+      "$\\mathrm{Na^+}$ 與 $\\mathrm{OH^-}$"
+    ],
+    "answer": 1,
+    "explain": "中和時 $\\mathrm{H^++OH^-\\rightarrow H_2O}$；鈉離子與氯離子主要留在溶液中。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-052",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "下列哪種變化屬於氧化還原反應？",
+    "choices": [
+      "蔗糖溶於水",
+      "冰塊熔化",
+      "酒精燃燒",
+      "水蒸發"
+    ],
+    "answer": 2,
+    "explain": "酒精燃燒時，酒精被氧化，氧氣被還原；其他三項都是物理變化。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-053",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "tf",
+    "q": "依電子轉移的觀點，物質失去電子稱為還原。",
+    "answer": false,
+    "explain": "失去電子稱為氧化；得到電子才稱為還原。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-054",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "鐵生鏽時，鐵失去電子而氧氣得到電子。在這個過程中，哪種物質是氧化劑？",
+    "choices": [
+      "鐵與氧氣都是氧化劑",
+      "鐵與氧氣都不是氧化劑",
+      "氧氣",
+      "鐵"
+    ],
+    "answer": 2,
+    "explain": "氧化劑得到電子，使其他物質氧化，而自己被還原；題目中得到電子的是氧氣。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-055",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "在一個氧化還原反應中，$\\mathrm{Fe^{2+}}$ 轉變成 $\\mathrm{Fe^{3+}}$，每個亞鐵離子的電子變化與所扮演的角色為何？",
+    "choices": [
+      "失去 1 個電子，作還原劑",
+      "得到 1 個電子，作還原劑",
+      "得到 1 個電子，作氧化劑",
+      "失去 1 個電子，作氧化劑"
+    ],
+    "answer": 0,
+    "explain": "正電荷由二價變三價，表示每個亞鐵離子失去 1 個電子；它提供電子使他物還原，因此作為還原劑。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "chemistry-056",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "tf",
+    "q": "一個氧化還原反應可以只發生氧化，而完全不伴隨還原。",
+    "answer": false,
+    "explain": "氧化與還原必定同時發生；一方失去的電子，必須由另一方得到。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-057",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "碳氫燃料不完全燃燒時，可能產生哪種會與血紅素結合、妨礙血液輸氧的氣體？",
+    "choices": [
+      "水蒸氣",
+      "一氧化碳",
+      "氧氣",
+      "二氧化碳"
+    ],
+    "answer": 1,
+    "explain": "供氧不足可能產生一氧化碳；它與血紅素結合，會妨礙氧的運送。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-058",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "tf",
+    "q": "一般化學電池放電時，將化學能轉換為電能。",
+    "answer": true,
+    "explain": "化學電池利用自發的氧化還原反應，將化學能轉換為電能供外部電路使用。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "chemistry-059",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "下列哪一種物質屬於天然高分子？",
+    "choices": [
+      "乙醇",
+      "葡萄糖",
+      "氯化鈉",
+      "澱粉"
+    ],
+    "answer": 3,
+    "explain": "澱粉是許多葡萄糖單元連結而成的天然高分子；葡萄糖本身是小分子。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "chemistry-060",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "在產品產量與品質相同的前提下，下列哪項製程改變最能從源頭減少有害廢棄物？",
+    "choices": [
+      "增加有毒的一次性原料用量",
+      "改用低毒且可回收再利用的溶劑",
+      "加高煙囪以擴散污染物",
+      "將有毒廢水稀釋後直接排放"
+    ],
+    "answer": 1,
+    "explain": "低毒溶劑可降低危害，回收再利用可減少廢棄量；加高煙囪或稀釋廢水，只會擴散或稀釋污染物。",
+    "formula": false,
+    "level": 2
+  }
+]

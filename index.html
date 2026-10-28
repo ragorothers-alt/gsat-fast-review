@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#070a1c" />
+    <meta name="description" content="學測全範圍快問快答：不用紙筆、單手就能刷題，離線也能玩。" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="快問快答" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <title>學測快問快答</title>
+  </head>
+  <body>
+    <canvas id="world" aria-hidden="true"></canvas>
+    <div id="flash" aria-hidden="true"></div>
+
+    <main id="app">
+      <!-- 首頁 -->
+      <section id="home" class="screen home">
+        <header class="topbar">
+          <div class="brand">
+            <img src="./icons/icon.svg" alt="" class="brand-icon" />
+            <div>
+              <h1>學測快問快答</h1>
+              <p class="tagline">免紙筆・單手・離線</p>
+            </div>
+          </div>
+          <div class="top-actions">
+            <span class="pill" id="streak" title="連續練習天數">🔥 <b>0</b> 天</span>
+            <button id="sound-toggle" class="icon-btn" type="button" aria-label="音效：關">🔇</button>
+          </div>
+        </header>
+
+        <div class="daily" id="daily">
+          <svg class="ring" viewBox="0 0 36 36" aria-hidden="true">
+            <circle class="ring-bg" cx="18" cy="18" r="15.9" />
+            <circle class="ring-fg" id="daily-ring" cx="18" cy="18" r="15.9" pathLength="100" />
+          </svg>
+          <div class="daily-text">
+            <span>今日 <b id="daily-count">0</b> / <span id="daily-goal">30</span> 題</span>
+            <small id="daily-acc"></small>
+          </div>
+        </div>
+
+        <div class="stage" aria-hidden="true">
+          <p class="stage-hint">點星球或下方按鈕選科目</p>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>科目</h2>
+            <button id="toggle-all" class="link-btn" type="button">全選</button>
+          </div>
+          <div id="subject-chips" class="chips" role="group" aria-label="選擇科目"></div>
+        </section>
+
+        <nav class="modes" aria-label="遊戲模式">
+          <button class="mode primary" type="button" data-mode="blitz">
+            <span class="mode-title">⚡ 60 秒快閃</span>
+            <span class="mode-sub">最高 <b id="best-blitz">0</b> 分</span>
+          </button>
+          <div class="mode-row">
+            <button class="mode" type="button" data-mode="ten">
+              <span class="mode-title">10 題一輪</span>
+              <span class="mode-sub">不計時</span>
+            </button>
+            <button class="mode" type="button" data-mode="formula">
+              <span class="mode-title">公式特訓</span>
+              <span class="mode-sub"><b id="formula-count">0</b> 題</span>
+            </button>
+            <button class="mode" type="button" data-mode="review">
+              <span class="mode-title">錯題複習</span>
+              <span class="mode-sub"><b id="weak-count">0</b> 題待練</span>
+            </button>
+          </div>
+        </nav>
+        <p class="foot" id="bank-info"></p>
+      </section>
+
+      <!-- 作答 -->
+      <section id="play" class="screen play" hidden>
+        <header class="play-bar">
+          <button id="quit" class="icon-btn" type="button" aria-label="結束這一輪">✕</button>
+          <span id="play-progress" class="play-progress"></span>
+          <span id="combo" class="combo" hidden></span>
+          <span class="score"><span id="score">0</span><span id="score-pop" class="score-pop"></span></span>
+        </header>
+        <div class="timer" id="timer" hidden><i id="timer-fill"></i></div>
+
+        <div class="card-wrap">
+          <article id="card" class="card" aria-live="polite">
+            <div class="card-tag">
+              <span id="q-subject" class="tag"></span>
+              <span id="q-topic" class="topic"></span>
+            </div>
+            <div id="q-text" class="q-text"></div>
+            <div id="q-explain" class="explain" hidden></div>
+            <p class="tf-hint" aria-hidden="true">← 左滑錯　・　右滑對 →</p>
+            <div class="swipe-hint swipe-yes" aria-hidden="true">⭕ 對</div>
+            <div class="swipe-hint swipe-no" aria-hidden="true">❌ 錯</div>
+          </article>
+        </div>
+
+        <div id="answers" class="answers"></div>
+        <footer class="play-foot">
+          <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
+          <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
+        </footer>
+      </section>
+
+      <!-- 結算 -->
+      <section id="result" class="screen result" hidden>
+        <div class="result-scroll">
+          <header class="result-head">
+            <p id="r-mode" class="r-mode"></p>
+            <p id="r-big" class="r-big"></p>
+            <p id="r-badge" class="r-badge" hidden>🏆 新紀錄！</p>
+            <p id="r-cheer" class="r-cheer"></p>
+            <div class="r-stats">
+              <div><b id="r-acc"></b><span>正確率</span></div>
+              <div><b id="r-combo"></b><span>最高連擊</span></div>
+              <div><b id="r-today"></b><span>今日題數</span></div>
+            </div>
+          </header>
+          <h2 id="r-review-title" class="r-title"></h2>
+          <ol id="r-list" class="r-list"></ol>
+        </div>
+        <nav class="result-actions">
+          <button id="r-home" class="secondary-btn" type="button">回首頁</button>
+          <button id="r-again" class="primary-btn" type="button">再來一輪</button>
+        </nav>
+      </section>
+    </main>
+
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

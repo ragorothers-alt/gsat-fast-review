@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="night" cx="50%" cy="44%" r="70%">
+      <stop offset="0" stop-color="#1a1f4d"/>
+      <stop offset="1" stop-color="#0b1026"/>
+    </radialGradient>
+    <linearGradient id="energy" x1="180" y1="155" x2="325" y2="365" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffd166"/>
+      <stop offset="0.44" stop-color="#ffb768"/>
+      <stop offset="1" stop-color="#ff7b6b"/>
+    </linearGradient>
+    <radialGradient id="aura">
+      <stop offset="0.48" stop-color="#ffd166" stop-opacity="0.24"/>
+      <stop offset="0.76" stop-color="#ff7b6b" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#ff7b6b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rear-orbit" x1="52" y1="256" x2="460" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38d6ff"/>
+      <stop offset="0.5" stop-color="#38d6ff" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#38d6ff"/>
+    </linearGradient>
+    <filter id="orbit-glow" x="-30%" y="-60%" width="160%" height="220%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+    <filter id="satellite-glow" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <clipPath id="artwork-clip">
+      <circle cx="256" cy="256" r="228"/>
+    </clipPath>
+  </defs>
+
+  <rect id="background" width="512" height="512" fill="url(#night)"/>
+  <g id="foreground" clip-path="url(#artwork-clip)">
+    <circle cx="256" cy="256" r="174" fill="url(#aura)"/>
+
+    <!-- The upper half of the orbit passes behind the energy sphere. -->
+    <g transform="rotate(-24 256 256)" fill="none" stroke="#38d6ff">
+      <path d="M 52 256 A 204 82 0 0 1 460 256" stroke-width="23" opacity="0.32" filter="url(#orbit-glow)"/>
+      <path d="M 52 256 A 204 82 0 0 1 460 256" stroke="url(#rear-orbit)" stroke-width="13.5"/>
+    </g>
+
+    <circle cx="256" cy="256" r="127" fill="url(#energy)"/>
+    <circle cx="256" cy="256" r="126" fill="none" stroke="#fff3c8" stroke-width="2" stroke-opacity="0.22"/>
+
+    <!-- A thicker foreground arc makes the tilted orbit legible at 48 px. -->
+    <g transform="rotate(-24 256 256)" fill="none" stroke="#38d6ff">
+      <path d="M 460 256 A 204 82 0 0 1 52 256" stroke-width="23" opacity="0.32" filter="url(#orbit-glow)"/>
+      <path d="M 460 256 A 204 82 0 0 1 52 256" stroke-width="13.5"/>
+    </g>
+
+    <g transform="rotate(-24 256 256)">
+      <g opacity="0.5" filter="url(#satellite-glow)">
+        <circle cx="79.331" cy="215" r="17" fill="#a78bfa"/>
+        <circle cx="447.697" cy="227.954" r="16" fill="#86d96b"/>
+        <circle cx="99.727" cy="308.709" r="15" fill="#f472b6"/>
+      </g>
+      <g stroke="#131936" stroke-width="5">
+        <circle cx="79.331" cy="215" r="14" fill="#a78bfa"/>
+        <circle cx="447.697" cy="227.954" r="13" fill="#86d96b"/>
+        <circle cx="99.727" cy="308.709" r="12" fill="#f472b6"/>
+      </g>
+    </g>
+
+    <path d="M 272 174 L 204 265 L 245 265 L 226 337 L 310 235 L 268 235 L 287 174 Z"
+          fill="#ffffff" stroke="#a94c53" stroke-opacity="0.23" stroke-width="6"
+          stroke-linejoin="round" paint-order="stroke"/>
+  </g>
+</svg>

@@ -1,0 +1,105 @@
+// 首頁：科目選擇、今日進度、模式入口
+import { SUBJECTS } from '../subjects.js';
+import { isWeak, mastery } from '../srs.js';
+import { currentStreak, today } from '../stats.js';
+import { setSoundEnabled } from './feedback.js';
+
+export function initHome(ctx) {
+  const $ = (sel) => document.querySelector(sel);
+  const chipsEl = $('#subject-chips');
+  const settings = ctx.state.settings;
+
+  // 舊存檔裡若有已不存在的科目就濾掉
+  settings.subjects = settings.subjects.filter((id) => SUBJECTS.some((s) => s.id === id));
+
+  const chips = SUBJECTS.map((s) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'chip';
+    btn.dataset.subject = s.id;
+    btn.style.setProperty('--c', s.color);
+    btn.innerHTML = `<span class="chip-name">${s.name}</span><span class="chip-meter"><i></i></span>`;
+    btn.addEventListener('click', () => toggle(s.id));
+    chipsEl.append(btn);
+    return btn;
+  });
+
+  function toggle(id) {
+    const set = new Set(settings.subjects);
+    set.has(id) ? set.delete(id) : set.add(id);
+    settings.subjects = SUBJECTS.map((s) => s.id).filter((x) => set.has(x));
+    ctx.save();
+    render();
+  }
+
+  ctx.world.onPlanetTap = toggle;
+
+  $('#toggle-all').addEventListener('click', () => {
+    const all = settings.subjects.length === SUBJECTS.length;
+    settings.subjects = all ? [] : SUBJECTS.map((s) => s.id);
+    ctx.save();
+    render();
+  });
+
+  const soundBtn = $('#sound-toggle');
+  soundBtn.addEventListener('click', () => {
+    settings.sound = !settings.sound;
+    ctx.save();
+    render();
+  });
+
+  document.querySelectorAll('#home [data-mode]').forEach((btn) => {
+    btn.addEventListener('click', () => ctx.startRound(btn.dataset.mode));
+  });
+
+  function render() {
+    const now = Date.now();
+    const { cards } = ctx.state;
+    const selected = new Set(settings.subjects);
+    const inSelection = ctx.bank.filter((q) => selected.has(q.subject));
+
+    chips.forEach((chip) => {
+      const id = chip.dataset.subject;
+      const qs = ctx.bank.filter((q) => q.subject === id);
+      const m = Math.round(mastery(qs, cards) * 100);
+      chip.setAttribute('aria-pressed', String(selected.has(id)));
+      chip.querySelector('i').style.width = `${m}%`;
+      chip.title = qs.length ? `熟練度 ${m}%・${qs.length} 題` : '題庫準備中';
+    });
+    $('#toggle-all').textContent = selected.size === SUBJECTS.length ? '清除' : '全選';
+
+    $('#streak b').textContent = currentStreak(ctx.state, now);
+    const day = today(ctx.state, now);
+    const goal = settings.goal;
+    $('#daily-count').textContent = day.answered;
+    $('#daily-goal').textContent = goal;
+    const ring = $('#daily-ring');
+    ring.style.strokeDasharray = `${Math.min(100, (day.answered / goal) * 100)} 100`;
+    ring.style.opacity = day.answered ? '1' : '0'; // 0 題時圓頭線帽會留一個點
+    $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : '今天還沒開始，來一輪吧！';
+    $('#daily').classList.toggle('done', day.answered >= goal);
+
+    $('#best-blitz').textContent = ctx.state.best.blitz;
+    $('#formula-count').textContent = inSelection.filter((q) => q.formula).length;
+    $('#weak-count').textContent = inSelection.filter((q) => isWeak(cards[q.id])).length;
+
+    const disabled = !inSelection.length;
+    document.querySelectorAll('#home [data-mode]').forEach((b) => (b.disabled = disabled));
+    $('#bank-info').textContent = ctx.bank.length
+      ? disabled
+        ? '先選至少一科再開始'
+        : `已選 ${selected.size} 科・${inSelection.length} 題（題庫共 ${ctx.bank.length} 題）`
+      : '題庫準備中…';
+
+    soundBtn.textContent = settings.sound ? '🔊' : '🔇';
+    soundBtn.setAttribute('aria-label', `音效：${settings.sound ? '開' : '關'}`);
+    setSoundEnabled(settings.sound);
+
+    ctx.world.setSelected(settings.subjects);
+  }
+
+  ctx.goHome = () => {
+    render();
+    ctx.show('home');
+  };
+}
