@@ -1,15 +1,14 @@
-// 設定：每日目標、學測日期、音效、進度備份與同步、回報的題目。底部彈出面板。
+// 設定：每日目標、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目。底部彈出面板。
 import { daysUntil } from '../analysis.js';
 import { foldLegacy } from '../cloud.js';
-import { dayKey } from '../stats.js';
+import { GOALS, dayKey } from '../stats.js';
 import { DEFAULT_EXAM_DATE } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { exportBackup, mergeState, parseBackup, setFlag } from '../sync.js';
+import { FONT_SCALES, THEMES, applyAppearance } from './appearance.js';
 import { copyText } from './clipboard.js';
 import { setSoundEnabled } from './feedback.js';
 import { richHTML } from './rich.js';
-
-const GOALS = [10, 20, 30, 50, 80, 120];
 
 /**
  * @param {object} ctx
@@ -59,6 +58,24 @@ export function initSettings(ctx, onChange) {
     settings.examDate = DEFAULT_EXAM_DATE;
     commit();
   });
+
+  // ── 外觀 ───────────────────────────────────────────
+  const segButtons = (container, options, key) =>
+    options.map(([value, label]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'seg-btn';
+      btn.textContent = label;
+      btn.addEventListener('click', () => {
+        settings[key] = value;
+        applyAppearance(settings, ctx.world);
+        commit();
+      });
+      $(container).append(btn);
+      return [value, btn];
+    });
+  const themeBtns = segButtons('#theme-options', THEMES, 'theme');
+  const fontBtns = segButtons('#font-options', FONT_SCALES, 'fontScale');
 
   // ── 音效 ───────────────────────────────────────────
   setSoundEnabled(settings.sound);
@@ -169,7 +186,11 @@ export function initSettings(ctx, onChange) {
     $('#exam-left').textContent = left > 0 ? `還有 ${left} 天` : left === 0 ? '就是今天' : '已經考完了';
     $('#exam-reset').hidden = settings.examDate === DEFAULT_EXAM_DATE;
     soundBtn.setAttribute('aria-checked', String(settings.sound));
+    for (const [value, btn] of themeBtns) btn.setAttribute('aria-pressed', String(settings.theme === value));
+    for (const [value, btn] of fontBtns) btn.setAttribute('aria-pressed', String(settings.fontScale === value));
     ctx.renderCloud?.();
+    ctx.renderReminder?.();
+    ctx.renderInstall?.();
     renderFlags();
   }
 
@@ -191,9 +212,12 @@ export function initSettings(ctx, onChange) {
   });
 
   return {
-    open() {
+    /** @param {string} [section] 打開後捲到哪個區塊（CSS 選擇器） */
+    open(section) {
       render();
       sheet.hidden = false;
+      if (section) $(section)?.scrollIntoView({ block: 'start' });
+      else $('#settings-sheet .settings-scroll').scrollTop = 0;
     },
   };
 }

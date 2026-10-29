@@ -86,5 +86,31 @@ self.addEventListener('fetch', (event) => {
     }),
   );
 });
+
+// 每日提醒（同步後端 worker/src/push.js 送來的推播）：顯示通知，點了就打開 App
+self.addEventListener('push', (event) => {
+  let msg = {};
+  try {
+    msg = event.data ? event.data.json() : {};
+  } catch {}
+  event.waitUntil(
+    self.registration.showNotification(msg.title || '學測快問快答', {
+      body: msg.body || '今天還沒練習，來一輪 60 秒快閃吧！',
+      icon: 'icons/icon-192.png',
+      tag: 'daily-reminder',
+      lang: 'zh-Hant-TW',
+    }),
+  );
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      const open = list.find((c) => 'focus' in c);
+      return open ? open.focus() : self.clients.openWindow('./');
+    }),
+  );
+});
 `;
 }

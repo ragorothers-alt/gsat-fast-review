@@ -13,6 +13,15 @@
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <link rel="manifest" href="./manifest.webmanifest" />
     <title>學測快問快答</title>
+    <script>
+      // 畫面出現前先套用深淺色與字體大小（由 src/ui/appearance.js 寫入），開啟時才不會先閃一下淺色
+      try {
+        var look = JSON.parse(localStorage.getItem('gsat-quiz:appearance') || '{}');
+        var dark = look.theme === 'dark' || (look.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        if (look.fontScale) document.documentElement.style.setProperty('--fs', look.fontScale);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <!-- 手繪小圖示（src/ui/icons.js 產生引用）：描邊跟著文字顏色，填色是固定的色票 -->
@@ -72,6 +81,44 @@
         <path d="M12.1 15.1Q11.8 17 12 18.8"/>
         <path d="M8.5 18.9L15.4 18.8Q16.3 18.8 16.5 19.7L16.6 21.2L7.3 21.2L7.5 19.8Q7.6 19 8.5 18.9Z" fill="#f2b632"/>
       </symbol>
+    <symbol id="i-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7.4 8.7L5.6 8.8Q3.8 8.7 3.9 10.8L4 19Q3.9 21 6 21L18.2 20.9Q20.2 21 20.1 19L20 10.7Q20 8.7 18.2 8.7L16.6 8.8"/>
+        <path d="M12.1 14.5Q11.9 8.6 12 2.9M8.5 6.4L12 2.8L15.6 6.3"/>
+      </symbol>
+    <symbol id="i-add" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.4 3.5L17.8 3.6Q20.6 3.6 20.5 6.5L20.4 17.7Q20.5 20.6 17.5 20.5L6.3 20.4Q3.5 20.5 3.6 17.6L3.5 6.4Q3.4 3.5 6.4 3.5Z"/>
+        <path d="M7.9 12Q12.1 11.8 16.2 12M12 7.8Q11.8 12 12.1 16.2"/>
+      </symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.7 3.1L18.2 3.2Q19.3 3.2 19.2 4.4L19.1 20.7L6.5 20.9Q4.3 20.8 4.4 18.7L4.5 5.5Q4.4 3.1 6.7 3.1Z" fill="#f0705f"/>
+        <path d="M7.5 3.4Q7.3 10.1 7.5 16.4" stroke-width="1.6"/>
+        <path d="M12.5 3.3L16.1 3.3L16 10.1L14.3 8.9L12.5 10.2Z" fill="#f2b632" stroke-width="1.6"/>
+        <path d="M6.6 16.5L19.1 16.4L19.1 20.7L6.5 20.9Q4.4 20.8 4.4 18.8Q4.5 16.5 6.6 16.5Z" fill="#fffdf8" stroke-width="1.8"/>
+      </symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.6 4.7Q10.3 2.9 12 2.8Q13.7 2.7 13.5 4.7" stroke-width="1.8"/>
+        <path d="M5.8 17.2Q4.5 17.3 5.3 16L6.9 13.6L7.1 9.3C7.1 6.5 9.2 4.5 12.1 4.6C15.1 4.6 17 6.6 17 9.2L17.1 13.5L18.7 16Q19.3 17.1 18.4 17.1Z" fill="#f2b632"/>
+        <path d="M10.2 19Q12 21.7 13.8 19"/>
+        <path d="M3 7.5L2.7 10.2M20.8 7.5L21.2 10" stroke-width="1.6"/>
+      </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15.4 3.1C10.3 1.8 4.3 5.3 4.1 11.6C3.8 17.8 9.8 22 15.4 20.4Q18.5 19.5 20.1 16.6C15.2 18.1 10.8 14.7 10.9 10.2Q10.9 5.8 15.4 3.1Z" fill="#f2b632"/>
+        <path d="M19.1 3.6L19.3 5.7L21.2 6L19.3 6.3L19 8.4L18.7 6.3L16.8 6L18.8 5.7Z" stroke-width="1.6"/>
+      </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16.7 11.9C16.9 14.7 14.8 16.8 12 16.7C9.2 16.8 7.1 14.8 7.3 12C7.1 9.3 9.2 7.2 12 7.3C14.7 7.1 16.8 9.2 16.7 11.9Z" fill="#f2b632"/>
+        <path d="M11.9 2.7L12 4.2M18.6 5.3L17.5 6.4M21.3 11.9L19.8 12M18.6 18.5L17.4 17.5M12.1 21.3L12 19.8M5.4 18.6L6.5 17.4M2.7 12.1L4.2 12M5.4 5.4L6.5 6.5"/>
+      </symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5.6Q11.8 11.9 12.1 18.2M6.6 12.9L12.1 18.4L17.5 12.8"/>
+      </symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5.7 5.3L18.3 5.4Q20.5 5.3 20.4 7.6L20.3 18.9Q20.4 21 18.2 20.9L5.6 20.8Q3.5 20.9 3.6 18.7L3.5 7.5Q3.5 5.3 5.7 5.3ZM11.75 14.65L20.35 14.7L20.3 18.9Q20.4 21 18.2 20.9L11.8 20.85Z" fill="#fffdf8" fill-rule="evenodd"/>
+        <path d="M4 14.6L20 14.7M11.7 10L11.8 20.5" stroke-width="1.6"/>
+        <path d="M5.7 5.3L18.3 5.4Q20.5 5.3 20.4 7.6L20.4 9.6L3.6 9.5L3.5 7.5Q3.5 5.3 5.7 5.3Z" fill="#f0705f"/>
+        <path d="M7.7 3Q7.5 5.3 7.7 6.8M16.3 3.1Q16.5 5.3 16.2 6.9"/>
+        <path d="M14 17.2L15.5 18.6L18.2 15.9" stroke-width="1.8"/>
+      </symbol>
     </svg>
 
     <canvas id="world" aria-hidden="true"></canvas>
@@ -90,6 +137,7 @@
           </div>
           <div class="top-actions">
             <span class="pill" id="streak" title="連續練習天數"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg><b>0</b> 天</span>
+            <button id="open-notebook" class="icon-btn" type="button" aria-label="錯題本" title="錯題本"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-book"/></svg></button>
             <button id="open-settings" class="icon-btn" type="button" aria-label="設定"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-gear"/></svg></button>
           </div>
         </header>
@@ -179,6 +227,10 @@
             <div class="swipe-hint swipe-yes" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ok"/></svg>對</div>
             <div class="swipe-hint swipe-no" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ng"/></svg>錯</div>
           </article>
+          <!-- 小螢幕上題目卡放不下時，提示往下捲 -->
+          <div id="card-more" class="card-more" hidden>
+            <button type="button" aria-label="往下捲，看完整題目"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>往下還有</button>
+          </div>
         </div>
 
         <div id="answers" class="answers"></div>
@@ -240,6 +292,14 @@
         <div class="stats-scroll">
           <div class="stats-head" id="stats-tiles"></div>
 
+          <section id="stats-plan" class="stats-block paper">
+            <h3><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>考前規劃<small>依首頁選的科目與單元</small></h3>
+            <p id="plan-text" class="plan-text"></p>
+            <div class="plan-meter" aria-hidden="true"><i id="plan-done"></i><i id="plan-proj"></i></div>
+            <p id="plan-legend" class="plan-legend"></p>
+            <button id="plan-goal" class="secondary-btn" type="button" hidden></button>
+          </section>
+
           <section class="stats-block paper">
             <h3>弱點單元<small>依首頁選的科目；看解答也算失誤</small></h3>
             <ol id="stats-weak" class="weak-list"></ol>
@@ -256,6 +316,27 @@
             <ul id="stats-subjects" class="subject-stats"></ul>
           </section>
         </div>
+      </section>
+
+      <!-- 錯題本：從首頁右上角的書本進來 -->
+      <section id="notebook" class="screen notebook" hidden>
+        <header class="stats-bar">
+          <button id="notebook-back" class="icon-btn" type="button" aria-label="回首頁">‹</button>
+          <h2>錯題本</h2>
+        </header>
+        <div id="notebook-scroll" class="stats-scroll">
+          <div class="nb-head paper">
+            <p class="nb-count"><b id="notebook-count">0</b> 題還沒學會</p>
+            <p class="set-note">答錯或按過「不會」的題目會留在這裡，之後隔開時間再答對三次才會離開。考前翻一翻，或直接練一輪。</p>
+          </div>
+          <div id="notebook-tabs" class="sheet-tabs" role="tablist" aria-label="科目"></div>
+          <ol id="notebook-list" class="r-list"></ol>
+          <p id="notebook-empty" class="nb-empty" hidden>這裡還沒有錯題。答錯或按「不會」的題目會自動收進來。</p>
+          <button id="notebook-more" class="secondary-btn" type="button" hidden></button>
+        </div>
+        <nav class="nb-actions">
+          <button id="notebook-train" class="primary-btn" type="button">練一輪錯題</button>
+        </nav>
       </section>
     </main>
 
@@ -298,10 +379,36 @@
           </section>
 
           <section class="set-group">
+            <h3>外觀</h3>
+            <div id="theme-options" class="seg" role="group" aria-label="深淺色"></div>
+            <h4 class="set-sub">題目字體大小<small>題目、選項與解析</small></h4>
+            <div id="font-options" class="seg" role="group" aria-label="字體大小"></div>
+          </section>
+
+          <section class="set-group">
             <h3>音效</h3>
             <button id="sound-toggle" class="switch" type="button" role="switch" aria-checked="false">
               <span>答對、答錯的提示音</span><i aria-hidden="true"></i>
             </button>
+          </section>
+
+          <section id="reminder-group" class="set-group">
+            <h3>每日提醒</h3>
+            <p id="reminder-note" class="set-note">每天到了這個時間，今天的目標還沒達成，就傳通知提醒你。</p>
+            <button id="reminder-toggle" class="switch" type="button" role="switch" aria-checked="false">
+              <span>提醒我練習</span><i aria-hidden="true"></i>
+            </button>
+            <label class="set-row reminder-time">
+              <span>提醒時間</span>
+              <select id="reminder-hour" class="date-input"></select>
+            </label>
+            <button id="reminder-install" class="secondary-btn" type="button" hidden>看加入主畫面的步驟</button>
+          </section>
+
+          <section id="install-group" class="set-group" hidden>
+            <h3>安裝成 App</h3>
+            <p id="install-note" class="set-note"></p>
+            <button id="install-open" class="secondary-btn" type="button"></button>
           </section>
 
           <section class="set-group">
@@ -348,6 +455,29 @@
             <button id="copy-flags" class="secondary-btn" type="button">複製回報清單</button>
             <textarea id="flag-report" class="flag-report" readonly hidden aria-label="回報清單"></textarea>
           </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- iPhone：教學加入主畫面（沒加入的話，Safari 可能清掉作答紀錄） -->
+    <div id="install-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="install-title">
+        <header class="sheet-head">
+          <h2 id="install-title">加入主畫面，進度才保得住</h2>
+          <button id="install-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <div class="settings-scroll">
+          <p class="set-note">用 Safari 直接開網頁的話，只要 7 天沒打開，iPhone 可能會清掉存在手機裡的作答紀錄。加入主畫面後就像一般 App：從桌面打開、沒網路也能玩，紀錄也會保留，還能收到每日提醒。</p>
+          <ol class="install-steps">
+            <li><span>點 Safari 的分享按鈕<svg class="ico" aria-hidden="true"><use href="#i-share"/></svg>（在畫面下方或網址列旁；新版 iOS 要先點「⋯」）</span></li>
+            <li><span>往下滑，選「加入主畫面」<svg class="ico" aria-hidden="true"><use href="#i-add"/></svg>，再按「加入」</span></li>
+            <li><span>之後從主畫面的「快問快答」圖示打開</span></li>
+          </ol>
+          <p class="set-note">換手機或也用平板練習？到設定開啟「線上同步」，紀錄會在雲端多存一份。</p>
+          <div class="set-actions">
+            <button id="install-sync" class="secondary-btn" type="button">開啟線上同步</button>
+            <button id="install-ok" class="secondary-btn" type="button">知道了</button>
+          </div>
         </div>
       </div>
     </div>

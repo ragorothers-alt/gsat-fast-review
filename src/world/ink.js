@@ -4,6 +4,9 @@ import * as THREE from 'three';
 
 export const INK = '#3b2f2a';
 export const PAPER = '#fbf5ea';
+// 夜間（黑板）：外框墨線換成粉筆色，背景紙換成黑板色
+export const CHALK = '#ece4d4';
+export const BOARD = '#232b28';
 /** 填色相對墨線稍微錯位，像套色沒對準的印刷 */
 const FILL_SHIFT = [0.006, -0.005];
 
@@ -105,6 +108,7 @@ export function fillGeometry(points) {
 /**
  * 一個部位（身體、頭…）的所有色塊與墨線合成一個網格，依加入順序由下往上畫。
  * origin 是部位的旋轉中心，幾何會平移成以它為原點。
+ * edge：這條墨線是貼著背景的外框。夜間模式只把外框換成粉筆色，眼睛、嘴巴等五官仍是墨色，畫在淺色毛上才看得到。
  */
 export class Part {
   constructor(origin = [0, 0]) {
@@ -112,15 +116,17 @@ export class Part {
     this.oy = origin[1];
     this.pos = [];
     this.col = [];
+    this.edge = [];
     this.idx = [];
   }
 
-  add({ pos, idx }, hex, dx = 0, dy = 0) {
+  add({ pos, idx }, hex, dx = 0, dy = 0, edge = false) {
     const base = this.pos.length / 3;
     const [r, g, b] = rgb(hex);
     for (let i = 0; i < pos.length; i += 2) {
       this.pos.push(pos[i] + dx - this.ox, pos[i + 1] + dy - this.oy, 0);
       this.col.push(r, g, b);
+      this.edge.push(edge ? 1 : 0);
     }
     for (const k of idx) this.idx.push(base + k);
     return this;
@@ -130,19 +136,21 @@ export class Part {
     return this.add(fillGeometry(points), hex, FILL_SHIFT[0], FILL_SHIFT[1]);
   }
 
-  stroke(points, hex, width, opts) {
-    return this.add(strokeGeometry(points, width, opts), hex);
+  /** @param {{ edge?: boolean } & Parameters<typeof strokeGeometry>[2]} [opts] */
+  stroke(points, hex, width, opts = {}) {
+    return this.add(strokeGeometry(points, width, opts), hex, 0, 0, opts.edge);
   }
 
   /** 填色 + 墨線外框 */
-  shape(points, fillHex, width, inkHex = INK) {
-    return this.fill(points, fillHex).stroke(points, inkHex, width, { closed: true });
+  shape(points, fillHex, width, { edge = false } = {}) {
+    return this.fill(points, fillHex).stroke(points, INK, width, { closed: true, edge });
   }
 
   geometry() {
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(this.pos, 3));
     g.setAttribute('color', new THREE.Float32BufferAttribute(this.col, 3));
+    g.setAttribute('edge', new THREE.Float32BufferAttribute(this.edge, 1));
     g.setIndex(this.idx);
     return g;
   }
@@ -161,7 +169,9 @@ const VERT = /* glsl */ `
   uniform float uBoil;
   uniform float uAmp;
   uniform float uSeed;
+  attribute float edge;
   varying vec3 vColor;
+  varying float vEdge;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   float vnoise(vec2 p) {
     vec2 i = floor(p);
@@ -171,6 +181,7 @@ const VERT = /* glsl */ `
   }
   void main() {
     vColor = color;
+    vEdge = edge;
     vec2 p = position.xy;
     float s = uBoil * 7.31 + uSeed * 3.17;
     vec2 off = vec2(vnoise(p * 5.0 + s), vnoise(p * 5.0 + s + 19.7)) - 0.5;
@@ -182,9 +193,23 @@ const FRAG = /* glsl */ `
   uniform vec3 uPaper;
   uniform vec3 uTint;
   uniform float uTintAmt;
+  uniform float uNight;
+  uniform float uAllEdge;
+  uniform vec3 uNightFlat;
+  uniform float uNightFlatAmt;
   varying vec3 vColor;
+  varying float vEdge;
+  const vec3 INK = vec3(${rgb(INK).join(', ')});
+  const vec3 CHALK = vec3(${rgb(CHALK).join(', ')});
   void main() {
-    vec3 c = mix(vColor, uTint, uTintAmt);
+    vec3 c = vColor;
+    if (uNight > 0.0) {
+      // 夜間：貼著背景的外框墨線換成粉筆色，色塊稍微壓暗；背景塗鴉整個換成淡淡的粉筆灰
+      float ink = max(vEdge, uAllEdge) * (1.0 - smoothstep(0.02, 0.1, distance(vColor, INK)));
+      vec3 night = mix(mix(c * 0.86, CHALK, ink), uNightFlat, uNightFlatAmt);
+      c = mix(c, night, uNight);
+    }
+    c = mix(c, uTint, uTintAmt);
     float grey = dot(c, vec3(0.299, 0.587, 0.114));
     c = mix(c, mix(vec3(grey), uPaper, 0.6), uFade);
     gl_FragColor = vec4(c, 1.0);
@@ -192,21 +217,35 @@ const FRAG = /* glsl */ `
 
 /** 全部墨線材質共用的抖動格，每幀由場景更新 */
 export const boil = { value: 0 };
+/** 全部材質共用：夜間模式（0 或 1）與背景紙色 */
+export const night = { value: 0 };
+export const paper = { value: new THREE.Vector3(...rgb(PAPER)) };
+
+export function setNightUniforms(on) {
+  night.value = on ? 1 : 0;
+  paper.value.set(...rgb(on ? BOARD : PAPER));
+}
 
 /**
  * 顏色直接用 sRGB 數值（不經 three 的色彩管理），所以這裡的 shader 不做輸出轉換。
- * @param {{ amp?: number, seed?: number }} opts amp = 抖動幅度（與幾何同單位）
+ * @param {{ amp?: number, seed?: number, allEdge?: boolean, nightFlat?: string }} opts
+ *   amp = 抖動幅度（與幾何同單位）；allEdge：夜間時所有墨線都換成粉筆色（浮在背景上的小圖示）；
+ *   nightFlat：夜間時整個網格改成這個顏色（背景塗鴉）
  */
-export function inkMaterial({ amp = 0.01, seed = 0 } = {}) {
+export function inkMaterial({ amp = 0.01, seed = 0, allEdge = false, nightFlat = null } = {}) {
   return new THREE.ShaderMaterial({
     uniforms: {
       uBoil: boil,
       uAmp: { value: amp },
       uSeed: { value: seed },
       uFade: { value: 0 },
-      uPaper: { value: new THREE.Vector3(...rgb(PAPER)) },
+      uPaper: paper,
       uTint: { value: new THREE.Vector3(1, 1, 1) },
       uTintAmt: { value: 0 },
+      uNight: night,
+      uAllEdge: { value: allEdge ? 1 : 0 },
+      uNightFlat: { value: new THREE.Vector3(...rgb(nightFlat ?? INK)) },
+      uNightFlatAmt: { value: nightFlat ? 1 : 0 },
     },
     vertexShader: VERT,
     fragmentShader: FRAG,

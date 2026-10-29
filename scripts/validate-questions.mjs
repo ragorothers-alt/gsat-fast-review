@@ -133,6 +133,20 @@ for (const file of files) {
 console.log(`\n合計：${totalErrors} 個錯誤、${totalWarnings} 個警告`);
 process.exit(totalErrors ? 1 : 0);
 
+/** \mathrm{...} 的最外層有 + 或箭頭：KaTeX 把整組當成一塊，不能在中間換行 */
+function equationInMathrm(tex) {
+  for (let at = tex.indexOf('\\mathrm{'); at >= 0; at = tex.indexOf('\\mathrm{', at + 1)) {
+    let depth = 0;
+    for (let i = at + 8; i < tex.length; i++) {
+      const ch = tex[i];
+      if (ch === '{') depth++;
+      else if (ch === '}' && depth-- === 0) break;
+      else if (depth === 0 && ((ch === '+' && tex[i - 1] !== '^') || /^\\(rightarrow|rightleftharpoons|longrightarrow|to)(?![a-zA-Z])/.test(tex.slice(i)))) return true;
+    }
+  }
+  return false;
+}
+
 function checkText(value, field, max, warnAt, err, warn) {
   if (typeof value !== 'string' || !value.trim()) return err(`${field} 必須是非空字串`);
   if (CONTROL_CHARS.test(value)) {
@@ -154,6 +168,9 @@ function checkText(value, field, max, warnAt, err, warn) {
       err(`${field} 的 LaTeX 無法解析：$${seg.text}$ — ${e.message.split('\n')[0]}`);
     }
     if (CJK.test(seg.text.replace(/\\text\{[^}]*\}/g, ''))) warn(`${field} 的公式內有中文，請改用 \\text{} 或移到 $ 外`);
+    if (equationInMathrm(seg.text)) {
+      err(`${field} 的整條方程式包在同一個 \\mathrm{} 裡，手機上無法換行；請每個化學式各自包，例如 $\\mathrm{H_2}+\\mathrm{Cl_2}\\rightarrow\\mathrm{2HCl}$`);
+    }
   }
   if (visible > max) err(`${field} 太長（約 ${visible} 字，上限 ${max}）`);
   else if (visible > warnAt) warn(`${field} 偏長（約 ${visible} 字，建議 ≤ ${warnAt}）`);

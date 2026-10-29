@@ -5992,7 +5992,7 @@
     "subject": "biology",
     "topic": "細胞與能量",
     "type": "mc",
-    "q": "給定葡萄糖有氧呼吸總反應：$\\mathrm{C_6H_{12}O_6+6O_2\\rightarrow6CO_2+6H_2O}$。2 個葡萄糖分子完全反應需幾個氧分子？",
+    "q": "給定葡萄糖有氧呼吸總反應：$\\mathrm{C_6H_{12}O_6}+\\mathrm{6O_2}\\rightarrow \\mathrm{6CO_2}+\\mathrm{6H_2O}$。2 個葡萄糖分子完全反應需幾個氧分子？",
     "choices": [
       "3 個",
       "12 個",

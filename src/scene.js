@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { SUBJECTS } from './subjects.js';
 import { Cat } from './world/cats.js';
 import { createDoodles } from './world/doodles.js';
-import { INK, Part, boil, inkMaterial, rgb, spline } from './world/ink.js';
+import { CHALK, INK, Part, boil, inkMaterial, rgb, setNightUniforms, spline } from './world/ink.js';
 import { createParticles } from './world/particles.js';
 
 const BREED_OF = {
@@ -21,6 +21,8 @@ const BREED_OF = {
   civics: 'cream',
 };
 const BOIL_FPS = 8;
+// 手繪動畫每秒 30 張就夠順；不必跟著螢幕更新率（60–120 Hz）一直重畫，長時間刷題比較省電、不發燙
+const FRAME_MS = 1000 / 30;
 const SHELF_UNIT = 100; // 書架幾何用 100px 當 1 單位，抖動才會跟貓一致
 const MAX_CAST = 5;
 
@@ -29,6 +31,7 @@ const NOOP_WORLD = {
   setSelected() {},
   setFocusSubject() {},
   setCast() {},
+  setNight() {},
   setCombo() {},
   react() {},
   burst() {},
@@ -90,7 +93,7 @@ export function createWorld(canvas, anchors) {
   let width = 1;
   let height = 1;
   const pointer = { x: 0, y: 0, at: -1e9 };
-  const clock = new THREE.Clock();
+  const timer = new THREE.Timer();
   const tint = new THREE.Vector3(1, 1, 1);
 
   function resize() {
@@ -208,7 +211,7 @@ export function createWorld(canvas, anchors) {
         [[x0, yy], [mid, yy - 0.012], [x1, yy], [x1 + 0.012, yy - 0.04], [x1, yy - 0.08], [mid, yy - 0.09], [x0, yy - 0.08], [x0 - 0.012, yy - 0.04]],
         { closed: true, n: 80 },
       );
-      const p = new Part().fill(plank, '#ecd8b5').stroke(plank, INK, 2.4 / u, { closed: true, seed: i, pressure: 0.4 });
+      const p = new Part().fill(plank, '#ecd8b5').stroke(plank, INK, 2.4 / u, { closed: true, seed: i, pressure: 0.4, edge: true });
       const m = p.mesh(shelfMat, 60 + i);
       m.scale.setScalar(u);
       scene.add(m);
@@ -218,8 +221,13 @@ export function createWorld(canvas, anchors) {
 
   // ── 每幀 ──────────────────────────────────────────────
   let elapsed = 0;
-  function frame() {
-    const dt = Math.min(clock.getDelta(), 0.05);
+  let lastFrame = -Infinity;
+  function frame(now) {
+    // 留一點容許誤差，60 Hz 螢幕上才會穩定隔一幀畫一次，而不是掉到 20 張
+    if (now - lastFrame < FRAME_MS - 3) return;
+    lastFrame = now;
+    // 剛從背景切回來時 reset 在這一幀開始之後，差值可能是負的
+    const dt = Math.max(0, Math.min(timer.update(now).getDelta(), 0.05));
     const t = (elapsed += dt);
     boil.value = reduced ? 0 : Math.floor(t * BOIL_FPS) % 3;
     layout();
@@ -292,7 +300,7 @@ export function createWorld(canvas, anchors) {
   function syncLoop() {
     if (document.hidden) renderer.setAnimationLoop(null);
     else {
-      clock.getDelta();
+      timer.reset();
       renderer.setAnimationLoop(frame);
     }
   }
@@ -306,12 +314,17 @@ export function createWorld(canvas, anchors) {
   const api = {
     /** 首頁點到貓時呼叫，參數是科目 id */
     onCatTap: null,
+    /** 夜間模式：外框改成粉筆色、科目名改成淺色字 */
+    setNight(on) {
+      setNightUniforms(on);
+      for (const label of labels) label.userData.draw(on ? CHALK : INK);
+    },
     setScene(name) {
       if (name === mode) return;
       mode = name;
       if (name !== 'play') api.setCombo(0);
       for (const cat of cats) cat.ducking = false;
-      if (name === 'result' || name === 'stats') for (const id of cast) catById[id].entering = true;
+      if (name === 'result' || name === 'stats' || name === 'notebook') for (const id of cast) catById[id].entering = true;
     },
     setSelected(ids) {
       const next = new Set(ids);
@@ -400,12 +413,17 @@ function makeLabel(text, ratio) {
   const h = Math.ceil(18 * ratio);
   c.width = w;
   c.height = h;
-  g.font = font;
-  g.fillStyle = INK;
-  g.textAlign = 'center';
-  g.textBaseline = 'middle';
-  g.fillText(text, w / 2, h / 2 + ratio);
   const tex = new THREE.CanvasTexture(c);
+  const draw = (color) => {
+    g.clearRect(0, 0, w, h);
+    g.font = font;
+    g.fillStyle = color;
+    g.textAlign = 'center';
+    g.textBaseline = 'middle';
+    g.fillText(text, w / 2, h / 2 + ratio);
+    tex.needsUpdate = true;
+  };
+  draw(INK);
   tex.colorSpace = THREE.SRGBColorSpace;
   tex.generateMipmaps = false;
   tex.minFilter = THREE.LinearFilter;
@@ -416,5 +434,6 @@ function makeLabel(text, ratio) {
   mesh.scale.set(w / ratio, h / ratio, 1);
   mesh.renderOrder = 400;
   mesh.frustumCulled = false;
+  mesh.userData.draw = draw;
   return mesh;
 }

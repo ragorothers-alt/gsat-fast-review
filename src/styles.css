@@ -16,9 +16,46 @@
   --note: #fff4cf;
   --hand: 18px 22px 17px 21px / 21px 17px 22px 18px;
   --hand-sm: 12px 15px 11px 14px / 14px 11px 15px 12px;
-  --pop: 3px 3px 0 var(--ink);
+  --pop: 3px 3px 0 var(--shadow);
   --pad-x: 16px;
+  --track: #eee3d1;
+  --shadow: var(--ink);
+  --scrim: rgba(59, 47, 42, 0.35);
+  /* 黃色、珊瑚色等亮底上的字，深色模式也維持深色 */
+  --on-bright: #3b2f2a;
   color-scheme: light;
+}
+
+/* 夜間：黑板風。墨線變粉筆、紙變黑板，貼紙的立體陰影改成深色 */
+:root[data-theme='dark'] {
+  --paper: #232b28;
+  --grid: #2a3430;
+  --card: #2d3733;
+  --ink: #ece4d4;
+  --ink-soft: #c9c0af;
+  --muted: #9b9488;
+  --line-soft: rgba(236, 228, 212, 0.2);
+  --accent: #f2b632;
+  --accent-2: #f0806f;
+  --good: #52c07c;
+  --good-bg: #24473a;
+  --bad: #f06c5f;
+  --bad-bg: #4d2d2a;
+  --note: #393a2c;
+  --track: #3b4642;
+  --shadow: #141917;
+  --scrim: rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* 黃底的按鈕上，字和圖示維持深色才看得清楚 */
+:root[data-theme='dark'] :is(.mode.primary, .primary-btn, .next-btn, .icon-btn[aria-pressed='true'], .tool[aria-pressed='true'], .seg-btn[aria-pressed='true']) {
+  color: var(--on-bright);
+}
+
+/* 成績的螢光筆底線：黑板上淡一點，粉筆字才清楚 */
+:root[data-theme='dark'] .r-big {
+  background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 40%, transparent) 62%);
 }
 
 * {
@@ -231,7 +268,7 @@ p {
 }
 
 .ring-bg {
-  stroke: #eee3d1;
+  stroke: var(--track);
 }
 
 .ring-fg {
@@ -398,7 +435,7 @@ p {
   height: 4px;
   margin: 0 6px;
   border-radius: 2px;
-  background: #eee3d1;
+  background: var(--track);
   overflow: hidden;
 }
 
@@ -452,7 +489,7 @@ p {
 
 .mode:active:not(:disabled) {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--shadow);
 }
 
 .mode:disabled {
@@ -479,7 +516,7 @@ p {
 }
 
 .mode.primary .mode-sub {
-  color: rgba(59, 47, 42, 0.75);
+  color: color-mix(in srgb, var(--ink) 75%, transparent);
 }
 
 .mode-pair {
@@ -501,7 +538,7 @@ p {
 }
 
 .mode.free .mode-sub {
-  color: rgba(59, 47, 42, 0.75);
+  color: color-mix(in srgb, var(--ink) 75%, transparent);
 }
 
 .mode-row {
@@ -538,7 +575,7 @@ p {
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  background: rgba(59, 47, 42, 0.35);
+  background: var(--scrim);
   pointer-events: auto;
   animation: fade-in 0.2s ease-out;
 }
@@ -607,7 +644,7 @@ p {
 
 .sheet-tab[aria-selected='true'] {
   background: color-mix(in srgb, var(--c) 30%, var(--card));
-  box-shadow: 2px 2px 0 var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
 }
 
 .unit-list {
@@ -672,7 +709,7 @@ p {
   grid-column: 2 / 4;
   height: 4px;
   border-radius: 2px;
-  background: #eee3d1;
+  background: var(--track);
   overflow: hidden;
   margin-top: -2px;
 }
@@ -786,7 +823,7 @@ p {
   background: var(--card);
   border: 2px solid var(--ink);
   border-radius: var(--hand);
-  box-shadow: 4px 5px 0 var(--ink);
+  box-shadow: 4px 5px 0 var(--shadow);
   transition: transform 0.25s ease;
 }
 
@@ -829,9 +866,51 @@ p {
 }
 
 .q-text {
-  font-size: clamp(1.08rem, 4.6vw, 1.3rem);
+  font-size: calc(clamp(1.08rem, 4.6vw, 1.3rem) * var(--fs, 1));
   line-height: 1.7;
   overflow-wrap: anywhere;
+}
+
+/* 小螢幕上題目卡放不下時縮小一級（play.js 的 fitCard） */
+.q-text.compact {
+  font-size: calc(0.98rem * var(--fs, 1));
+  line-height: 1.6;
+}
+
+/* 還是放不下：卡片底部淡出，加一顆「往下還有」 */
+.card-wrap {
+  position: relative;
+}
+
+.card-more {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  height: 46px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  border-radius: 0 0 15px 19px;
+  background: linear-gradient(transparent, var(--card) 62%);
+  pointer-events: none;
+  animation: fade-in 0.2s ease-out;
+}
+
+.card-more button {
+  pointer-events: auto;
+  padding: 3px 12px 3px 9px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--shadow);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.card-more .ico {
+  margin-right: 0.15em;
 }
 
 .katex {
@@ -843,8 +922,8 @@ p {
   padding: 12px 14px;
   border-radius: var(--hand-sm);
   background: var(--note);
-  border: 1.5px dashed rgba(59, 47, 42, 0.45);
-  font-size: 0.95rem;
+  border: 1.5px dashed color-mix(in srgb, var(--ink) 45%, transparent);
+  font-size: calc(0.95rem * var(--fs, 1));
   line-height: 1.65;
   animation: card-in 0.25s ease-out;
 }
@@ -919,14 +998,14 @@ p {
   border: 2px solid var(--ink);
   box-shadow: var(--pop);
   text-align: left;
-  font-size: 1.05rem;
+  font-size: calc(1.05rem * var(--fs, 1));
   line-height: 1.45;
   transition: transform 0.1s, box-shadow 0.1s, background 0.2s, opacity 0.2s;
 }
 
 .answer:active:not(:disabled) {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--shadow);
 }
 
 .answers.grid-2 .answer {
@@ -990,6 +1069,32 @@ p {
   box-shadow: none;
 }
 
+/* 批改記號：正解蓋圈、選錯的蓋叉，壓在按鈕右上角 */
+.answer {
+  position: relative;
+}
+
+.ico.mark {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 3px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  animation: stamp 0.22s ease-out;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.6) rotate(-12deg);
+  }
+}
+
 .play-foot {
   display: flex;
   justify-content: center;
@@ -1001,7 +1106,7 @@ p {
   padding: 10px 16px;
   color: var(--ink-soft);
   font-size: 0.9rem;
-  text-decoration: underline dashed rgba(59, 47, 42, 0.4);
+  text-decoration: underline dashed color-mix(in srgb, var(--ink) 40%, transparent);
   text-underline-offset: 4px;
 }
 
@@ -1021,7 +1126,7 @@ p {
 .primary-btn:active,
 .secondary-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--shadow);
 }
 
 .next-btn[hidden],
@@ -1045,7 +1150,7 @@ p {
 
 .related-btn:active {
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0 var(--ink);
+  box-shadow: 1px 1px 0 var(--shadow);
 }
 
 .related-btn.wide {
@@ -1118,7 +1223,7 @@ p {
 
 .tool[aria-pressed='true'] {
   background: var(--accent);
-  box-shadow: 2px 2px 0 var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
 }
 
 .tool-btn {
@@ -1147,7 +1252,7 @@ p {
   background-size: 22px 22px;
   border: 2px solid var(--ink);
   border-radius: var(--hand);
-  box-shadow: 4px 5px 0 var(--ink);
+  box-shadow: 4px 5px 0 var(--shadow);
 }
 
 #scratch-canvas {
@@ -1268,7 +1373,7 @@ p {
   background: var(--card);
   border: 2px solid var(--ink);
   border-radius: var(--hand);
-  box-shadow: 4px 5px 0 var(--ink);
+  box-shadow: 4px 5px 0 var(--shadow);
 }
 
 .r-mode {
@@ -1349,6 +1454,7 @@ p {
 }
 
 .r-q {
+  font-size: calc(1rem * var(--fs, 1));
   line-height: 1.65;
 }
 
@@ -1357,7 +1463,7 @@ p {
   flex-wrap: wrap;
   gap: 6px 14px;
   margin: 8px 0;
-  font-size: 0.92rem;
+  font-size: calc(0.92rem * var(--fs, 1));
   font-weight: 600;
 }
 
@@ -1374,7 +1480,7 @@ p {
 }
 
 .r-explain {
-  font-size: 0.9rem;
+  font-size: calc(0.9rem * var(--fs, 1));
   line-height: 1.6;
   color: var(--ink-soft);
 }
@@ -1458,7 +1564,7 @@ p {
   background: var(--card);
   border: 2px solid var(--ink);
   border-radius: var(--hand);
-  box-shadow: 4px 5px 0 var(--ink);
+  box-shadow: 4px 5px 0 var(--shadow);
   flex: none;
 }
 
@@ -1476,6 +1582,85 @@ p {
 
 .stats-block {
   padding: 14px;
+  flex: none;
+}
+
+/* 考前規劃 */
+.plan-text {
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.plan-meter {
+  display: flex;
+  height: 10px;
+  margin: 12px 0 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.plan-meter i {
+  display: block;
+  height: 100%;
+}
+
+#plan-done {
+  background: var(--good);
+}
+
+#plan-proj {
+  background: repeating-linear-gradient(135deg, var(--accent) 0 5px, color-mix(in srgb, var(--accent) 45%, var(--card)) 5px 10px);
+}
+
+.plan-legend {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+#plan-goal {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ── 錯題本 ─────────────────────────────────────────── */
+.nb-head {
+  margin-top: 48px;
+  padding: 14px 16px 4px;
+  flex: none;
+  border-width: 2px;
+  box-shadow: 4px 5px 0 var(--shadow);
+}
+
+.nb-count {
+  margin-bottom: 6px;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.nb-count b {
+  font-size: 1.6rem;
+  margin-right: 4px;
+}
+
+#notebook-tabs {
+  margin-bottom: -4px;
+}
+
+.nb-empty {
+  padding: 24px 8px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+#notebook-more {
+  flex: none;
+}
+
+.nb-actions {
+  display: grid;
   flex: none;
 }
 
@@ -1679,7 +1864,7 @@ p {
 .seg-btn[aria-pressed='true'] {
   border-color: var(--ink);
   background: var(--accent);
-  box-shadow: 2px 2px 0 var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
 }
 
 .set-row {
@@ -1687,6 +1872,82 @@ p {
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
+}
+
+#theme-options {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#font-options {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.set-sub {
+  margin: 14px 0 8px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.set-sub small {
+  margin-left: 6px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.reminder-time {
+  margin-top: 10px;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+#reminder-install,
+#install-open {
+  margin-top: 10px;
+}
+
+/* 加入主畫面的步驟 */
+.install-steps {
+  margin: 4px 0 14px;
+  padding: 0;
+  list-style: none;
+  counter-reset: step;
+  display: grid;
+  gap: 10px;
+}
+
+.install-steps li {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 4px 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.install-steps li::before {
+  counter-increment: step;
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.install-steps .ico {
+  width: 1.35em;
+  height: 1.35em;
+  margin: 0 0.15em;
+  vertical-align: -0.32em;
 }
 
 .date-input {
@@ -1719,7 +1980,7 @@ p {
   height: 26px;
   border-radius: 13px;
   border: 1.5px solid var(--ink);
-  background: #eee3d1;
+  background: var(--track);
   transition: background 0.2s;
 }
 
@@ -1881,7 +2142,7 @@ p {
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgba(251, 245, 234, 0.75);
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
   z-index: 40;
   /* 從快取讀通常一下子就好，慢了才顯示，避免每次開啟都閃一下 */
   animation: boot-in 0.2s 0.3s both;

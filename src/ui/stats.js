@@ -1,7 +1,9 @@
 // 學習分析：整體概況、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
-import { accuracyOf, dailySeries, subjectStats, weakUnits } from '../analysis.js';
+import { accuracyOf, dailySeries, daysUntil, studyPlan, subjectStats, weakUnits } from '../analysis.js';
 import { DAY, mastery } from '../srs.js';
+import { GOALS } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
+import { unitKey } from '../units.js';
 
 const pct = (x) => (x === null ? '—' : `${Math.round(x * 100)}%`);
 const TRAIN_UNITS = 3;
@@ -38,6 +40,7 @@ export function initStats(ctx) {
     ];
     $('#stats-tiles').innerHTML = tiles.map(([v, k]) => `<div class="tile"><b>${v}</b><span>${k}</span></div>`).join('');
 
+    renderPlan(now, week);
     weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, limit: 5 });
     renderWeak();
 
@@ -55,6 +58,54 @@ export function initStats(ctx) {
       })
       .join('');
   }
+
+  /** 考前規劃：照目前步調考前能練到多少、全部練過一輪每天要做幾題 */
+  function renderPlan(now, week) {
+    const { cards, flags, settings } = ctx.state;
+    const left = daysUntil(settings.examDate, now);
+    $('#stats-plan').hidden = left <= 0;
+    if (left <= 0) return;
+    const selected = new Set(settings.subjects);
+    const off = new Set(settings.excludedUnits);
+    const pool = ctx.bank.filter((q) => selected.has(q.subject) && !off.has(unitKey(q.subject, q.topic)) && !flags[q.id]);
+    const practiced = pool.filter((q) => cards[q.id]).length;
+    // 這 7 天幾乎沒練的話，改用每日目標推估
+    const recent = week.reduce((a, d) => a + d.answered, 0) / 7;
+    const byGoal = recent < 1;
+    const p = studyPlan({ total: pool.length, practiced, daysLeft: left, pace: byGoal ? settings.goal : recent, goals: GOALS });
+    const n = (x) => x.toLocaleString('zh-TW');
+    const goalBtn = $('#plan-goal');
+    goalBtn.hidden = true;
+
+    if (!pool.length) {
+      $('#plan-text').textContent = '先在首頁選要練的科目。';
+    } else if (!p.remaining) {
+      $('#plan-text').textContent = `距學測 ${left} 天。選的範圍 ${n(pool.length)} 題已經全部練過了！接下來靠錯題複習和弱點加強，把還不熟的練到熟。`;
+    } else {
+      const pace = byGoal ? `照每日目標 ${settings.goal} 題` : `照近 7 天每天約 ${Math.round(recent)} 題`;
+      $('#plan-text').textContent =
+        `距學測 ${left} 天，選的範圍有 ${n(pool.length)} 題，已練過 ${n(practiced)} 題。${pace}的步調，考前大約能再練到 ${n(p.projected)} 題新題。` +
+        `想在考前全部練過一輪，每天要做約 ${n(p.needDaily)} 題（新題、複習大約各半）。` +
+        (p.suggest === null ? '題目太多的話，先在首頁的「單元」挑重點，或用弱點加強集中火力。' : '');
+      if (p.suggest !== null && p.suggest > settings.goal) {
+        goalBtn.hidden = false;
+        goalBtn.textContent = `把每日目標改成 ${p.suggest} 題`;
+        goalBtn.dataset.goal = String(p.suggest);
+      }
+    }
+    const done = Math.round(p.coverage * 100);
+    const proj = Math.round(p.projectedCoverage * 100);
+    $('#plan-done').style.width = `${p.coverage * 100}%`;
+    $('#plan-proj').style.width = `${(p.projectedCoverage - p.coverage) * 100}%`;
+    $('#plan-legend').textContent = p.remaining ? `已練過 ${done}%・照這個步調考前約 ${proj}%` : '';
+  }
+
+  $('#plan-goal').addEventListener('click', (e) => {
+    ctx.state.settings.goal = Number(e.currentTarget.dataset.goal);
+    ctx.save();
+    render();
+    ctx.toast(`每日目標改成 ${ctx.state.settings.goal} 題`);
+  });
 
   function renderWeak() {
     const list = $('#stats-weak');

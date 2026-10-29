@@ -19,6 +19,8 @@ export function freshState() {
     // 線上同步（cloud.js）；沒開過就是 null
     cloud: null,
     // scratch：平板上草稿區要不要展開（手機上一律收起）
+    // theme：auto（跟著系統）／light／dark；fontScale：字體大小倍率
+    // reminder：每日提醒，hour 是當地時間幾點（推播訂閱存在同步後端，見 ui/reminder.js）
     settings: {
       subjects: SUBJECTS.map((s) => s.id),
       excludedUnits: [],
@@ -26,6 +28,9 @@ export function freshState() {
       sound: false,
       scratch: true,
       examDate: DEFAULT_EXAM_DATE,
+      theme: 'auto',
+      fontScale: 1,
+      reminder: { on: false, hour: 20 },
     },
   };
 }

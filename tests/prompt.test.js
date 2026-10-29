@@ -48,4 +48,12 @@ describe('questionPrompt', () => {
     expect(text).toContain('正確答案：錯誤');
     expect(text).toContain('我不會這題');
   });
+
+  it('從錯題本複製：沒有當時的答案，附上正解與解析', () => {
+    const text = questionPrompt(mc, { outcome: 'review' });
+    expect(text).not.toContain('我的答案');
+    expect(text).toContain('正確答案：(A) $\\frac{1}{2}$');
+    expect(text).toContain(mc.explain);
+    expect(text).toContain('之前答錯過');
+  });
 });

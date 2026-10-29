@@ -42,6 +42,7 @@ export function initPlay(ctx) {
     flag: $('#flag'),
     copy: $('#copy-q'),
     related: $('#related'),
+    more: $('#card-more'),
   };
   const byId = new Map(ctx.bank.map((x) => [x.id, x]));
 
@@ -56,14 +57,14 @@ export function initPlay(ctx) {
 
   /**
    * 依目前選的單元組一批題目。被回報的題目一律先不出。
-   * @param {{ subjects?: string[], units?: string[] | null, exclude?: string[] }} [opts]
-   *   units：只出這些單元（弱點加強用）；exclude：這批先不出的題目 id
+   * @param {{ subjects?: string[], units?: string[] | null, exclude?: string[], allUnits?: boolean }} [opts]
+   *   units：只出這些單元（弱點加強用）；exclude：這批先不出的題目 id；allUnits：不管首頁關掉的單元（錯題本用）
    */
-  function queueFor(mode, { subjects = ctx.state.settings.subjects, units = null, exclude = [] } = {}) {
+  function queueFor(mode, { subjects = ctx.state.settings.subjects, units = null, exclude = [], allUnits = false } = {}) {
     const cfg = MODES[mode];
     return buildQueue(ctx.bank, ctx.state.cards, {
       subjects,
-      excludedUnits: ctx.state.settings.excludedUnits,
+      excludedUnits: allUnits ? [] : ctx.state.settings.excludedUnits,
       onlyUnits: units,
       exclude: [...exclude, ...Object.keys(ctx.state.flags)],
       formulaOnly: cfg.formulaOnly,
@@ -82,8 +83,9 @@ export function initPlay(ctx) {
 
   /**
    * @param {string} mode
-   * @param {{ units?: string[], seeds?: string[] }} [opts]
-   *   units：指定要練的單元（從學習分析點單元進來時）；seeds：錯題延伸要從哪幾題錯題找類似題
+   * @param {{ units?: string[], seeds?: string[], subjects?: string[] }} [opts]
+   *   units：指定要練的單元（從學習分析點單元進來時）；seeds：錯題延伸要從哪幾題錯題找類似題；
+   *   subjects：只出這幾科、而且不管首頁關掉的單元（從錯題本進來時）
    */
   ctx.startRound = (mode, opts = {}) => {
     let units = opts.units ?? null;
@@ -101,7 +103,7 @@ export function initPlay(ctx) {
             size: MODES.related.size,
             exclude: avoidIds(Date.now()),
           })
-        : queueFor(mode, { units });
+        : queueFor(mode, opts.subjects ? { units, subjects: opts.subjects, allUnits: true } : { units });
     if (!queue.length && mode === 'formula') {
       queue = queueFor(mode, { subjects: SUBJECTS.map((x) => x.id) });
       if (queue.length) ctx.toast('選的科目沒有公式題，改出全部科目的公式題');
@@ -166,6 +168,7 @@ export function initPlay(ctx) {
     resetCardDrag();
     restartAnimation(el.card, 'enter');
     renderAnswers();
+    fitCard();
     ctx.scratch.newPage();
     ctx.world.setFocusSubject(q.subject);
     if (s.timeLeft !== null) renderTimer();
@@ -184,6 +187,29 @@ export function initPlay(ctx) {
     el.answers.className = `answers mc${short ? ' grid-2' : ''}`;
     order.forEach((orig, i) => el.answers.append(answerButton(richHTML(q.choices[orig]), i, String(i + 1), true)));
   }
+
+  // ── 小螢幕：題目卡放不下 ─────────────────────────────
+  // 先把題目字縮小一級；還是放不下就在卡片底部提示「往下還有」，免得沒看完題目就作答
+  function overflowing() {
+    return el.card.scrollHeight - el.card.clientHeight > 2;
+  }
+
+  function fitCard() {
+    el.card.scrollTop = 0;
+    el.text.classList.remove('compact');
+    if (overflowing()) el.text.classList.add('compact');
+    updateMore();
+  }
+
+  function updateMore() {
+    el.more.hidden = el.card.scrollHeight - el.card.clientHeight - el.card.scrollTop <= 6;
+  }
+
+  el.card.addEventListener('scroll', updateMore, { passive: true });
+  window.addEventListener('resize', () => {
+    if (q && !$('#play').hidden) updateMore();
+  });
+  el.more.addEventListener('click', () => el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: 'smooth' }));
 
   function answerButton(label, value, key, isHTML = false) {
     const btn = document.createElement('button');
@@ -224,11 +250,16 @@ export function initPlay(ctx) {
     if (before < goal && today(ctx.state, now).answered >= goal) ctx.toast(`今日 ${goal} 題目標達成！`);
 
     const correctValue = q.type === 'mc' ? order.indexOf(q.answer) : q.answer;
+    // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯
     for (const b of el.answers.children) {
       b.disabled = true;
-      if (b._value === correctValue) b.classList.add('correct');
-      else if (b._value === displayValue) b.classList.add('wrong');
-      else b.classList.add('dim');
+      if (b._value === correctValue) {
+        b.classList.add('correct');
+        b.insertAdjacentHTML('beforeend', icon('ok', 'mark'));
+      } else if (b._value === displayValue) {
+        b.classList.add('wrong');
+        b.insertAdjacentHTML('beforeend', icon('ng', 'mark'));
+      } else b.classList.add('dim');
     }
     el.score.textContent = s.score;
     renderCombo();
@@ -257,6 +288,7 @@ export function initPlay(ctx) {
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
     el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    updateMore();
     el.skip.hidden = true;
     // 答錯或不會：可以馬上再練幾題同單元的類似題（快閃模式在計時，不打斷）
     pendingRelated =

@@ -20,3 +20,11 @@ simple = { limit = 60, period = 60 }
 name = "CREATE_LIMIT"
 namespace_id = "1002"
 simple = { limit = 5, period = 60 }
+
+# 每日提醒：每個整點檢查一次該提醒誰（push.js）
+[triggers]
+crons = ["0 * * * *"]
+
+# VAPID 公鑰（前端訂閱時也要用，見 src/ui/reminder.js）；私鑰是 secret：npx wrangler@4 secret put VAPID_PRIVATE_JWK
+[vars]
+VAPID_PUBLIC = "BIbHHfAs_Zww6eLeI2EH4WkZUj-YBsSgwcqL3sFrXRDmiwDqjuJONY4qtcqssfofzR5cS0lU7PzBOqbhITgSQhE"

@@ -1,5 +1,8 @@
 // 每日作答量與連續天數。日期一律用裝置的本地時間。
 
+/** 每日目標可以選的題數 */
+export const GOALS = [10, 20, 30, 50, 80, 120];
+
 export function dayKey(ts) {
   const d = new Date(ts);
   const mm = String(d.getMonth() + 1).padStart(2, '0');

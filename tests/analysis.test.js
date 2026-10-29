@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { accuracyOf, dailySeries, daysUntil, subjectStats, weakUnits } from '../src/analysis.js';
+import { accuracyOf, dailySeries, daysUntil, studyPlan, subjectStats, weakUnits } from '../src/analysis.js';
+import { GOALS } from '../src/stats.js';
 import { UNITS } from '../src/units.js';
 
 const [U1, U2, U3] = UNITS.math;
@@ -45,5 +46,21 @@ describe('統計', () => {
     expect(daysUntil('2026-10-29', now)).toBe(1);
     expect(daysUntil('2026-10-28', now)).toBe(0);
     expect(daysUntil('2027-01-22', now)).toBe(86);
+  });
+});
+
+describe('studyPlan', () => {
+  it('照目前步調推估考前能練到多少，並算出全部練完一輪每天要做幾題', () => {
+    const p = studyPlan({ total: 1000, practiced: 200, daysLeft: 40, pace: 30, goals: GOALS });
+    // 每天 30 題、新題占一半 → 40 天 600 題新題
+    expect(p).toMatchObject({ remaining: 800, projected: 600, coverage: 0.2, projectedCoverage: 0.8 });
+    // 剩 800 題、40 天、新題占一半 → 每天 40 題，建議目標 50
+    expect(p.needDaily).toBe(40);
+    expect(p.suggest).toBe(50);
+  });
+
+  it('題目太多時沒有夠用的目標；已經全部練過就不用再加量', () => {
+    expect(studyPlan({ total: 10000, practiced: 0, daysLeft: 30, pace: 0, goals: GOALS })).toMatchObject({ projected: 0, needDaily: 667, suggest: null });
+    expect(studyPlan({ total: 500, practiced: 500, daysLeft: 10, pace: 30, goals: GOALS })).toMatchObject({ remaining: 0, needDaily: 0, suggest: 10 });
   });
 });

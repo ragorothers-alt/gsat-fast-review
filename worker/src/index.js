@@ -2,6 +2,8 @@
 // 同步碼就是鑰匙（不用帳號）：資料庫只存它的 SHA-256。
 // 合併規則與前端 src/sync.js 相同：作答排程以較晚作答的為準、次數取較大值；回報以較晚的動作為準；
 // 每日作答量每台裝置各記一份（相加），開始同步前的舊紀錄取較大值。
+// 另外負責每日提醒的推播（push.js），每小時由 Cron 觸發。
+import { PushError, progress, sendReminders, subscribe, unsubscribe } from './push.js';
 
 /** 同步碼字元：Crockford Base32（去掉 I、L、O、U），16 碼 = 80 bits */
 const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
@@ -50,11 +52,18 @@ export default {
       if (pathname === '/v1/create') return json(await create(env.DB));
       if (pathname === '/v1/sync') return await sync(env.DB, body);
       if (pathname === '/v1/delete') return json(await remove(env.DB, body));
+      if (pathname === '/v1/push/subscribe') return json(await subscribe(env.DB, body, Date.now()));
+      if (pathname === '/v1/push/unsubscribe') return json(await unsubscribe(env.DB, body));
+      if (pathname === '/v1/push/progress') return json(await progress(env.DB, body, Date.now()));
       throw new HttpError(404, 'not found');
     } catch (e) {
-      if (e instanceof HttpError) return json({ error: e.message }, e.status);
+      if (e instanceof HttpError || e instanceof PushError) return json({ error: e.message }, e.status);
       throw e;
     }
+  },
+
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(sendReminders(env, event.scheduledTime));
   },
 };
 

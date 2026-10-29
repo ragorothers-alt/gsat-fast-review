@@ -143,8 +143,8 @@ function heart() {
   return pts;
 }
 const EMOTES = {
-  heart: (p) => p.shape(heart(), '#f47b8e', 0.09),
-  sweat: (p) => p.shape(spline([[0, 0.5], [0.24, 0.02], [0.2, -0.3], [0, -0.4], [-0.2, -0.3], [-0.24, 0.02]], { closed: true, n: 36 }), '#a8d8f0', 0.09),
+  heart: (p) => p.shape(heart(), '#f47b8e', 0.09, { edge: true }),
+  sweat: (p) => p.shape(spline([[0, 0.5], [0.24, 0.02], [0.2, -0.3], [0, -0.4], [-0.2, -0.3], [-0.24, 0.02]], { closed: true, n: 36 }), '#a8d8f0', 0.09, { edge: true }),
   question: (p) => {
     p.stroke(spline([[-0.22, 0.24], [-0.1, 0.42], [0.12, 0.42], [0.22, 0.25], [0.12, 0.08], [0, -0.02], [0, -0.14]], { n: 30 }), INK, 0.12, { cap: true });
     p.fill(ellipse(0, -0.36, 0.08, 0.08, 16), INK);
@@ -173,7 +173,7 @@ function sharedEmotes() {
       }),
     );
     const zGeo = new Part().stroke(Z_GLYPH, '#8a7b70', 0.13, { taper: 0, pressure: 0.2 }).geometry();
-    shared = { emoteGeo, zGeo, emoteMat: inkMaterial({ amp: 0.04, seed: 9 }) };
+    shared = { emoteGeo, zGeo, emoteMat: inkMaterial({ amp: 0.04, seed: 9, allEdge: true }) };
   }
   return shared;
 }
@@ -189,7 +189,7 @@ function tailGeometry(furHex) {
   const part = new Part();
   // 先放一條佔位的直線，頂點位置之後每幀覆寫
   const line = seg([0, 0], [TAIL_LEN, 0], TAIL_N);
-  part.add(strokeGeometry(line, TAIL_W + LINE * 2, { taper: 0, cap: true, pressure: 0 }), INK);
+  part.add(strokeGeometry(line, TAIL_W + LINE * 2, { taper: 0, cap: true, pressure: 0 }), INK, 0, 0, true);
   part.add(strokeGeometry(line, TAIL_W, { taper: 0, cap: true, pressure: 0 }), furHex);
   const g = part.geometry();
   g.attributes.position.setUsage(THREE.DynamicDrawUsage);
@@ -226,7 +226,7 @@ export class Cat {
     body.fill(BODY, b.fur);
     if (b.chest) body.fill(ellipse(0, 0.22, 0.13, 0.15, 32), b.chest);
     b.body?.(body);
-    body.stroke(BODY, INK, LINE, { closed: true, seed: index });
+    body.stroke(BODY, INK, LINE, { closed: true, seed: index, edge: true });
     for (const s of [-1, 1]) {
       const paw = ellipse(0.1 * s, 0.04, 0.075, 0.05, 24);
       body.shape(paw, b.paws || b.point || b.fur, LINE * 0.85);
@@ -246,7 +246,7 @@ export class Cat {
     head.fill(INNER_EAR_R, PINK).fill(mirrorX(INNER_EAR_R), PINK);
     b.head?.(head);
     head.fill(ellipse(-0.205, 0.55, 0.05, 0.026, 20), BLUSH).fill(ellipse(0.205, 0.55, 0.05, 0.026, 20), BLUSH);
-    head.stroke(HEAD, INK, LINE, { closed: true, seed: index + 3 });
+    head.stroke(HEAD, INK, LINE, { closed: true, seed: index + 3, edge: true });
     const whisker = b.faceInk || INK;
     for (const w of WHISKERS_R) head.stroke(w, whisker, 0.011, { taper: 0.5 }).stroke(mirrorX(w), whisker, 0.011, { taper: 0.5 });
     head.shape(NOSE, PINK, 0.012);

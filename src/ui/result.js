@@ -1,11 +1,10 @@
 // 結算畫面：分數、正確率、這輪要再看一眼的題目
-import { SUBJECT_BY_ID } from '../subjects.js';
 import { MODES } from '../session.js';
 import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
 import { setFlag } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
-import { icon } from './icons.js';
+import { reviewItem, tfLabel } from './review-item.js';
 import { richHTML } from './rich.js';
 import { sfx } from './feedback.js';
 
@@ -35,7 +34,7 @@ export function initResult(ctx) {
 
     misses = s.log.filter((e) => e.outcome !== 'right');
     $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題';
-    $('#r-list').innerHTML = misses.map((e, i) => reviewItem(byId.get(e.id), e, i, !!ctx.state.flags[e.id])).join('');
+    $('#r-list').innerHTML = misses.map((e, i) => reviewItem(byId.get(e.id), { index: i, flagged: !!ctx.state.flags[e.id], note: mine(byId.get(e.id), e) })).join('');
     $('#r-related').hidden = !misses.length;
 
     // 這輪出現最多的科目，牠們的貓會趴在成績卡上
@@ -48,12 +47,17 @@ export function initResult(ctx) {
     ctx.show('result');
     sfx.finish();
     ctx.cloudSync?.();
+    ctx.reminder?.sync();
     if (record || (answered && !misses.length)) ctx.world.celebrate();
   };
 
   $('#r-again').addEventListener('click', () => ctx.startRound(last.mode, last.opts));
   $('#r-related').addEventListener('click', () => ctx.startRound('related', { seeds: misses.map((e) => e.id) }));
-  $('#r-home').addEventListener('click', () => ctx.goHome());
+  $('#r-home').addEventListener('click', () => {
+    ctx.goHome();
+    // iPhone 沒加入主畫面的話，練完一輪回到首頁時提醒一次
+    ctx.install?.nudge();
+  });
 
   // 錯題清單裡也能複製題目、回報題目
   $('#r-list').addEventListener('click', (e) => {
@@ -74,20 +78,10 @@ export function initResult(ctx) {
   });
 }
 
-function reviewItem(q, entry, index, flagged) {
-  const subj = SUBJECT_BY_ID[q.subject];
-  const tf = (v) => (v ? `${icon('ok')}對` : `${icon('ng')}錯`);
-  const answer = q.type === 'tf' ? tf(q.answer) : richHTML(q.choices[q.answer]);
-  const mine =
-    entry.outcome === 'skip'
-      ? '<span class="r-mine skip">看了解答</span>'
-      : `<span class="r-mine">你選：${q.type === 'tf' ? tf(entry.chosen) : richHTML(q.choices[entry.chosen])}</span>`;
-  return `<li class="r-item" style="--c:${subj.color}">
-    <div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${q.topic}</span><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
-    <div class="r-q">${richHTML(q.q)}</div>
-    <div class="r-ans">${mine}<span class="r-right">正解：${answer}</span></div>
-    <div class="r-explain">${richHTML(q.explain)}</div>
-  </li>`;
+/** 這一題你選了什麼 */
+function mine(q, entry) {
+  if (entry.outcome === 'skip') return '<span class="r-mine skip">看了解答</span>';
+  return `<span class="r-mine">你選：${q.type === 'tf' ? tfLabel(entry.chosen) : richHTML(q.choices[entry.chosen])}</span>`;
 }
 
 function cheer(s, answered) {

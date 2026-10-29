@@ -49,6 +49,8 @@ export function initHome(ctx) {
 
   const settingsSheet = initSettings(ctx, () => render());
   $('#open-settings').addEventListener('click', () => settingsSheet.open());
+  ctx.openSettings = (section) => settingsSheet.open(section);
+  $('#open-notebook').addEventListener('click', () => ctx.showNotebook());
   $('#daily').addEventListener('click', () => ctx.showStats());
 
   document.querySelectorAll('#home [data-mode]').forEach((btn) => {

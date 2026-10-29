@@ -88,3 +88,28 @@ export function daysUntil(date, now) {
   const today = new Date(t.getFullYear(), t.getMonth(), t.getDate()).getTime();
   return Math.round((new Date(y, m - 1, d).getTime() - today) / 86_400_000);
 }
+
+/** 每天作答的題目裡，新題大約占一半（出題時到期的複習題與新題交錯，見 srs.js 的 buildQueue） */
+export const NEW_SHARE = 0.5;
+
+/**
+ * 考前規劃：照目前的步調，考前能把選的範圍練過多少；想全部練過一輪，每天要做幾題。
+ * @param {{ total: number, practiced: number, daysLeft: number, pace: number, goals: number[] }} opts
+ *   total：選的範圍有幾題；practiced：其中練過幾題；pace：近來平均每天作答幾題
+ * @returns {{ remaining: number, projected: number, coverage: number, projectedCoverage: number, needDaily: number, suggest: number | null }}
+ *   projected：照目前步調，考前還能練到的新題數；suggest：建議的每日目標（選項裡最小夠用的；不夠用時為 null）
+ */
+export function studyPlan({ total, practiced, daysLeft, pace, goals }) {
+  const remaining = Math.max(0, total - practiced);
+  const days = Math.max(1, daysLeft);
+  const projected = Math.min(remaining, Math.round(days * pace * NEW_SHARE));
+  const needDaily = remaining ? Math.ceil(remaining / days / NEW_SHARE) : 0;
+  return {
+    remaining,
+    projected,
+    coverage: total ? practiced / total : 0,
+    projectedCoverage: total ? (practiced + projected) / total : 0,
+    needDaily,
+    suggest: goals.find((g) => g >= needDaily) ?? null,
+  };
+}

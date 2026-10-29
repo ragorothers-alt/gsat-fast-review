@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { Part, ellipse, inkMaterial, spline } from './ink.js';
 
 const COLOR = '#ddcfb8';
+const NIGHT_COLOR = '#3c4743'; // 夜間：黑板上淡淡的粉筆灰
 const W = 0.075;
 
 /** 折線：每段補點，轉角才不會被平滑掉 */
@@ -111,7 +112,7 @@ const SHAPES = [
 ];
 
 export function createDoodles(scene) {
-  const material = inkMaterial({ amp: 0.035, seed: 5 });
+  const material = inkMaterial({ amp: 0.035, seed: 5, nightFlat: NIGHT_COLOR });
   const geos = SHAPES.map((draw) => {
     const p = new Part();
     draw(p);
