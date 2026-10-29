@@ -2234,6 +2234,15 @@ p {
   .answer { min-height: 48px; }
   .answers.tf .answer { min-height: 62px; }
   .card-wrap { padding-top: 30px; }
+  /* 選項按鈕排緊一點，把高度留給題目卡 */
+  .answers { gap: 8px; }
+  .answers.mc .answer {
+    min-height: 44px;
+    padding: 6px 12px;
+    font-size: calc(0.98rem * var(--fs, 1));
+    line-height: 1.38;
+  }
+  .card { padding: 14px 15px 16px; }
 }
 
 @media (max-width: 480px) {
