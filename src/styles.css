@@ -174,11 +174,34 @@ p {
 .icon-btn {
   width: 40px;
   height: 40px;
+  display: grid;
+  place-items: center;
   border-radius: var(--hand-sm);
   background: var(--card);
   border: 1.5px solid var(--ink);
   font-size: 1.05rem;
   flex: none;
+}
+
+/* 手繪小圖示（index.html 開頭的 sprite）：大小跟著文字，墨線跟著文字顏色 */
+.ico {
+  width: 1.2em;
+  height: 1.2em;
+  flex: none;
+  margin-right: 0.28em;
+  vertical-align: -0.25em;
+  overflow: visible;
+}
+
+.ico-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-btn .ico,
+.copy-btn .ico,
+.flag-btn .ico {
+  margin: 0;
 }
 
 .daily {
@@ -1370,16 +1393,13 @@ p {
   width: 36px;
   height: 30px;
   flex: none;
+  display: grid;
+  place-items: center;
   border-radius: 9px 10px 8px 11px;
   border: 1.5px solid transparent;
-  font-size: 0.9rem;
-  opacity: 0.35;
-  filter: grayscale(1);
-  transition: opacity 0.2s, filter 0.2s;
-}
-
-.copy-btn {
-  opacity: 0.6;
+  font-size: 1rem;
+  color: var(--muted);
+  transition: color 0.2s, background 0.2s;
 }
 
 .copy-btn + .flag-btn {
@@ -1387,18 +1407,15 @@ p {
 }
 
 .copy-btn:hover,
-.flag-btn:hover {
-  opacity: 0.8;
-}
-
+.flag-btn:hover,
 .copy-btn:active {
-  opacity: 1;
-  filter: none;
+  color: var(--ink);
 }
 
+/* 回報中：旗面塗紅 */
 .flag-btn[aria-pressed='true'] {
-  opacity: 1;
-  filter: none;
+  color: var(--bad);
+  --flag-fill: var(--bad);
   background: var(--bad-bg);
   border-color: var(--bad);
 }
@@ -1627,7 +1644,8 @@ p {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  padding: 6px 2px 8px;
+  /* 右、下多留一點，按鈕的立體陰影（3px）才不會被捲動區切掉 */
+  padding: 6px 5px 10px 2px;
 }
 
 .set-group h3 small {

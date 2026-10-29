@@ -15,6 +15,65 @@
     <title>學測快問快答</title>
   </head>
   <body>
+    <!-- 手繪小圖示（src/ui/icons.js 產生引用）：描邊跟著文字顏色，填色是固定的色票 -->
+    <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden">
+      <symbol id="i-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11.9 2.5C12.9 6.3 16.6 6.3 16.1 10.1Q17.8 9.9 18.6 8.5C21.3 12.5 21.1 17.5 17.7 20.1C14.7 22.2 9.3 21.8 6.7 19.2C3.6 16.3 4.7 12.7 7.2 9.8Q7.6 12.1 9 12.9C8.1 8.4 10 4.6 11.9 2.5Z" fill="#f0705f"/>
+        <path d="M12.1 12.2C12.9 14.1 15.2 14.6 15.2 16.8C15.4 18.5 14 19.7 12 19.5C10.1 19.5 8.9 18.2 9.8 16.6C10.5 15.2 11.8 14.4 12.1 12.2Z" fill="#f2b632" stroke-width="1.6"/>
+      </symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9.6 2.8L14.1 2.9L14.6 5.3Q15.6 5.6 16.5 6.5L18.9 5.9L21 9.6L19.1 11.2Q19.2 12.1 19 13.2L20.9 14.8L18.7 18.4L16.4 17.5Q15.5 18.3 14.5 18.6L14.1 21L9.8 21.1L9.2 18.6Q8.2 18.2 7.4 17.5L5 18.2L2.9 14.5L4.9 13Q4.7 11.9 4.9 10.9L3.1 9.3L5.3 5.7L7.5 6.5Q8.4 5.7 9.4 5.3Z" fill="#fffdf8"/>
+        <path d="M14.9 11.9C15.1 13.7 13.7 15.1 12 15C10.2 15 8.9 13.8 9.1 12C9 10.3 10.3 9 12.1 9.1C13.8 9 15 10.3 14.9 11.9Z"/>
+      </symbol>
+      <symbol id="i-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M13.155 3.09C13.65 2.43 14.64 2.925 14.31 4.08L13.485 8.7H18.93C20.085 8.7 20.415 9.69 19.59 10.515L10.02 20.745C9.195 21.57 7.875 21.075 8.37 19.755L9.69 13.98L5.235 14.145C4.08 14.145 3.75 13.155 4.575 12.165Z" fill="#f2b632"/>
+      </symbol>
+      <symbol id="i-paw" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M3.5 6.8C5.1 6.1 6.8 8.1 6.9 9.8C7.2 11.3 6.2 12.4 4.9 11.9C3.3 11.5 1.9 7.7 3.5 6.8Z"/>
+        <path d="M8.1 2.9C10 2.3 11.3 4.5 11.1 6.2C11.1 8 9.6 9.2 8.3 8.1C6.9 7 6.3 3.6 8.1 2.9Z"/>
+        <path d="M15.4 2.8C17.3 3.1 17.2 5.9 16.2 7.3C15.4 8.8 13.6 9.1 13.1 7.4C12.5 5.8 13.6 2.4 15.4 2.8Z"/>
+        <path d="M20.6 6.9C22.4 7.7 21.2 10.4 20 11.4C18.8 12.6 17.1 12.1 17.3 10.6C17.5 8.9 19.1 6.2 20.6 6.9Z"/>
+        <path d="M11.9 10.6C9.6 10.4 8.9 12.9 6.8 15C4.4 17.4 6.1 21.5 9.1 21Q11.9 19.7 14.8 20.9C17.6 21.8 20 19.1 18.5 16.5C17.5 14.7 15.7 13 14.7 11.6Q13.6 10.3 11.9 10.6Z"/>
+      </symbol>
+      <symbol id="i-pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.3 14.5L14.9 5.9L18.2 9.2L9.7 18Z" fill="#f2b632"/>
+        <path d="M14.9 5.9L17.6 3.2Q18.7 2.1 20 3.4L20.5 3.9Q21.8 5.1 20.6 6.3L18.2 9.2Z" fill="#f7a5a0"/>
+        <path d="M6.3 14.5L9.7 18L3.2 20.9Z" fill="#f7d9a8"/>
+        <path d="M4.5 17.4L6.7 19.4L3.2 20.9Z" fill="currentColor" stroke="none"/>
+        <path d="M8.1 15.5Q11.7 11.6 15.7 7.9" stroke-width="1.6"/>
+      </symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8.3 4.8L6.7 4.9Q4.6 4.8 4.8 7L4.9 19.2Q4.9 21.4 7 21.3L17.3 21.1Q19.3 21.1 19.2 19.1L19.1 6.9Q19.1 4.8 17.1 4.8L15.3 4.8Z" fill="#fffdf8"/>
+        <path d="M9.2 4Q9.1 2.5 10.9 2.5L12.7 2.6Q14.4 2.6 14.3 4L15.4 4.1L15.3 7L8.2 6.9L8.3 4Z" fill="#fffdf8" stroke-width="1.8"/>
+        <path d="M8.4 10.6Q12 10.4 15.8 10.6M8.3 14Q12 14.2 15.7 14M8.5 17.5L13 17.4" stroke-width="1.6"/>
+      </symbol>
+      <symbol id="i-flag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5.2 4C9.4 1.8 13.8 6.3 19.3 3.7L18.9 12.1C13.8 14.6 9.5 9.5 5.2 11.8Z" fill="var(--flag-fill, none)"/>
+        <path d="M5.1 2.7Q4.9 12 5.4 21.3"/>
+      </symbol>
+      <symbol id="i-loop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3.6 9.2C4.9 3.8 11.8 1.7 16.9 4.8Q19.2 6.2 20.2 8.7M20.1 3.8L20.4 8.9L15.4 8.7M20.4 14.8C19.1 20.2 12.3 22.3 7.2 19.2Q4.8 17.8 3.8 15.3M3.9 20.1L3.6 15.1L8.5 15.3"/>
+      </symbol>
+      <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9.1 16.7C9 14.8 6.6 13.8 6.4 10.7C5.8 3.4 17.7 3.2 17.5 10.4C17.7 13.6 15 14.6 14.8 16.7Z" fill="#fff1b8"/>
+        <path d="M10.3 11.9L12 13.5L13.7 11.7M12 13.5L12.1 16.5" stroke-width="1.6"/>
+        <path d="M9.2 19.1L14.6 19M10.3 21.3Q12 21.7 13.6 21.3" stroke-width="1.8"/>
+        <path d="M11.9 2.4L12 3M2.7 8.1L3.9 8.5M20.1 8.4L21.3 7.9" stroke-width="1.8"/>
+      </symbol>
+      <symbol id="i-ok" viewBox="0 0 24 24" fill="none" stroke="#2f9e5b" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 4.2C12.7 1.9 6.6 3.5 4 7.7C1.7 11.9 3.3 18.2 8.2 20.2C13.5 22.4 19.7 19.5 20.7 14.2C21.6 9.6 18.9 5.3 14.8 3.7"/>
+      </symbol>
+      <symbol id="i-ng" viewBox="0 0 24 24" fill="none" stroke="#d9473c" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 4.7C9.1 8.6 14.5 14.9 19.2 19.3M19 4.9C14.9 9.3 9.2 14.5 4.8 19.1"/>
+      </symbol>
+      <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6.9 5.6L3 5.5L3.2 8.4Q3.4 12 8 12M17.1 5.6L20.9 5.4L20.8 8.2Q20.4 11.9 16.1 12"/>
+        <path d="M6.7 3.1L17.4 3.2L16.9 9.6C16.6 13 14.9 15 12.2 15C9.1 14.9 7.3 12.9 7 9.6Z" fill="#f2b632"/>
+        <path d="M12.1 15.1Q11.8 17 12 18.8"/>
+        <path d="M8.5 18.9L15.4 18.8Q16.3 18.8 16.5 19.7L16.6 21.2L7.3 21.2L7.5 19.8Q7.6 19 8.5 18.9Z" fill="#f2b632"/>
+      </symbol>
+    </svg>
+
     <canvas id="world" aria-hidden="true"></canvas>
     <div id="flash" aria-hidden="true"></div>
 
@@ -30,8 +89,8 @@
             </div>
           </div>
           <div class="top-actions">
-            <span class="pill" id="streak" title="連續練習天數">🔥 <b>0</b> 天</span>
-            <button id="open-settings" class="icon-btn" type="button" aria-label="設定">⚙️</button>
+            <span class="pill" id="streak" title="連續練習天數"><svg class="ico" aria-hidden="true"><use href="#i-flame"/></svg><b>0</b> 天</span>
+            <button id="open-settings" class="icon-btn" type="button" aria-label="設定"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-gear"/></svg></button>
           </div>
         </header>
 
@@ -65,11 +124,11 @@
         <nav class="modes" aria-label="遊戲模式">
           <div class="mode-pair">
             <button class="mode primary" type="button" data-mode="blitz">
-              <span class="mode-title">⚡ 60 秒快閃</span>
+              <span class="mode-title"><svg class="ico" aria-hidden="true"><use href="#i-bolt"/></svg>60 秒快閃</span>
               <span class="mode-sub">最高 <b id="best-blitz">0</b> 分</span>
             </button>
             <button class="mode free" type="button" data-mode="free">
-              <span class="mode-title">🐾 自由練習</span>
+              <span class="mode-title"><svg class="ico" aria-hidden="true"><use href="#i-paw"/></svg>自由練習</span>
               <span class="mode-sub">不限時・想停就停</span>
             </button>
           </div>
@@ -102,7 +161,7 @@
           <span id="play-progress" class="play-progress"></span>
           <span id="combo" class="combo" hidden></span>
           <span class="score"><span id="score">0</span><span id="score-pop" class="score-pop"></span></span>
-          <button id="scratch-toggle" class="icon-btn" type="button" aria-label="草稿區" aria-pressed="false">✏️</button>
+          <button id="scratch-toggle" class="icon-btn" type="button" aria-label="草稿區" aria-pressed="false"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-pencil"/></svg></button>
         </header>
         <div class="timer" id="timer" hidden><i id="timer-fill"></i></div>
 
@@ -111,25 +170,25 @@
             <div class="card-tag">
               <span id="q-subject" class="tag"></span>
               <span id="q-topic" class="topic"></span>
-              <button id="copy-q" class="copy-btn" type="button" aria-label="複製題目（可以貼給 ChatGPT 問）" title="複製題目，貼給 ChatGPT 問">📋</button>
-              <button id="flag" class="flag-btn" type="button" aria-pressed="false" aria-label="回報這題有問題" title="這題怪怪的？">🚩</button>
+              <button id="copy-q" class="copy-btn" type="button" aria-label="複製題目（可以貼給 ChatGPT 問）" title="複製題目，貼給 ChatGPT 問"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg></button>
+              <button id="flag" class="flag-btn" type="button" aria-pressed="false" aria-label="回報這題有問題" title="這題怪怪的？"><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg></button>
             </div>
             <div id="q-text" class="q-text"></div>
             <div id="q-explain" class="explain" hidden></div>
             <p class="tf-hint" aria-hidden="true">← 左滑錯　・　右滑對 →</p>
-            <div class="swipe-hint swipe-yes" aria-hidden="true">⭕ 對</div>
-            <div class="swipe-hint swipe-no" aria-hidden="true">❌ 錯</div>
+            <div class="swipe-hint swipe-yes" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ok"/></svg>對</div>
+            <div class="swipe-hint swipe-no" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ng"/></svg>錯</div>
           </article>
         </div>
 
         <div id="answers" class="answers"></div>
         <footer class="play-foot">
           <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
-          <button id="related" class="related-btn" type="button" hidden title="接著練 3 題同單元的類似題">🔁 練 3 題類似題</button>
+          <button id="related" class="related-btn" type="button" hidden title="接著練 3 題同單元的類似題"><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg>練 3 題類似題</button>
           <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
         </footer>
 
-        <!-- 草稿區：平板上常駐，手機上按 ✏️ 拉出來 -->
+        <!-- 草稿區：平板上常駐，手機上按鉛筆拉出來 -->
         <aside id="scratch" class="scratch" aria-label="草稿區">
           <div class="scratch-bar">
             <div class="scratch-tools" role="group" aria-label="筆">
@@ -154,7 +213,7 @@
           <header class="result-head">
             <p id="r-mode" class="r-mode"></p>
             <p id="r-big" class="r-big"></p>
-            <p id="r-badge" class="r-badge" hidden>🏆 新紀錄！</p>
+            <p id="r-badge" class="r-badge" hidden><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg>新紀錄！</p>
             <p id="r-cheer" class="r-cheer"></p>
             <div class="r-stats">
               <div><b id="r-acc"></b><span>正確率</span></div>
@@ -163,7 +222,7 @@
             </div>
           </header>
           <h2 id="r-review-title" class="r-title"></h2>
-          <button id="r-related" class="related-btn wide" type="button" hidden>🔁 用這些錯題找類似題來練</button>
+          <button id="r-related" class="related-btn wide" type="button" hidden><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg>用這些錯題找類似題來練</button>
           <ol id="r-list" class="r-list"></ol>
         </div>
         <nav class="result-actions">
@@ -284,7 +343,7 @@
 
           <section class="set-group">
             <h3>回報的題目<small id="flag-count"></small></h3>
-            <p class="set-note">作答時覺得題目有錯，按題目卡右上角的 🚩。回報的題目先不會再出，複製清單交給題庫維護者就能修正。</p>
+            <p class="set-note">作答時覺得題目有錯，按題目卡右上角的 <svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg>。回報的題目先不會再出，複製清單交給題庫維護者就能修正。</p>
             <ul id="flag-list" class="flag-list"></ul>
             <button id="copy-flags" class="secondary-btn" type="button">複製回報清單</button>
             <textarea id="flag-report" class="flag-report" readonly hidden aria-label="回報清單"></textarea>

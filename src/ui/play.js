@@ -8,6 +8,7 @@ import { relatedQuestions, relatedQueue } from '../related.js';
 import { recordAnswer, today } from '../stats.js';
 import { setFlag } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
+import { icon } from './icons.js';
 import { richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
 
@@ -107,7 +108,7 @@ export function initPlay(ctx) {
     }
     if (!queue.length) {
       ctx.toast(
-        mode === 'review' ? '目前沒有待練的錯題，太穩了 🎉' : mode === 'related' ? '類似的題目剛剛都練過了，晚點再來' : '選到的單元沒有題目',
+        mode === 'review' ? '目前沒有待練的錯題，太穩了！' : mode === 'related' ? '類似的題目剛剛都練過了，晚點再來' : '選到的單元沒有題目',
       );
       return;
     }
@@ -151,7 +152,7 @@ export function initPlay(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    el.topic.textContent = s.extra.has(q.id) ? `🔁 ${q.topic}・類似題` : q.topic;
+    el.topic.innerHTML = s.extra.has(q.id) ? `${icon('loop')}${q.topic}・類似題` : q.topic;
     el.text.innerHTML = richHTML(q.q);
     el.explain.hidden = true;
     el.next.hidden = true;
@@ -175,7 +176,7 @@ export function initPlay(ctx) {
     if (q.type === 'tf') {
       el.answers.className = 'answers tf';
       // 與滑動方向一致：左錯右對
-      el.answers.append(answerButton('❌ 錯', false, '←'), answerButton('⭕ 對', true, '→'));
+      el.answers.append(answerButton(`${icon('ng')}錯`, false, '←', true), answerButton(`${icon('ok')}對`, true, '→', true));
       return;
     }
     order = shuffle([0, 1, 2, 3]);
@@ -220,7 +221,7 @@ export function initPlay(ctx) {
     ctx.save();
 
     const goal = ctx.state.settings.goal;
-    if (before < goal && today(ctx.state, now).answered >= goal) ctx.toast(`🎯 今日 ${goal} 題目標達成！`);
+    if (before < goal && today(ctx.state, now).answered >= goal) ctx.toast(`今日 ${goal} 題目標達成！`);
 
     const correctValue = q.type === 'mc' ? order.indexOf(q.answer) : q.answer;
     for (const b of el.answers.children) {
@@ -252,7 +253,7 @@ export function initPlay(ctx) {
       restartAnimation(el.flash, 'on');
       restartAnimation(el.card, 'shake');
     }
-    el.explain.innerHTML = `<b>💡 ${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
+    el.explain.innerHTML = `<b>${icon('bulb')}${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
     el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -263,7 +264,7 @@ export function initPlay(ctx) {
         ? []
         : relatedQuestions(ctx.bank, q, { count: RELATED_COUNT, exclude: avoidIds(now) });
     el.related.hidden = !pendingRelated.length;
-    el.related.textContent = `🔁 練 ${pendingRelated.length} 題類似題`;
+    el.related.innerHTML = `${icon('loop')}練 ${pendingRelated.length} 題類似題`;
     el.next.hidden = false;
     el.next.focus({ preventScroll: true });
   }
@@ -312,7 +313,7 @@ export function initPlay(ctx) {
     setFlag(ctx.state, q.id, !flags[q.id], Date.now());
     ctx.save();
     renderFlag();
-    ctx.toast(flags[q.id] ? '已回報這題，之後先不出；清單在首頁 ⚙️ 設定裡' : '已取消回報');
+    ctx.toast(flags[q.id] ? '已回報這題，之後先不出；清單在首頁的設定裡' : '已取消回報');
   });
 
   function finish() {
@@ -356,7 +357,7 @@ export function initPlay(ctx) {
   // ── 是非題：卡片左右滑 ────────────────────────────────
   let drag = null;
   el.card.addEventListener('pointerdown', (e) => {
-    // 卡片上的按鈕（🚩）不能被滑動手勢搶走指標，否則點不到
+    // 卡片上的按鈕（複製、回報）不能被滑動手勢搶走指標，否則點不到
     if (phase !== 'answering' || q.type !== 'tf' || e.target.closest('button')) return;
     drag = { x: e.clientX, y: e.clientY, dx: 0, active: false };
     el.card.setPointerCapture(e.pointerId);

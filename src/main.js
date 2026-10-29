@@ -76,7 +76,7 @@ function start(bank) {
   try {
     if (sessionStorage.getItem(UPDATED_KEY)) {
       sessionStorage.removeItem(UPDATED_KEY);
-      ctx.toast('已更新到最新版本 ✨');
+      ctx.toast('已更新到最新版本');
     }
   } catch {
     // 私密瀏覽等情況讀不到 sessionStorage，略過提示

@@ -5,6 +5,7 @@ import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
 import { setFlag } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
+import { icon } from './icons.js';
 import { richHTML } from './rich.js';
 import { sfx } from './feedback.js';
 
@@ -33,7 +34,7 @@ export function initResult(ctx) {
     $('#r-cheer').textContent = cheer(s, answered);
 
     misses = s.log.filter((e) => e.outcome !== 'right');
-    $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題 🎉';
+    $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題';
     $('#r-list').innerHTML = misses.map((e, i) => reviewItem(byId.get(e.id), e, i, !!ctx.state.flags[e.id])).join('');
     $('#r-related').hidden = !misses.length;
 
@@ -75,13 +76,14 @@ export function initResult(ctx) {
 
 function reviewItem(q, entry, index, flagged) {
   const subj = SUBJECT_BY_ID[q.subject];
-  const answer = q.type === 'tf' ? (q.answer ? '⭕ 對' : '❌ 錯') : richHTML(q.choices[q.answer]);
+  const tf = (v) => (v ? `${icon('ok')}對` : `${icon('ng')}錯`);
+  const answer = q.type === 'tf' ? tf(q.answer) : richHTML(q.choices[q.answer]);
   const mine =
     entry.outcome === 'skip'
       ? '<span class="r-mine skip">看了解答</span>'
-      : `<span class="r-mine">你選：${q.type === 'tf' ? (entry.chosen ? '⭕ 對' : '❌ 錯') : richHTML(q.choices[entry.chosen])}</span>`;
+      : `<span class="r-mine">你選：${q.type === 'tf' ? tf(entry.chosen) : richHTML(q.choices[entry.chosen])}</span>`;
   return `<li class="r-item" style="--c:${subj.color}">
-    <div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${q.topic}</span><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">📋</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">🚩</button></div>
+    <div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${q.topic}</span><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
     <div class="r-q">${richHTML(q.q)}</div>
     <div class="r-ans">${mine}<span class="r-right">正解：${answer}</span></div>
     <div class="r-explain">${richHTML(q.explain)}</div>
@@ -91,7 +93,7 @@ function reviewItem(q, entry, index, flagged) {
 function cheer(s, answered) {
   if (!answered) return '先看解答也是一種複習，下一輪再來！';
   const acc = s.right / answered;
-  if (acc === 1) return '完美！記憶已經上鎖 🔒';
+  if (acc === 1) return '完美！記憶已經上鎖。';
   if (acc >= 0.8) return '很穩！錯的那幾題明天會再出現。';
   if (acc >= 0.5) return '一半以上了，錯題是最划算的複習。';
   return '剛起步最難，多刷幾輪就會熟。';
