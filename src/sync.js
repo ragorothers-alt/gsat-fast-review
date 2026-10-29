@@ -4,8 +4,8 @@ import { shiftDay } from './stats.js';
 const APP = 'gsat-quiz';
 
 export function exportBackup(state, now) {
-  const { cards, daily, streak, best, flags } = state;
-  return JSON.stringify({ app: APP, version: 1, exportedAt: now, state: { cards, daily, streak, best, flags } });
+  const { cards, daily, streak, best, flags, flagsOff } = state;
+  return JSON.stringify({ app: APP, version: 1, exportedAt: now, state: { cards, daily, streak, best, flags, flagsOff } });
 }
 
 /** 讀出備份裡的進度；不是這個遊戲的備份就丟出 Error，訊息直接給玩家看 */
@@ -27,7 +27,7 @@ const num = (x) => (Number.isFinite(x) ? x : 0);
  * 同一題在兩邊都有紀錄時：排程（盒子、到期日）以較晚作答的那份為準；
  * 累計次數取較大值而不相加，這樣來回匯入或重複匯入同一份檔案，結果都不會變。
  */
-function mergeCard(a, b) {
+export function mergeCard(a, b) {
   if (!a) return b;
   if (!b) return a;
   const newer = num(b.last) > num(a.last) ? b : a;
@@ -39,8 +39,36 @@ function mergeCard(a, b) {
   };
 }
 
+/**
+ * 回報與取消回報都記下時間：flags 是目前回報中的題目，flagsOff 是取消過的。
+ * 合併時同一題以較晚的動作為準，在一台取消回報，另一台同步過來才不會又加回去。
+ */
+export function setFlag(state, id, on, now) {
+  state.flagsOff ||= {};
+  if (on) {
+    state.flags[id] = now;
+    delete state.flagsOff[id];
+  } else {
+    delete state.flags[id];
+    state.flagsOff[id] = now;
+  }
+}
+
+/** 把另一份的一筆回報／取消併進來；比本機的動作新才採用，回傳有沒有改變 */
+export function applyFlag(flags, flagsOff, id, at, on) {
+  if (!(at > Math.max(flags[id] ?? 0, flagsOff[id] ?? 0))) return false;
+  if (on) {
+    flags[id] = at;
+    delete flagsOff[id];
+  } else {
+    delete flags[id];
+    flagsOff[id] = at;
+  }
+  return true;
+}
+
 /** 連續天數：從較晚的最後練習日往回數合併後的每日紀錄；數到紀錄盡頭時沿用原本較大的天數 */
-function mergeStreak(daily, ...streaks) {
+export function mergeStreak(daily, ...streaks) {
   const last = streaks.map((s) => s.last).filter(Boolean).sort().pop() ?? null;
   if (!last) return { count: 0, last: null };
   let run = 0;
@@ -75,7 +103,9 @@ export function mergeState(local, incoming) {
   }
 
   const flags = { ...local.flags };
-  for (const [id, at] of Object.entries(obj(incoming.flags))) flags[id] = Math.min(flags[id] ?? Infinity, num(at));
+  const flagsOff = { ...local.flagsOff };
+  for (const [id, at] of Object.entries(obj(incoming.flags))) applyFlag(flags, flagsOff, id, num(at), true);
+  for (const [id, at] of Object.entries(obj(incoming.flagsOff))) applyFlag(flags, flagsOff, id, num(at), false);
 
   const inStreak = { count: num(incoming.streak?.count), last: incoming.streak?.last ?? null };
   return {
@@ -84,6 +114,7 @@ export function mergeState(local, incoming) {
       cards,
       daily,
       flags,
+      flagsOff,
       streak: mergeStreak(daily, local.streak, inStreak),
       best: { ...local.best, blitz: Math.max(num(local.best?.blitz), num(incoming.best?.blitz)) },
     },

@@ -1,0 +1,22 @@
+# 線上同步後端。部署：在這個資料夾執行 npx wrangler@4 deploy（資料表變更：npx wrangler@4 d1 migrations apply gsat-sync --remote）
+name = "gsat-sync"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "gsat-sync"
+database_id = "7939f6bd-7fad-4416-9cb9-de309f517f9c"
+migrations_dir = "migrations"
+
+# 每個 IP 每分鐘的請求上限
+[[ratelimits]]
+name = "SYNC_LIMIT"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
+
+[[ratelimits]]
+name = "CREATE_LIMIT"
+namespace_id = "1002"
+simple = { limit = 5, period = 60 }

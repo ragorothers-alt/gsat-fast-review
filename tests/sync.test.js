@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { exportBackup, mergeState, parseBackup } from '../src/sync.js';
+import { exportBackup, mergeState, parseBackup, setFlag } from '../src/sync.js';
 import { shiftDay } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -47,7 +47,19 @@ describe('mergeState', () => {
     const local = state({ flags: { a: 5 } });
     const { state: s } = mergeState(local, { flags: { a: 9, b: 3 } });
     expect(s.settings).toBe(local.settings);
-    expect(s.flags).toEqual({ a: 5, b: 3 });
+    expect(s.flags).toEqual({ a: 9, b: 3 });
+  });
+
+  it('取消回報比另一份的回報晚，就維持取消；比較早則以回報為準', () => {
+    const local = state();
+    setFlag(local, 'a', true, 5);
+    setFlag(local, 'a', false, 8);
+    setFlag(local, 'b', false, 2);
+    const { state: s } = mergeState(local, { flags: { a: 6, b: 4 } });
+    expect(s.flags).toEqual({ b: 4 });
+    expect(s.flagsOff).toEqual({ a: 8 });
+    // 對方取消得更晚
+    expect(mergeState(s, { flagsOff: { b: 9 } }).state.flags).toEqual({});
   });
 
   it('連續天數依合併後的每日紀錄重算', () => {

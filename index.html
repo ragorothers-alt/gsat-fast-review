@@ -246,8 +246,35 @@
           </section>
 
           <section class="set-group">
-            <h3>進度備份與同步</h3>
-            <p class="set-note">在一台裝置匯出，存成檔案傳到另一台（AirDrop、LINE、雲端硬碟都可以）再匯入。同一題保留較新的紀錄，重複匯入也不會重複計算；兩台都練過的話，兩邊各匯入一次對方的檔案就一致了。</p>
+            <h3>線上同步<small id="cloud-badge"></small></h3>
+            <div id="cloud-off">
+              <p class="set-note">手機、平板輸入同一組同步碼，作答紀錄、錯題和每日題數就會自動合併。不用註冊或登入，雲端只存作答紀錄。</p>
+              <button id="cloud-create" class="secondary-btn" type="button">開啟線上同步</button>
+              <form id="cloud-join" class="cloud-join">
+                <input id="cloud-input" class="date-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="24" placeholder="或輸入另一台的同步碼" aria-label="同步碼" />
+                <button class="secondary-btn" type="submit">加入</button>
+              </form>
+            </div>
+            <div id="cloud-on" hidden>
+              <div class="cloud-code">
+                <span>同步碼</span><b id="cloud-code"></b>
+                <button id="cloud-copy" class="link-btn" type="button">複製</button>
+              </div>
+              <p id="cloud-status" class="set-note"></p>
+              <div class="set-actions">
+                <button id="cloud-now" class="secondary-btn" type="button">立即同步</button>
+                <button id="cloud-leave" class="secondary-btn" type="button">這台停止同步</button>
+              </div>
+              <p class="set-note cloud-foot">
+                在另一台的「線上同步」輸入這組碼就能加入。同步碼等於鑰匙，別給其他人。
+                <button id="cloud-delete" class="link-btn" type="button">刪除雲端資料</button>
+              </p>
+            </div>
+          </section>
+
+          <section class="set-group">
+            <h3>進度備份</h3>
+            <p class="set-note">也可以匯出成檔案，傳到另一台（AirDrop、LINE、雲端硬碟都可以）再匯入。同一題保留較新的紀錄，重複匯入也不會重複計算；兩台都練過的話，兩邊各匯入一次對方的檔案就一致了。</p>
             <div class="set-actions">
               <button id="export-progress" class="secondary-btn" type="button">匯出進度</button>
               <button id="import-progress" class="secondary-btn" type="button">匯入進度</button>

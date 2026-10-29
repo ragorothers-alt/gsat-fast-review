@@ -1,9 +1,10 @@
 // 設定：每日目標、學測日期、音效、進度備份與同步、回報的題目。底部彈出面板。
 import { daysUntil } from '../analysis.js';
+import { foldLegacy } from '../cloud.js';
 import { dayKey } from '../stats.js';
 import { DEFAULT_EXAM_DATE } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
-import { exportBackup, mergeState, parseBackup } from '../sync.js';
+import { exportBackup, mergeState, parseBackup, setFlag } from '../sync.js';
 import { copyText } from './clipboard.js';
 import { setSoundEnabled } from './feedback.js';
 import { richHTML } from './rich.js';
@@ -98,9 +99,13 @@ export function initSettings(ctx, onChange) {
     fileInput.value = ''; // 同一個檔案可以再選一次
     if (!file) return;
     try {
-      const { state, added, updated } = mergeState(ctx.state, parseBackup(await file.text()));
+      const incoming = parseBackup(await file.text());
+      const { state, added, updated } = mergeState(ctx.state, incoming);
       Object.assign(ctx.state, state);
+      // 開過線上同步時，每日作答量由同步紀錄重算：匯入的當成開始同步前的舊紀錄
+      foldLegacy(ctx.state, incoming.daily, Date.now());
       commit();
+      ctx.cloudSync?.();
       ctx.toast(added || updated ? `匯入完成：新增 ${added} 題、更新 ${updated} 題的紀錄` : '匯入完成：沒有比這台更新的紀錄');
     } catch (e) {
       ctx.toast(e instanceof Error && e.message.includes('進度備份') ? e.message : '讀不到這個檔案，請再試一次');
@@ -132,7 +137,7 @@ export function initSettings(ctx, onChange) {
       li.innerHTML = `<span class="tag">${subj.name}</span><span class="flag-text"></span><button type="button" class="link-btn">取消</button>`;
       li.querySelector('.flag-text').innerHTML = `<b>${q.id}</b> ${richHTML(q.q)}`;
       li.querySelector('button').addEventListener('click', () => {
-        delete ctx.state.flags[q.id];
+        setFlag(ctx.state, q.id, false, Date.now());
         commit();
       });
       flagList.append(li);
@@ -164,8 +169,14 @@ export function initSettings(ctx, onChange) {
     $('#exam-left').textContent = left > 0 ? `還有 ${left} 天` : left === 0 ? '就是今天' : '已經考完了';
     $('#exam-reset').hidden = settings.examDate === DEFAULT_EXAM_DATE;
     soundBtn.setAttribute('aria-checked', String(settings.sound));
+    ctx.renderCloud?.();
     renderFlags();
   }
+
+  // 線上同步拉回別台的回報後重畫（面板正開著才需要）
+  ctx.refreshSettings = () => {
+    if (!sheet.hidden) render();
+  };
 
   function close() {
     sheet.hidden = true;

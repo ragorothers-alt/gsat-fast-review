@@ -6,6 +6,7 @@ import { MODES, advance, createSession, current, extend, isCorrect, submit, tick
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
 import { recordAnswer, today } from '../stats.js';
+import { setFlag } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
 import { richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
@@ -308,8 +309,7 @@ export function initPlay(ctx) {
   el.flag.addEventListener('click', () => {
     if (!q) return;
     const { flags } = ctx.state;
-    if (flags[q.id]) delete flags[q.id];
-    else flags[q.id] = Date.now();
+    setFlag(ctx.state, q.id, !flags[q.id], Date.now());
     ctx.save();
     renderFlag();
     ctx.toast(flags[q.id] ? '已回報這題，之後先不出；清單在首頁 ⚙️ 設定裡' : '已取消回報');

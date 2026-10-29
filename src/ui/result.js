@@ -3,6 +3,7 @@ import { SUBJECT_BY_ID } from '../subjects.js';
 import { MODES } from '../session.js';
 import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
+import { setFlag } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
 import { richHTML } from './rich.js';
 import { sfx } from './feedback.js';
@@ -45,6 +46,7 @@ export function initResult(ctx) {
     ctx.world.setCast([...counts].sort((a, b) => b[1] - a[1]).map(([id]) => id));
     ctx.show('result');
     sfx.finish();
+    ctx.cloudSync?.();
     if (record || (answered && !misses.length)) ctx.world.celebrate();
   };
 
@@ -64,8 +66,7 @@ export function initResult(ctx) {
     if (!btn) return;
     const id = btn.dataset.flag;
     const { flags } = ctx.state;
-    if (flags[id]) delete flags[id];
-    else flags[id] = Date.now();
+    setFlag(ctx.state, id, !flags[id], Date.now());
     ctx.save();
     btn.setAttribute('aria-pressed', String(!!flags[id]));
     ctx.toast(flags[id] ? '已回報這題，之後先不出' : '已取消回報');

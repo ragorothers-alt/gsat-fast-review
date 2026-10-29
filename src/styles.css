@@ -1732,6 +1732,62 @@ p {
   gap: 10px;
 }
 
+/* 線上同步 */
+.cloud-join {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.cloud-join input {
+  flex: 1;
+  min-width: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cloud-join input::placeholder {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.cloud-join .secondary-btn {
+  width: auto;
+  min-height: 44px;
+  padding: 0 18px;
+}
+
+.cloud-code {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+}
+
+.cloud-code span {
+  flex: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.cloud-code b {
+  flex: 1;
+  min-width: 0;
+  font-family: ui-monospace, 'SF Mono', Consolas, monospace;
+  font-size: 1.02rem;
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+}
+
+.cloud-foot {
+  margin: 10px 0 0;
+}
+
 .flag-list {
   margin-bottom: 10px;
   gap: 6px;

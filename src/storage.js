@@ -13,8 +13,11 @@ export function freshState() {
     daily: {},
     streak: { count: 0, last: null },
     best: { blitz: 0 },
-    // 玩家回報有問題的題目：id → 回報時間；回報後先不出這題
+    // 玩家回報有問題的題目：id → 回報時間；回報後先不出這題。flagsOff：取消回報的時間（同步用）
     flags: {},
+    flagsOff: {},
+    // 線上同步（cloud.js）；沒開過就是 null
+    cloud: null,
     // scratch：平板上草稿區要不要展開（手機上一律收起）
     settings: {
       subjects: SUBJECTS.map((s) => s.id),

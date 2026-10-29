@@ -112,6 +112,11 @@ export function initHome(ctx) {
     ctx.world.setSelected(settings.subjects);
   }
 
+  // 線上同步拉回別台的紀錄後重畫（首頁正開著才需要）
+  ctx.refreshHome = () => {
+    if (!$('#home').hidden) render();
+  };
+
   ctx.goHome = () => {
     // 新版已在背景下載好：趁回到首頁時換上，不打斷作答
     if (ctx.updateReady) return ctx.applyUpdate();

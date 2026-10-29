@@ -3,6 +3,7 @@ import './styles.css';
 import { loadBank } from './data/bank.js';
 import { createWorld } from './scene.js';
 import { loadState, saveState, requestPersistence } from './storage.js';
+import { initCloud } from './ui/cloud.js';
 import { initHome } from './ui/home.js';
 import { initPlay } from './ui/play.js';
 import { initResult } from './ui/result.js';
@@ -50,6 +51,10 @@ const ctx = {
   },
   // 由各畫面模組註冊
   goHome: null,
+  refreshHome: null,
+  refreshSettings: null,
+  renderCloud: null,
+  cloudSync: null,
   startRound: null,
   showResult: null,
   showStats: null,
@@ -63,8 +68,10 @@ function start(bank) {
   initPlay(ctx);
   initResult(ctx);
   initStats(ctx);
+  initCloud(ctx);
   ctx.goHome();
   document.querySelector('#boot').hidden = true;
+  ctx.cloudSync();
 
   try {
     if (sessionStorage.getItem(UPDATED_KEY)) {

@@ -24,6 +24,13 @@ export function recordAnswer(state, outcome, now) {
   const day = (state.daily[key] ||= { answered: 0, right: 0 });
   if (outcome !== 'skip') day.answered++;
   if (outcome === 'right') day.right++;
+  // 開過線上同步：這台另外記一份，同步時各台的作答量相加（見 cloud.js）
+  if (state.cloud) {
+    const mine = (state.cloud.devices[state.cloud.device] ||= {});
+    const own = (mine[key] ||= { answered: 0, right: 0 });
+    if (outcome !== 'skip') own.answered++;
+    if (outcome === 'right') own.right++;
+  }
 
   if (state.streak.last !== key) {
     state.streak.count = state.streak.last === previousDayKey(now) ? state.streak.count + 1 : 1;
@@ -42,7 +49,12 @@ export function today(state, now) {
   return state.daily[dayKey(now)] ?? { answered: 0, right: 0 };
 }
 
-function pruneDaily(state, now) {
-  const cutoff = dayKey(now - 90 * 86_400_000);
-  for (const k of Object.keys(state.daily)) if (k < cutoff) delete state.daily[k];
+/** 每日紀錄只留最近 90 天 */
+export const KEEP_DAYS = 90;
+
+export function pruneDaily(state, now) {
+  const cutoff = dayKey(now - KEEP_DAYS * 86_400_000);
+  const maps = [state.daily];
+  if (state.cloud) maps.push(state.cloud.legacy, ...Object.values(state.cloud.devices));
+  for (const m of maps) for (const k of Object.keys(m)) if (k < cutoff) delete m[k];
 }
