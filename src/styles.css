@@ -1245,6 +1245,12 @@ p {
   background: var(--bad);
 }
 
+/* 深色模式的草稿紙還是白紙、黑筆還是深色墨水（見 .scratch-sheet），圓點跟著畫出來的顏色 */
+:root[data-theme='dark'] .tool[data-tool='ink'] i {
+  background: #3b2f2a;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+
 .tool[aria-pressed='true'] {
   background: var(--accent);
   box-shadow: 2px 2px 0 var(--shadow);
@@ -1277,6 +1283,13 @@ p {
   border: 2px solid var(--ink);
   border-radius: var(--hand);
   box-shadow: 4px 5px 0 var(--shadow);
+}
+
+/* 深色模式也維持白紙：筆是深色墨水，跟著變成黑板就看不到了（紙色稍微暗一點，晚上不刺眼） */
+:root[data-theme='dark'] .scratch-sheet {
+  --card: #f1ebdf;
+  --grid: #e0d5c1;
+  --muted: #776a60;
 }
 
 #scratch-canvas {
