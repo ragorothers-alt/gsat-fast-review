@@ -3393,12 +3393,12 @@
     "q": "She is one of the ____ players on the team.",
     "choices": [
       "goodest",
-      "good",
+      "most good",
       "best",
       "well"
     ],
     "answer": 2,
-    "explain": "one of the 加最高級與複數名詞，表示「最……的其中之一」；best 是 good「好的」的最高級。",
+    "explain": "one of the 加最高級與複數名詞，表示「最……的其中之一」；good 的最高級是不規則變化 best，不說 goodest 或 most good。",
     "formula": false,
     "level": 1
   },
