@@ -27,6 +27,9 @@ jobs:
       - run: npm run validate
       - run: npm test
       - run: npm run build
+      # 端對端測試與無障礙檢查：在無頭 Chromium 裡實際操作建置好的版本，沒過就不部署
+      - run: npx playwright install --with-deps --only-shell chromium
+      - run: npm run e2e
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -13,6 +13,9 @@ export const MODES = {
   weak: { name: '弱點加強', size: 15, explainAlways: true },
   // 從結算畫面的錯題出發，練同單元裡最像的題目
   related: { name: '錯題延伸', size: 15, explainAlways: true },
+  // 從錯題本的收藏、搜尋結果出發，練指定的題目（opts.ids）
+  starred: { name: '收藏的題目', size: 20, explainAlways: true },
+  picked: { name: '搜尋到的題目', size: 20, explainAlways: true },
 };
 
 export function createSession(mode, queue) {

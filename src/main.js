@@ -1,12 +1,15 @@
 import 'katex/dist/katex.min.css';
 import './styles.css';
 import { loadBank } from './data/bank.js';
+import { initErrorReporting } from './errors.js';
 import { createWorld } from './scene.js';
 import { loadState, saveState, requestPersistence } from './storage.js';
+import { initAbout } from './ui/about.js';
 import { applyAppearance, watchSystemTheme } from './ui/appearance.js';
 import { initCloud } from './ui/cloud.js';
 import { initHome } from './ui/home.js';
 import { initInstall } from './ui/install.js';
+import { initKeypoints } from './ui/keypoints.js';
 import { initNotebook } from './ui/notebook.js';
 import { initPlay } from './ui/play.js';
 import { initReminder } from './ui/reminder.js';
@@ -17,6 +20,9 @@ import { initStats } from './ui/stats.js';
 const UPDATED_KEY = 'gsat-quiz:updated';
 // Android 長按 App 圖示的捷徑（manifest 的 shortcuts）帶 ?mode= 進來，直接開始這個模式
 const SHORTCUT_MODES = new Set(['blitz', 'free', 'review']);
+
+// 最先掛上：開機時（例如題庫載入）出的錯也記得到
+initErrorReporting();
 
 const state = loadState();
 // 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣、學習分析的概況卡上緣、錯題本的說明卡上緣
@@ -66,6 +72,7 @@ const ctx = {
   renderCloud: null,
   renderReminder: null,
   renderInstall: null,
+  renderAbout: null,
   cloudSync: null,
   reminder: null,
   install: null,
@@ -73,6 +80,7 @@ const ctx = {
   showResult: null,
   showStats: null,
   showNotebook: null,
+  openKeypoints: null,
   scratch: null,
 };
 
@@ -87,6 +95,8 @@ function start(bank) {
   initCloud(ctx);
   initInstall(ctx);
   initReminder(ctx);
+  initAbout(ctx);
+  initKeypoints(ctx);
   ctx.goHome();
   document.querySelector('#boot').hidden = true;
   ctx.cloudSync();

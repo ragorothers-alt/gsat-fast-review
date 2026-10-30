@@ -9,7 +9,7 @@
 //   syncedAt  上次同步成功的時間（顯示用）
 //   legacy    開始同步前的每日作答量：各台取較大值（跟匯入備份檔的規則一樣）
 //   devices   開始同步後，每台裝置各自的每日作答量：各台相加
-import { mergeStreak, applyFlag, mergeCard } from './sync.js';
+import { MARKS, applyMark, mergeCard, mergeStreak } from './sync.js';
 import { dayKey, pruneDaily } from './stats.js';
 
 /** 部署好的 Worker；開發時可用 VITE_SYNC_API 指到本機的 wrangler dev */
@@ -83,7 +83,7 @@ export function foldLegacy(state, daily, now) {
 const pack = (c) => [c.box, c.due, c.seen, c.right, c.wrong, c.parked ? 1 : 0, c.last];
 const unpack = ([box, due, seen, right, wrong, parked, last]) => ({ box, due, seen, right, wrong, parked: !!parked, last });
 
-/** 要上傳的變動：上次上傳之後作答過的題目、這台這幾天的作答量、回報；第一次則全部上傳 */
+/** 要上傳的變動：上次上傳之後作答過的題目、這台這幾天的作答量、回報與收藏；第一次則全部上傳 */
 export function buildPush(state) {
   const c = state.cloud;
   const since = c.pushedAt;
@@ -95,10 +95,13 @@ export function buildPush(state) {
     .filter(([day]) => day >= fromDay)
     .map(([day, d]) => [c.device, day, d.answered, d.right]);
   if (c.legacyDirty) for (const [day, d] of Object.entries(c.legacy)) daily.push(['', day, d.answered, d.right]);
-  const flags = {};
-  for (const [id, at] of Object.entries(state.flags)) if (at > since) flags[id] = [at, 1];
-  for (const [id, at] of Object.entries(state.flagsOff ?? {})) if (at > since) flags[id] = [at, 0];
-  return { cards, daily, flags, best: state.best.blitz };
+  const marks = {};
+  for (const kind of MARKS) {
+    const out = (marks[kind] = {});
+    for (const [id, at] of Object.entries(state[kind] ?? {})) if (at > since) out[id] = [at, 1];
+    for (const [id, at] of Object.entries(state[`${kind}Off`] ?? {})) if (at > since) out[id] = [at, 0];
+  }
+  return { cards, daily, ...marks, best: state.best.blitz };
 }
 
 /** 套用雲端拉回來的變動，回傳本機有幾題的紀錄因此改變 */
@@ -116,8 +119,11 @@ export function applyPull(state, res, now) {
     const d = map[day] ?? { answered: 0, right: 0 };
     map[day] = { answered: Math.max(d.answered, answered), right: Math.max(d.right, right) };
   }
-  state.flagsOff ||= {};
-  for (const [id, [at, on]] of Object.entries(res.flags ?? {})) if (applyFlag(state.flags, state.flagsOff, id, at, !!on)) changed++;
+  for (const kind of MARKS) {
+    const on = (state[kind] ||= {});
+    const off = (state[`${kind}Off`] ||= {});
+    for (const [id, [at, flag]] of Object.entries(res[kind] ?? {})) if (applyMark(on, off, id, at, !!flag)) changed++;
+  }
   state.best.blitz = Math.max(state.best.blitz, res.best ?? 0);
   if (Number.isFinite(res.rev)) c.cursor = res.rev;
   rebuildDaily(state, now);
@@ -208,6 +214,7 @@ export async function syncCloud(state, request, { now = Date.now, keepalive = fa
         cards: Object.fromEntries(batches[i]),
         daily: first ? push.daily : [],
         flags: first ? push.flags : {},
+        stars: first ? push.stars : {},
         best: push.best,
       },
       { keepalive },

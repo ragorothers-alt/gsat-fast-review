@@ -1,4 +1,4 @@
-// 設定：每日目標、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目。底部彈出面板。
+// 設定：每日目標、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目、關於與診斷。底部彈出面板。
 import { daysUntil } from '../analysis.js';
 import { foldLegacy } from '../cloud.js';
 import { GOALS, dayKey } from '../stats.js';
@@ -191,6 +191,7 @@ export function initSettings(ctx, onChange) {
     ctx.renderCloud?.();
     ctx.renderReminder?.();
     ctx.renderInstall?.();
+    ctx.renderAbout?.();
     renderFlags();
   }
 

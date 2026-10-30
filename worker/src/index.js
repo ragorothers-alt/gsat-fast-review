@@ -1,8 +1,8 @@
 // 學測快問快答的線上同步後端：Cloudflare Worker + D1。
 // 同步碼就是鑰匙（不用帳號）：資料庫只存它的 SHA-256。
-// 合併規則與前端 src/sync.js 相同：作答排程以較晚作答的為準、次數取較大值；回報以較晚的動作為準；
+// 合併規則與前端 src/sync.js 相同：作答排程以較晚作答的為準、次數取較大值；回報與收藏以較晚的動作為準；
 // 每日作答量每台裝置各記一份（相加），開始同步前的舊紀錄取較大值。
-// 另外負責每日提醒的推播（push.js），每小時由 Cron 觸發。
+// 另外負責每日提醒的推播（push.js），每小時由 Cron 觸發；以及收集前端的執行錯誤（/v1/log）。
 import { PushError, progress, sendReminders, subscribe, unsubscribe } from './push.js';
 
 /** 同步碼字元：Crockford Base32（去掉 I、L、O、U），16 碼 = 80 bits */
@@ -16,7 +16,7 @@ const DEVICE = /^[a-z0-9]{6,16}$/;
 const MAX_BODY = 1_000_000;
 const MAX_CARDS = 2000;
 const MAX_DAILY = 1000;
-const MAX_FLAGS = 2000;
+const MAX_MARKS = 2000;
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -55,6 +55,7 @@ export default {
       if (pathname === '/v1/push/subscribe') return json(await subscribe(env.DB, body, Date.now()));
       if (pathname === '/v1/push/unsubscribe') return json(await unsubscribe(env.DB, body));
       if (pathname === '/v1/push/progress') return json(await progress(env.DB, body, Date.now()));
+      if (pathname === '/v1/log') return json(await logError(env.DB, body, Date.now()));
       throw new HttpError(404, 'not found');
     } catch (e) {
       if (e instanceof HttpError || e instanceof PushError) return json({ error: e.message }, e.status);
@@ -116,7 +117,7 @@ async function create(db) {
 
 async function remove(db, body) {
   const sid = await spaceId(db, body.code);
-  await db.batch(['cards', 'daily', 'flags', 'spaces'].map((t) => db.prepare(`DELETE FROM ${t} WHERE sid = ?1`).bind(sid)));
+  await db.batch(['cards', 'daily', 'flags', 'stars', 'spaces'].map((t) => db.prepare(`DELETE FROM ${t} WHERE sid = ?1`).bind(sid)));
   return { ok: true };
 }
 
@@ -127,7 +128,8 @@ UPDATE spaces SET rev = rev + 1, updated_at = ?2
 WHERE sid = ?1 AND (
   EXISTS (SELECT 1 FROM cards WHERE sid = ?1 AND rev > spaces.rev) OR
   EXISTS (SELECT 1 FROM daily WHERE sid = ?1 AND rev > spaces.rev) OR
-  EXISTS (SELECT 1 FROM flags WHERE sid = ?1 AND rev > spaces.rev))`;
+  EXISTS (SELECT 1 FROM flags WHERE sid = ?1 AND rev > spaces.rev) OR
+  EXISTS (SELECT 1 FROM stars WHERE sid = ?1 AND rev > spaces.rev))`;
 
 const UPSERT_CARDS = `
 INSERT INTO cards (sid, id, box, due, seen, rights, wrongs, parked, last, rev)
@@ -155,19 +157,23 @@ ON CONFLICT (sid, device, day) DO UPDATE SET
   rev = excluded.rev
 WHERE excluded.answered > daily.answered OR excluded.rights > daily.rights`;
 
-const UPSERT_FLAGS = `
-INSERT INTO flags (sid, id, at, flagged, rev)
+/** 回報（flags.flagged）與收藏（stars.starred）：{ id: [at, on] }，以較晚的動作為準 */
+const upsertMarks = (table, col) => `
+INSERT INTO ${table} (sid, id, at, ${col}, rev)
 SELECT ?1, j.key, json_extract(j.value, '$[0]'), json_extract(j.value, '$[1]'), ${REV}
 FROM json_each(?2) AS j WHERE true
-ON CONFLICT (sid, id) DO UPDATE SET at = excluded.at, flagged = excluded.flagged, rev = excluded.rev
-WHERE excluded.at > flags.at`;
+ON CONFLICT (sid, id) DO UPDATE SET at = excluded.at, ${col} = excluded.${col}, rev = excluded.rev
+WHERE excluded.at > ${table}.at`;
+const UPSERT_FLAGS = upsertMarks('flags', 'flagged');
+const UPSERT_STARS = upsertMarks('stars', 'starred');
 
 // 回傳的 JSON 直接由 SQLite 組好，Worker 不必逐列處理（免費方案每次請求只有 10 ms CPU）
 const PULL = `
 SELECT rev, best,
   (SELECT json_group_object(id, json_array(box, due, seen, rights, wrongs, parked, last)) FROM cards WHERE sid = ?1 AND rev > ?2) AS cards,
   (SELECT json_group_array(json_array(device, day, answered, rights)) FROM daily WHERE sid = ?1 AND rev > ?2) AS daily,
-  (SELECT json_group_object(id, json_array(at, flagged)) FROM flags WHERE sid = ?1 AND rev > ?2) AS flags
+  (SELECT json_group_object(id, json_array(at, flagged)) FROM flags WHERE sid = ?1 AND rev > ?2) AS flags,
+  (SELECT json_group_object(id, json_array(at, starred)) FROM stars WHERE sid = ?1 AND rev > ?2) AS stars
 FROM spaces WHERE sid = ?1`;
 
 /**
@@ -180,11 +186,13 @@ async function sync(db, body) {
   const best = isInt(body.best, 1e6) ? body.best : 0;
   const cards = cleanCards(body.cards);
   const daily = cleanDaily(body.daily);
-  const flags = cleanFlags(body.flags);
+  const flags = cleanMarks(body.flags);
+  const stars = cleanMarks(body.stars);
   const writes = [];
   if (Object.keys(cards).length) writes.push(db.prepare(UPSERT_CARDS).bind(sid, JSON.stringify(cards)));
   if (daily.length) writes.push(db.prepare(UPSERT_DAILY).bind(sid, JSON.stringify(daily)));
   if (Object.keys(flags).length) writes.push(db.prepare(UPSERT_FLAGS).bind(sid, JSON.stringify(flags)));
+  if (Object.keys(stars).length) writes.push(db.prepare(UPSERT_STARS).bind(sid, JSON.stringify(stars)));
 
   const stmts = [...writes];
   if (writes.length) stmts.push(db.prepare(BUMP).bind(sid, Date.now()));
@@ -192,8 +200,36 @@ async function sync(db, body) {
   stmts.push(db.prepare(PULL).bind(sid, since));
   const results = await db.batch(stmts);
   const row = results.at(-1).results[0];
-  const text = `{"rev":${row.rev},"best":${row.best},"cards":${row.cards},"daily":${row.daily},"flags":${row.flags}}`;
+  const text = `{"rev":${row.rev},"best":${row.best},"cards":${row.cards},"daily":${row.daily},"flags":${row.flags},"stars":${row.stars}}`;
   return new Response(text, { headers: { ...CORS, 'Content-Type': 'application/json' } });
+}
+
+/** 錯誤紀錄最多保留幾列（舊的先刪） */
+const MAX_ERRORS = 500;
+const clip = (x, max) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
+
+/**
+ * 前端回報的執行錯誤：{ version, message, source, ua }。同一版本、訊息、位置累計次數。
+ * 只收字串、截斷長度；不需要同步碼，每個 IP 的請求數仍受 SYNC_LIMIT 限制。
+ */
+export async function logError(db, body, now) {
+  const version = clip(body.version, 20);
+  const message = clip(body.message, 300);
+  const source = clip(body.source, 300);
+  const ua = clip(body.ua, 200);
+  if (!version || !message) throw new HttpError(400, 'bad log');
+  await db.batch([
+    db
+      .prepare(
+        `INSERT INTO errors (version, message, source, ua, count, first_at, last_at) VALUES (?1, ?2, ?3, ?4, 1, ?5, ?5)
+         ON CONFLICT (version, message, source) DO UPDATE SET count = count + 1, last_at = ?5, ua = ?4`,
+      )
+      .bind(version, message, source, ua, now),
+    db
+      .prepare('DELETE FROM errors WHERE last_at < (SELECT last_at FROM errors ORDER BY last_at DESC LIMIT 1 OFFSET ?1)')
+      .bind(MAX_ERRORS - 1),
+  ]);
+  return { ok: true };
 }
 
 const isInt = (x, max = Number.MAX_SAFE_INTEGER) => Number.isSafeInteger(x) && x >= 0 && x <= max;
@@ -231,12 +267,12 @@ function cleanDaily(input) {
   );
 }
 
-/** { id: [at, flagged] } */
-function cleanFlags(input) {
+/** 回報或收藏：{ id: [at, on] } */
+function cleanMarks(input) {
   const out = {};
   if (!isObject(input)) return out;
   const entries = Object.entries(input);
-  if (entries.length > MAX_FLAGS) throw new HttpError(413, 'too many flags');
+  if (entries.length > MAX_MARKS) throw new HttpError(413, 'too many marks');
   for (const [id, v] of entries) {
     if (CARD_ID.test(id) && Array.isArray(v) && v.length === 2 && isInt(v[0]) && (v[1] === 0 || v[1] === 1)) out[id] = v;
   }

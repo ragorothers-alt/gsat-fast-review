@@ -1,4 +1,5 @@
 import { defineConfig } from 'vite';
+import { execSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -8,6 +9,8 @@ export default defineConfig({
   base: './',
   // 題庫是另外下載的 JSON（見 src/data/bank.js）；主程式約 900 kB 幾乎都是 three.js 與 KaTeX，一次快取就好，不再拆
   build: { target: 'es2020', chunkSizeWarningLimit: 1000 },
+  // 版本號（設定裡的「關於與診斷」、錯誤回報用）：git commit 的前 7 碼與建置時間
+  define: { __APP_VERSION__: JSON.stringify(commit()), __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
   plugins: [precacheServiceWorker()],
 });
 
@@ -31,6 +34,15 @@ function precacheServiceWorker() {
       this.emitFile({ type: 'asset', fileName: 'sw.js', source: serviceWorkerSource(version, urls) });
     },
   };
+}
+
+function commit() {
+  if (process.env.GITHUB_SHA) return process.env.GITHUB_SHA.slice(0, 7);
+  try {
+    return execSync('git rev-parse --short HEAD', { stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return 'dev';
+  }
 }
 
 function listFiles(dir) {
@@ -67,12 +79,13 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// 快取優先：沒網路也能開；新版本會在下次開啟時生效
+// 快取優先：沒網路也能開；新版本會在下次開啟時生效。
+// ignoreVary：有些主機回應帶 Vary: Origin，而 <script crossorigin> 的請求帶 Origin、預先快取時沒帶，不忽略就會對不上
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   event.respondWith(
-    caches.match(req, { ignoreSearch: req.mode === 'navigate' }).then((hit) => {
+    caches.match(req, { ignoreSearch: req.mode === 'navigate', ignoreVary: true }).then((hit) => {
       if (hit) return hit;
       return fetch(req)
         .then((res) => {

@@ -2,9 +2,9 @@
 import { MODES } from '../session.js';
 import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
-import { setFlag } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
-import { reviewItem, tfLabel } from './review-item.js';
+import { openKeypointsFrom } from './keypoints.js';
+import { reviewItem, speakItem, tfLabel, toggleMark } from './review-item.js';
 import { richHTML } from './rich.js';
 import { sfx } from './feedback.js';
 
@@ -34,7 +34,10 @@ export function initResult(ctx) {
 
     misses = s.log.filter((e) => e.outcome !== 'right');
     $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題';
-    $('#r-list').innerHTML = misses.map((e, i) => reviewItem(byId.get(e.id), { index: i, flagged: !!ctx.state.flags[e.id], note: mine(byId.get(e.id), e) })).join('');
+    const { flags, stars } = ctx.state;
+    $('#r-list').innerHTML = misses
+      .map((e, i) => reviewItem(byId.get(e.id), { index: i, flagged: !!flags[e.id], starred: !!stars[e.id], note: mine(byId.get(e.id), e) }))
+      .join('');
     $('#r-related').hidden = !misses.length;
 
     // 這輪出現最多的科目，牠們的貓會趴在成績卡上
@@ -59,22 +62,16 @@ export function initResult(ctx) {
     ctx.install?.nudge();
   });
 
-  // 錯題清單裡也能複製題目、回報題目
+  // 錯題清單裡也能念英文、收藏、複製、回報題目
   $('#r-list').addEventListener('click', (e) => {
+    if (openKeypointsFrom(ctx, e.target) || speakItem(e.target, misses.map((m) => byId.get(m.id)))) return;
     const copy = e.target.closest('[data-copy]');
     if (copy) {
       const entry = misses[Number(copy.dataset.copy)];
       copyQuestion(questionPrompt(byId.get(entry.id), entry), ctx.toast);
       return;
     }
-    const btn = e.target.closest('[data-flag]');
-    if (!btn) return;
-    const id = btn.dataset.flag;
-    const { flags } = ctx.state;
-    setFlag(ctx.state, id, !flags[id], Date.now());
-    ctx.save();
-    btn.setAttribute('aria-pressed', String(!!flags[id]));
-    ctx.toast(flags[id] ? '已回報這題，之後先不出' : '已取消回報');
+    toggleMark(ctx, e.target);
   });
 }
 

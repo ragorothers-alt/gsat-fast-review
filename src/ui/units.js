@@ -1,6 +1,7 @@
-// 單元選擇：底部彈出面板，一科一個分頁，打勾的單元才會出題。
+// 單元選擇：底部彈出面板，一科一個分頁，打勾的單元才會出題；每個單元旁邊可以打開考前重點卡。
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { mastery } from '../srs.js';
+import { icon } from './icons.js';
 import { UNITS, unitKey } from '../units.js';
 
 /**
@@ -94,14 +95,16 @@ export function initUnitSheet(ctx, onChange) {
       const m = Math.round(mastery(qs, ctx.state.cards) * 100);
       const on = isOn(current, unit);
       const li = document.createElement('li');
+      li.className = 'unit-row';
       li.innerHTML = `<button type="button" class="unit" aria-pressed="${on}">
         <span class="unit-check" aria-hidden="true">✓</span>
         <span class="unit-name"></span>
         <span class="unit-meta">${qs.length} 題・熟練 ${m}%</span>
         <span class="unit-meter" aria-hidden="true"><i style="width:${m}%"></i></span>
-      </button>`;
+      </button><button type="button" class="kp-btn" aria-label="${unit}：考前重點">${icon('card')}重點</button>`;
       li.querySelector('.unit-name').textContent = unit;
-      li.querySelector('button').addEventListener('click', () => toggleUnit(unit));
+      li.querySelector('.unit').addEventListener('click', () => toggleUnit(unit));
+      li.querySelector('.kp-btn').addEventListener('click', () => ctx.openKeypoints(current, unit));
       listEl.append(li);
     }
     allBtn.textContent = UNITS[current].every((u) => isOn(current, u)) ? '這科全不選' : '這科全選';

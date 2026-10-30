@@ -8,13 +8,16 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
-    "validate": "node scripts/validate-questions.mjs"
+    "validate": "node scripts/validate-questions.mjs && node scripts/validate-keypoints.mjs",
+    "e2e": "playwright test"
   },
   "dependencies": {
     "katex": "^0.19.1",
     "three": "^0.186.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.64.1",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   }

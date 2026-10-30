@@ -16,6 +16,9 @@ export function freshState() {
     // 玩家回報有問題的題目：id → 回報時間；回報後先不出這題。flagsOff：取消回報的時間（同步用）
     flags: {},
     flagsOff: {},
+    // 收藏的題目：id → 收藏時間；starsOff：取消收藏的時間（同步用）
+    stars: {},
+    starsOff: {},
     // 線上同步（cloud.js）；沒開過就是 null
     cloud: null,
     // scratch：平板上草稿區要不要展開（手機上一律收起）

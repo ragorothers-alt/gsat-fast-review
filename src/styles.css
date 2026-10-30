@@ -5,7 +5,7 @@
   --card: #fffdf8;
   --ink: #3b2f2a;
   --ink-soft: #6f6159;
-  --muted: #8d7f74;
+  --muted: #776a60;
   --line-soft: rgba(59, 47, 42, 0.22);
   --accent: #f2b632;
   --accent-2: #f0705f;
@@ -13,6 +13,10 @@
   --good-bg: #d9f2e0;
   --bad: #d9473c;
   --bad-bg: #fde1dc;
+  /* 小字用的對錯色：比底色、邊框用的深一點，白底上才夠清楚 */
+  --good-ink: #237a45;
+  --bad-ink: #bf3a30;
+  --accent-2-ink: #b84a3a;
   --note: #fff4cf;
   --hand: 18px 22px 17px 21px / 21px 17px 22px 18px;
   --hand-sm: 12px 15px 11px 14px / 14px 11px 15px 12px;
@@ -33,7 +37,7 @@
   --card: #2d3733;
   --ink: #ece4d4;
   --ink-soft: #c9c0af;
-  --muted: #9b9488;
+  --muted: #aea79a;
   --line-soft: rgba(236, 228, 212, 0.2);
   --accent: #f2b632;
   --accent-2: #f0806f;
@@ -41,6 +45,9 @@
   --good-bg: #24473a;
   --bad: #f06c5f;
   --bad-bg: #4d2d2a;
+  --good-ink: #52c07c;
+  --bad-ink: #f47f73;
+  --accent-2-ink: #f0806f;
   --note: #393a2c;
   --track: #3b4642;
   --shadow: #141917;
@@ -51,6 +58,11 @@
 /* 黃底的按鈕上，字和圖示維持深色才看得清楚 */
 :root[data-theme='dark'] :is(.mode.primary, .primary-btn, .next-btn, .icon-btn[aria-pressed='true'], .tool[aria-pressed='true'], .seg-btn[aria-pressed='true']) {
   color: var(--on-bright);
+}
+
+/* 科目標籤：黑板上底色淡一點，粉筆字才清楚 */
+:root[data-theme='dark'] .tag {
+  background: color-mix(in srgb, var(--c, var(--accent)) 30%, var(--card));
 }
 
 /* 成績的螢光筆底線：黑板上淡一點，粉筆字才清楚 */
@@ -64,6 +76,16 @@
 
 [hidden] {
   display: none !important;
+}
+
+/* 只給螢幕閱讀器念，畫面上看不到 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 html,
@@ -236,6 +258,8 @@ p {
 }
 
 .icon-btn .ico,
+.speak-btn .ico,
+.star-btn .ico,
 .copy-btn .ico,
 .flag-btn .ico {
   margin: 0;
@@ -292,7 +316,7 @@ p {
 
 .daily-text b {
   font-size: 1.2rem;
-  color: var(--accent-2);
+  color: var(--accent-2-ink);
 }
 
 .daily.done .daily-text b {
@@ -516,7 +540,7 @@ p {
 }
 
 .mode.primary .mode-sub {
-  color: color-mix(in srgb, var(--ink) 75%, transparent);
+  color: var(--on-bright);
 }
 
 .mode-pair {
@@ -538,7 +562,7 @@ p {
 }
 
 .mode.free .mode-sub {
-  color: color-mix(in srgb, var(--ink) 75%, transparent);
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
 }
 
 .mode-row {
@@ -1393,7 +1417,7 @@ p {
 
 .r-badge {
   font-weight: 900;
-  color: var(--accent-2);
+  color: var(--accent-2-ink);
   animation: bump 0.5s ease 2;
 }
 
@@ -1468,7 +1492,7 @@ p {
 }
 
 .r-mine {
-  color: var(--bad);
+  color: var(--bad-ink);
 }
 
 .r-mine.skip {
@@ -1476,7 +1500,7 @@ p {
 }
 
 .r-right {
-  color: var(--good);
+  color: var(--good-ink);
 }
 
 .r-explain {
@@ -1492,10 +1516,16 @@ p {
   flex: none;
 }
 
-/* ── 複製題目、回報題目 ─────────────────────────────── */
+/* ── 發音、收藏、複製、回報題目 ─────────────────────── */
+/* 單元名稱把按鈕推到右邊（英文題才有發音鈕，所以不能靠第一顆按鈕推） */
+.card-tag .topic {
+  margin-right: auto;
+}
+
+.speak-btn,
+.star-btn,
 .copy-btn,
 .flag-btn {
-  margin-left: auto;
   width: 36px;
   height: 30px;
   flex: none;
@@ -1508,14 +1538,19 @@ p {
   transition: color 0.2s, background 0.2s;
 }
 
-.copy-btn + .flag-btn {
-  margin-left: 0;
-}
-
+.speak-btn:hover,
+.speak-btn:active,
+.star-btn:hover,
 .copy-btn:hover,
 .flag-btn:hover,
 .copy-btn:active {
   color: var(--ink);
+}
+
+/* 收藏中：星星塗黃 */
+.star-btn[aria-pressed='true'] {
+  color: var(--ink);
+  --star-fill: var(--accent);
 }
 
 /* 回報中：旗面塗紅 */
@@ -1648,6 +1683,287 @@ p {
   margin-bottom: -4px;
 }
 
+.seg.nb-views {
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 12px;
+}
+
+.nb-views .seg-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.nb-views .seg-btn .ico {
+  margin: 0;
+}
+
+/* 收藏分頁的按鈕：星星塗黃 */
+.nb-views [data-view='star'] {
+  --star-fill: var(--accent);
+}
+
+/* 選中時按鈕本身是黃底，星星改塗白 */
+.nb-views .seg-btn[data-view='star'][aria-pressed='true'] {
+  --star-fill: var(--card);
+}
+
+.nb-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 12px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  color: var(--muted);
+}
+
+.nb-search:focus-within {
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink);
+}
+
+.nb-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem; /* 小於 16px 時 iPhone 會自動放大頁面 */
+}
+
+.r-note {
+  color: var(--muted);
+}
+
+/* 題目卡上的單元名稱：點了打開這個單元的考前重點卡 */
+.topic-link {
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.topic-link:hover {
+  color: var(--ink);
+}
+
+/* ── 考前重點卡 ─────────────────────────────────────── */
+.kp .sheet-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.kp-h {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.kp-h .ico {
+  margin: 0;
+}
+
+.kp-h.trap {
+  margin-top: 18px;
+  color: var(--bad-ink);
+}
+
+.kp-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: kp;
+}
+
+.kp-list li {
+  position: relative;
+  padding: 10px 12px 10px 40px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  font-size: calc(0.95rem * var(--fs, 1));
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.kp-list li::before {
+  counter-increment: kp;
+  content: counter(kp);
+  position: absolute;
+  left: 10px;
+  top: 11px;
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: color-mix(in srgb, var(--c, var(--accent)) 30%, var(--card));
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.kp-list.traps li {
+  border-style: dashed;
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad-bg) 55%, var(--card));
+}
+
+.kp-list.traps li::before {
+  content: '!';
+  border-color: var(--bad);
+  background: var(--bad-bg);
+  color: var(--bad-ink);
+}
+
+/* 捲動區可以用鍵盤捲（Tab 進來後按方向鍵） */
+#kp-scroll:focus-visible {
+  outline: 2.5px dashed var(--accent-2);
+  outline-offset: 2px;
+}
+
+.kp-actions {
+  display: grid;
+  grid-template-columns: 52px 1fr 52px;
+  gap: 10px;
+  margin-top: 12px;
+  flex: none;
+}
+
+.kp-actions .secondary-btn {
+  padding: 0;
+  font-size: 1.3rem;
+}
+
+/* 單元列旁邊的「重點」按鈕（單元面板、弱點單元） */
+.unit-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.unit-row > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.kp-btn {
+  flex: none;
+  width: 48px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  border: 1.5px dashed var(--line-soft);
+  border-radius: var(--hand-sm);
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.kp-btn .ico {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+.kp-btn:hover,
+.kp-btn:active {
+  border-style: solid;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+/* 錯題本「重點」分頁的單元清單 */
+.kp-unit {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 11px 12px;
+  text-align: left;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-left: 6px solid var(--c);
+  border-radius: var(--hand-sm);
+}
+
+.kp-unit-name {
+  font-weight: 700;
+}
+
+.kp-unit-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.kp-unit .unit-meter {
+  grid-column: 1 / 4;
+}
+
+/* ── 關於與診斷 ─────────────────────────────────────── */
+.set-group h3 .ico {
+  margin: 0 -2px 0 0;
+}
+
+.about-list {
+  margin: 0 0 10px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.about-list div {
+  display: grid;
+  grid-template-columns: 5.5em 1fr;
+  gap: 8px;
+}
+
+.about-list dt {
+  color: var(--muted);
+}
+
+.about-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.about-errors {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border: 1.5px dashed var(--bad);
+  border-radius: var(--hand-sm);
+  font-size: 0.8rem;
+}
+
+.about-errors h4 {
+  margin: 0 0 4px;
+  color: var(--bad-ink);
+  font-size: 0.85rem;
+}
+
+.about-errors ul {
+  margin: 0;
+  padding-left: 1.2em;
+  overflow-wrap: anywhere;
+}
+
 .nb-empty {
   padding: 24px 8px;
   text-align: center;
@@ -1733,7 +2049,7 @@ p {
   grid-area: go;
   font-size: 0.8rem;
   font-weight: 800;
-  color: var(--accent-2);
+  color: var(--accent-2-ink);
 }
 
 .weak-unit .unit-meter {
@@ -1836,7 +2152,7 @@ p {
 .set-group h3 small {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--accent-2);
+  color: var(--accent-2-ink);
 }
 
 .set-note {
@@ -2243,6 +2559,55 @@ p {
     line-height: 1.38;
   }
   .card { padding: 14px 15px 16px; }
+}
+
+/* 手機橫放：高度只剩一半，上下排放不下，改成左右兩欄（:not([hidden]) 免得蓋掉隱藏畫面的 display: none） */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* 首頁：左邊書架上的貓、右邊選科目和模式 */
+  .home:not([hidden]) {
+    max-width: 980px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: 'top panel' 'daily panel' 'stage modes' 'stage foot';
+    column-gap: 20px;
+  }
+  .home .topbar { grid-area: top; }
+  .home .daily { grid-area: daily; }
+  .home .stage { grid-area: stage; min-height: 140px; }
+  .home .panel { grid-area: panel; }
+  .home .modes { grid-area: modes; align-self: end; }
+  .home .foot { grid-area: foot; }
+
+  /* 作答：題目卡在左、選項在右 */
+  .play:not([hidden]) {
+    max-width: 980px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: 'bar bar' 'timer timer' 'card answers' 'card foot';
+    column-gap: 20px;
+    row-gap: 6px;
+  }
+  .play .card-wrap { padding-top: 26px; }
+  .play .answers { align-self: center; }
+  .play .play-foot { min-height: 48px; }
+  /* 草稿拉出來：題目留在左邊，草稿換到右邊，選項先收起（按「去作答」回來） */
+  .play[data-dock=''].scratch-open:not([hidden]) {
+    grid-template-areas: 'bar bar' 'timer timer' 'card pad' 'card pad';
+  }
+  .play[data-dock=''].scratch-open .card { max-height: 100%; }
+  .play[data-dock=''].scratch-open .scratch { min-height: 0; }
+}
+
+/* 小手機橫放（例如 iPhone SE）：每欄只剩 300 多 px，標題列和科目卡再收一點才不會換行 */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 720px) {
+  .home .brand > div,
+  .home .panel-head h2 small { display: none; }
+  .home .top-actions { gap: 6px; }
+  .home .pill { padding: 5px 9px; }
+  .home .chips { gap: 6px; }
+  .home .chip { padding: 6px 2px 5px; gap: 4px; }
 }
 
 @media (max-width: 480px) {

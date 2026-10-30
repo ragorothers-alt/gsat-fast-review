@@ -4,8 +4,8 @@ import { shiftDay } from './stats.js';
 const APP = 'gsat-quiz';
 
 export function exportBackup(state, now) {
-  const { cards, daily, streak, best, flags, flagsOff } = state;
-  return JSON.stringify({ app: APP, version: 1, exportedAt: now, state: { cards, daily, streak, best, flags, flagsOff } });
+  const { cards, daily, streak, best, flags, flagsOff, stars, starsOff } = state;
+  return JSON.stringify({ app: APP, version: 1, exportedAt: now, state: { cards, daily, streak, best, flags, flagsOff, stars, starsOff } });
 }
 
 /** 讀出備份裡的進度；不是這個遊戲的備份就丟出 Error，訊息直接給玩家看 */
@@ -39,30 +39,38 @@ export function mergeCard(a, b) {
   };
 }
 
+/** 題目上的標記：flags 回報有問題、stars 收藏 */
+export const MARKS = ['flags', 'stars'];
+
 /**
- * 回報與取消回報都記下時間：flags 是目前回報中的題目，flagsOff 是取消過的。
- * 合併時同一題以較晚的動作為準，在一台取消回報，另一台同步過來才不會又加回去。
+ * 標記與取消都記下時間：state[kind] 是目前標記中的題目，state[kind + 'Off'] 是取消過的。
+ * 合併時同一題以較晚的動作為準，在一台取消，另一台同步過來才不會又加回去。
+ * @param {'flags'|'stars'} kind
  */
-export function setFlag(state, id, on, now) {
-  state.flagsOff ||= {};
+export function setMark(state, kind, id, on, now) {
+  const marks = (state[kind] ||= {});
+  const off = (state[`${kind}Off`] ||= {});
   if (on) {
-    state.flags[id] = now;
-    delete state.flagsOff[id];
+    marks[id] = now;
+    delete off[id];
   } else {
-    delete state.flags[id];
-    state.flagsOff[id] = now;
+    delete marks[id];
+    off[id] = now;
   }
 }
 
-/** 把另一份的一筆回報／取消併進來；比本機的動作新才採用，回傳有沒有改變 */
-export function applyFlag(flags, flagsOff, id, at, on) {
-  if (!(at > Math.max(flags[id] ?? 0, flagsOff[id] ?? 0))) return false;
+export const setFlag = (state, id, on, now) => setMark(state, 'flags', id, on, now);
+export const setStar = (state, id, on, now) => setMark(state, 'stars', id, on, now);
+
+/** 把另一份的一筆標記／取消併進來；比本機的動作新才採用，回傳有沒有改變 */
+export function applyMark(marks, off, id, at, on) {
+  if (!(at > Math.max(marks[id] ?? 0, off[id] ?? 0))) return false;
   if (on) {
-    flags[id] = at;
-    delete flagsOff[id];
+    marks[id] = at;
+    delete off[id];
   } else {
-    delete flags[id];
-    flagsOff[id] = at;
+    delete marks[id];
+    off[id] = at;
   }
   return true;
 }
@@ -102,10 +110,14 @@ export function mergeState(local, incoming) {
     daily[k] = { answered: Math.max(mine.answered, num(d?.answered)), right: Math.max(mine.right, num(d?.right)) };
   }
 
-  const flags = { ...local.flags };
-  const flagsOff = { ...local.flagsOff };
-  for (const [id, at] of Object.entries(obj(incoming.flags))) applyFlag(flags, flagsOff, id, num(at), true);
-  for (const [id, at] of Object.entries(obj(incoming.flagsOff))) applyFlag(flags, flagsOff, id, num(at), false);
+  const marks = {};
+  for (const kind of MARKS) {
+    const on = { ...local[kind] };
+    const off = { ...local[`${kind}Off`] };
+    for (const [id, at] of Object.entries(obj(incoming[kind]))) applyMark(on, off, id, num(at), true);
+    for (const [id, at] of Object.entries(obj(incoming[`${kind}Off`]))) applyMark(on, off, id, num(at), false);
+    Object.assign(marks, { [kind]: on, [`${kind}Off`]: off });
+  }
 
   const inStreak = { count: num(incoming.streak?.count), last: incoming.streak?.last ?? null };
   return {
@@ -113,8 +125,7 @@ export function mergeState(local, incoming) {
       ...local,
       cards,
       daily,
-      flags,
-      flagsOff,
+      ...marks,
       streak: mergeStreak(daily, local.streak, inStreak),
       best: { ...local.best, blitz: Math.max(num(local.best?.blitz), num(incoming.best?.blitz)) },
     },

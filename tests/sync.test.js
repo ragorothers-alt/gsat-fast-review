@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { exportBackup, mergeState, parseBackup, setFlag } from '../src/sync.js';
+import { exportBackup, mergeState, parseBackup, setFlag, setStar } from '../src/sync.js';
 import { shiftDay } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -11,10 +11,12 @@ function state(patch) {
 
 describe('backup', () => {
   it('匯出再讀回，進度欄位不變', () => {
-    const s = state({ cards: { a: card(5) }, flags: { b: 9 } });
+    const s = state({ cards: { a: card(5) }, flags: { b: 9 }, stars: { c: 7 }, starsOff: { d: 8 } });
     const back = parseBackup(exportBackup(s, 100));
     expect(back.cards).toEqual(s.cards);
     expect(back.flags).toEqual({ b: 9 });
+    expect(back.stars).toEqual({ c: 7 });
+    expect(back.starsOff).toEqual({ d: 8 });
     expect(back.settings).toBeUndefined();
   });
 
@@ -60,6 +62,21 @@ describe('mergeState', () => {
     expect(s.flagsOff).toEqual({ a: 8 });
     // 對方取消得更晚
     expect(mergeState(s, { flagsOff: { b: 9 } }).state.flags).toEqual({});
+  });
+
+  it('收藏與回報各自合併，互不影響', () => {
+    const local = state();
+    setStar(local, 'a', true, 5);
+    setStar(local, 'b', false, 9);
+    const { state: s } = mergeState(local, { stars: { b: 6, c: 3 }, flags: { a: 4 } });
+    expect(s.stars).toEqual({ a: 5, c: 3 });
+    expect(s.starsOff).toEqual({ b: 9 });
+    expect(s.flags).toEqual({ a: 4 });
+  });
+
+  it('舊版備份沒有收藏欄位也能匯入', () => {
+    const local = state({ stars: { a: 5 } });
+    expect(mergeState(local, { cards: {} }).state.stars).toEqual({ a: 5 });
   });
 
   it('連續天數依合併後的每日紀錄重算', () => {

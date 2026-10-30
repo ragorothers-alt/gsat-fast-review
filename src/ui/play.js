@@ -1,4 +1,4 @@
-// 作答畫面：出題、點選／滑動作答、回饋、計時、回報題目
+// 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, schedule, shuffle } from '../srs.js';
@@ -6,11 +6,12 @@ import { MODES, advance, createSession, current, extend, isCorrect, submit, tick
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
 import { recordAnswer, today } from '../stats.js';
-import { setFlag } from '../sync.js';
+import { setFlag, setStar } from '../sync.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
-import { richHTML, visibleLength } from './rich.js';
+import { plainText, richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
+import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
 
 const RIGHT_DELAY = 650;
 const SWIPE_THRESHOLD = 80;
@@ -40,6 +41,8 @@ export function initPlay(ctx) {
     timerFill: $('#timer-fill'),
     flash: $('#flash'),
     flag: $('#flag'),
+    star: $('#star'),
+    speak: $('#speak'),
     copy: $('#copy-q'),
     related: $('#related'),
     more: $('#card-more'),
@@ -81,11 +84,17 @@ export function initPlay(ctx) {
     return ids;
   }
 
+  /** 指定的題目（收藏、搜尋結果）：打亂後取一輪的量，被回報的不出 */
+  function pickedQueue(mode, ids) {
+    const qs = ids.map((id) => byId.get(id)).filter((x) => x && !ctx.state.flags[x.id]);
+    return shuffle(qs).slice(0, MODES[mode].size);
+  }
+
   /**
    * @param {string} mode
-   * @param {{ units?: string[], seeds?: string[], subjects?: string[] }} [opts]
+   * @param {{ units?: string[], seeds?: string[], subjects?: string[], ids?: string[] }} [opts]
    *   units：指定要練的單元（從學習分析點單元進來時）；seeds：錯題延伸要從哪幾題錯題找類似題；
-   *   subjects：只出這幾科、而且不管首頁關掉的單元（從錯題本進來時）
+   *   subjects：只出這幾科、而且不管首頁關掉的單元（從錯題本進來時）；ids：只出這幾題（收藏、搜尋結果）
    */
   ctx.startRound = (mode, opts = {}) => {
     let units = opts.units ?? null;
@@ -97,8 +106,9 @@ export function initPlay(ctx) {
         return;
       }
     }
-    let queue =
-      mode === 'related'
+    let queue = opts.ids
+      ? pickedQueue(mode, opts.ids)
+      : mode === 'related'
         ? relatedQueue(ctx.bank, opts.seeds.map((id) => byId.get(id)).filter(Boolean), {
             size: MODES.related.size,
             exclude: avoidIds(Date.now()),
@@ -110,7 +120,13 @@ export function initPlay(ctx) {
     }
     if (!queue.length) {
       ctx.toast(
-        mode === 'review' ? '目前沒有待練的錯題，太穩了！' : mode === 'related' ? '類似的題目剛剛都練過了，晚點再來' : '選到的單元沒有題目',
+        opts.ids
+          ? '這些題目都回報過了，先不出'
+          : mode === 'review'
+            ? '目前沒有待練的錯題，太穩了！'
+            : mode === 'related'
+              ? '類似的題目剛剛都練過了，晚點再來'
+              : '選到的單元沒有題目',
       );
       return;
     }
@@ -164,7 +180,9 @@ export function initPlay(ctx) {
     const counted = s.timeLeft === null && !MODES[s.mode].endless;
     el.progress.textContent = counted ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
     el.card.classList.toggle('swipeable', q.type === 'tf');
-    renderFlag();
+    renderMarks();
+    stopSpeaking();
+    el.speak.hidden = !canSpeak(q);
     resetCardDrag();
     restartAnimation(el.card, 'enter');
     renderAnswers();
@@ -219,6 +237,15 @@ export function initPlay(ctx) {
     const text = btn.querySelector('.answer-text');
     if (isHTML) text.innerHTML = label;
     else text.textContent = label;
+    // 有公式的選項改念 plainText 轉出來的文字，螢幕閱讀器才念得出來；
+    // 不用 aria-label，名稱才會跟著按鈕內容走（axe 的 label-in-name 規則）
+    if (text.querySelector('math')) {
+      const said = document.createElement('span');
+      said.className = 'sr-only';
+      said.textContent = plainText(text);
+      text.setAttribute('aria-hidden', 'true');
+      btn.append(said);
+    }
     btn.addEventListener('click', () => choose(value));
     btn._value = value;
     return btn;
@@ -326,9 +353,10 @@ export function initPlay(ctx) {
     extend(s, more.length ? more : queueFor(s.mode));
   }
 
-  // ── 回報題目 ─────────────────────────────────────────
-  function renderFlag() {
+  // ── 收藏、回報題目 ─────────────────────────────────────
+  function renderMarks() {
     el.flag.setAttribute('aria-pressed', String(!!ctx.state.flags[q.id]));
+    el.star.setAttribute('aria-pressed', String(!!ctx.state.stars[q.id]));
   }
 
   // ── 複製題目給 AI 家教 ────────────────────────────────
@@ -344,11 +372,26 @@ export function initPlay(ctx) {
     const { flags } = ctx.state;
     setFlag(ctx.state, q.id, !flags[q.id], Date.now());
     ctx.save();
-    renderFlag();
+    renderMarks();
     ctx.toast(flags[q.id] ? '已回報這題，之後先不出；清單在首頁的設定裡' : '已取消回報');
   });
 
+  // 英文題：作答前念題目（空格停頓），作答後念填好正解的句子
+  el.speak.addEventListener('click', () => {
+    if (q) speak(speechText(q, { filled: phase === 'feedback' }));
+  });
+
+  el.star.addEventListener('click', () => {
+    if (!q) return;
+    const { stars } = ctx.state;
+    setStar(ctx.state, q.id, !stars[q.id], Date.now());
+    ctx.save();
+    renderMarks();
+    ctx.toast(stars[q.id] ? '已收藏，在錯題本的「收藏」找得到' : '已取消收藏');
+  });
+
   function finish() {
+    stopSpeaking();
     cancelAnimationFrame(raf);
     clearTimeout(autoNext);
     phase = 'idle';
@@ -378,6 +421,7 @@ export function initPlay(ctx) {
     if (!s) return;
     if (s.log.length) finish();
     else {
+      stopSpeaking();
       cancelAnimationFrame(raf);
       clearTimeout(autoNext);
       phase = 'idle';

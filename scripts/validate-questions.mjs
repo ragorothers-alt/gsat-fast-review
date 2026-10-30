@@ -6,10 +6,9 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import katex from 'katex';
 import { SUBJECT_BY_ID, SUBJECTS } from '../src/subjects.js';
 import { MIN_PER_UNIT, UNITS } from '../src/units.js';
-import { splitMath } from '../src/rich-text.js';
+import { checkText } from './text-check.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
@@ -17,8 +16,6 @@ const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const CONTROL_CHARS = /[\u0000-\u0009\u000b-\u001f]/;
-const CJK = /[㐀-鿿]/;
 const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level']);
 
 const args = process.argv.slice(2);
@@ -132,46 +129,3 @@ for (const file of files) {
 
 console.log(`\n合計：${totalErrors} 個錯誤、${totalWarnings} 個警告`);
 process.exit(totalErrors ? 1 : 0);
-
-/** \mathrm{...} 的最外層有 + 或箭頭：KaTeX 把整組當成一塊，不能在中間換行 */
-function equationInMathrm(tex) {
-  for (let at = tex.indexOf('\\mathrm{'); at >= 0; at = tex.indexOf('\\mathrm{', at + 1)) {
-    let depth = 0;
-    for (let i = at + 8; i < tex.length; i++) {
-      const ch = tex[i];
-      if (ch === '{') depth++;
-      else if (ch === '}' && depth-- === 0) break;
-      else if (depth === 0 && ((ch === '+' && tex[i - 1] !== '^') || /^\\(rightarrow|rightleftharpoons|longrightarrow|to)(?![a-zA-Z])/.test(tex.slice(i)))) return true;
-    }
-  }
-  return false;
-}
-
-function checkText(value, field, max, warnAt, err, warn) {
-  if (typeof value !== 'string' || !value.trim()) return err(`${field} 必須是非空字串`);
-  if (CONTROL_CHARS.test(value)) {
-    return err(`${field} 含控制字元——多半是 JSON 裡的 LaTeX 反斜線沒有寫成兩個（例如 "\\frac" 要寫 "\\\\frac"）`);
-  }
-  const { segments, balanced } = splitMath(value);
-  if (!balanced) err(`${field} 的 $ 沒有成對`);
-  let visible = 0;
-  for (const seg of segments) {
-    if (!seg.math) {
-      visible += seg.text.length;
-      continue;
-    }
-    visible += Math.ceil(seg.text.length / 3);
-    if (seg.text.includes('\n')) err(`${field} 的公式內不可換行`);
-    try {
-      katex.renderToString(seg.text, { throwOnError: true, strict: 'ignore' });
-    } catch (e) {
-      err(`${field} 的 LaTeX 無法解析：$${seg.text}$ — ${e.message.split('\n')[0]}`);
-    }
-    if (CJK.test(seg.text.replace(/\\text\{[^}]*\}/g, ''))) warn(`${field} 的公式內有中文，請改用 \\text{} 或移到 $ 外`);
-    if (equationInMathrm(seg.text)) {
-      err(`${field} 的整條方程式包在同一個 \\mathrm{} 裡，手機上無法換行；請每個化學式各自包，例如 $\\mathrm{H_2}+\\mathrm{Cl_2}\\rightarrow\\mathrm{2HCl}$`);
-    }
-  }
-  if (visible > max) err(`${field} 太長（約 ${visible} 字，上限 ${max}）`);
-  else if (visible > warnAt) warn(`${field} 偏長（約 ${visible} 字，建議 ≤ ${warnAt}）`);
-}

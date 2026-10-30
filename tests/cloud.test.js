@@ -5,7 +5,7 @@ import { schedule } from '../src/srs.js';
 import { dayKey, recordAnswer } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 import { SUBJECTS } from '../src/subjects.js';
-import { setFlag } from '../src/sync.js';
+import { setFlag, setStar } from '../src/sync.js';
 import { statusText } from '../src/ui/cloud.js';
 import { createD1 } from './helpers/d1.js';
 
@@ -128,6 +128,23 @@ describe('合併', () => {
     await sync(b);
     await sync(a);
     expect(a.flags).toEqual({});
+  });
+
+  it('收藏在兩台之間同步，取消也同步；跟回報互不影響', async () => {
+    const { a, b } = await pair();
+    clock += 1000;
+    setStar(a, 'history-020', true, clock);
+    setStar(a, 'math-003', true, clock);
+    setFlag(a, 'math-003', true, clock);
+    await sync(a);
+    await sync(b);
+    expect(Object.keys(b.stars).sort()).toEqual(['history-020', 'math-003']);
+    clock += 1000;
+    setStar(b, 'math-003', false, clock);
+    await sync(b);
+    await sync(a);
+    expect(Object.keys(a.stars)).toEqual(['history-020']);
+    expect(Object.keys(a.flags)).toEqual(['math-003']);
   });
 
   it('快閃最高分取較大值', async () => {

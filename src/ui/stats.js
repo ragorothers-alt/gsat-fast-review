@@ -4,6 +4,7 @@ import { DAY, mastery } from '../srs.js';
 import { GOALS } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { unitKey } from '../units.js';
+import { icon } from './icons.js';
 
 const pct = (x) => (x === null ? '—' : `${Math.round(x * 100)}%`);
 const TRAIN_UNITS = 3;
@@ -121,15 +122,17 @@ export function initStats(ctx) {
       const subj = SUBJECT_BY_ID[u.subject];
       const rate = Math.round(u.rate * 100);
       const li = document.createElement('li');
+      li.className = 'unit-row';
       li.innerHTML = `<button type="button" class="weak-unit" style="--c:${subj.color}">
         <span class="tag">${subj.name}</span>
         <span class="weak-name"></span>
         <span class="weak-meta">失誤 ${rate}%・作答 ${u.seen} 次${u.weak ? `・待練 ${u.weak} 題` : ''}</span>
         <span class="weak-go" aria-hidden="true">練 ›</span>
         <span class="unit-meter" aria-hidden="true"><i style="width:${rate}%"></i></span>
-      </button>`;
+      </button><button type="button" class="kp-btn" aria-label="${u.unit}：考前重點">${icon('card')}重點</button>`;
       li.querySelector('.weak-name').textContent = u.unit;
-      li.querySelector('button').addEventListener('click', () => ctx.startRound('weak', { units: [u.key] }));
+      li.querySelector('.weak-unit').addEventListener('click', () => ctx.startRound('weak', { units: [u.key] }));
+      li.querySelector('.kp-btn').addEventListener('click', () => ctx.openKeypoints(u.subject, u.unit));
       list.append(li);
     }
   }
