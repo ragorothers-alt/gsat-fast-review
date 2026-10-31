@@ -21637,5 +21637,2521 @@
     "explain": "物質循環不等於能量可無限重複利用；蒸發需吸熱，自然水循環主要由太陽能及重力驅動。",
     "formula": false,
     "level": 2
+  },
+  {
+    "id": "chemistry-1374",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "硝酸銨 $\\mathrm{NH_4NO_3}$ 的莫耳質量為 80 g/mol。氮的原子量為 14，氮元素的質量百分率為何？",
+    "choices": [
+      "17.5%",
+      "70%",
+      "2.5%",
+      "35%"
+    ],
+    "answer": 3,
+    "explain": "質量百分率為元素質量除以總質量：$w_N=2\\times14/80\\times100\\%=35\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1375",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "純氧化物 $\\mathrm{XO}$ 的氧質量百分率為 40%。氧原子量為 16，X 的原子量為何？",
+    "choices": [
+      "24",
+      "40",
+      "6.4",
+      "$\\frac{32}{3}$"
+    ],
+    "answer": 0,
+    "explain": "由 $\\frac{16}{X+16}=0.40$，式量為 $16/0.4=40$，故 $X=40-16=24$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1376",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "熔合前秤得銅 36 g、鋅 18 g、錫 6 g；熔合時三者均無損失。成品中鋅的質量百分率為何？",
+    "choices": [
+      "50%",
+      "$\\frac{100}{3}$%",
+      "30%",
+      "60%"
+    ],
+    "answer": 2,
+    "explain": "混合物質量百分率 $=m_i/m_{\\rm total}\\times100\\%$；$18/(36+18+6)\\times100\\%=30\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1377",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "將銅占 40% 的合金 100 g，與銅占 80% 的合金 60 g 熔合；質量均無損失。新合金中銅的質量百分率為何？",
+    "choices": [
+      "60%",
+      "88%",
+      "25%",
+      "55%"
+    ],
+    "answer": 3,
+    "explain": "$w=m_{\\rm Cu}/m_{\\rm total}$；銅為 $100\\times0.4+60\\times0.8=88$ g，故 $w=88/160=55\\%$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1378",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "80 g 糖水的蔗糖質量百分率為 10%。加入純蔗糖並使其全溶，無物質流失；若要變為 20%，須加入多少克蔗糖？",
+    "choices": [
+      "8 g",
+      "16 g",
+      "40 g",
+      "10 g"
+    ],
+    "answer": 3,
+    "explain": "質量分率 $w=m_i/m$；設加 $x$ g，$(8+x)/(80+x)=0.2$，得 $0.8x=8$，$x=10$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1379",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "某乾燥粉末只含甲、乙兩種成分，兩者的質量比為 3：2。乙的質量百分率為何？",
+    "choices": [
+      "$\\frac{200}{3}$%",
+      "60%",
+      "$\\frac{200}{7}$%",
+      "40%"
+    ],
+    "answer": 3,
+    "explain": "質量百分率 $=m_i/m_{\\rm total}\\times100\\%=2/(3+2)\\times100\\%=40\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1380",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "9 g 金屬與氧完全化合，只得到 15 g 純氧化物，沒有其他產物。氧化物中金屬質量是氧質量的幾倍？",
+    "choices": [
+      "1.5 倍",
+      "$\\frac{2}{3}$ 倍",
+      "0.6 倍",
+      "$\\frac{5}{3}$ 倍"
+    ],
+    "answer": 0,
+    "explain": "氧的質量為 $15-9=6$ g；定比中的質量比 $m_{\\rm metal}/m_{\\rm O}=9/6=1.5$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1381",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "36 g 純化合物分解後只得到元素甲 27 g 與元素乙。另一份同種純化合物分解後得到甲 12 g，乙為多少克？",
+    "choices": [
+      "36 g",
+      "16 g",
+      "4 g",
+      "9 g"
+    ],
+    "answer": 2,
+    "explain": "定比定律：乙、甲質量比為 $(36-27):27=1:3$；另一份的乙為 $12\\times(36-27)/27=4$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1382",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "兩種鐵氧化物，甲含鐵 7 g、氧 2 g，乙含鐵 3.5 g、氧 1.5 g。取含鐵等質量的兩樣品，乙的氧質量是甲的幾倍？",
+    "choices": [
+      "0.75 倍",
+      "1.5 倍",
+      "$\\frac{2}{3}$ 倍",
+      "0.375 倍"
+    ],
+    "answer": 1,
+    "explain": "固定鐵質量後，氧量比為 $(1.5/3.5)/(2/7)=1.5$；不可直接比較兩份樣品的氧量。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1383",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "甲、乙兩純化合物都只含 A、B 元素。甲含 A 80%、B 20%，乙含 A 50%、B 50%，皆為質量百分率。取含 A 等質量的樣品，乙的 B 質量是甲的幾倍？",
+    "choices": [
+      "4 倍",
+      "2.5 倍",
+      "0.25 倍",
+      "0.625 倍"
+    ],
+    "answer": 0,
+    "explain": "固定 A 後，B 的質量比為各自 $w_B/w_A$ 之比：$(50/50)/(20/80)=4$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1384",
+    "subject": "chemistry",
+    "topic": "物質的分類與組成",
+    "type": "mc",
+    "q": "一份只含銅、鋅的合金，鋅的質量百分率為 25%，銅為 45 g。這份合金含鋅多少克？",
+    "choices": [
+      "15 g",
+      "11.25 g",
+      "135 g",
+      "33.75 g"
+    ],
+    "answer": 0,
+    "explain": "銅占 75%，故總質量 $m=45/0.75=60$ g；鋅為 $60\\times0.25=15$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1385",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "鈣－44 的原子序為 20。單一中性鈣－44 原子含多少個中子？",
+    "choices": [
+      "64 個",
+      "24 個",
+      "20 個",
+      "4 個"
+    ],
+    "answer": 1,
+    "explain": "中子數 $N=A-Z=44-20=24$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1386",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "硒－80 的原子序為 34。單一 $\\mathrm{Se^{2-}}$ 的質子、中子、電子合計多少個？",
+    "choices": [
+      "112 個",
+      "80 個",
+      "116 個",
+      "150 個"
+    ],
+    "answer": 2,
+    "explain": "$p+n=A=80$，陰離子電子數 $e=Z+2=36$，總數為 $80+36=116$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1387",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "鋁－27 的原子序為 13。一個 $\\mathrm{Al^{3+}}$ 所含帶電粒子合計多少個？",
+    "choices": [
+      "29 個",
+      "37 個",
+      "10 個",
+      "23 個"
+    ],
+    "answer": 3,
+    "explain": "帶電粒子是質子及電子；$p=Z=13$，$e=Z-3=10$，合計 $13+10=23$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1388",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "某單原子二價陽離子的質量數為 44。取 3 個此種離子，質子、中子、電子合計 186 個。此元素的原子序為何？",
+    "choices": [
+      "20",
+      "18",
+      "16",
+      "22"
+    ],
+    "answer": 0,
+    "explain": "每離子粒子數 $186/3=62$；電子數 $e=62-A=18$，二價陽離子的 $Z=e+2=20$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1389",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "鐵－56 的原子序為 26。單一 $\\mathrm{Fe^{3+}}$ 中，中子數比電子數多多少個？",
+    "choices": [
+      "4 個",
+      "1 個",
+      "7 個",
+      "53 個"
+    ],
+    "answer": 2,
+    "explain": "$N=A-Z=56-26=30$，$e=Z-3=23$；兩者相差 $30-23=7$ 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1390",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "氧的原子序為 8。某 $\\mathrm{X^{3+}}$ 與 $\\mathrm{O^{2-}}$ 電子數相同，X 的質量數為 27。單一 X 原子核含多少個中子？",
+    "choices": [
+      "17 個",
+      "14 個",
+      "20 個",
+      "19 個"
+    ],
+    "answer": 1,
+    "explain": "$\\mathrm{O^{2-}}$ 有 $8+2=10$ 個電子；X 的 $Z=10+3=13$，故 $N=A-Z=27-13=14$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1391",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "硫、氯的原子序依序為 16、17。各取一個 $\\mathrm{S^{2-}}$、$\\mathrm{Cl^-}$，核外電子合計多少個？",
+    "choices": [
+      "36 個",
+      "30 個",
+      "33 個",
+      "34 個"
+    ],
+    "answer": 0,
+    "explain": "陰離子的電子數為原子序加所得電子數，故總數 $=(16+2)+(17+1)=36$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1392",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "鈉－23 的原子序為 11。取 3 個中性鈉－23 原子，其核內中子合計多少個？",
+    "choices": [
+      "33 個",
+      "69 個",
+      "36 個",
+      "12 個"
+    ],
+    "answer": 2,
+    "explain": "每核中子數 $N=A-Z=23-11=12$；三個原子共有 $3\\times12=36$ 個。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1393",
+    "subject": "chemistry",
+    "topic": "原子結構與同位素",
+    "type": "mc",
+    "q": "鎂－25 的原子序為 12。取 2 個 $\\mathrm{Mg^{2+}}$，其質子、中子及電子合計多少個？",
+    "choices": [
+      "78 個",
+      "50 個",
+      "35 個",
+      "70 個"
+    ],
+    "answer": 3,
+    "explain": "每個離子共有 $A+(Z-2)=25+10=35$ 個粒子；兩個共 $2\\times35=70$ 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1394",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某中性鹽只由 $\\mathrm{Ca^{2+}}$、$\\mathrm{F^-}$ 組成。1 mol 此鹽共有多少個離子？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$6\\times10^{23}$ 個",
+      "$1.2\\times10^{24}$ 個",
+      "$1.8\\times10^{24}$ 個",
+      "$2.4\\times10^{24}$ 個"
+    ],
+    "answer": 2,
+    "explain": "電荷平衡得 $\\mathrm{CaF_2}$；每式單位有 3 個離子，$N=3N_A=1.8\\times10^{24}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1395",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某氧化物只由 $\\mathrm{Al^{3+}}$、$\\mathrm{O^{2-}}$ 組成且電中性。1 mol 此物含多少個氧原子？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$1.2\\times10^{24}$ 個",
+      "$3\\times10^{24}$ 個",
+      "$1.8\\times10^{24}$ 個",
+      "$6\\times10^{23}$ 個"
+    ],
+    "answer": 2,
+    "explain": "電荷平衡得 $\\mathrm{Al_2O_3}$；$N_{\\rm O}=3N_A=1.8\\times10^{24}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1396",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某中性鹽由 $\\mathrm{NH_4^+}$ 與 $\\mathrm{CO_3^{2-}}$ 組成。1 mol 此鹽含多少個氫原子？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$2.4\\times10^{24}$ 個",
+      "$1.2\\times10^{24}$ 個",
+      "$4.8\\times10^{24}$ 個",
+      "$3.6\\times10^{24}$ 個"
+    ],
+    "answer": 2,
+    "explain": "化學式為 $\\mathrm{(NH_4)_2CO_3}$；氫為 $2\\times4=8$ mol，$N=8N_A=4.8\\times10^{24}$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1397",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某中性鹽由 $\\mathrm{Mg^{2+}}$、$\\mathrm{NO_3^-}$ 組成。1 mol 此鹽內，氧原子比鎂離子多多少個？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$3.6\\times10^{24}$ 個",
+      "$3.0\\times10^{24}$ 個",
+      "$1.2\\times10^{24}$ 個",
+      "$6.0\\times10^{23}$ 個"
+    ],
+    "answer": 1,
+    "explain": "式為 $\\mathrm{Mg(NO_3)_2}$；每式單位有 6 個氧原子、1 個鎂離子，相差 $(6-1)N_A=3.0\\times10^{24}$ 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1398",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "電中性鹽由 $\\mathrm{Al^{3+}}$、$\\mathrm{SO_4^{2-}}$ 組成。1 mol 此鹽的陽離子合帶多少庫侖電荷？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$，基本電荷量 $e=1.6\\times10^{-19}$ C。",
+    "choices": [
+      "288000 C",
+      "192000 C",
+      "576000 C",
+      "0 C"
+    ],
+    "answer": 2,
+    "explain": "式為 $\\mathrm{Al_2(SO_4)_3}$，陽離子為 2 mol；$q=2\\times3N_Ae=5.76\\times10^5$ C。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1399",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "電中性鹽由 $\\mathrm{Ca^{2+}}$、$\\mathrm{PO_4^{3-}}$ 組成。1 mol 此鹽的陰離子合帶多少基本電荷？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$，以 $e$ 為基本電荷量。",
+    "choices": [
+      "$-3.6\\times10^{24}$ $e$",
+      "$3.6\\times10^{24}$ $e$",
+      "$-1.8\\times10^{24}$ $e$",
+      "$-1.2\\times10^{24}$ $e$"
+    ],
+    "answer": 0,
+    "explain": "式為 $\\mathrm{Ca_3(PO_4)_2}$；陰離子為 2 mol，$q=2N_A(-3e)=-3.6\\times10^{24}e$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1400",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某電中性鹽只由 $\\mathrm{Fe^{3+}}$、$\\mathrm{Cl^-}$ 組成。1 mol 此鹽內，氯離子比鐵離子多多少個？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$1.8\\times10^{24}$ 個",
+      "$1.2\\times10^{24}$ 個",
+      "$2.4\\times10^{24}$ 個",
+      "$6.0\\times10^{23}$ 個"
+    ],
+    "answer": 1,
+    "explain": "化學式為 $\\mathrm{FeCl_3}$；每式單位的兩類離子相差 $3-1=2$ 個，故差為 $2N_A=1.2\\times10^{24}$ 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1401",
+    "subject": "chemistry",
+    "topic": "化學鍵與分子",
+    "type": "mc",
+    "q": "某電中性鹽由 $\\mathrm{K^+}$ 與 $\\mathrm{SO_4^{2-}}$ 組成。1 mol 此鹽內所有元素的原子合計多少個？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$1.8\\times10^{24}$ 個",
+      "$3.6\\times10^{24}$ 個",
+      "$3\\times10^{24}$ 個",
+      "$4.2\\times10^{24}$ 個"
+    ],
+    "answer": 3,
+    "explain": "化學式為 $\\mathrm{K_2SO_4}$，每式單位有 $2+1+4=7$ 個原子；$N=7N_A=4.2\\times10^{24}$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1402",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "碳酸銨的化學式為 $\\mathrm{(NH_4)_2CO_3}$，其莫耳質量為何？原子量 H＝1、C＝12、N＝14、O＝16。",
+    "choices": [
+      "78 g/mol",
+      "96 g/mol",
+      "92 g/mol",
+      "64 g/mol"
+    ],
+    "answer": 1,
+    "explain": "依原子數加總：$M=2(14+4)+12+3\\times16=96$ g/mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1403",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "臭氧 $\\mathrm{O_3}$ 的莫耳質量為 48 g/mol。單一臭氧分子的質量為多少克？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$\\frac{8}{3}\\times10^{-23}$ g",
+      "$2.4\\times10^{-22}$ g",
+      "$8\\times10^{-24}$ g",
+      "$8\\times10^{-23}$ g"
+    ],
+    "answer": 3,
+    "explain": "由 $N=nN_A$、$m=nM$，一分子質量 $m=M/N_A=48/(6.0\\times10^{23})=8.0\\times10^{-23}$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1404",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "一份純一氧化碳含 $3.0\\times10^{22}$ 個分子，莫耳質量為 28 g/mol。這份樣品的質量為何？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "0.7 g",
+      "14 g",
+      "2.8 g",
+      "1.4 g"
+    ],
+    "answer": 3,
+    "explain": "$n=N/N_A=0.05$ mol，$m=nM=0.05\\times28=1.4$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1405",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "一份氦氣質量為 4.0 mg，氦的莫耳質量為 4.0 g/mol。這份氦氣含多少個原子？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "$6\\times10^{20}$ 個",
+      "$6\\times10^{23}$ 個",
+      "$9.6\\times10^{21}$ 個",
+      "$1.2\\times10^{21}$ 個"
+    ],
+    "answer": 0,
+    "explain": "$4.0$ mg $=0.0040$ g；$n=m/M=0.001$ mol，$N=nN_A=6.0\\times10^{20}$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1406",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "取 25.4 g 純碘 $\\mathrm{I_2}$，其中碘分子的物質的量為何？碘的原子量為 127。",
+    "choices": [
+      "0.1 mol",
+      "0.2 mol",
+      "0.05 mol",
+      "10 mol"
+    ],
+    "answer": 0,
+    "explain": "$M(\\mathrm{I_2})=2\\times127=254$ g/mol；$n=m/M=25.4/254=0.10$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1407",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "純銅片原含 $6.0\\times10^{22}$ 個銅原子；清洗時溶失 0.64 g 銅，無其他變化。剩餘銅有幾莫耳？銅莫耳質量為 64 g/mol，$N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "0.11 mol",
+      "0.01 mol",
+      "0.09 mol",
+      "0.99 mol"
+    ],
+    "answer": 2,
+    "explain": "$n_0=N/N_A=0.10$ mol，溶失 $n=m/M=0.01$ mol，剩餘 $0.10-0.01=0.09$ mol。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1408",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "一份純分子物質質量為 7.5 g，含 $1.5\\times10^{22}$ 個分子。此物質的莫耳質量為何？取 $N_A=6.0\\times10^{23}\\ \\mathrm{mol^{-1}}$。",
+    "choices": [
+      "0.1875 g/mol",
+      "30 g/mol",
+      "300 g/mol",
+      "3 g/mol"
+    ],
+    "answer": 2,
+    "explain": "$n=N/N_A=0.025$ mol；$M=m/n=7.5/0.025=300$ g/mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1409",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "甲醇與乙醇的莫耳質量依序為 32、46 g/mol。甲有 3.2 g 甲醇，乙有 9.2 g 乙醇；乙的分子比甲多幾莫耳？",
+    "choices": [
+      "0.30 mol",
+      "0.10 mol",
+      "0.20 mol",
+      "0.1875 mol"
+    ],
+    "answer": 1,
+    "explain": "由 $n=m/M$，甲為 $3.2/32=0.10$ mol，乙為 $9.2/46=0.20$ mol，相差 $0.20-0.10=0.10$ mol。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1410",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{4Al}+\\mathrm{3O_2}\\rightarrow\\mathrm{2Al_2O_3}$，0.40 mol 鋁在足量氧氣中完全反應，消耗多少克氧氣？氧氣莫耳質量為 32 g/mol。",
+    "choices": [
+      "9.6 g",
+      "$\\frac{256}{15}$ g",
+      "12.8 g",
+      "4.8 g"
+    ],
+    "answer": 0,
+    "explain": "依係數比，氧氣為 $n=0.40\\times3/4=0.30$ mol；其質量 $m=nM=0.30\\times32=9.6$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1411",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{Fe_2O_3}+\\mathrm{3CO}\\rightarrow\\mathrm{2Fe}+\\mathrm{3CO_2}$，0.10 mol 氧化鐵與足量一氧化碳完全反應，生成幾克鐵？鐵莫耳質量為 56 g/mol。",
+    "choices": [
+      "11.2 g",
+      "5.6 g",
+      "2.8 g",
+      "1.12 g"
+    ],
+    "answer": 0,
+    "explain": "依係數比，鐵為 $n=0.10\\times2=0.20$ mol；其質量 $m=nM=0.20\\times56=11.2$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1412",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "0.20 mol 氯酸鉀依 $\\mathrm{2KClO_3}\\rightarrow\\mathrm{2KCl}+\\mathrm{3O_2}$ 完全分解，生成幾克氧氣？氧氣莫耳質量為 32 g/mol。",
+    "choices": [
+      "$\\frac{64}{15}$ g",
+      "6.4 g",
+      "9.6 g",
+      "19.2 g"
+    ],
+    "answer": 2,
+    "explain": "依係數比，氧氣為 $n=0.20\\times3/2=0.30$ mol；其質量 $m=nM=0.30\\times32=9.6$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1413",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "要依 $\\mathrm{2H_2O_2}\\rightarrow\\mathrm{2H_2O}+\\mathrm{O_2}$ 製得 0.25 mol 氧氣，需完全分解多少克純過氧化氫？過氧化氫、氧氣莫耳質量依序為 34、32 g/mol。",
+    "choices": [
+      "8.5 g",
+      "17 g",
+      "4.25 g",
+      "16 g"
+    ],
+    "answer": 1,
+    "explain": "依係數比，過氧化氫為 $n=0.25\\times2=0.50$ mol；其質量 $m=nM=0.50\\times34=17$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1414",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{2Na}+\\mathrm{Cl_2}\\rightarrow\\mathrm{2NaCl}$，0.10 mol 氯氣與足量鈉完全反應，生成多少克氯化鈉？氯化鈉莫耳質量為 58.5 g/mol。",
+    "choices": [
+      "5.85 g",
+      "11.7 g",
+      "2.925 g",
+      "23.4 g"
+    ],
+    "answer": 1,
+    "explain": "依係數比，氯化鈉為 $n=0.10\\times2=0.20$ mol；其質量 $m=nM=0.20\\times58.5=11.7$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1415",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{C_3H_8}+\\mathrm{5O_2}\\rightarrow\\mathrm{3CO_2}+\\mathrm{4H_2O}$，4.4 g 丙烷在足量氧氣中完全燃燒，生成多少克二氧化碳？丙烷、二氧化碳莫耳質量均為 44 g/mol。",
+    "choices": [
+      "4.4 g",
+      "$\\frac{22}{15}$ g",
+      "6.6 g",
+      "13.2 g"
+    ],
+    "answer": 3,
+    "explain": "$n=m/M=4.4/44=0.10$ mol；二氧化碳為 $0.10\\times3=0.30$ mol，質量 $m=nM=13.2$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1416",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "碳酸鈣全依 $\\mathrm{CaCO_3}\\rightarrow\\mathrm{CaO}+\\mathrm{CO_2}$ 分解，收得 5.6 g 氧化鈣。生成的二氧化碳多少克？兩產物的莫耳質量依序為 56、44 g/mol。",
+    "choices": [
+      "4.4 g",
+      "10 g",
+      "5.6 g",
+      "8.8 g"
+    ],
+    "answer": 0,
+    "explain": "兩產物莫耳數比為 1：1；$n=5.6/56=0.1$ mol，二氧化碳質量 $m=nM=0.1\\times44=4.4$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1417",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{AgNO_3}+\\mathrm{NaCl}\\rightarrow\\mathrm{AgCl}+\\mathrm{NaNO_3}$，34 g 硝酸銀與足量氯化鈉完全反應，生成幾克氯化銀？硝酸銀、氯化銀莫耳質量為 170、143.5 g/mol。",
+    "choices": [
+      "28.7 g",
+      "2.87 g",
+      "34 g",
+      "14.35 g"
+    ],
+    "answer": 0,
+    "explain": "兩者係數比為 1：1；$n=34/170=0.2$ mol，氯化銀質量 $m=nM=0.2\\times143.5=28.7$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1418",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "9.0 g 水全依 $\\mathrm{2H_2O}\\rightarrow\\mathrm{2H_2}+\\mathrm{O_2}$ 分解。生成的氧氣比氫氣重多少克？水、氫氣的莫耳質量依序為 18、2 g/mol。",
+    "choices": [
+      "8 g",
+      "7 g",
+      "1 g",
+      "9 g"
+    ],
+    "answer": 1,
+    "explain": "$n=m/M=9/18=0.5$ mol，氫氣為 $0.5\\times2=1$ g；由質量守恆氧氣為 $9-1=8$ g，相差 7 g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1419",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{CuO}+\\mathrm{H_2SO_4}\\rightarrow\\mathrm{CuSO_4}+\\mathrm{H_2O}$，8 g 氧化銅與足量稀硫酸完全反應。生成的硫酸銅以無水鹽計，為多少克？氧化銅、無水硫酸銅莫耳質量為 80、160 g/mol。",
+    "choices": [
+      "4 g",
+      "8 g",
+      "1.6 g",
+      "16 g"
+    ],
+    "answer": 3,
+    "explain": "係數比為 1：1；$n=8/80=0.1$ mol，硫酸銅質量 $m=nM=0.1\\times160=16$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1420",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{CH_4}+\\mathrm{H_2O}\\rightarrow\\mathrm{CO}+\\mathrm{3H_2}$，8 g 甲烷與足量水蒸氣完全反應，生成多少克氫氣？甲烷、氫氣莫耳質量依序為 16、2 g/mol。",
+    "choices": [
+      "3 g",
+      "1 g",
+      "$\\frac{1}{3}$ g",
+      "1.5 g"
+    ],
+    "answer": 0,
+    "explain": "$M(\\mathrm{CH_4})=16$ g/mol，甲烷為 0.5 mol；氫氣為 $0.5\\times3=1.5$ mol，質量為 $1.5\\times2=3$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1421",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{Fe}+\\mathrm{2HCl}\\rightarrow\\mathrm{FeCl_2}+\\mathrm{H_2}$，5.6 g 鐵與足量稀鹽酸完全反應，生成多少克氫氣？鐵、氫氣莫耳質量為 56、2 g/mol。",
+    "choices": [
+      "0.1 g",
+      "0.4 g",
+      "2 g",
+      "0.2 g"
+    ],
+    "answer": 3,
+    "explain": "鐵與氫氣係數比為 1：1；$n=5.6/56=0.1$ mol，氫氣質量 $m=nM=0.1\\times2=0.2$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1422",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{S}+\\mathrm{O_2}\\rightarrow\\mathrm{SO_2}$，足量硫與氧氣完全反應，消耗氧氣 6.4 g。生成的二氧化硫為多少克？氧氣、二氧化硫莫耳質量為 32、64 g/mol。",
+    "choices": [
+      "3.2 g",
+      "12.8 g",
+      "6.4 g",
+      "25.6 g"
+    ],
+    "answer": 1,
+    "explain": "係數比為 1：1；$n(\\mathrm{O_2})=6.4/32=0.2$ mol，產物質量 $m=nM=0.2\\times64=12.8$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1423",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "某硫氧化合物的硫、氧質量百分率均為 50%。原子量 S＝32、O＝16，其實驗式中氧的下標為何？",
+    "choices": [
+      "1",
+      "0.5",
+      "4",
+      "2"
+    ],
+    "answer": 3,
+    "explain": "原子數比等於 $w/M$ 之比；$n_{\\rm S}:n_{\\rm O}=(50/32):(50/16)=1:2$，氧下標為 2。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1424",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "某鎂氧化合物的氧質量百分率為 40%。一份樣品含 0.10 mol 氧原子，氧的莫耳質量為 16 g/mol；樣品共多少克？",
+    "choices": [
+      "0.64 g",
+      "4.0 g",
+      "1.6 g",
+      "0.25 g"
+    ],
+    "answer": 1,
+    "explain": "氧的質量 $m=nM=0.10\\times16=1.6$ g；由質量分率 $w=m_O/m$，總質量 $m=1.6/0.40=4.0$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1425",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "某純化合物只含氮、氫、氧，質量百分率依序為 35%、5%、60%。原子量 N＝14、H＝1、O＝16，其實驗式中氧的下標為何？",
+    "choices": [
+      "6",
+      "1.5",
+      "4",
+      "3"
+    ],
+    "answer": 3,
+    "explain": "各原子莫耳數比為 $35/14:5/1:60/16=2.5:5:3.75=2:4:3$，故氧下標為 3。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1426",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{CaO}+\\mathrm{SO_2}\\rightarrow\\mathrm{CaSO_3}$ 製得 24 g 亞硫酸鈣，其他反應物足量且完全反應。消耗多少克氧化鈣？氧化鈣、亞硫酸鈣莫耳質量為 56、120 g/mol。",
+    "choices": [
+      "12.8 g",
+      "11.2 g",
+      "24 g",
+      "33.6 g"
+    ],
+    "answer": 1,
+    "explain": "係數比為 1：1；產物為 $n=24/120=0.2$ mol，氧化鈣質量 $m=nM=0.2\\times56=11.2$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1427",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "一瓶樣品含 0.50 mol 氧氣 $\\mathrm{O_2}$ 與 0.25 mol 臭氧 $\\mathrm{O_3}$，兩者尚未互相反應。兩者莫耳質量依序為 32、48 g/mol；樣品共多少克？",
+    "choices": [
+      "28 g",
+      "60 g",
+      "24 g",
+      "12 g"
+    ],
+    "answer": 0,
+    "explain": "由 $m=nM$，氧氣為 $0.50\\times32=16$ g，臭氧為 $0.25\\times48=12$ g，總質量 $16+12=28$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1428",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "24 g 臭氧全依 $\\mathrm{2O_3}\\rightarrow\\mathrm{3O_2}$ 分解，無其他產物。生成氧氣的物質的量為何？臭氧莫耳質量為 48 g/mol。",
+    "choices": [
+      "0.5 mol",
+      "$\\frac{1}{3}$ mol",
+      "0.75 mol",
+      "1.5 mol"
+    ],
+    "answer": 2,
+    "explain": "臭氧 $n=m/M=24/48=0.50$ mol；依係數比，氧氣為 $0.50\\times3/2=0.75$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1429",
+    "subject": "chemistry",
+    "topic": "莫耳與化學計量",
+    "type": "mc",
+    "q": "依 $\\mathrm{Zn}+\\mathrm{CuSO_4}\\rightarrow\\mathrm{ZnSO_4}+\\mathrm{Cu}$，13 g 鋅與足量硫酸銅完全反應，生成多少克銅？鋅、銅莫耳質量為 65、64 g/mol。",
+    "choices": [
+      "6.4 g",
+      "13 g",
+      "12.8 g",
+      "25.6 g"
+    ],
+    "answer": 2,
+    "explain": "係數比為 1：1；$n(\\mathrm{Zn})=13/65=0.2$ mol，銅質量 $m=nM=0.2\\times64=12.8$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1430",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "定壓下，$\\mathrm{2NO(g)}+\\mathrm{O_2(g)}\\rightarrow\\mathrm{2NO_2(g)}$ 的 $\\Delta H=-114$ kJ。1.5 mol NO 與足量氧氣完全反應，反應系統的熱量變化為何？",
+    "choices": [
+      "-85.5 kJ",
+      "85.5 kJ",
+      "-171 kJ",
+      "-152 kJ"
+    ],
+    "answer": 0,
+    "explain": "反應熱隨反應量縮放：$\\Delta H=-114\\times(1.5/2)=-85.5$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1431",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "定壓下，$\\mathrm{N_2O_4(g)}\\rightarrow\\mathrm{2NO_2(g)}$ 的 $\\Delta H=+58$ kJ。若全依此式反應生成 1.5 mol 二氧化氮，系統吸收多少熱？",
+    "choices": [
+      "87 kJ",
+      "43.5 kJ",
+      "$\\frac{232}{3}$ kJ",
+      "-43.5 kJ"
+    ],
+    "answer": 1,
+    "explain": "反應量為 $1.5/2=0.75$ 倍，吸熱 $Q=58\\times0.75=43.5$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1432",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "同溫定壓下，$\\mathrm{CaCO_3(s)}\\rightarrow\\mathrm{CaO(s)}+\\mathrm{CO_2(g)}$ 的 $\\Delta H=+180$ kJ。0.20 mol 氧化鈣與足量二氧化碳全反應生成碳酸鈣，系統的熱量變化為何？",
+    "choices": [
+      "36 kJ",
+      "-900 kJ",
+      "-36 kJ",
+      "-180 kJ"
+    ],
+    "answer": 2,
+    "explain": "逆反應變號，並按反應量縮放：$\\Delta H=-180\\times0.20=-36$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1433",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "同溫定壓下，$\\mathrm{2H_2O(l)}\\rightarrow\\mathrm{2H_2(g)}+\\mathrm{O_2(g)}$ 的 $\\Delta H=+572$ kJ。足量氫氣與 1.5 mol 氧氣全反應生成液態水，系統的熱量變化為何？",
+    "choices": [
+      "858 kJ",
+      "-858 kJ",
+      "-429 kJ",
+      "$\\frac{-1144}{3}$ kJ"
+    ],
+    "answer": 1,
+    "explain": "生成液態水是逆反應，氧氣係數為 1；$\\Delta H=-572\\times1.5=-858$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1434",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "定壓下，0.50 mol 二氧化硫與足量氧氣反應生成三氧化硫，放熱 49.5 kJ。三者皆為氣態，$\\mathrm{2SO_2(g)}+\\mathrm{O_2(g)}\\rightarrow\\mathrm{2SO_3(g)}$ 的 $\\Delta H$ 為何？",
+    "choices": [
+      "-198 kJ",
+      "198 kJ",
+      "-99 kJ",
+      "-12.375 kJ"
+    ],
+    "answer": 0,
+    "explain": "式中消耗 2 mol 二氧化硫，是實測量的 $2/0.5=4$ 倍；$\\Delta H=-49.5\\times4=-198$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1435",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "定壓下，$\\mathrm{2NH_3(g)}\\rightarrow\\mathrm{N_2(g)}+\\mathrm{3H_2(g)}$ 的 $\\Delta H=+92$ kJ。此反應吸熱 23 kJ 時，消耗多少莫耳氨？",
+    "choices": [
+      "0.25 mol",
+      "8 mol",
+      "0.125 mol",
+      "0.5 mol"
+    ],
+    "answer": 3,
+    "explain": "反應熱與反應量成正比；反應量為 $23/92=1/4$，消耗氨 $n=2\\times23/92=0.50$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1436",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "同一條件下，乙醇的莫耳燃燒熱為 1360 kJ/mol，莫耳質量為 46 g/mol。4.6 g 乙醇在足量氧氣中完全燃燒，放出多少熱？",
+    "choices": [
+      "6256 kJ",
+      "13600 kJ",
+      "136 kJ",
+      "-136 kJ"
+    ],
+    "answer": 2,
+    "explain": "$n=m/M=4.6/46=0.1$ mol；放熱量 $Q=n|\\Delta H_c|=0.1\\times1360=136$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1437",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "某條件下，甲烷的莫耳燃燒熱為 800 kJ/mol，莫耳質量為 16 g/mol。若完全燃燒放熱 400 kJ，燃燒的甲烷為多少克？",
+    "choices": [
+      "0.5 g",
+      "32 g",
+      "8 g",
+      "$\\frac{1}{32}$ g"
+    ],
+    "answer": 2,
+    "explain": "$n=Q/|\\Delta H_c|=400/800=0.5$ mol；$m=nM=0.5\\times16=8$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1438",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "同條件下，甲烷、氫氣每莫耳完全燃燒放熱近似為 800、240 kJ，莫耳質量為 16、2 g/mol。若兩者完全燃燒放熱相同，甲烷的質量是氫氣的幾倍？",
+    "choices": [
+      "0.3 倍",
+      "2.4 倍",
+      "$\\frac{5}{12}$ 倍",
+      "8 倍"
+    ],
+    "answer": 1,
+    "explain": "由 $Q=(m/M)|\\Delta H_c|$，每克放熱為 50、120 kJ；同熱量時，質量比為 $120/50=2.4$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1439",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "甲醇 3.2 g 與乙醇 0.10 mol 分別在足量氧氣中完全燃燒。甲醇莫耳質量為 32 g/mol；兩者莫耳燃燒熱依序為 720、1360 kJ/mol。合計放熱多少？",
+    "choices": [
+      "2440 kJ",
+      "416 kJ",
+      "208 kJ",
+      "64 kJ"
+    ],
+    "answer": 2,
+    "explain": "$Q=n|\\Delta H_c|$；甲醇 $n=m/M=3.2/32=0.10$ mol，合計 $Q=0.10\\times720+0.10\\times1360=208$ kJ。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1440",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "250 g 液態水升溫 20 ℃，無相變。水的比熱為 4.0 J/(g·℃)，水共吸收多少熱量？",
+    "choices": [
+      "0.02 kJ",
+      "20 kJ",
+      "40 kJ",
+      "20000 kJ"
+    ],
+    "answer": 1,
+    "explain": "$Q=ms\\Delta T=250\\times4\\times20=20000$ J＝20 kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1441",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "100 g 水起初為 25 ℃，吸收 8400 J 熱量後仍為液態。水比熱為 4.2 J/(g·℃)，末溫為多少？",
+    "choices": [
+      "20 ℃",
+      "25.02 ℃",
+      "45 ℃",
+      "5 ℃"
+    ],
+    "answer": 2,
+    "explain": "$\\Delta T=Q/(ms)=8400/(100\\times4.2)=20$ ℃；末溫 $T=25+20=45$ ℃。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1442",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "0.50 kg 液態水冷卻降溫 20 ℃，無相變。水比熱為 4.2 kJ/(kg·℃)，以水吸熱為正，水的熱量變化為多少？",
+    "choices": [
+      "-42 kJ",
+      "42 kJ",
+      "-0.042 kJ",
+      "-84 kJ"
+    ],
+    "answer": 0,
+    "explain": "水冷卻時 $\\Delta T=-20$ ℃；$Q=ms\\Delta T=0.50\\times4.2\\times(-20)=-42$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1443",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "一份液態水由 20 ℃ 升至 30 ℃，吸收 4200 J 熱量。水的比熱為 4.2 J/(g·℃)，這份水的質量為何？",
+    "choices": [
+      "1000 g",
+      "100 g",
+      "$\\frac{100}{3}$ g",
+      "50 g"
+    ],
+    "answer": 1,
+    "explain": "由 $Q=ms\\Delta T$，$m=Q/(s\\Delta T)=4200/[4.2(30-20)]=100$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1444",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "200 g 液態水吸收 8400 J 熱量，過程無相變。水的比熱為 4.2 J/(g·℃)，水溫升高多少？",
+    "choices": [
+      "10 ℃",
+      "42 ℃",
+      "5 ℃",
+      "20 ℃"
+    ],
+    "answer": 0,
+    "explain": "由 $Q=ms\\Delta T$，$\\Delta T=8400/(200\\times4.2)=10$ ℃。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1445",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "0.46 g 乙醇完全燃燒，熱全傳給 0.20 kg 液態水，使水升溫 17 ℃，容器不吸熱。水比熱為 4.0 kJ/(kg·℃)，乙醇莫耳質量為 46 g/mol；每莫耳乙醇燃燒放熱多少？",
+    "choices": [
+      "13.6 kJ",
+      "136 kJ",
+      "1360 kJ",
+      "136000 kJ"
+    ],
+    "answer": 2,
+    "explain": "水吸熱 $Q=ms\\Delta T=0.20\\times4\\times17=13.6$ kJ；乙醇 $n=m/M=0.01$ mol，每莫耳放熱 $Q/n=1360$ kJ。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1446",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "甲醇完全燃燒的熱全傳給 160 g 液態水，使水升溫 10 ℃，容器不吸熱。水比熱為 4.0 J/(g·℃)；甲醇莫耳質量為 32 g/mol，每莫耳完全燃燒放熱近似為 640 kJ。消耗甲醇多少克？",
+    "choices": [
+      "0.032 g",
+      "0.32 g",
+      "0.01 g",
+      "3.2 g"
+    ],
+    "answer": 1,
+    "explain": "$Q=ms\\Delta T=160\\times4\\times10=6400$ J＝6.4 kJ；$n=6.4/640=0.01$ mol，$m=nM=0.32$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1447",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "某吸熱反應每消耗 1 mol 甲吸熱 20 kJ。消耗 0.10 mol 甲所需熱量，全由起初 30 ℃ 的 200 g 水供應；容器不吸熱且無其他熱交換。水比熱為 4.0 J/(g·℃)，末溫為何？",
+    "choices": [
+      "32.5 ℃",
+      "29.9975 ℃",
+      "2.5 ℃",
+      "27.5 ℃"
+    ],
+    "answer": 3,
+    "explain": "反應吸熱 $Q=0.1\\times20=2$ kJ；水降溫 $|\\Delta T|=2000/(200\\times4)=2.5$ ℃，末溫為 27.5 ℃。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1448",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "同溫定壓下，某反應每消耗 1 mol 甲放熱 80 kJ。先使 1.0 mol 甲反應，再使其中相當於 0.25 mol 甲的產物逆反應回復。兩次合計，系統的熱量變化為何？",
+    "choices": [
+      "-100 kJ",
+      "-60 kJ",
+      "60 kJ",
+      "-20 kJ"
+    ],
+    "answer": 1,
+    "explain": "正逆反應熱異號；淨正向反應量為 $1-0.25=0.75$ mol，$\\Delta H=-80\\times0.75=-60$ kJ。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1449",
+    "subject": "chemistry",
+    "topic": "化學反應與能量",
+    "type": "mc",
+    "q": "兩杯水各 200 g，甲由 20 ℃ 升至 30 ℃，乙由 20 ℃ 升至 40 ℃，均無相變。水比熱為 4.0 J/(g·℃)，兩杯水合計吸收多少熱？",
+    "choices": [
+      "56 kJ",
+      "32 kJ",
+      "24000 kJ",
+      "24 kJ"
+    ],
+    "answer": 3,
+    "explain": "$Q=ms\\Delta T$；兩杯質量與比熱相同，總熱量 $=200\\times4[(30-20)+(40-20)]=24000$ J＝24 kJ。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1450",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "容器內已有 80 g 水，欲只加入食鹽配成重量百分率 20% 的食鹽水，需加入多少克食鹽？假設全部溶解。",
+    "choices": [
+      "16 g",
+      "320 g",
+      "20 g",
+      "100 g"
+    ],
+    "answer": 2,
+    "explain": "重量分率 $w=m_s/(m_s+m_w)$，故 $m_s=80\\times0.20/(1-0.20)=20$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1451",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲溶液 120 g 含溶質 18 g。乙溶液與甲的重量百分率相同，乙共 200 g，含多少克溶質？",
+    "choices": [
+      "30 g",
+      "10.8 g",
+      "15 g",
+      "18 g"
+    ],
+    "answer": 0,
+    "explain": "由重量分率 $w=m_s/m$，乙含溶質 $(18/120)\\times200=30$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1452",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "某標準液的溶質含量為 8 ppm（質量比），整份含溶質 4 mg。整份標準液的質量為多少公斤？",
+    "choices": [
+      "32 kg",
+      "2 kg",
+      "500 kg",
+      "0.5 kg"
+    ],
+    "answer": 3,
+    "explain": "質量比 ppm 可寫為 $p=m_s(\\mathrm{mg})/m(\\mathrm{kg})$，故 $m=4/8=0.5$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1453",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "兩份等質量水樣的同種溶質含量相差 6 mg，濃度相差 12 ppm（質量比）。每份水樣的質量為多少公斤？",
+    "choices": [
+      "2 kg",
+      "0.5 kg",
+      "72 kg",
+      "1 kg"
+    ],
+    "answer": 1,
+    "explain": "由 $\\Delta p=\\Delta m_s/m$，每份質量 $m=6/12=0.5$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1454",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "某尿素液濃度為 0.20 mol/L，取一份蒸乾後得 3.0 g 尿素，未損失尿素。尿素莫耳質量 60 g/mol，原取樣體積為多少毫升？",
+    "choices": [
+      "10 mL",
+      "250 mL",
+      "0.25 mL",
+      "15000 mL"
+    ],
+    "answer": 1,
+    "explain": "由 $n=m/M$、$V=n/C_M$，$V=(3/60)/0.20=0.25$ L，即 250 mL。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1455",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "0.12 mol 尿素被配成 400 mL 溶液；原本希望濃度為 0.20 mol/L。應再加多少毫升水？體積可相加。",
+    "choices": [
+      "600 mL",
+      "1000 mL",
+      "80 mL",
+      "200 mL"
+    ],
+    "answer": 3,
+    "explain": "$V=n/C_M=0.12/0.20=0.60$ L；應加水 $600-400=200$ mL。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1456",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "取原液 10 mL，加水定容至 250 mL，測得濃度 0.040 mol/L。原液濃度為多少？溶質未損失。",
+    "choices": [
+      "1 mol/L",
+      "0.0016 mol/L",
+      "0.96 mol/L",
+      "0.04 mol/L"
+    ],
+    "answer": 0,
+    "explain": "由 $C_1V_1=C_2V_2$，$C_1=0.040\\times250/10=1.0$ mol/L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1457",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "50 mL、0.60 mol/L 原液混勻後灑出 10 mL，再將剩餘液體加水至 120 mL。最後濃度為多少？",
+    "choices": [
+      "0.25 mol/L",
+      "0.15 mol/L",
+      "0.2 mol/L",
+      "0.05 mol/L"
+    ],
+    "answer": 2,
+    "explain": "由 $C_1V_1=C_2V_2$，$C_2=0.60\\times(50-10)/120=0.20$ mol/L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1458",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲、乙各含相同莫耳數的葡萄糖，分別配成 200 mL、500 mL。甲為 0.50 mol/L，甲的濃度比乙高多少？",
+    "choices": [
+      "0.2 mol/L",
+      "0.7 mol/L",
+      "0.75 mol/L",
+      "0.3 mol/L"
+    ],
+    "answer": 3,
+    "explain": "由 $C_M=n/V$，乙為 $0.50\\times200/500=0.20$；濃度差為 0.30 mol/L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1459",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "50 g、10% 的糖水與 150 g 未知濃度糖水混合，得到重量百分率 25% 的糖水。未知糖水的重量百分率為何？",
+    "choices": [
+      "15 %",
+      "25 %",
+      "30 %",
+      "90 %"
+    ],
+    "answer": 2,
+    "explain": "$w=m_s/m$；未知液含糖 $0.25\\times200-0.10\\times50=45$ g，故為 $45/150=30\\%$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1460",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "1 kg、4 ppm 標準液與 3 kg、12 ppm 同種標準液混合，均以質量比計且無損失。混合後濃度是多少？",
+    "choices": [
+      "8 ppm",
+      "10 ppm",
+      "16 ppm",
+      "40 ppm"
+    ],
+    "answer": 1,
+    "explain": "由 $p=m_s(\\mathrm{mg})/m(\\mathrm{kg})$，$p=(1\\times4+3\\times12)/4=10$ ppm。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1461",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "某溫度下，甲的溶解度為 20 g／100 g 水。取不含晶體的飽和水溶液 60 g，其中含水多少克？",
+    "choices": [
+      "50 g",
+      "48 g",
+      "10 g",
+      "40 g"
+    ],
+    "answer": 0,
+    "explain": "由 $S=100m_s/m_w$，水占 $100/(100+20)$，故水為 $60\\times100/120=50$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1462",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "某溫度下，甲的溶解度為 20 g／100 g 水。40 g 水溶液已含甲 4 g，維持同溫且無蒸發，還可溶入多少克甲？",
+    "choices": [
+      "3.2 g",
+      "4 g",
+      "7.2 g",
+      "8 g"
+    ],
+    "answer": 0,
+    "explain": "由 $m_s=Sm_w/100$，水為 36 g；還可溶入 $36\\times0.20-4=3.2$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1463",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲的溶解度為 40 g／100 g 水。其飽和液另加 35 g 水，在同溫下最多還能加入多少克甲而全部溶解？無蒸發。",
+    "choices": [
+      "87.5 g",
+      "14 g",
+      "10 g",
+      "40 g"
+    ],
+    "answer": 1,
+    "explain": "由 $S=100m_s/m_w$，新增溶解容量 $\\Delta m_s=40\\times35/100=14$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1464",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "200 mL、0.10 mol/L 尿素液，要與 0.40 mol/L 尿素液混成 0.20 mol/L。應取多少毫升高濃度液？體積可相加。",
+    "choices": [
+      "50 mL",
+      "200 mL",
+      "100 mL",
+      "400 mL"
+    ],
+    "answer": 2,
+    "explain": "由 $n=CV$，$0.10\\times200+0.40V=0.20(200+V)$，得 $V=100$ mL。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1465",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "100 mL、0.40 mol/L 尿素液分成 25 mL、75 mL 兩份，分別加水定容至 50 mL、150 mL，再全部混合。尿素無損失，最後濃度為多少？",
+    "choices": [
+      "0.8 mol/L",
+      "0.1 mol/L",
+      "0.4 mol/L",
+      "0.2 mol/L"
+    ],
+    "answer": 3,
+    "explain": "由 $n=CV$、$C=n/V$，尿素共 $0.40\\times0.100=0.040$ mol；合併後為 $0.040/0.200=0.20$ mol/L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1466",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "200 mL、0.10 mol/L 葡萄糖液再溶入 3.6 g 葡萄糖。葡萄糖莫耳質量為 180 g/mol；若加水配成 0.10 mol/L，最後體積應為多少毫升？",
+    "choices": [
+      "200 mL",
+      "0.4 mL",
+      "400 mL",
+      "600 mL"
+    ],
+    "answer": 2,
+    "explain": "由 $n=CV+m/M$，共 $0.020+0.020=0.040$ mol；$V=n/C=0.40$ L，即 400 mL。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1467",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "50 g、重量百分率 8.0% 的氫氧化鈉液，與多少毫升 0.20 mol/L 氫氧化鈉液含有相同質量的氫氧化鈉？其莫耳質量為 40 g/mol。",
+    "choices": [
+      "500 mL",
+      "0.5 mL",
+      "20 mL",
+      "6250 mL"
+    ],
+    "answer": 0,
+    "explain": "由 $m_s=wm$，含 $50\\times0.080=4.0$ g；$n=m_s/M=0.10$ mol，$V=n/C=0.50$ L，即 500 mL。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1468",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲在 20 ℃、60 ℃ 的溶解度依序為 20、50 g／100 g 水。容器內有 20 ℃ 飽和液 120 g，另有未溶的甲 10 g。忽略蒸發，升至 60 ℃ 後最多還能另加多少克甲而全溶？",
+    "choices": [
+      "30 g",
+      "40 g",
+      "50 g",
+      "20 g"
+    ],
+    "answer": 3,
+    "explain": "由 $S=100m_s/m_w$，原有水 100 g、甲共 30 g；60 ℃ 可溶 50 g，故還能加入 $50-30=20$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1469",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲在 40 ℃、20 ℃ 的溶解度依序為 50、20 g／100 g 水。150 g 的 40 ℃ 飽和液混勻後取走 30 g，餘液冷至 20 ℃ 達平衡後濾去無水晶體。無蒸發及其他損失，濾液有多少克？",
+    "choices": [
+      "120 g",
+      "96 g",
+      "24 g",
+      "84 g"
+    ],
+    "answer": 1,
+    "explain": "由 $S=100m_s/m_w$，餘液含水 $(150-30)/1.5=80$ g；低溫飽和濾液為 $80(1+0.20)=96$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1470",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "含水 100 g、已溶解甲 40 g 的熱溶液，先加水 50 g，再冷至 20 ℃ 達平衡。甲在 20 ℃ 的溶解度為 10 g／100 g 水。無蒸發且晶體不含水，析出多少克甲？",
+    "choices": [
+      "30 g",
+      "25 g",
+      "21 g",
+      "15 g"
+    ],
+    "answer": 1,
+    "explain": "由 $m_s=Sm_w/100$，低溫可溶 $(100+50)\\times0.10=15$ g；析出 $40-15=25$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1471",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲在高、低溫的溶解度為 50、10 g／100 g 水。150 g 高溫飽和液冷至低溫達平衡，無蒸發；所得無水晶體全部分離且不附著母液。只用這些晶體與水，在高溫配成重量百分率 20% 的溶液，需加水多少克？",
+    "choices": [
+      "200 g",
+      "40 g",
+      "8 g",
+      "160 g"
+    ],
+    "answer": 3,
+    "explain": "由 $S=100m_s/m_w$，原水 100 g，析晶 $100(0.5-0.1)=40$ g；$m_w=m_s/w-m_s=160$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1472",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲在高、低溫的溶解度依序為 60、20 g／100 g 水。一份高溫飽和液冷至低溫，過濾後取得 180 g 飽和濾液。無蒸發、無損失且晶體不含水，濾出的晶體有多少克？",
+    "choices": [
+      "60 g",
+      "72 g",
+      "45 g",
+      "90 g"
+    ],
+    "answer": 0,
+    "explain": "由 $S=100m_s/m_w$，濾液含水 $180/1.2=150$ g，析晶 $150(0.6-0.2)=60$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1473",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "甲、乙標準液各 500 g，甲為 4 ppm。混合後取 200 g，加水至 1 kg，測得 1 ppm。ppm 均以質量比計且無損失，乙原濃度為多少？",
+    "choices": [
+      "1 ppm",
+      "5 ppm",
+      "6 ppm",
+      "10 ppm"
+    ],
+    "answer": 2,
+    "explain": "$p=m_s/m$；混合液為 $1\\times1/0.2=5$ ppm；乙為 $(5\\times1-4\\times0.5)/0.5=6$ ppm。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1474",
+    "subject": "chemistry",
+    "topic": "溶液與溶解度",
+    "type": "mc",
+    "q": "120 g、重量百分率 10% 的甲水溶液，在溶解度為 25 g／100 g 水的溫度下緩慢蒸發。甲不揮發且不含結晶水，剛成為飽和液時已蒸發多少克水？",
+    "choices": [
+      "72 g",
+      "108 g",
+      "48 g",
+      "60 g"
+    ],
+    "answer": 3,
+    "explain": "$m_s=wm=12$ g，原水 108 g；由 $S=100m_s/m_w$，飽和時水 48 g，蒸發 60 g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1475",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃，將 0.0010 mol 氫氧化鈉溶於水，配成 100 mL 溶液。氫氧化鈉完全解離，忽略水自解離對氫氧根的貢獻，氫離子濃度約為多少？",
+    "choices": [
+      "$1\\times10^{-2}$ mol/L",
+      "$1\\times10^{-16}$ mol/L",
+      "$1\\times10^{-12}$ mol/L",
+      "$1\\times10^{-10}$ mol/L"
+    ],
+    "answer": 2,
+    "explain": "$[\\mathrm{OH^-}]=n/V=0.0010/0.100=10^{-2}$；由 $[\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}$，得 $[\\mathrm{H^+}]=10^{-12}$ mol/L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1476",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃ 某水溶液的 pH 為 4，其氫離子濃度是氫氧根離子濃度的多少倍？",
+    "choices": [
+      "$10^{-6}$ 倍",
+      "$10^{6}$ 倍",
+      "$10^{14}$ 倍",
+      "6 倍"
+    ],
+    "answer": 1,
+    "explain": "$[\\mathrm{H^+}]=10^{-4}$，$[\\mathrm{OH^-}]=10^{-14}/10^{-4}=10^{-10}$；比值為 $10^6$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1477",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "200 mL 稀鹽酸的 pH 為 5，其中的氫離子共有多少莫耳？",
+    "choices": [
+      "$2\\times10^{-6}$ mol",
+      "$2\\times10^{-3}$ mol",
+      "$5\\times10^{-5}$ mol",
+      "$1\\times10^{0}$ mol"
+    ],
+    "answer": 0,
+    "explain": "由 $[\\mathrm{H^+}]=10^{-\\mathrm{pH}}$、$n=CV$，$n=10^{-5}\\times0.200=2\\times10^{-6}$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1478",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "一份 pH 為 3 的稀鹽酸含氫離子 0.0020 mol，這份溶液的體積為多少公升？",
+    "choices": [
+      "2 L",
+      "$2\\times10^{-6}$ L",
+      "0.2 L",
+      "0.5 L"
+    ],
+    "answer": 0,
+    "explain": "由 $[\\mathrm{H^+}]=10^{-3}$ mol/L、$V=n/C$，$V=0.0020/0.0010=2.0$ L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1479",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃，20 mL、0.010 mol/L 氫氧化鈉液加水至 200 mL。氫氧化鈉完全解離，忽略水自解離對氫氧根的貢獻，稀釋後的 pH 約為多少？",
+    "choices": [
+      "3",
+      "11",
+      "13",
+      "12"
+    ],
+    "answer": 1,
+    "explain": "由 $C_1V_1=C_2V_2$，$[\\mathrm{OH^-}]=10^{-3}$，故 $[\\mathrm{H^+}]=10^{-14}/10^{-3}=10^{-11}$；由 $\\mathrm{pH}=-\\log[\\mathrm{H^+}]$，得 11。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1480",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃ 取 pH 為 12 的氫氧化鈉液 10 mL，欲加水配成 pH 為 11 的溶液。忽略水自解離，最後體積約為多少毫升？",
+    "choices": [
+      "1 mL",
+      "10 mL",
+      "100 mL",
+      "1000 mL"
+    ],
+    "answer": 2,
+    "explain": "$[\\mathrm{H^+}]$ 增為十倍，由 $[\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}$，鹼濃度降為十分之一；由 $C_1V_1=C_2V_2$，體積為 100 mL。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1481",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "取稀鹽酸 20 mL，加水至 200 mL 後測得 pH 為 3。氯化氫完全解離，忽略水自解離，原鹽酸的 pH 約為多少？",
+    "choices": [
+      "4",
+      "30",
+      "3",
+      "2"
+    ],
+    "answer": 3,
+    "explain": "由 $C_1V_1=C_2V_2$，原 $[\\mathrm{H^+}]=10^{-3}\\times10=10^{-2}$，故 pH 約為 2。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1482",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "100 mL、pH 為 2 的稀鹽酸，恰好中和時需多少莫耳氫氧化鈉？氯化氫與氫氧化鈉均完全解離，忽略水自解離。",
+    "choices": [
+      "1 mol",
+      "0.01 mol",
+      "0.001 mol",
+      "0.1 mol"
+    ],
+    "answer": 2,
+    "explain": "中和時 $n_{\\mathrm{H^+}}=n_{\\mathrm{OH^-}}$，故需 $10^{-2}\\times0.100=0.0010$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1483",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "0.080 g 純氫氧化鈉恰好中和 0.020 mol/L 鹽酸。氫氧化鈉莫耳質量為 40 g/mol，所需鹽酸體積為多少毫升？",
+    "choices": [
+      "100 mL",
+      "4000 mL",
+      "0.1 mL",
+      "0.04 mL"
+    ],
+    "answer": 0,
+    "explain": "中和時 $n_{\\mathrm{H^+}}=n_{\\mathrm{OH^-}}=0.080/40=0.0020$ mol；$V=n/C=100$ mL。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1484",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 mL 某鹽酸恰好需 10 mL、0.10 mol/L 氫氧化鈉液中和。另取 50 mL 同種鹽酸，改用 0.050 mol/L 氫氧化鈉液，恰好中和需多少毫升？兩者均完全解離。",
+    "choices": [
+      "20 mL",
+      "2.5 mL",
+      "10 mL",
+      "40 mL"
+    ],
+    "answer": 3,
+    "explain": "中和時 $C_aV_a=C_bV_b$；酸量加倍、鹼濃度減半，所需鹼液為 $10\\times2\\times2=40$ mL。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1485",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "含氯化氫 0.00020 mol 的鹽酸與含氫氧化鈉 0.00030 mol 的溶液混合。均完全解離且忽略水自解離，反應後過量的氫氧根有多少莫耳？",
+    "choices": [
+      "$3\\times10^{-4}$ mol",
+      "$1\\times10^{-4}$ mol",
+      "$5\\times10^{-4}$ mol",
+      "$2\\times10^{-4}$ mol"
+    ],
+    "answer": 1,
+    "explain": "中和時 $n_{\\mathrm{H^+}}=n_{\\mathrm{OH^-}}$，剩氫氧根 $0.00030-0.00020=10^{-4}$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1486",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "含氯化氫 0.020 mol 的鹽酸，與含氫氧化鈉 0.0050 mol 的溶液混合後共 150 mL。均完全解離且忽略水自解離，混合液的氫離子濃度約為多少？",
+    "choices": [
+      "$\\frac{1}{6}$ mol/L",
+      "0.1 mol/L",
+      "$10^{-4}$ mol/L",
+      "0.015 mol/L"
+    ],
+    "answer": 1,
+    "explain": "中和時兩種離子等莫耳反應，$[\\mathrm{H^+}]=(n_a-n_b)/V=(0.020-0.0050)/0.150=0.10$ mol/L。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1487",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃，含氯化氫 0.0020 mol 的鹽酸與含氫氧化鈉 0.020 mol 的溶液混合後共 180 mL。均完全解離且忽略水自解離，pH 約為多少？",
+    "choices": [
+      "1",
+      "10",
+      "0.1",
+      "13"
+    ],
+    "answer": 3,
+    "explain": "$[\\mathrm{OH^-}]=(0.020-0.0020)/0.180=10^{-1}$；$[\\mathrm{H^+}]=10^{-14}/10^{-1}=10^{-13}$，故 pH 約為 13。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1488",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "50 mL、0.010 mol/L 氫氧化鈉液等分成 5 份。每份需多少毫升 0.0010 mol/L 鹽酸恰好中和？均完全解離。",
+    "choices": [
+      "100 mL",
+      "500 mL",
+      "2500 mL",
+      "0.1 mL"
+    ],
+    "answer": 0,
+    "explain": "中和時 $n_{\\mathrm{H^+}}=n_{\\mathrm{OH^-}}=0.010\\times0.050/5=10^{-4}$ mol；$V=n/C=100$ mL。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1489",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃ 某水溶液的氫離子濃度是氫氧根離子濃度的 $10^4$ 倍，該溶液的 pH 為多少？",
+    "choices": [
+      "9",
+      "10",
+      "5",
+      "4"
+    ],
+    "answer": 2,
+    "explain": "由 $[\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}$ 及濃度比，$[\\mathrm{H^+}]^2=10^4\\times10^{-14}=10^{-10}$，得 $[\\mathrm{H^+}]=10^{-5}$，pH 為 5。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1490",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "0.40 g 氫氧化鈉配成 100 mL 溶液，再取 10 mL 加水至 1.0 L。莫耳質量 40 g/mol；25 ℃，完全解離且忽略水自解離對氫氧根的貢獻，最後氫離子濃度約為多少？",
+    "choices": [
+      "$1\\times10^{-3}$ mol/L",
+      "$1\\times10^{-12}$ mol/L",
+      "$1\\times10^{-17}$ mol/L",
+      "$1\\times10^{-11}$ mol/L"
+    ],
+    "answer": 3,
+    "explain": "$n=m/M=0.010$ mol，分取後為 0.0010 mol；$[\\mathrm{OH^-}]=n/V=10^{-3}$，由 $[\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}$，得 $10^{-11}$ mol/L。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1491",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "200 mL、0.0040 mol/L 鹽酸與含 0.00030 mol 氫氧化鈉的溶液混合，再加水至 500 mL。兩者均完全解離且忽略水自解離，最後 pH 約為多少？",
+    "choices": [
+      "4",
+      "6",
+      "3",
+      "11"
+    ],
+    "answer": 2,
+    "explain": "由 $n=CV$，剩氫離子 $0.00080-0.00030=0.00050$ mol；$[\\mathrm{H^+}]=10^{-3}$，故 $\\mathrm{pH}=-\\log[\\mathrm{H^+}]=3$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1492",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃，40 mL、pH 為 12 的氫氧化鈉液，需與多少毫升 pH 為 2 的鹽酸混合，才能恰好中和至 pH 為 7？兩者均完全解離，忽略二氧化碳等外界影響。",
+    "choices": [
+      "4 mL",
+      "40 mL",
+      "400 mL",
+      "20 mL"
+    ],
+    "answer": 1,
+    "explain": "酸液 $[\\mathrm{H^+}]=10^{-2}$；鹼液 $[\\mathrm{OH^-}]=10^{-14}/10^{-12}=10^{-2}$，由 $C_aV_a=C_bV_b$，需 40 mL。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1493",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "0.40 g 氫氧化鈉配成 100 mL 溶液，取其中 20 mL，以 0.050 mol/L 鹽酸恰好中和。氫氧化鈉莫耳質量 40 g/mol，需多少毫升鹽酸？",
+    "choices": [
+      "40 mL",
+      "200 mL",
+      "1000 mL",
+      "1600 mL"
+    ],
+    "answer": 0,
+    "explain": "$n=m/M=0.010$ mol，分取後剩 0.0020 mol；中和所需 $V=n/C=0.040$ L，即 40 mL。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1494",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "取原鹽酸 20 mL，加水至 100 mL；再取 10 mL，恰好中和 5.0 mL、0.0040 mol/L 氫氧化鈉。均完全解離且忽略水自解離，原鹽酸 pH 約為多少？",
+    "choices": [
+      "2",
+      "3",
+      "1",
+      "0.01"
+    ],
+    "answer": 0,
+    "explain": "由中和 $n_a=n_b$，原酸共 $0.004\\times0.005\\times10=0.00020$ mol；濃度 $10^{-2}$，pH 約為 2。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1495",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "100 mL 含 0.0020 mol 氯化氫的鹽酸，與 200 mL、0.0050 mol/L 鹽酸混合，再加水至 3.0 L。氯化氫完全解離且忽略水自解離，最後 pH 約為多少？",
+    "choices": [
+      "2",
+      "3",
+      "11",
+      "0"
+    ],
+    "answer": 1,
+    "explain": "由 $n=CV$，共氫離子 $0.0020+0.0010=0.0030$ mol；$[\\mathrm{H^+}]=0.0030/3=10^{-3}$，故 pH 約為 3。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1496",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "25 ℃，含 0.00040 mol 與 0.00020 mol 氫氧化鈉的兩份溶液混合，再加水至 600 mL。均完全解離且忽略水自解離對氫氧根的貢獻，最後氫離子濃度約為多少？",
+    "choices": [
+      "$1\\times10^{-3}$ mol/L",
+      "$1\\times10^{-17}$ mol/L",
+      "$1\\times10^{-11}$ mol/L",
+      "$1\\times10^{-8}$ mol/L"
+    ],
+    "answer": 2,
+    "explain": "$[\\mathrm{OH^-}]=n/V=(0.00040+0.00020)/0.600=10^{-3}$；由 $[\\mathrm{H^+}][\\mathrm{OH^-}]=10^{-14}$，得 $10^{-11}$ mol/L。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1497",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "100 mL 未知濃度鹽酸與含 0.0020 mol 氫氧化鈉的溶液混合，最後總體積為 200 mL，pH 為 2。均完全解離且忽略水自解離，原鹽酸濃度為多少？",
+    "choices": [
+      "0.01 mol/L",
+      "0.02 mol/L",
+      "0.03 mol/L",
+      "0.04 mol/L"
+    ],
+    "answer": 3,
+    "explain": "由 $n=CV$，剩氫離子 $10^{-2}\\times0.200=0.0020$ mol；原酸量為 $0.0020+0.0020=0.0040$ mol，故 $C=0.040$ mol/L。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1498",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "一份 300 mL 鹽酸，先加入 0.0010 mol 氫氧化鈉後仍呈酸性，再加 0.0020 mol 才恰好中和。均完全解離且忽略水自解離，原鹽酸 pH 約為多少？",
+    "choices": [
+      "12",
+      "-2",
+      "2",
+      "5"
+    ],
+    "answer": 2,
+    "explain": "中和時 $n_{\\mathrm{H^+}}=n_{\\mathrm{OH^-}}=0.0030$ mol；$[\\mathrm{H^+}]=0.0030/0.300=10^{-2}$，pH 約為 2。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1499",
+    "subject": "chemistry",
+    "topic": "酸鹼與 pH",
+    "type": "mc",
+    "q": "500 mL、0.010 mol/L 氫氧化鈉液混勻後倒出 100 mL，餘液加入含 0.0030 mol 氯化氫的鹽酸，再加水至 1.0 L。均完全解離且忽略水自解離，最後氫氧根濃度約為多少？",
+    "choices": [
+      "$1\\times10^{-3}$ mol/L",
+      "$4\\times10^{-3}$ mol/L",
+      "$3\\times10^{-3}$ mol/L",
+      "$7\\times10^{-3}$ mol/L"
+    ],
+    "answer": 0,
+    "explain": "由 $n=CV$，倒出後鹼為 $(0.500-0.100)\\times0.010=0.0040$ mol；中和剩 0.0010 mol，故 $[\\mathrm{OH^-}]=n/V=0.0010$ mol/L。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1500",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "3 個鋁原子各變成 $\\mathrm{Al^{3+}}$，另有 2 個鎂原子各變成 $\\mathrm{Mg^{2+}}$。共失去多少個電子？",
+    "choices": [
+      "5 個",
+      "7 個",
+      "26 個",
+      "13 個"
+    ],
+    "answer": 3,
+    "explain": "每個原子的失電子數等於電荷增加數；$N_e=3\\times3+2\\times2=13$ 個。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1501",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "8 個 $\\mathrm{Fe^{3+}}$ 各轉成 $\\mathrm{Fe^{2+}}$，另有 3 個 $\\mathrm{Cu^{2+}}$ 各轉成銅原子。合計得到多少個電子？",
+    "choices": [
+      "30 個",
+      "14 個",
+      "11 個",
+      "28 個"
+    ],
+    "answer": 1,
+    "explain": "得電子數等於電荷減少數；$N_e=8(3-2)+3\\times2=14$ 個。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1502",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "6 個 $\\mathrm{M^+}$ 各轉成 $\\mathrm{M^{3+}}$，合計失去多少個電子？",
+    "choices": [
+      "18 個",
+      "12 個",
+      "6 個",
+      "24 個"
+    ],
+    "answer": 1,
+    "explain": "失電子數等於電荷增加數，$N_e=N\\Delta z=6(3-1)=12$ 個。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1503",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "8.1 g 鋁全部轉成 $\\mathrm{Al^{3+}}$。鋁的莫耳質量為 27 g/mol，共失去多少莫耳電子？",
+    "choices": [
+      "0.3 mol",
+      "0.1 mol",
+      "24.3 mol",
+      "0.9 mol"
+    ],
+    "answer": 3,
+    "explain": "由 $n=m/M$，$n_e=zn=3\\times8.1/27=0.90$ mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1504",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "0.40 mol 電子全部使 $\\mathrm{Zn^{2+}}$ 轉成鋅。鋅的莫耳質量為 65 g/mol，可生成多少克鋅？",
+    "choices": [
+      "13 g",
+      "26 g",
+      "52 g",
+      "0.2 g"
+    ],
+    "answer": 0,
+    "explain": "由電荷差得 $n_e=2n_{\\mathrm{Zn}}$，$m=(0.40/2)\\times65=13$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1505",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "鐵金屬只轉成 $\\mathrm{Fe^{3+}}$，共釋出 0.30 mol 電子。鐵的莫耳質量為 56 g/mol，消耗多少克鐵？",
+    "choices": [
+      "16.8 g",
+      "8.4 g",
+      "5.6 g",
+      "50.4 g"
+    ],
+    "answer": 2,
+    "explain": "$n_e=3n_{\\mathrm{Fe}}$，$m=nM=(0.30/3)\\times56=5.6$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1506",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "3.6 g 鎂全成 $\\mathrm{Mg^{2+}}$；若鋁全成 $\\mathrm{Al^{3+}}$ 且失電子量相同，需鋁多少克？鎂、鋁莫耳質量依序為 24、27 g/mol。",
+    "choices": [
+      "4.05 g",
+      "2.7 g",
+      "5.4 g",
+      "0.1 g"
+    ],
+    "answer": 1,
+    "explain": "由 $n_e=zm/M$，$2(3.6/24)=3(m/27)$，得鋁質量 $m=2.7$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1507",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "某金屬 1.2 g 全部形成二價陽離子，共失去 0.10 mol 電子。該金屬的莫耳質量是多少？",
+    "choices": [
+      "24 g/mol",
+      "12 g/mol",
+      "6 g/mol",
+      "0.06 g/mol"
+    ],
+    "answer": 0,
+    "explain": "由 $n_e=2n$ 得金屬 $n=0.050$ mol；$M=m/n=1.2/0.050=24$ g/mol。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1508",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "鐵與銅分別由 $\\mathrm{Fe^{2+}}$、$\\mathrm{Cu^{2+}}$ 還原，得到鐵 5.6 g、銅 6.4 g。鐵、銅莫耳質量依序為 56、64 g/mol，兩者共得到多少莫耳電子？",
+    "choices": [
+      "0.2 mol",
+      "0.4 mol",
+      "0.5 mol",
+      "0.8 mol"
+    ],
+    "answer": 1,
+    "explain": "由 $n_e=zm/M$，兩者各得 $2\\times0.10=0.20$ mol 電子，共 0.40 mol。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1509",
+    "subject": "chemistry",
+    "topic": "氧化還原",
+    "type": "mc",
+    "q": "鋁與鎂的莫耳數相等，合計質量 10.2 g。兩者分別全成 $\\mathrm{Al^{3+}}$、$\\mathrm{Mg^{2+}}$，共失去多少莫耳電子？鋁、鎂的莫耳質量依序為 27、24 g/mol。",
+    "choices": [
+      "0.2 mol",
+      "2 mol",
+      "1 mol",
+      "0.4 mol"
+    ],
+    "answer": 2,
+    "explain": "由 $m=nM$，兩金屬各有 $10.2/(27+24)=0.20$ mol；由 $n_e=zn$，共失去 $0.20(3+2)=1.0$ mol 電子。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1510",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "一次操作共需供熱 900 kJ，前一階段已供應 300 kJ。後續使用熱值 30 kJ/g 的燃料，需完全燃燒多少克？不計熱損失。",
+    "choices": [
+      "20 g",
+      "30 g",
+      "10 g",
+      "40 g"
+    ],
+    "answer": 0,
+    "explain": "由 $Q=qm$，剩需 $Q=900-300=600$ kJ，故 $m=Q/q=600/30=20$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1511",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "甲、乙燃料熱值依序為 20、50 kJ/g。若要與完全燃燒 15 g 甲放出同樣熱量，需完全燃燒多少克乙？",
+    "choices": [
+      "37.5 g",
+      "0.006 g",
+      "15 g",
+      "6 g"
+    ],
+    "answer": 3,
+    "explain": "由 $Q=qm$，相同熱量滿足 $20\\times15=50m$，故乙需 6 g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1512",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "燃料由 50 g 減至 30 g，減少部分全因完全燃燒，共放出 900 kJ。此燃料的熱值為多少？",
+    "choices": [
+      "18 kJ/g",
+      "45 kJ/g",
+      "30 kJ/g",
+      "11.25 kJ/g"
+    ],
+    "answer": 1,
+    "explain": "由 $q=Q/m$，實際燃燒 $50-30=20$ g，熱值 $q=900/20=45$ kJ/g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1513",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "0.50 mol 甲烷在足量氧氣中完全燃燒，可產生多少克二氧化碳？甲烷、氧氣、二氧化碳莫耳質量依序為 16、32、44 g/mol。",
+    "choices": [
+      "8 g",
+      "22 g",
+      "16 g",
+      "44 g"
+    ],
+    "answer": 1,
+    "explain": "由碳原子守恆，$n_{\\mathrm{CO_2}}=n_{\\mathrm{CH_4}}=0.50$ mol；$m=nM=22$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1514",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "純碳在足量氧氣中完全燃燒，產生 66 g 二氧化碳。碳、二氧化碳莫耳質量依序為 12、44 g/mol，共燃燒多少克碳？",
+    "choices": [
+      "66 g",
+      "242 g",
+      "22 g",
+      "18 g"
+    ],
+    "answer": 3,
+    "explain": "碳守恆給出 $n_{\\mathrm C}=n_{\\mathrm{CO_2}}=66/44=1.5$ mol，$m=nM=1.5\\times12=18$ g。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1515",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "甲土壤 100 kg，汙染物為 2 ppm；乙土壤 50 kg，為 6 ppm。ppm 均以質量比計，乙比甲多含多少毫克該汙染物？",
+    "choices": [
+      "100 mg",
+      "500 mg",
+      "200 mg",
+      "400 mg"
+    ],
+    "answer": 0,
+    "explain": "由 $p=m_s(\\mathrm{mg})/m(\\mathrm{kg})$，差量為 $6\\times50-2\\times100=100$ mg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1516",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "一批均勻砂土的汙染物含量為 4 ppm（質量比），整批共含該汙染物 12 mg。這批砂土有多少公斤？",
+    "choices": [
+      "$\\frac{1}{3}$ kg",
+      "48 kg",
+      "3 kg",
+      "3000 kg"
+    ],
+    "answer": 2,
+    "explain": "由 $p=m_s(\\mathrm{mg})/m(\\mathrm{kg})$，砂土質量 $m=12/4=3$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "chemistry-1517",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "一次操作需供熱 600 kJ。先完全燃燒 12 g、熱值 30 kJ/g 的甲燃料，再用熱值 20 kJ/g 的乙補足。不計熱損失，乙需多少克？",
+    "choices": [
+      "30 g",
+      "18 g",
+      "8 g",
+      "12 g"
+    ],
+    "answer": 3,
+    "explain": "由 $Q=qm$，甲供 $12\\times30=360$ kJ；乙需 $(600-360)/20=12$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1518",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "甲烷熱值為 50 kJ/g。若完全燃燒甲烷以供熱 800 kJ，不計熱損失，會產生多少克二氧化碳？甲烷、二氧化碳莫耳質量依序為 16、44 g/mol。",
+    "choices": [
+      "16 g",
+      "704 g",
+      "44 g",
+      "88 g"
+    ],
+    "answer": 2,
+    "explain": "$m=Q/q=800/50=16$ g；碳守恆給出 $n_{\\mathrm{CO_2}}=16/16=1$ mol，即 44 g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1519",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "6.0 g 純碳與 8.0 g 甲烷，分別在足量氧氣中完全燃燒。碳、甲烷、二氧化碳莫耳質量依序為 12、16、44 g/mol，兩次共生成多少克二氧化碳？",
+    "choices": [
+      "14 g",
+      "44 g",
+      "22 g",
+      "88 g"
+    ],
+    "answer": 1,
+    "explain": "碳守恆給出 $n_{\\mathrm{CO_2}}=6/12+8/16=1$ mol；$m=nM=44$ g。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1520",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "甲汙泥 200 kg，汙染物 5 ppm；乙汙泥 100 kg，汙染物 20 ppm。混勻後取總質量的三分之一乾燥，汙染物不揮發且無損失。ppm 以質量比計，乾燥物含汙染物多少毫克？",
+    "choices": [
+      "1000 mg",
+      "3000 mg",
+      "1250 mg",
+      "9000 mg"
+    ],
+    "answer": 0,
+    "explain": "$m_s=pm$，原共 $5\\times200+20\\times100=3000$ mg；取三分之一，含 1000 mg。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "chemistry-1521",
+    "subject": "chemistry",
+    "topic": "化學與能源及生活",
+    "type": "mc",
+    "q": "處理站每天處理 300 kg、汙染物含量 2 ppm 的廢水。連續 5 天，該汙染物全轉入共 1 kg 的乾汙泥且無損失。ppm 均以質量比計，乾汙泥的濃度為多少？",
+    "choices": [
+      "3000 ppm",
+      "600 ppm",
+      "2 ppm",
+      "3 ppm"
+    ],
+    "answer": 0,
+    "explain": "$m_s=pm=2\\times300\\times5=3000$ mg；$p=m_s/m=3000/1=3000$ ppm。",
+    "formula": true,
+    "level": 3
   }
 ]

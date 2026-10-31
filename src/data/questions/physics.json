@@ -19785,5 +19785,2419 @@
     "explain": "理想條件下儲存能量均可轉為功，位能相同使提升同一重物的最大高度相同；形式或軟硬不同不一定改變作功能力。",
     "formula": false,
     "level": 2
+  },
+  {
+    "id": "physics-1257",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "列車的速率表顯示 90 km/h，換成 m/s 為多少？",
+    "choices": [
+      "$25$ m/s",
+      "$324$ m/s",
+      "$2.5$ m/s",
+      "$1500$ m/s"
+    ],
+    "answer": 0,
+    "explain": "$v=90\\times1000/3600=25$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1258",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "滑雪者每秒前進 15 公尺，以 km/h 表示其速率為多少？",
+    "choices": [
+      "$\\frac{25}{6}$ km/h",
+      "$54$ km/h",
+      "$54000$ km/h",
+      "$5.4$ km/h"
+    ],
+    "answer": 1,
+    "explain": "$v=15\\times3600/1000=54$ km/h。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1259",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "同一直路上甲、乙同向行駛，速率分別為 36、18 km/h。兩車速率相差多少 m/s？",
+    "choices": [
+      "$15$ m/s",
+      "$18$ m/s",
+      "$5$ m/s",
+      "$64.8$ m/s"
+    ],
+    "answer": 2,
+    "explain": "$\\Delta v=(36-18)/3.6=5$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1260",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "電表記錄一次設備測試用電 0.25 kWh，這次耗能為多少焦耳？",
+    "choices": [
+      "$250$ J",
+      "$900$ J",
+      "$15000$ J",
+      "$9\\times10^{5}$ J"
+    ],
+    "answer": 3,
+    "explain": "$1\\ \\mathrm{kWh}=3.6\\times10^6$ J，故耗能為 $9\\times10^5$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1261",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "某儲能裝置釋出 $7.2\\times10^6$ J，等於多少 kWh？",
+    "choices": [
+      "$2$ kWh",
+      "$2000$ kWh",
+      "$7200$ kWh",
+      "$20$ kWh"
+    ],
+    "answer": 0,
+    "explain": "$E=7.2\\times10^6/(3.6\\times10^6)=2$ kWh。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1262",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "兩次充電分別輸入 0.2、0.3 kWh，總輸入能量為多少焦耳？",
+    "choices": [
+      "$3.6\\times10^{5}$ J",
+      "$1.8\\times10^{6}$ J",
+      "$1800$ J",
+      "$500$ J"
+    ],
+    "answer": 1,
+    "explain": "$E=(0.2+0.3)\\times3.6\\times10^6=1.8\\times10^6$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1263",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "電子獲得 5 eV 的能量，此能量為多少焦耳？基本電荷量為 $1.6\\times10^{-19}$ C。",
+    "choices": [
+      "$3.125\\times10^{-19}$ J",
+      "$8\\times10^{-18}$ J",
+      "$8\\times10^{-19}$ J",
+      "$8\\times10^{-20}$ J"
+    ],
+    "answer": 2,
+    "explain": "$1\\ \\mathrm{eV}=1.6\\times10^{-19}$ J，故能量為 $8\\times10^{-19}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1264",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "一粒子的能量為 $4.8\\times10^{-18}$ J，是多少 eV？基本電荷量為 $1.6\\times10^{-19}$ C。",
+    "choices": [
+      "$3$ eV",
+      "$300$ eV",
+      "$76.8$ eV",
+      "$30$ eV"
+    ],
+    "answer": 3,
+    "explain": "$E=4.8\\times10^{-18}/(1.6\\times10^{-19})=30$ eV。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1265",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "某原子先吸收 6 eV，再釋出 4 eV，其淨增加的能量為多少焦耳？基本電荷量為 $1.6\\times10^{-19}$ C。",
+    "choices": [
+      "$3.2\\times10^{-19}$ J",
+      "$1.6\\times10^{-18}$ J",
+      "$1.25\\times10^{-19}$ J",
+      "$3.2\\times10^{-18}$ J"
+    ],
+    "answer": 0,
+    "explain": "$\\Delta E=(6-4)\\times1.6\\times10^{-19}=3.2\\times10^{-19}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1266",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "樣品含 $2\\times10^5$ 顆相同微粒，每顆質量 $3\\times10^{-9}$ kg，總質量為多少？",
+    "choices": [
+      "$6\\times10^{-14}$ kg",
+      "$6\\times10^{-4}$ kg",
+      "$0.006$ kg",
+      "$5\\times10^{-4}$ kg"
+    ],
+    "answer": 1,
+    "explain": "$m=(2\\times10^5)(3\\times10^{-9})=6\\times10^{-4}$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1267",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "總能量 $6\\times10^{-3}$ J 平均分成 $3\\times10^2$ 份，每份能量為多少？",
+    "choices": [
+      "$0.2$ J",
+      "$1.8\\times10^{-4}$ J",
+      "$2\\times10^{-5}$ J",
+      "$2\\times10^{-4}$ J"
+    ],
+    "answer": 2,
+    "explain": "$E=(6/3)\\times10^{-3-2}=2\\times10^{-5}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1268",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "探測資料量約 $4\\times10^7$ 位元，穩定傳輸率為每秒 $8\\times10^4$ 位元。傳完約需多少秒？",
+    "choices": [
+      "$5000$ s",
+      "$50$ s",
+      "$32000$ s",
+      "$500$ s"
+    ],
+    "answer": 3,
+    "explain": "$t=\\text{資料量}/\\text{傳輸率}=(4/8)10^3=500$ s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1269",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "測試車先以 72 km/h 行駛 2 分鐘，再以 36 km/h 行駛 3 分鐘。全程路程為多少公里？",
+    "choices": [
+      "$4.2$ km",
+      "$252$ km",
+      "$0.6$ km",
+      "$4.5$ km"
+    ],
+    "answer": 0,
+    "explain": "$s=v_1t_1+v_2t_2=72(2/60)+36(3/60)=4.2$ km。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1270",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "電池原存 $3.6\\times10^6$ J，先損失 20%，剩餘全供給每次耗能 0.2 kWh 的測試。可完成幾次？",
+    "choices": [
+      "$5$ 次",
+      "$4$ 次",
+      "$1$ 次",
+      "$4000$ 次"
+    ],
+    "answer": 1,
+    "explain": "$E=0.8\\times3.6\\times10^6$ J；每次 $0.2\\times3.6\\times10^6$ J，可完成 4 次。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1271",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "甲、乙儲能模組分別有 0.4 kWh、$7.2\\times10^5$ J。把全部能量平均移入 3 個空儲存器，過程無損耗，每個儲存器獲得多少焦耳？",
+    "choices": [
+      "$2.16\\times10^{6}$ J",
+      "$4.8\\times10^{5}$ J",
+      "$7.2\\times10^{5}$ J",
+      "$2.4\\times10^{5}$ J"
+    ],
+    "answer": 2,
+    "explain": "$E_\\text{甲}=0.4(3.6\\times10^6)=1.44\\times10^6$ J；總量 $2.16\\times10^6$ J，除以 3 得 $7.2\\times10^5$ J。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1272",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "偵測器記錄總能量 $6.4\\times10^{-16}$ J，其中 25% 是雜訊。其餘來自每個 5 eV 的粒子，共有幾個粒子？基本電荷量 $1.6\\times10^{-19}$ C。",
+    "choices": [
+      "$800$ 個",
+      "$200$ 個",
+      "$1536$ 個",
+      "$600$ 個"
+    ],
+    "answer": 3,
+    "explain": "$E=0.75(6.4\\times10^{-16})$ J；每粒 $5(1.6\\times10^{-19})$ J，相除得 600 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1273",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "一批粒子原有 $2\\times10^4$ 個，只有四分之一進入儀器，每個帶入 10 eV。總帶入能量為多少焦耳？基本電荷量 $1.6\\times10^{-19}$ C。",
+    "choices": [
+      "$8\\times10^{-15}$ J",
+      "$3.2\\times10^{-14}$ J",
+      "$1.28\\times10^{-13}$ J",
+      "$8\\times10^{-14}$ J"
+    ],
+    "answer": 0,
+    "explain": "$N=2\\times10^4/4=5000$；$E=N(10)(1.6\\times10^{-19})=8\\times10^{-15}$ J。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1274",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "檔案含 $3\\times10^5$ 筆，每筆 $2\\times10^3$ 位元組。裝置每秒寫入 $4\\times10^6$ 位元組；寫完後還需 30 秒檢查。共需多少秒？",
+    "choices": [
+      "$150$ s",
+      "$180$ s",
+      "$45$ s",
+      "$1530$ s"
+    ],
+    "answer": 1,
+    "explain": "$D=(3\\times10^5)(2\\times10^3)=6\\times10^8$；$t=D/(4\\times10^6)+30=180$ s。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1275",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "望遠鏡連拍 $4\\times10^2$ 張，每張曝光 $5\\times10^{-3}$ 秒；每相鄰兩張間另停 0.01 秒。從首次曝光開始到最後曝光結束共多久？",
+    "choices": [
+      "$6$ s",
+      "$2$ s",
+      "$5.99$ s",
+      "$5.985$ s"
+    ],
+    "answer": 2,
+    "explain": "$t=400(0.005)+399(0.01)=2+3.99=5.99$ s。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1276",
+    "subject": "physics",
+    "topic": "科學方法與單位",
+    "type": "mc",
+    "q": "太空通訊任務每日傳送 $2\\times10^8$ 位元，連續 5 日，資料全部都要保存。每個記憶模組容量 $4\\times10^8$ 位元，其中四分之一保留不用。至少需幾個模組？",
+    "choices": [
+      "$10$ 個",
+      "$3$ 個",
+      "$2$ 個",
+      "$4$ 個"
+    ],
+    "answer": 3,
+    "explain": "$D=10^9$ 位元，每模組可用 $3\\times10^8$ 位元；$D/C=10/3$，至少 4 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1277",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "滑車沿直線以初速 4 m/s 前進，加速度維持同向 $3\\ \\mathrm{m/s^2}$，4 秒後速率為多少？",
+    "choices": [
+      "$16$ m/s",
+      "$12$ m/s",
+      "$28$ m/s",
+      "$52$ m/s"
+    ],
+    "answer": 0,
+    "explain": "$v=v_0+at=4+3\\times4=16$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1278",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "測試電動車沿直線由 5 m/s 均勻加速至 20 m/s，加速度為 $3\\ \\mathrm{m/s^2}$，需要多少秒？",
+    "choices": [
+      "$\\frac{20}{3}$ s",
+      "$5$ s",
+      "$\\frac{25}{3}$ s",
+      "$45$ s"
+    ],
+    "answer": 1,
+    "explain": "$v=v_0+at$，故 $t=(20-5)/3=5$ s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1279",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "小球以向下 5 m/s 拋出，2 秒後仍未碰地。忽略空氣阻力，取 $g=10\\ \\mathrm{m/s^2}$，此時速率為多少？",
+    "choices": [
+      "$20$ m/s",
+      "$15$ m/s",
+      "$45$ m/s",
+      "$25$ m/s"
+    ],
+    "answer": 3,
+    "explain": "向下取正，$v=v_0+gt=5+10(2)=25$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1280",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "一個質量 750 g 的器材靜置桌面。取 $g=10\\ \\mathrm{m/s^2}$，它的重量為多少？",
+    "choices": [
+      "$7500$ N",
+      "$7.5$ N",
+      "$0.075$ N",
+      "$75$ N"
+    ],
+    "answer": 1,
+    "explain": "$W=mg=(750/1000)\\times10=7.5$ N。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1281",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "某地重力加速度為 $4\\ \\mathrm{m/s^2}$，靜掛器材重量為 60 N。器材質量為多少？",
+    "choices": [
+      "$240$ kg",
+      "$6$ kg",
+      "$15$ kg",
+      "$\\frac{1}{15}$ kg"
+    ],
+    "answer": 2,
+    "explain": "$W=mg$，故 $m=W/g=60/4=15$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1282",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "滑車同時受向右 30 N 與向左 6 N 的水平力，無其他水平力，測得加速度向右 $4\\ \\mathrm{m/s^2}$。滑車質量為多少？",
+    "choices": [
+      "$9$ kg",
+      "$7.5$ kg",
+      "$96$ kg",
+      "$6$ kg"
+    ],
+    "answer": 3,
+    "explain": "$F_{\\rm net}=30-6=24$ N；由 $F_{\\rm net}=ma$ 得 $m=24/4=6$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1283",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "3 kg 箱子沿水平地面向右滑動，受向左摩擦力 4 N。要使向右加速度為 $2\\ \\mathrm{m/s^2}$，向右拉力須多大？",
+    "choices": [
+      "$6$ N",
+      "$10$ N",
+      "$2$ N",
+      "$14$ N"
+    ],
+    "answer": 1,
+    "explain": "$F-f=ma$，$F=3(2)+4=10$ N。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1284",
+    "subject": "physics",
+    "topic": "牛頓運動定律",
+    "type": "mc",
+    "q": "總質量 500 kg 的測試車以 72 km/h 前進，沿直線均勻減速，4 秒後停下。煞車期間合力大小為多少？",
+    "choices": [
+      "$9000$ N",
+      "$40000$ N",
+      "$10000$ N",
+      "$2500$ N"
+    ],
+    "answer": 3,
+    "explain": "$v_0=72/3.6=20$ m/s；$|a|=20/4=5$，$F=m|a|=2500$ N。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1285",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "兩個可視為質點的實驗物體質量為 10 kg、20 kg，相距 2 m。取 $G=6.7\\times10^{-11}\\ \\mathrm{N\\,m^2/kg^2}$，互引力為多少？",
+    "choices": [
+      "$6.7\\times10^{-9}$ N",
+      "$5.025\\times10^{-10}$ N",
+      "$5.36\\times10^{-8}$ N",
+      "$3.35\\times10^{-9}$ N"
+    ],
+    "answer": 3,
+    "explain": "$F=GMm/r^2=(6.7\\times10^{-11})(10)(20)/4=3.35\\times10^{-9}$ N。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1286",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "兩質點相距 2 m，互引力為 $6.7\\times10^{-10}$ N。取 $G=6.7\\times10^{-11}$ N·m²/kg²，兩質量的乘積為多少？",
+    "choices": [
+      "$40$ kg²",
+      "$20$ kg²",
+      "$2.5$ kg²",
+      "$10$ kg²"
+    ],
+    "answer": 0,
+    "explain": "$F=GMm/r^2$，故 $Mm=Fr^2/G=10\\times4=40$ kg²。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1287",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "同一物體原本位於某球對稱天體外，移到距球心 2 倍遠處後，所受引力減少 12 N。它原先受到的引力為多少？忽略其他天體。",
+    "choices": [
+      "$48$ N",
+      "$16$ N",
+      "$24$ N",
+      "$12$ N"
+    ],
+    "answer": 1,
+    "explain": "$F\\propto1/r^2$，新力為 $F/4$；$F-F/4=12$，得 $F=16$ N。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1288",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "甲、乙小物體位於同一球對稱天體外，距球心分別為 2r、r，受到的引力分別為 6 N、8 N。甲質量為乙的幾倍？",
+    "choices": [
+      "$\\frac34$ 倍",
+      "$\\frac32$ 倍",
+      "$3$ 倍",
+      "$\\frac13$ 倍"
+    ],
+    "answer": 2,
+    "explain": "由 $F=GMm/r^2$，$m_1/m_2=(6/8)\\times2^2=3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1289",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "某球對稱星球的質量為 $6.7\\times10^{24}$ kg，半徑為 $6.7\\times10^6$ m。忽略自轉，取 $G=6.7\\times10^{-11}$ N·m²/kg²，表面重力加速度為多少？",
+    "choices": [
+      "$6.7\\times10^7$ m/s²",
+      "$1$ m/s²",
+      "$100$ m/s²",
+      "$10$ m/s²"
+    ],
+    "answer": 3,
+    "explain": "$g=GM/R^2$，係數 $6.7^2$ 約去，得 $g=10^{-11+24-12}=10$ m/s²。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1290",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "機器人在球對稱星球表面所受重量為 120 N，質量為 20 kg。忽略自轉，該星球半徑 $2\\times10^6$ m，則此星球的 $GM$ 為多少？",
+    "choices": [
+      "$2.4\\times10^{13}$ $\\mathrm{m^3/s^2}$",
+      "$1.2\\times10^{7}$ $\\mathrm{m^3/s^2}$",
+      "$9.6\\times10^{15}$ $\\mathrm{m^3/s^2}$",
+      "$9.6\\times10^{13}$ $\\mathrm{m^3/s^2}$"
+    ],
+    "answer": 0,
+    "explain": "$g=W/m=6$；由 $g=GM/R^2$ 得 $GM=gR^2=2.4\\times10^{13}$ m³/s²。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1291",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "同一物體分別放在球對稱星球甲、乙的表面，重量為 80 N、20 N。兩星球質量相同，忽略自轉。乙半徑為甲的幾倍？",
+    "choices": [
+      "$4$ 倍",
+      "$2$ 倍",
+      "$0.25$ 倍",
+      "$0.5$ 倍"
+    ],
+    "answer": 1,
+    "explain": "$W=GMm/R^2$，同質量天體有 $R_\\text{乙}/R_\\text{甲}=\\sqrt{80/20}=2$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1292",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "忽略自轉。球對稱星球乙的質量為甲的 4 倍，半徑為甲的 2 倍；甲表面可承受重量 60 N 的支架搬到乙表面，仍以 60 N 為承重上限。若甲表面重力加速度為 10 m/s²，乙處最多可承載多少公斤？",
+    "choices": [
+      "$1.5$ kg",
+      "$3$ kg",
+      "$6$ kg",
+      "$600$ kg"
+    ],
+    "answer": 2,
+    "explain": "$g_\\text{乙}=g_\\text{甲}(4/2^2)=10$ m/s²；$m=W/g=60/10=6$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1293",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "球對稱星球直徑為 $8\\times10^6$ m。在離表面 $4\\times10^6$ m 處測得重力加速度為 1 m/s²。忽略自轉，此星球的 $GM$ 為多少？",
+    "choices": [
+      "$1.6\\times10^{13}$ m³/s²",
+      "$1.44\\times10^{14}$ m³/s²",
+      "$8\\times10^6$ m³/s²",
+      "$6.4\\times10^{13}$ m³/s²"
+    ],
+    "answer": 3,
+    "explain": "$r=D/2+h=8\\times10^6$ m；$g=GM/r^2$，故 $GM=gr^2=6.4\\times10^{13}$ m³/s²。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1294",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "甲、乙為同一恆星的低質量行星，甲半長軸 2 AU、週期 4 年，乙半長軸 8 AU。乙繞行三圈需幾年？",
+    "choices": [
+      "$96$ 年",
+      "$32$ 年",
+      "$48$ 年",
+      "$768$ 年"
+    ],
+    "answer": 0,
+    "explain": "$T_2=T_1\\sqrt{(a_2/a_1)^3}=4\\sqrt{4^3}=32$ 年；三圈需 96 年。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1295",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "兩顆質量可忽略的衛星繞同一星球作圓軌道運動，半徑分別為 3、12 萬公里。外側公轉週期比內側多 21 日，內側公轉週期為多少日？",
+    "choices": [
+      "$7$ 日",
+      "$3$ 日",
+      "$\\frac{1}{3}$ 日",
+      "$2.625$ 日"
+    ],
+    "answer": 1,
+    "explain": "$T_2/T_1=\\sqrt{(12/3)^3}=8$；$T_2-T_1=7T_1=21$，得 $T_1=3$ 日。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1296",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "同一恆星的甲、乙低質量行星週期比為 8：27，兩軌道半長軸的和為 13 AU。甲的半長軸為多少 AU？",
+    "choices": [
+      "$\\frac{104}{35}$ AU",
+      "$5.2$ AU",
+      "$4$ AU",
+      "$9$ AU"
+    ],
+    "answer": 2,
+    "explain": "由 $T^2\\propto a^3$ 得半長軸比為 $4:9$；甲為 $13\\times4/(4+9)=4$ AU。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1297",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "兩個球對稱物體半徑均為 1 m，質量分別為 100、150 kg，球面相隔 3 m。取 $G=6.7\\times10^{-11}$ N·m²/kg²，互引力為多少？",
+    "choices": [
+      "$2.01\\times10^{-7}$ N",
+      "$1.005\\times10^{-7}$ N",
+      "$4.02\\times10^{-8}$ N",
+      "$6.7\\times10^{-10}$ N"
+    ],
+    "answer": 2,
+    "explain": "$r=1+3+1=5$ m；$F=GMm/r^2=6.7\\times10^{-11}\\times600=4.02\\times10^{-8}$ N。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1298",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "探測器在某球對稱星球表面重 160 N。移至距表面一個星球半徑的高度後，釋放一半質量的載荷。忽略自轉，剩餘探測器所受重力為多少？",
+    "choices": [
+      "$40$ N",
+      "$80$ N",
+      "$320$ N",
+      "$20$ N"
+    ],
+    "answer": 3,
+    "explain": "$W\\propto m/r^2$；剩餘質量為一半、球心距離為 2 倍，$W=160(1/2)/4=20$ N。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1299",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "一球對稱天體原質量為 $4\\times10^{24}$ kg、半徑為 $4\\times10^6$ m，後均勻收縮至半徑 $2\\times10^6$ m 並失去一半質量。忽略自轉，取 $G=6.7\\times10^{-11}$ N·m²/kg²，新表面重力加速度為多少？",
+    "choices": [
+      "$67$ m/s²",
+      "$16.75$ m/s²",
+      "$33.5$ m/s²",
+      "$6.7\\times10^7$ m/s²"
+    ],
+    "answer": 2,
+    "explain": "$M=2\\times10^{24}$ kg；$g=GM/R^2=6.7\\times2/4\\times10=33.5$ m/s²。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1300",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "星球半徑為 3000 km，甲、乙低質量衛星的圓軌道離表面高度分別為 3000、21000 km。在乙完成一圈的時間內，甲完成幾圈？",
+    "choices": [
+      "$7$ 圈",
+      "$4$ 圈",
+      "$64$ 圈",
+      "$8$ 圈"
+    ],
+    "answer": 3,
+    "explain": "$r_1=6000$、$r_2=24000$ km；$T_2/T_1=\\sqrt{(r_2/r_1)^3}=8$，故甲完成 8 圈。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1301",
+    "subject": "physics",
+    "topic": "克卜勒定律與萬有引力",
+    "type": "mc",
+    "q": "低質量行星只受同一恆星引力。甲半長軸 4 AU、週期 16 年；乙近日距 0.5 AU、遠日距 1.5 AU。乙繞行 3 圈需幾年？",
+    "choices": [
+      "$6$ 年",
+      "$12$ 年",
+      "$0.75$ 年",
+      "$2$ 年"
+    ],
+    "answer": 0,
+    "explain": "$a_2=(0.5+1.5)/2=1$ AU；$T_2=T_1(a_2/a_1)^{3/2}=2$ 年，三圈需 6 年。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1302",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "真空中兩點電荷的電量為 $2\\times10^{-6}$ C、$3\\times10^{-6}$ C，相距 0.3 m。取 $k=9\\times10^9\\ \\mathrm{N\\,m^2/C^2}$，電力大小為多少？",
+    "choices": [
+      "$0.6$ N",
+      "$0.18$ N",
+      "$0.00486$ N",
+      "$60$ N"
+    ],
+    "answer": 0,
+    "explain": "$F=k|q_1q_2|/r^2=0.054/0.09=0.6$ N。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1303",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "兩點電荷相距 0.3 m，電力大小 0.8 N，其中一個電量為 $2\\times10^{-6}$ C。取 $k=9\\times10^9\\ \\mathrm{N\\,m^2/C^2}$，另一個電量大小為多少微庫侖？",
+    "choices": [
+      "$\\frac{40}{3}$ μC",
+      "$4$ μC",
+      "$\\frac{40000}{81}$ μC",
+      "$4\\times10^{-6}$ μC"
+    ],
+    "answer": 1,
+    "explain": "$|q_2|=Fr^2/(k|q_1|)=4\\times10^{-6}$ C，即 4 μC。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1304",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "兩點電荷各帶 $1\\times10^{-6}$ C，電力大小為 0.9 N。取 $k=9\\times10^9\\ \\mathrm{N\\,m^2/C^2}$，兩者相距多少公分？",
+    "choices": [
+      "$1$ cm",
+      "$0.1$ cm",
+      "$10$ cm",
+      "$1000$ cm"
+    ],
+    "answer": 2,
+    "explain": "$r=\\sqrt{kq^2/F}=\\sqrt{0.01}=0.1$ m，即 10 cm。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1305",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "兩組點電荷實驗中，甲的電力為 2 N、距離為 0.2 m；乙的電力為 6 N、距離為 0.4 m，介質相同。乙的兩電量大小乘積為甲的幾倍？",
+    "choices": [
+      "$3$ 倍",
+      "$6$ 倍",
+      "$0.75$ 倍",
+      "$12$ 倍"
+    ],
+    "answer": 3,
+    "explain": "$|q_1q_2|=Fr^2/k$，故乘積比為 $(6/2)(0.4/0.2)^2=12$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1306",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "兩個點電荷電量不變，在相距 0.2 m 時電力大小 0.72 N。將距離再增加 0.2 m，電力減少多少牛頓？",
+    "choices": [
+      "$0.54$ N",
+      "$0.18$ N",
+      "$0.36$ N",
+      "$0.72$ N"
+    ],
+    "answer": 0,
+    "explain": "$F\\propto1/r^2$，新力為 $0.72(0.2/0.4)^2=0.18$ N，減少 $0.72-0.18=0.54$ N。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1307",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "一對粒子間電力大小為 $3.6\\times10^{-8}$ N、引力為 $6\\times10^{-44}$ N。電力大小為引力的幾倍？",
+    "choices": [
+      "$6\\times10^{-53}$ 倍",
+      "$6\\times10^{35}$ 倍",
+      "$\\frac{5}{3}\\times10^{-36}$ 倍",
+      "$6\\times10^{36}$ 倍"
+    ],
+    "answer": 1,
+    "explain": "$F_e/F_g=(3.6/6)10^{-8-(-44)}=6\\times10^{35}$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1308",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "一對粒子間引力大小約 $3\\times10^{-40}$ N，電力大小約為引力的 $2\\times10^{30}$ 倍。電力大小約為多少？",
+    "choices": [
+      "$6\\times10^{-70}$ N",
+      "$1.5\\times10^{-10}$ N",
+      "$6\\times10^{-10}$ N",
+      "$6\\times10^{-9}$ N"
+    ],
+    "answer": 2,
+    "explain": "$F_e=(F_e/F_g)F_g=(2\\times10^{30})(3\\times10^{-40})=6\\times10^{-10}$ N。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1309",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "原子直徑為 $2\\times10^{-10}$ m，原子核直徑為 $4\\times10^{-15}$ m。若等比例模型的原子直徑為 1 m，模型核直徑為多少微米？",
+    "choices": [
+      "$2\\times10^{-5}$ μm",
+      "$50000$ μm",
+      "$0.02$ μm",
+      "$20$ μm"
+    ],
+    "answer": 3,
+    "explain": "$D_\\text{核}/D_\\text{原子}=2\\times10^{-5}$；模型核為 $2\\times10^{-5}$ m，即 20 μm。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1310",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "某原子直徑為 0.2 nm，為其原子核直徑的 $5\\times10^4$ 倍。原子核直徑為多少公尺？",
+    "choices": [
+      "$4\\times10^{-15}$ m",
+      "$1\\times10^{-5}$ m",
+      "$4\\times10^{-14}$ m",
+      "$4\\times10^{-12}$ m"
+    ],
+    "answer": 0,
+    "explain": "$D_\\text{核}=D_\\text{原子}/(5\\times10^4)=2\\times10^{-10}/(5\\times10^4)=4\\times10^{-15}$ m。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1311",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "真空中甲帶 $1\\times10^{-6}$ C，乙帶 $2\\times10^{-6}$ C，相距 0.3 m。將乙電量加倍並移至距甲 0.6 m 處。取 $k=9\\times10^9\\ \\mathrm{N\\,m^2/C^2}$，甲乙電力大小減少多少？",
+    "choices": [
+      "$0.2$ N",
+      "$0.1$ N",
+      "$0.3$ N",
+      "$0.15$ N"
+    ],
+    "answer": 1,
+    "explain": "$F_1=k|q_1q_2|/r^2=0.2$ N；$F_2=0.2(2)/2^2=0.1$ N，故減少 0.1 N。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1312",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "兩個帶電質點質量各 3 kg，電量大小分別為 $6.7\\times10^{-6}$、$1\\times10^{-6}$ C。取 $k=9\\times10^9$ N·m²/C²、$G=6.7\\times10^{-11}$ N·m²/kg²，電力與引力大小比為多少？",
+    "choices": [
+      "$9\\times10^8$ 倍",
+      "$1\\times10^{-8}$ 倍",
+      "$1\\times10^8$ 倍",
+      "$3\\times10^8$ 倍"
+    ],
+    "answer": 2,
+    "explain": "$F_e/F_g=k|q_1q_2|/(Gm_1m_2)$，約去 6.7 與 9 後得 $10^8$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1313",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "甲、乙兩實驗的帶電小物體間距相同。甲每個物體電量 $1\\times10^{-6}$ C、質量 1 kg；乙每個物體電量 $2\\times10^{-6}$ C、質量 4 kg。乙的「電力除以引力」為甲的幾倍？",
+    "choices": [
+      "$0.5$ 倍",
+      "$4$ 倍",
+      "$0.0625$ 倍",
+      "$0.25$ 倍"
+    ],
+    "answer": 3,
+    "explain": "$F_e/F_g=kq^2/(Gm^2)$；兩實驗比值為 $2^2/4^2=1/4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1314",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "兩個相同帶電小球原相距 0.1 m，電力為 $9\\times10^{-3}$ N，引力為 $1\\times10^{-9}$ N，均可視為質點。電量質量均不變，改距 0.3 m；新電力為原引力的幾倍？",
+    "choices": [
+      "$1\\times10^{6}$ 倍",
+      "$9\\times10^{6}$ 倍",
+      "$3\\times10^{6}$ 倍",
+      "$8.1\\times10^{7}$ 倍"
+    ],
+    "answer": 0,
+    "explain": "$F_e\\propto1/r^2$，新電力為 $10^{-3}$ N；除以原引力 $10^{-9}$ 得 $10^6$ 倍。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1315",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "甲原子及其核的直徑為 $3\\times10^{-10}$、$6\\times10^{-15}$ m；乙為 $2\\times10^{-10}$、$8\\times10^{-15}$ m。各以原子直徑除以核直徑，兩個比值相差多少？",
+    "choices": [
+      "$75000$ （無因次）",
+      "$25000$ （無因次）",
+      "$2$ （無因次）",
+      "$0$ （無因次）"
+    ],
+    "answer": 1,
+    "explain": "$D_\\text{原子}/D_\\text{核}$ 分別為 $5\\times10^4$、$2.5\\times10^4$，相差 $2.5\\times10^4$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1316",
+    "subject": "physics",
+    "topic": "基本交互作用",
+    "type": "mc",
+    "q": "將原子與核視為小球，直徑分別為 $3\\times10^{-10}$、$6\\times10^{-15}$ m。模型中一列長 0.3 mm 的原子緊貼排列；若改用相同數目的核緊貼排列，總長為多少奈米？",
+    "choices": [
+      "$6\\times10^{-9}$ nm",
+      "$3\\times10^{5}$ nm",
+      "$6$ nm",
+      "$0.006$ nm"
+    ],
+    "answer": 2,
+    "explain": "$N=L/D_\\text{原子}=10^6$；$L_\\text{核}=N D_\\text{核}=6\\times10^{-9}$ m，即 6 nm。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1317",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "直流馬達兩端電壓 12 V，穩定運轉時電流 3 A，輸入電功率多少？",
+    "choices": [
+      "$4$ W",
+      "$0.25$ W",
+      "$108$ W",
+      "$36$ W"
+    ],
+    "answer": 3,
+    "explain": "$P=IV=3\\times12=36$ W。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1318",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "一個直流電器正常輸入功率 72 W，工作電壓 24 V。正常電流多少？",
+    "choices": [
+      "$3$ A",
+      "$1728$ A",
+      "$\\frac{1}{3}$ A",
+      "$0.125$ A"
+    ],
+    "answer": 0,
+    "explain": "$P=IV$，故 $I=P/V=72/24=3$ A。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1319",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "某歐姆電阻兩端加 9 V 時，通過電流 0.3 A，電阻值多少？",
+    "choices": [
+      "$2.7$ Ω",
+      "$30$ Ω",
+      "$\\frac{1}{30}$ Ω",
+      "$3$ Ω"
+    ],
+    "answer": 1,
+    "explain": "$V=IR$，$R=V/I=9/0.3=30$ Ω。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1320",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "40 Ω 歐姆電阻通過 0.2 A 直流電流，兩端電壓為多少？",
+    "choices": [
+      "$200$ V",
+      "$0.005$ V",
+      "$8$ V",
+      "$1.6$ V"
+    ],
+    "answer": 2,
+    "explain": "$V=IR=0.2\\times40=8$ V。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1321",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "將 8 Ω 歐姆電阻接在理想 24 V 直流電源兩端，通過電流多少？",
+    "choices": [
+      "$192$ A",
+      "$\\frac{1}{3}$ A",
+      "$72$ A",
+      "$3$ A"
+    ],
+    "answer": 3,
+    "explain": "$V=IR$，$I=V/R=24/8=3$ A。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1322",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "1.5 kW 電熱水壺持續以此功率運轉 20 分鐘，用電多少度？",
+    "choices": [
+      "$0.5$ kWh",
+      "$30$ kWh",
+      "$1800$ kWh",
+      "$5\\times10^{-4}$ kWh"
+    ],
+    "answer": 0,
+    "explain": "$E=Pt=1.5(20/60)=0.5$ kWh，即 0.5 度。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1323",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "600 W 加熱器持續運轉 5 分鐘，消耗多少焦耳電能？",
+    "choices": [
+      "$3000$ J",
+      "$1.8\\times10^{5}$ J",
+      "$50$ J",
+      "$1.08\\times10^{7}$ J"
+    ],
+    "answer": 1,
+    "explain": "$E=Pt=600(5\\times60)=1.8\\times10^5$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1324",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "某次設備測試的電費為 12 元。題設每度電 4 元，不計其他費用；這次用電能量為多少焦耳？",
+    "choices": [
+      "$3$ J",
+      "$10800$ J",
+      "$1.08\\times10^7$ J",
+      "$1.728\\times10^8$ J"
+    ],
+    "answer": 2,
+    "explain": "用電 $E=12/4=3$ kWh；$1$ kWh 為 $3.6\\times10^6$ J，故為 $1.08\\times10^7$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1325",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "200 W 風扇運轉 3 小時，400 W 設備運轉 1 小時，總用電多少度？",
+    "choices": [
+      "$2.4$ kWh",
+      "$0.2$ kWh",
+      "$1000$ kWh",
+      "$1$ kWh"
+    ],
+    "answer": 3,
+    "explain": "$E=P_1t_1+P_2t_2=(600+400)/1000=1$ kWh。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1326",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "直流輸電站以 30 kV 電壓送出 60 kW 功率，送出電流多少？",
+    "choices": [
+      "$2000$ A",
+      "$0.002$ A",
+      "$1800$ A",
+      "$2$ A"
+    ],
+    "answer": 3,
+    "explain": "$P=VI$，$I=60\\times10^3/(30\\times10^3)=2$ A。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1327",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "把 200 W 燈具換成 50 W 燈具，每天各使用 5 小時，連用 30 天。題設每度電 4 元，不計其他費用，可省多少元？",
+    "choices": [
+      "$120$ 元",
+      "$30$ 元",
+      "$3$ 元",
+      "$90$ 元"
+    ],
+    "answer": 3,
+    "explain": "$\\Delta E=(0.2-0.05)(5)(30)=22.5$ kWh；節省 $22.5(4)=90$ 元。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1328",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "1200 W 恆溫加熱器開機 2 小時，其中只有四分之一時間通電，其餘耗電忽略。題設每度電 5 元，電費多少？",
+    "choices": [
+      "$3$ 元",
+      "$12$ 元",
+      "$9$ 元",
+      "$3000$ 元"
+    ],
+    "answer": 0,
+    "explain": "$t=2/4=0.5$ h，$E=Pt=1.2(0.5)=0.6$ kWh；電費 $0.6(5)=3$ 元。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1329",
+    "subject": "physics",
+    "topic": "電與磁",
+    "type": "mc",
+    "q": "兩台相同電熱器各有固定電阻 20 Ω，分別接獨立的理想 100 V 直流電源，各運轉 2 小時。題設每度電 3 元，兩台合計電費多少？",
+    "choices": [
+      "$6$ 元",
+      "$3$ 元",
+      "$0.06$ 元",
+      "$6000$ 元"
+    ],
+    "answer": 0,
+    "explain": "$I=V/R=5$ A，$P=IV=500$ W；$E=2(0.5)(2)=2$ kWh，電費 $2(3)=6$ 元。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1330",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "水槽中規律水波的速率為 0.6 m/s，造波器每秒振動 2 次。相鄰波峰相距多少公尺？",
+    "choices": [
+      "$0.3\\,\\mathrm{m}$",
+      "$1.2\\,\\mathrm{m}$",
+      "$0.15\\,\\mathrm{m}$",
+      "$0.03\\,\\mathrm{m}$"
+    ],
+    "answer": 0,
+    "explain": "由 $v=f\\lambda$，$\\lambda=0.6/2=0.3$ m。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1331",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "超音波在組織中的速率為 1500 m/s，波長為 3 mm，其頻率為多少赫茲？",
+    "choices": [
+      "$500\\,\\mathrm{Hz}$",
+      "$50000\\,\\mathrm{Hz}$",
+      "$5000000\\,\\mathrm{Hz}$",
+      "$5\\times10^{5}\\,\\mathrm{Hz}$"
+    ],
+    "answer": 3,
+    "explain": "$v=f\\lambda$；3 mm 為 0.003 m，$f=1500/0.003=5\\times10^5$ Hz。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1332",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "廣播電臺發出的電磁波頻率為 20 MHz。此電磁波的週期為多少奈秒？",
+    "choices": [
+      "$5\\,\\mathrm{ns}$",
+      "$0.05\\,\\mathrm{ns}$",
+      "$50\\,\\mathrm{ns}$",
+      "$500\\,\\mathrm{ns}$"
+    ],
+    "answer": 2,
+    "explain": "$T=1/f=1/(20\\times10^6)=5\\times10^{-8}$ s，即 50 ns。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1333",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "港內規律海浪相鄰波峰相距 120 m，固定浮標每 30 s 完成一次上下起伏。海浪速率為多少？",
+    "choices": [
+      "$8\\,\\mathrm{m/s}$",
+      "$4\\,\\mathrm{m/s}$",
+      "$0.25\\,\\mathrm{m/s}$",
+      "$2\\,\\mathrm{m/s}$"
+    ],
+    "answer": 1,
+    "explain": "$f=1/T$、$v=f\\lambda=120/30=4$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1334",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "某音叉發出 680 Hz 的聲音，在聲速為 340 m/s 的空氣中，其聲波波長為多少公分？",
+    "choices": [
+      "$50\\,\\mathrm{cm}$",
+      "$0.5\\,\\mathrm{cm}$",
+      "$200\\,\\mathrm{cm}$",
+      "$5\\,\\mathrm{cm}$"
+    ],
+    "answer": 0,
+    "explain": "$\\lambda=v/f=340/680=0.5$ m，即 50 cm。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1335",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "實驗者與平直岩壁相距 85 m，發聲後 0.5 s 收到回聲。若兩者均靜止，當時的聲速為多少？",
+    "choices": [
+      "$170\\,\\mathrm{m/s}$",
+      "$85\\,\\mathrm{m/s}$",
+      "$680\\,\\mathrm{m/s}$",
+      "$340\\,\\mathrm{m/s}$"
+    ],
+    "answer": 3,
+    "explain": "回聲往返岩壁，$v=2d/t=2\\times85/0.5=340$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1336",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "聲音在空氣中的速率為 340 m/s。站在距山壁 510 m 處發聲，經多少秒會聽到同一次發聲的回聲？",
+    "choices": [
+      "$1.5\\,\\mathrm{s}$",
+      "$0.75\\,\\mathrm{s}$",
+      "$3\\,\\mathrm{s}$",
+      "$30\\,\\mathrm{s}$"
+    ],
+    "answer": 2,
+    "explain": "$d=vt/2$，故 $t=2d/v=2\\times510/340=3$ s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1337",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "靜止聲納向前後兩個固定岩面同時發出聲波，回波抵達時間相差 0.6 s。水中聲速為 1500 m/s，兩岩面到聲納的距離相差多少？",
+    "choices": [
+      "$900\\,\\mathrm{m}$",
+      "$450\\,\\mathrm{m}$",
+      "$225\\,\\mathrm{m}$",
+      "$90\\,\\mathrm{m}$"
+    ],
+    "answer": 1,
+    "explain": "回波時間差對應兩倍距離差，$\\Delta d=v\\Delta t/2=1500\\times0.6/2=450$ m。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1338",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "一束單色光在液體中速率為 $2\\times10^8$ m/s，波長為 500 nm，頻率為多少赫茲？",
+    "choices": [
+      "$4\\times10^{14}\\,\\mathrm{Hz}$",
+      "$4\\times10^{5}\\,\\mathrm{Hz}$",
+      "$4\\times10^{11}\\,\\mathrm{Hz}$",
+      "$4\\times10^{15}\\,\\mathrm{Hz}$"
+    ],
+    "answer": 0,
+    "explain": "$v=f\\lambda$；$f=(2\\times10^8)/(500\\times10^{-9})=4\\times10^{14}$ Hz。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1339",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "聲波波長為 0.68 m，在聲速 340 m/s 的空氣中傳播。空氣質點完成一次振動需多少秒？",
+    "choices": [
+      "$500\\,\\mathrm{s}$",
+      "$0.02\\,\\mathrm{s}$",
+      "$0.001\\,\\mathrm{s}$",
+      "$0.002\\,\\mathrm{s}$"
+    ],
+    "answer": 3,
+    "explain": "$f=v/\\lambda$、$T=1/f$，故 $T=\\lambda/v=0.68/340=0.002$ s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1340",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "同一水槽的波速固定。造波器為 2 Hz 時波長為 0.15 m，調成 3 Hz 後波長為多少？",
+    "choices": [
+      "$0.225\\,\\mathrm{m}$",
+      "$0.15\\,\\mathrm{m}$",
+      "$0.1\\,\\mathrm{m}$",
+      "$0.3\\,\\mathrm{m}$"
+    ],
+    "answer": 2,
+    "explain": "$v=f\\lambda=2\\times0.15=0.3$ m/s，故新波長 $0.3/3=0.1$ m。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1341",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "水中超音波頻率為 45 kHz。從發射到收到正前方固定障礙物的回波，振動器恰完成 1800 次振動。聲速為 1500 m/s，障礙物距離為多少？",
+    "choices": [
+      "$60\\,\\mathrm{m}$",
+      "$30\\,\\mathrm{m}$",
+      "$30000\\,\\mathrm{m}$",
+      "$15\\,\\mathrm{m}$"
+    ],
+    "answer": 1,
+    "explain": "$f=45000$ Hz，$t=N/f=0.04$ s，$d=vt/2=1500\\times0.04/2=30$ m。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1342",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "聲納位於水面，水深 1.5 m、水中聲速 1500 m/s；底下沉積層聲速 2000 m/s。正下方層底的回波在發射後 6 ms 抵達。沉積層厚多少？忽略其他反射。",
+    "choices": [
+      "$4\\,\\mathrm{m}$",
+      "$6\\,\\mathrm{m}$",
+      "$8\\,\\mathrm{m}$",
+      "$2\\,\\mathrm{m}$"
+    ],
+    "answer": 0,
+    "explain": "水層往返時間 $t_1=2d/v=2$ ms；沉積層往返需 4 ms，厚度 $d_2=v_2t_2/2=4$ m。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1343",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "聲學實驗中，固定聲源距固定岩壁 68 m，發聲後 0.4 s 收到回聲；聲源頻率為 500 Hz。由這次量測求得的聲波波長為多少？",
+    "choices": [
+      "$0.34\\,\\mathrm{m}$",
+      "$1.36\\,\\mathrm{m}$",
+      "$0.068\\,\\mathrm{m}$",
+      "$0.68\\,\\mathrm{m}$"
+    ],
+    "answer": 3,
+    "explain": "$v=2d/t=2\\times68/0.4=340$ m/s，再由 $\\lambda=v/f=340/500=0.68$ m。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1344",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "雷射在材料中的頻率為 $5\\times10^{14}$ Hz、波長為 0.3 μm。垂直通過厚 0.3 m 的均勻材料需多少奈秒？忽略介面延遲。",
+    "choices": [
+      "$0.5\\,\\mathrm{ns}$",
+      "$2\\,\\mathrm{ns}$",
+      "$0.002\\,\\mathrm{ns}$",
+      "$4\\,\\mathrm{ns}$"
+    ],
+    "answer": 1,
+    "explain": "$v=f\\lambda=1.5\\times10^8$ m/s，$t=L/v=2\\times10^{-9}$ s，即 2 ns。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1345",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "兩靜止太空探測器相距 600 km，以頻率 1 MHz 的無線電波通訊。訊號單程飛行期間，發射器完成多少次振盪？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$2$ 次",
+      "$4000$ 次",
+      "$2000$ 次",
+      "$200$ 次"
+    ],
+    "answer": 2,
+    "explain": "$t=d/c=600000/(3\\times10^8)=0.002$ s，$N=ft=10^6\\times0.002=2000$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1346",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "繩波振動器連續完成 12 次振動需 2 s；某波峰從甲標記傳至相距 2.4 m 的乙標記需 0.8 s。規律波的波長為多少？",
+    "choices": [
+      "$18\\,\\mathrm{m}$",
+      "$0.5\\,\\mathrm{m}$",
+      "$0.25\\,\\mathrm{m}$",
+      "$0.32\\,\\mathrm{m}$"
+    ],
+    "answer": 1,
+    "explain": "$f=12/2=6$ Hz，$v=2.4/0.8=3$ m/s，$\\lambda=v/f=0.5$ m。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1347",
+    "subject": "physics",
+    "topic": "波動與光",
+    "type": "mc",
+    "q": "固定岩壁前發聲，聲速為 300 m/s 時回聲在 0.66 s 後抵達。聲速變為 330 m/s，發聲位置不變，回聲抵達時間縮短多少毫秒？",
+    "choices": [
+      "$60\\,\\mathrm{ms}$",
+      "$360\\,\\mathrm{ms}$",
+      "$-66\\,\\mathrm{ms}$",
+      "$0.06\\,\\mathrm{ms}$"
+    ],
+    "answer": 0,
+    "explain": "$d=300\\times0.66/2=99$ m；新時間 $2d/330=0.6$ s，縮短 60 ms。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1348",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "質量 500 g 的足球以 4 m/s 飛行，將足球視為質點，其動能為多少焦耳？",
+    "choices": [
+      "$8\\,\\mathrm{J}$",
+      "$1\\,\\mathrm{J}$",
+      "$4000\\,\\mathrm{J}$",
+      "$4\\,\\mathrm{J}$"
+    ],
+    "answer": 3,
+    "explain": "$K=\\frac12mv^2=\\frac12\\times0.5\\times4^2=4$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1349",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "一個質量 4 kg 的物體，動能為 72 J，速率為多少？",
+    "choices": [
+      "$36\\,\\mathrm{m/s}$",
+      "$9\\,\\mathrm{m/s}$",
+      "$6\\,\\mathrm{m/s}$",
+      "$18\\,\\mathrm{m/s}$"
+    ],
+    "answer": 2,
+    "explain": "$K=\\frac12mv^2$，故 $v=\\sqrt{2K/m}=\\sqrt{144/4}=6$ m/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1350",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "某遙控模型的速率為 6 m/s，平移動能為 54 J。不計零件轉動，其質量為多少公斤？",
+    "choices": [
+      "$1.5\\,\\mathrm{kg}$",
+      "$3\\,\\mathrm{kg}$",
+      "$18\\,\\mathrm{kg}$",
+      "$9\\,\\mathrm{kg}$"
+    ],
+    "answer": 1,
+    "explain": "$K=\\frac12mv^2$，故 $m=2K/v^2=108/36=3$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1351",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "將 3 kg 的工具由離地 1 m 的平臺移到離地 5 m 的平臺。取 $g=10$ m/s²，重力位能增加多少？",
+    "choices": [
+      "$120\\,\\mathrm{J}$",
+      "$150\\,\\mathrm{J}$",
+      "$12\\,\\mathrm{J}$",
+      "$180\\,\\mathrm{J}$"
+    ],
+    "answer": 0,
+    "explain": "$\\Delta U=mg\\Delta h=3\\times10\\times(5-1)=120$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1352",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "以地面為重力位能零點，4 kg 的花盆位能為 240 J。取 $g=10$ m/s²，花盆離地多高？",
+    "choices": [
+      "$60\\,\\mathrm{m}$",
+      "$24\\,\\mathrm{m}$",
+      "$600\\,\\mathrm{m}$",
+      "$6\\,\\mathrm{m}$"
+    ],
+    "answer": 3,
+    "explain": "$U=mgh$，$h=U/(mg)=240/(4\\times10)=6$ m。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1353",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "某物體由地面升高 3 m，重力位能增加 150 J。取 $g=10$ m/s²，其質量為多少？",
+    "choices": [
+      "$50\\,\\mathrm{kg}$",
+      "$15\\,\\mathrm{kg}$",
+      "$5\\,\\mathrm{kg}$",
+      "$45\\,\\mathrm{kg}$"
+    ],
+    "answer": 2,
+    "explain": "$\\Delta U=mgh$，故 $m=150/(10\\times3)=5$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1354",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "抽水機在 2 分鐘內對水作功 2400 J，這段時間的平均輸出功率為多少瓦特？",
+    "choices": [
+      "$1200\\,\\mathrm{W}$",
+      "$20\\,\\mathrm{W}$",
+      "$10\\,\\mathrm{W}$",
+      "$72000\\,\\mathrm{W}$"
+    ],
+    "answer": 1,
+    "explain": "$P=W/t=2400/(2\\times60)=20$ W。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1355",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "一個功率固定為 30 W 的電熱器，要輸入 1800 J 能量，需通電多少秒？",
+    "choices": [
+      "$1\\,\\mathrm{s}$",
+      "$\\frac{1}{60}\\,\\mathrm{s}$",
+      "$60\\,\\mathrm{s}$",
+      "$120\\,\\mathrm{s}$"
+    ],
+    "answer": 2,
+    "explain": "$P=W/t$，故 $t=W/P=1800/30=60$ s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1356",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "200 g 的水從 20°C 升至 30°C，無相變且不計容器吸熱。水的比熱為 4.2 J/(g·°C)，吸熱多少？",
+    "choices": [
+      "$25200\\,\\mathrm{J}$",
+      "$8.4\\,\\mathrm{J}$",
+      "$840\\,\\mathrm{J}$",
+      "$8400\\,\\mathrm{J}$"
+    ],
+    "answer": 3,
+    "explain": "$Q=ms\\Delta T=200\\times4.2\\times(30-20)=8400$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1357",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "0.5 kg 的金屬吸收 1200 J 熱量，溫度上升 20°C，無相變。其比熱為多少？",
+    "choices": [
+      "$2400\\,\\mathrm{J/(kg\\cdot{}^\\circ C)}$",
+      "$60\\,\\mathrm{J/(kg\\cdot{}^\\circ C)}$",
+      "$120\\,\\mathrm{J/(kg\\cdot{}^\\circ C)}$",
+      "$30\\,\\mathrm{J/(kg\\cdot{}^\\circ C)}$"
+    ],
+    "answer": 2,
+    "explain": "$Q=ms\\Delta T$，故 $s=1200/(0.5\\times20)=120$ J/(kg·°C)。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1358",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "0.2 kg 的液體比熱為 2000 J/(kg·°C)，吸收 8000 J 熱量且無相變，溫度上升多少？",
+    "choices": [
+      "$4\\,\\mathrm{{}^\\circ C}$",
+      "$20\\,\\mathrm{{}^\\circ C}$",
+      "$0.8\\,\\mathrm{{}^\\circ C}$",
+      "$0.02\\,\\mathrm{{}^\\circ C}$"
+    ],
+    "answer": 1,
+    "explain": "$Q=ms\\Delta T$，故 $\\Delta T=8000/(0.2\\times2000)=20$ °C。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1359",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "量熱實驗中，21 cal 的熱量相當於多少焦耳？取 1 cal = 4.2 J。",
+    "choices": [
+      "$88.2\\,\\mathrm{J}$",
+      "$5\\,\\mathrm{J}$",
+      "$882\\,\\mathrm{J}$",
+      "$8.82\\,\\mathrm{J}$"
+    ],
+    "answer": 0,
+    "explain": "將卡換成焦耳，$Q=21\\times4.2=88.2$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1360",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "840 J 的機械功全部轉為 50 g 水的熱量。水比熱為 1 cal/(g·°C)，取 1 cal = 4.2 J，不計散熱，水溫升高多少？",
+    "choices": [
+      "$16.8\\,\\mathrm{{}^\\circ C}$",
+      "$70.56\\,\\mathrm{{}^\\circ C}$",
+      "$4000\\,\\mathrm{{}^\\circ C}$",
+      "$4\\,\\mathrm{{}^\\circ C}$"
+    ],
+    "answer": 3,
+    "explain": "熱量 $840/4.2=200$ cal；$\\Delta T=Q/(ms)=200/50=4$ °C。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1361",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "兩個質量皆為 2 kg 的滑塊，速率分別為 3 m/s 與 5 m/s。將滑塊視為質點，兩者的動能相差多少焦耳？",
+    "choices": [
+      "$4\\,\\mathrm{J}$",
+      "$32\\,\\mathrm{J}$",
+      "$16\\,\\mathrm{J}$",
+      "$25\\,\\mathrm{J}$"
+    ],
+    "answer": 2,
+    "explain": "$K=\\frac12mv^2$，兩者動能為 $\\frac12\\times2\\times3^2=9$ J、25 J，相差 $25-9=16$ J。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1362",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "0.5 kg、80°C 的金屬放入 0.1 kg、20°C 的水中。金屬與水的比熱分別為 420、4200 J/(kg·°C)，容器隔熱且不吸熱，熱平衡末溫多少？",
+    "choices": [
+      "$50\\,\\mathrm{{}^\\circ C}$",
+      "$70\\,\\mathrm{{}^\\circ C}$",
+      "$40\\,\\mathrm{{}^\\circ C}$",
+      "$60\\,\\mathrm{{}^\\circ C}$"
+    ],
+    "answer": 2,
+    "explain": "由 $Q=ms\\Delta T$，熱容量各為 210、420 J/°C；$210(80-T)=420(T-20)$，得 $T=40$ °C。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1363",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "隔熱杯內有 100 g、20°C 的水，杯的熱容量為 420 J/°C 且也為 20°C。加入 100 g、80°C 的水，水比熱為 4.2 J/(g·°C)，熱平衡末溫多少？",
+    "choices": [
+      "$50\\,\\mathrm{{}^\\circ C}$",
+      "$40\\,\\mathrm{{}^\\circ C}$",
+      "$60\\,\\mathrm{{}^\\circ C}$",
+      "$\\frac{100}{3}\\,\\mathrm{{}^\\circ C}$"
+    ],
+    "answer": 1,
+    "explain": "由 $Q=ms\\Delta T$，杯與冷水熱容量共 840 J/°C；$840(T-20)=420(80-T)$，得 $T=40$ °C。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1364",
+    "subject": "physics",
+    "topic": "能量與能量守恆",
+    "type": "mc",
+    "q": "隔熱且不吸熱的容器中，200 g 金屬與冷水達熱平衡於 25°C。已知水吸熱 840 J，金屬比熱為 420 J/(kg·°C)，金屬原溫多少？",
+    "choices": [
+      "$35\\,\\mathrm{{}^\\circ C}$",
+      "$15\\,\\mathrm{{}^\\circ C}$",
+      "$10\\,\\mathrm{{}^\\circ C}$",
+      "$25\\,\\mathrm{{}^\\circ C}$"
+    ],
+    "answer": 0,
+    "explain": "金屬放熱等於水吸熱；由 $Q=ms\\Delta T$，$\\Delta T=840/(0.2\\times420)=10$ °C，原溫為 $25+10=35$ °C。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1365",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "一粒質量為 2 mg 的微粒，其靜止能量為多少焦耳？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$1.8\\times10^{11}\\,\\mathrm{J}$",
+      "$1.8\\times10^{14}\\,\\mathrm{J}$",
+      "$1.8\\times10^{17}\\,\\mathrm{J}$",
+      "$600\\,\\mathrm{J}$"
+    ],
+    "answer": 0,
+    "explain": "$m=2\\times10^{-6}$ kg，$E=mc^2=2\\times10^{-6}\\times9\\times10^{16}=1.8\\times10^{11}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1366",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "一電子與一正電子起初皆靜止，質量各近似 $9\\times10^{-31}$ kg。兩者完全湮滅且只產生光子，光子總能量約多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$8.1\\times10^{-14}\\,\\mathrm{J}$",
+      "$1.62\\times10^{-14}\\,\\mathrm{J}$",
+      "$3.24\\times10^{-13}\\,\\mathrm{J}$",
+      "$1.62\\times10^{-13}\\,\\mathrm{J}$"
+    ],
+    "answer": 3,
+    "explain": "總質量 $m=1.8\\times10^{-30}$ kg；$E=mc^2=1.8\\times10^{-30}\\times9\\times10^{16}=1.62\\times10^{-13}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1367",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "某過程釋出的能量為 $9\\times10^{10}$ J，相當於總靜止質量減少多少毫克？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$0.001\\,\\mathrm{mg}$",
+      "$3\\times10^{8}\\,\\mathrm{mg}$",
+      "$1\\,\\mathrm{mg}$",
+      "$1\\times10^{-6}\\,\\mathrm{mg}$"
+    ],
+    "answer": 2,
+    "explain": "$\\Delta m=E/c^2=10^{-6}$ kg，即 1 mg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1368",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "電池放電期間對外供電 1200 J，另散熱 600 J，沒有物質進出且初末皆靜止。電池的整體質量減少多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$\\frac{4}{3}\\times10^{-14}\\,\\mathrm{kg}$",
+      "$2\\times10^{-14}\\,\\mathrm{kg}$",
+      "$\\frac{20}{3}\\times10^{-15}\\,\\mathrm{kg}$",
+      "$6\\times10^{-6}\\,\\mathrm{kg}$"
+    ],
+    "answer": 1,
+    "explain": "淨釋能 $E=1200+600=1800$ J，$\\Delta m=E/c^2=2\\times10^{-14}$ kg。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1369",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "自由質子與中子的總靜止質量比結合後的氘核多 $4\\times10^{-30}$ kg。忽略反沖，將此氘核完全拆散至少需供能多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$3.6\\times10^{-13}\\,\\mathrm{J}$",
+      "$1.2\\times10^{-21}\\,\\mathrm{J}$",
+      "$1.8\\times10^{-13}\\,\\mathrm{J}$",
+      "$3.6\\times10^{-12}\\,\\mathrm{J}$"
+    ],
+    "answer": 0,
+    "explain": "拆散需補回結合能，$E=\\Delta mc^2=4\\times10^{-30}\\times9\\times10^{16}=3.6\\times10^{-13}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1370",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "核反應爐每秒發生的反應，其反應物總靜止質量比產物多 $2\\times10^{-8}$ kg。釋能全成為熱，熱功率多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$6\\,\\mathrm{W}$",
+      "$9\\times10^{8}\\,\\mathrm{W}$",
+      "$1.08\\times10^{11}\\,\\mathrm{W}$",
+      "$1.8\\times10^{9}\\,\\mathrm{W}$"
+    ],
+    "answer": 3,
+    "explain": "$P=(\\Delta m/\\Delta t)c^2=2\\times10^{-8}\\times9\\times10^{16}=1.8\\times10^9$ W。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1371",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "核反應爐熱功率為 $9\\times10^8$ W，熱能全來自總靜止質量的減少。每秒質量虧損為多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$3\\,\\mathrm{kg/s}$",
+      "$6\\times10^{-7}\\,\\mathrm{kg/s}$",
+      "$1\\times10^{-8}\\,\\mathrm{kg/s}$",
+      "$1\\times10^{-7}\\,\\mathrm{kg/s}$"
+    ],
+    "answer": 2,
+    "explain": "$\\Delta m/\\Delta t=P/c^2=(9\\times10^8)/(9\\times10^{16})=10^{-8}$ kg/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1372",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "核能機組每秒總靜止質量虧損 $3\\times10^{-9}$ kg，熱轉電效率為三分之一。電功率多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$2.7\\times10^{8}\\,\\mathrm{W}$",
+      "$9\\times10^{7}\\,\\mathrm{W}$",
+      "$8.1\\times10^{8}\\,\\mathrm{W}$",
+      "$0.3\\,\\mathrm{W}$"
+    ],
+    "answer": 1,
+    "explain": "$P_{th}=\\dot m c^2=2.7\\times10^8$ W；$P_e=\\eta P_{th}=9\\times10^7$ W。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1373",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "核電廠每秒總靜止質量虧損 $10^{-8}$ kg，輸出電功率 $4.5\\times10^8$ W。熱轉電效率為多少百分比？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$50\\,\\mathrm{\\%}$",
+      "$200\\,\\mathrm{\\%}$",
+      "$0.5\\,\\mathrm{\\%}$",
+      "$5\\,\\mathrm{\\%}$"
+    ],
+    "answer": 0,
+    "explain": "$P_{th}=10^{-8}c^2=9\\times10^8$ W，$\\eta=P_e/P_{th}=50\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1374",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "理想連鎖反應中，每一個中子引發一次分裂並產生 3 個下一輪中子，無中子流失。起始中子經過 3 輪後成為 216 個，起始有幾個？",
+    "choices": [
+      "$72$ 個",
+      "$24$ 個",
+      "$27$ 個",
+      "$8$ 個"
+    ],
+    "answer": 3,
+    "explain": "$N=N_0k^r$，$N_0=216/3^3=8$ 個。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1375",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "簡化連鎖模型中，每個中子都產生相同數量的下一輪中子，無其他增減。4 個起始中子經 3 輪後為 108 個，每個中子產生幾個下一輪中子？",
+    "choices": [
+      "$27$ 個",
+      "$9$ 個",
+      "$3$ 個",
+      "$81$ 個"
+    ],
+    "answer": 2,
+    "explain": "$N=N_0k^r$，故 $k^3=108/4=27$，$k=3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1376",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "理想模型中，每個中子引發一次分裂並產生 3 個下一輪中子，無中子流失。從 2 個中子開始，經過幾輪後該輪中子數首次達到 162 個？",
+    "choices": [
+      "$2$ 輪",
+      "$4$ 輪",
+      "$5$ 輪",
+      "$3$ 輪"
+    ],
+    "answer": 1,
+    "explain": "$N=N_0k^r$；$162/2=81=3^4$，故經過 4 輪。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1377",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "核電廠以 180 MW 電功率穩定供電 10 s，熱轉電效率為 40%。這段期間總靜止質量虧損多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$2\\times10^{-8}\\,\\mathrm{kg}$",
+      "$8\\times10^{-9}\\,\\mathrm{kg}$",
+      "$5\\times10^{-14}\\,\\mathrm{kg}$",
+      "$5\\times10^{-8}\\,\\mathrm{kg}$"
+    ],
+    "answer": 3,
+    "explain": "熱功率 $180/0.4=450$ MW，釋能 $4.5\\times10^9$ J；$\\Delta m=E/c^2=5\\times10^{-8}$ kg。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1378",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "核反應每次總質量虧損 $4\\times10^{-29}$ kg，每秒發生 $5\\times10^{18}$ 次，轉電效率為 25%。電功率多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$1.8\\times10^{7}\\,\\mathrm{W}$",
+      "$7.2\\times10^{7}\\,\\mathrm{W}$",
+      "$4.5\\times10^{6}\\,\\mathrm{W}$",
+      "$9\\times10^{-13}\\,\\mathrm{W}$"
+    ],
+    "answer": 2,
+    "explain": "每次 $E=\\Delta mc^2=3.6\\times10^{-12}$ J，熱功率 $1.8\\times10^7$ W，電功率 $4.5\\times10^6$ W。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1379",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "某核電機組的燃料總共可轉換 2 mg 的質量虧損，發電效率為 50%。若輸出電功率維持 9 MW，可供電多少秒？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$20000\\,\\mathrm{s}$",
+      "$10000\\,\\mathrm{s}$",
+      "$1\\times10^{7}\\,\\mathrm{s}$",
+      "$40000\\,\\mathrm{s}$"
+    ],
+    "answer": 1,
+    "explain": "$E=\\Delta mc^2=1.8\\times10^{11}$ J，可得電能 $9\\times10^{10}$ J；$t=E_e/P_e=10000$ s。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1380",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "起始有 2 個中子，每個引發一次分裂並產生 3 個下一輪中子，無流失且燃料足夠。每次分裂質量虧損 $10^{-28}$ kg，前 2 輪共釋能多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$7.2\\times10^{-11}\\,\\mathrm{J}$",
+      "$5.4\\times10^{-11}\\,\\mathrm{J}$",
+      "$1.8\\times10^{-11}\\,\\mathrm{J}$",
+      "$1.44\\times10^{-10}\\,\\mathrm{J}$"
+    ],
+    "answer": 0,
+    "explain": "兩輪分裂數為 2、$2\\times3=6$，共 8 次；每次 $E=\\Delta mc^2=9\\times10^{-12}$ J，合計 $7.2\\times10^{-11}$ J。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1381",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "簡化連鎖反應中，起始有 8 個中子，每個引發一次分裂並產生 4 個新中子，每輪各移除一半新中子，其餘引發下一輪。燃料足夠，第三輪後留下幾個中子？",
+    "choices": [
+      "$32$ 個",
+      "$512$ 個",
+      "$24$ 個",
+      "$64$ 個"
+    ],
+    "answer": 3,
+    "explain": "每輪有效倍增率 $k=4\\times\\frac12=2$；由 $N=N_0k^r$，$N=8\\times2^3=64$ 個。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1382",
+    "subject": "physics",
+    "topic": "質能互換與核能",
+    "type": "mc",
+    "q": "密閉盒初、末皆靜止，受 300 W 光束照射 2 分鐘；25% 光能被反射，其餘全留在盒內，無其他能量或物質進出。整體質量增加多少？取 $c=3\\times10^8$ m/s。",
+    "choices": [
+      "$4\\times10^{-13}\\,\\mathrm{kg}$",
+      "$3\\times10^{-13}\\,\\mathrm{kg}$",
+      "$1\\times10^{-13}\\,\\mathrm{kg}$",
+      "$5\\times10^{-15}\\,\\mathrm{kg}$"
+    ],
+    "answer": 1,
+    "explain": "$E=Pt(1-0.25)=300\\times120\\times0.75=27000$ J；$\\Delta m=E/c^2=3\\times10^{-13}$ kg。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1383",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "紅色雷射在真空中的波長為 620 nm，單顆光子能量為多少電子伏特？取 $hc\\approx1240$ eV·nm。",
+    "choices": [
+      "$2\\,\\mathrm{eV}$",
+      "$0.5\\,\\mathrm{eV}$",
+      "$2000\\,\\mathrm{eV}$",
+      "$1\\,\\mathrm{eV}$"
+    ],
+    "answer": 0,
+    "explain": "$E=hc/\\lambda=1240/620=2$ eV。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1384",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "某單色光每顆光子能量為 4 eV，其真空波長為多少奈米？取 $hc\\approx1240$ eV·nm。",
+    "choices": [
+      "$4960\\,\\mathrm{nm}$",
+      "$0.31\\,\\mathrm{nm}$",
+      "$77.5\\,\\mathrm{nm}$",
+      "$310\\,\\mathrm{nm}$"
+    ],
+    "answer": 3,
+    "explain": "$E=hc/\\lambda$，故 $\\lambda=hc/E=1240/4=310$ nm。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1385",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "一顆光子的能量為 $3.3\\times10^{-19}$ J，頻率約多少赫茲？取 $h\\approx6.6\\times10^{-34}$ J·s。",
+    "choices": [
+      "$2\\times10^{14}\\,\\mathrm{Hz}$",
+      "$5\\times10^{15}\\,\\mathrm{Hz}$",
+      "$5\\times10^{14}\\,\\mathrm{Hz}$",
+      "$5\\times10^{13}\\,\\mathrm{Hz}$"
+    ],
+    "answer": 2,
+    "explain": "$E=hf$，故 $f=E/h=(3.3\\times10^{-19})/(6.6\\times10^{-34})=5\\times10^{14}$ Hz。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1386",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "某激發過程需要 4 eV 能量，相當於多少焦耳？取 $1\\ \\mathrm{eV}=1.6\\times10^{-19}$ J。",
+    "choices": [
+      "$2.5\\times10^{19}\\,\\mathrm{J}$",
+      "$6.4\\times10^{-19}\\,\\mathrm{J}$",
+      "$2.5\\times10^{-19}\\,\\mathrm{J}$",
+      "$6.4\\times10^{-18}\\,\\mathrm{J}$"
+    ],
+    "answer": 1,
+    "explain": "電子伏特換成焦耳：$E=4\\times1.6\\times10^{-19}=6.4\\times10^{-19}$ J。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1387",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "單色光源輸出的光功率為 3.2 mW，每顆光子能量為 $3.2\\times10^{-19}$ J。平均每秒發出多少顆光子？",
+    "choices": [
+      "$1\\times10^{19}$ 顆/s",
+      "$1\\times10^{13}$ 顆/s",
+      "$2\\times10^{16}$ 顆/s",
+      "$1\\times10^{16}$ 顆/s"
+    ],
+    "answer": 3,
+    "explain": "$\\dot N=P/E=(3.2\\times10^{-3})/(3.2\\times10^{-19})=10^{16}$ 顆/s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1388",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "某單色光源平均每秒發出 $5\\times10^{15}$ 顆光子，每顆能量 2 eV。輸出光功率多少瓦特？取 $1\\ \\mathrm{eV}=1.6\\times10^{-19}$ J。",
+    "choices": [
+      "$0.016\\,\\mathrm{W}$",
+      "$8\\times10^{-4}\\,\\mathrm{W}$",
+      "$0.0016\\,\\mathrm{W}$",
+      "$6.25\\times10^{-4}\\,\\mathrm{W}$"
+    ],
+    "answer": 2,
+    "explain": "$E=3.2\\times10^{-19}$ J；$P=\\dot NE=5\\times10^{15}\\times3.2\\times10^{-19}=0.0016$ W。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1389",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "一個光脈衝含 $6\\times10^{15}$ 顆光子，每顆能量 $4\\times10^{-19}$ J。發光期間光功率固定為 0.012 W，脈衝持續多久？",
+    "choices": [
+      "$0.4\\,\\mathrm{s}$",
+      "$0.2\\,\\mathrm{s}$",
+      "$0.002\\,\\mathrm{s}$",
+      "$5\\,\\mathrm{s}$"
+    ],
+    "answer": 1,
+    "explain": "光能 $NE=0.0024$ J，$t=NE/P=0.0024/0.012=0.2$ s。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1390",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "某原子兩能階能量分別為 −3 eV 與 −7 eV。原子由前者降至後者，忽略反沖，放出的光子能量為多少？",
+    "choices": [
+      "$4\\,\\mathrm{eV}$",
+      "$10\\,\\mathrm{eV}$",
+      "$7\\,\\mathrm{eV}$",
+      "$3\\,\\mathrm{eV}$"
+    ],
+    "answer": 0,
+    "explain": "$E_\\gamma=E_i-E_f=(-3)-(-7)=4$ eV。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1391",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "某原子由 −2 eV 能階降至 −6 eV，忽略反沖。放出光子的真空波長為多少？取 $hc\\approx1240$ eV·nm。",
+    "choices": [
+      "$155\\,\\mathrm{nm}$",
+      "$620\\,\\mathrm{nm}$",
+      "$0.31\\,\\mathrm{nm}$",
+      "$310\\,\\mathrm{nm}$"
+    ],
+    "answer": 3,
+    "explain": "$\\Delta E=(-2)-(-6)=4$ eV，$\\lambda=hc/\\Delta E=310$ nm。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1392",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "某原子起初能量為 −8 eV，完整吸收一顆真空波長 248 nm 的光子而升階。末能階能量為多少？取 $hc\\approx1240$ eV·nm。",
+    "choices": [
+      "$-13\\,\\mathrm{eV}$",
+      "$5\\,\\mathrm{eV}$",
+      "$-3\\,\\mathrm{eV}$",
+      "$13\\,\\mathrm{eV}$"
+    ],
+    "answer": 2,
+    "explain": "$E_\\gamma=hc/\\lambda=5$ eV；吸收後 $E_f=-8+5=-3$ eV。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "physics-1393",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "真空波長為 620 nm 的雷射，輸出光功率為 6.4 mW。每秒放出多少顆光子？取 $hc\\approx1240$ eV·nm，$1\\ \\mathrm{eV}=1.6\\times10^{-19}$ J。",
+    "choices": [
+      "$2\\times10^{19}$ 顆/s",
+      "$2\\times10^{16}$ 顆/s",
+      "$1\\times10^{16}$ 顆/s",
+      "$8\\times10^{16}$ 顆/s"
+    ],
+    "answer": 1,
+    "explain": "$E=hc/\\lambda=2$ eV，即 $3.2\\times10^{-19}$ J；$\\dot N=P/E=2\\times10^{16}$ 顆/s。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1394",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "單色光源輸入電功率 0.0128 W，每秒發出 $10^{16}$ 顆真空波長 620 nm 的光子。轉光效率約多少？取 $hc\\approx1240$ eV·nm、$1\\ \\mathrm{eV}=1.6\\times10^{-19}$ J。",
+    "choices": [
+      "$25\\,\\mathrm{\\%}$",
+      "$100\\,\\mathrm{\\%}$",
+      "$50\\,\\mathrm{\\%}$",
+      "$6.25\\,\\mathrm{\\%}$"
+    ],
+    "answer": 0,
+    "explain": "$E=hc/\\lambda=2$ eV，即 $3.2\\times10^{-19}$ J；$P_{out}=\\dot NE=0.0032$ W，$\\eta=P_{out}/P_{in}=25\\%$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1395",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "原子由高能階直降基態放出 248 nm 光子；若先降中間能階，第一顆為 1240 nm。再降基態的第二顆波長多少？皆為真空波長，取 $hc\\approx1240$ eV·nm。",
+    "choices": [
+      "$310\\,\\mathrm{nm}$",
+      "$992\\,\\mathrm{nm}$",
+      "$\\frac{620}{3}\\,\\mathrm{nm}$",
+      "$248\\,\\mathrm{nm}$"
+    ],
+    "answer": 0,
+    "explain": "由 $E=hc/\\lambda$，總能階差為 5 eV、第一顆為 1 eV；第二顆能量 $5-1=4$ eV，$\\lambda=1240/4=310$ nm。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1396",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "有 $2\\times10^{15}$ 個原子各從 −5 eV 升至 −3 eV。光功率 0.00128 W，全被吸收；每個原子只吸收一次且期間不放光，需照多久？取 $1\\ \\mathrm{eV}=1.6\\times10^{-19}$ J。",
+    "choices": [
+      "$2\\,\\mathrm{s}$",
+      "$5\\times10^{-4}\\,\\mathrm{s}$",
+      "$0.25\\,\\mathrm{s}$",
+      "$0.5\\,\\mathrm{s}$"
+    ],
+    "answer": 3,
+    "explain": "$\\Delta E=E_f-E_i=2$ eV，總能量 $N\\Delta E=6.4\\times10^{-4}$ J；$t=E/P=0.5$ s。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1397",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "兩束單色光的光功率各為 1.6 mW，每顆光子能量分別為 $3.2\\times10^{-19}$ J 與 $1.6\\times10^{-19}$ J。兩束合計每秒發出多少顆光子？",
+    "choices": [
+      "$1\\times10^{16}$ 顆/s",
+      "$2\\times10^{16}$ 顆/s",
+      "$1.5\\times10^{16}$ 顆/s",
+      "$7.5\\times10^{15}$ 顆/s"
+    ],
+    "answer": 2,
+    "explain": "每束 $P=0.0016$ W；由 $\\dot N=P/E$，兩束各為 $5\\times10^{15}$、$10^{16}$ 顆/s，合計 $1.5\\times10^{16}$ 顆/s。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "physics-1398",
+    "subject": "physics",
+    "topic": "量子現象",
+    "type": "mc",
+    "q": "單色光源原每秒發出 $10^{16}$ 顆真空波長 620 nm 的光子。改為 310 nm，光功率同時減半。每秒少發出多少顆光子？",
+    "choices": [
+      "$5\\times10^{15}$ 顆/s",
+      "$7.5\\times10^{15}$ 顆/s",
+      "$2.5\\times10^{15}$ 顆/s",
+      "$1\\times10^{16}$ 顆/s"
+    ],
+    "answer": 1,
+    "explain": "由 $E=hc/\\lambda$，新光子能量加倍；$\\dot N=P/E$ 變成原來的 $1/4$，新速率 $2.5\\times10^{15}$，少 $7.5\\times10^{15}$ 顆/s。",
+    "formula": true,
+    "level": 3
   }
 ]
