@@ -1,9 +1,11 @@
 // 首頁：科目選擇、今日進度、學測倒數、模式入口
 import { daysUntil, weakUnits } from '../analysis.js';
-import { SUBJECTS } from '../subjects.js';
+import { currentUnit, pathUnits } from '../path.js';
+import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { isWeak, mastery } from '../srs.js';
 import { currentStreak, today } from '../stats.js';
 import { UNITS, isUnitOff, unitKey } from '../units.js';
+import { initPathSheet } from './path.js';
 import { initSettings } from './settings.js';
 import { initUnitSheet } from './units.js';
 
@@ -57,6 +59,9 @@ export function initHome(ctx) {
     btn.addEventListener('click', () => ctx.startRound(btn.dataset.mode));
   });
 
+  initPathSheet(ctx);
+  $('#open-path').addEventListener('click', () => ctx.openPath());
+
   function render() {
     const now = Date.now();
     const { cards, flags } = ctx.state;
@@ -102,6 +107,14 @@ export function initHome(ctx) {
     $('#weak-count').textContent = inSelection.filter((q) => isWeak(cards[q.id])).length;
     const weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits });
     $('#weak-units-sub').textContent = weak.length ? `最弱 ${weak.length} 單元` : '先多練幾輪';
+    // 單元闖關：最近闖的那科到第幾關了（按鈕窄，完整單元名放在 title）
+    const pathSubject = ctx.state.pathLast;
+    const progress = pathSubject && ctx.state.path?.[pathSubject];
+    const pathList = progress ? pathUnits(pathSubject, settings.excludedUnits) : [];
+    const unit = progress && currentUnit(pathList, progress);
+    const pathName = progress && SUBJECT_BY_ID[pathSubject].name;
+    $('#path-sub').textContent = progress ? `${pathName}・${unit ? `第 ${pathList.indexOf(unit) + 1} 關` : '全過關'}` : '一關一關過';
+    $('#open-path').title = unit ? `${pathName}・${unit}` : '';
 
     const disabled = !inSelection.length;
     document.querySelectorAll('#home [data-mode]').forEach((b) => (b.disabled = disabled));

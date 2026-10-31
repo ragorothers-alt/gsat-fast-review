@@ -16,7 +16,8 @@ export function initResult(ctx) {
 
   ctx.showResult = (s) => {
     last = { mode: s.mode, opts: s.opts };
-    const answered = s.right + s.wrong;
+    // 答對但自己標成猜的、不太確定的，算作答但不算答對
+    const answered = s.right + s.wrong + s.log.filter((e) => e.mark).length;
     const isBlitz = s.mode === 'blitz';
     const record = isBlitz && s.score > ctx.state.best.blitz;
     if (record) {
@@ -24,15 +25,17 @@ export function initResult(ctx) {
       ctx.save();
     }
 
-    $('#r-mode').textContent = MODES[s.mode].name;
-    $('#r-big').textContent = isBlitz ? `${s.score} 分` : `${s.right} / ${s.log.length}`;
+    const { path } = s;
+    $('#r-mode').textContent = path ? `${MODES.path.name}・${path.unit}` : MODES[s.mode].name;
+    $('#r-big').textContent = isBlitz ? `${s.score} 分` : path?.done ? '過關！' : `${s.right} / ${s.log.length}`;
     $('#r-badge').hidden = !record;
     $('#r-acc').textContent = answered ? `${Math.round((s.right / answered) * 100)}%` : '—';
     $('#r-combo').textContent = s.maxCombo;
     $('#r-today').textContent = today(ctx.state, Date.now()).answered;
-    $('#r-cheer').textContent = cheer(s, answered);
+    $('#r-cheer').textContent = path ? pathCheer(path) : cheer(s, answered);
+    $('#r-again').textContent = path ? (path.done ? (path.next ? `下一關：${path.next}` : '這科全部過關！') : '繼續這一關') : '再來一輪';
 
-    misses = s.log.filter((e) => e.outcome !== 'right');
+    misses = s.log.filter((e) => e.outcome !== 'right' || e.mark);
     $('#r-review-title').textContent = misses.length ? `再看一眼（${misses.length} 題，已加入錯題複習）` : '全對！這輪沒有錯題';
     const { flags, stars } = ctx.state;
     $('#r-list').innerHTML = misses
@@ -78,7 +81,13 @@ export function initResult(ctx) {
 /** 這一題你選了什麼 */
 function mine(q, entry) {
   if (entry.outcome === 'skip') return '<span class="r-mine skip">看了解答</span>';
+  if (entry.mark) return `<span class="r-mine skip">答對了，但你標了「${entry.mark === 'guess' ? '猜對的' : '不太確定'}」</span>`;
   return `<span class="r-mine">你選：${q.type === 'tf' ? tfLabel(entry.chosen) : richHTML(q.choices[entry.chosen])}</span>`;
+}
+
+function pathCheer({ done, next, left }) {
+  if (!done) return `這關還有 ${left} 題，下次從這裡接著做。`;
+  return next ? '這一關的錯題都補練過了，往下一關前進！' : '這科每一關都過了，記得用錯題複習維持手感。';
 }
 
 function cheer(s, answered) {

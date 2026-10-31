@@ -42,6 +42,13 @@ export function recordAnswer(state, outcome, now) {
   pruneDaily(state, now);
 }
 
+/** 答對後才標成「猜的」或「不太確定」：那天的答對數扣回來（delta = -1），取消標記時加回（+1） */
+export function adjustRight(state, delta, at) {
+  const key = dayKey(at);
+  const own = state.cloud?.devices[state.cloud.device]?.[key];
+  for (const day of [state.daily[key], own]) if (day) day.right = Math.max(0, day.right + delta);
+}
+
 /** 顯示用的連續天數：昨天或今天有練才算還沒斷 */
 export function currentStreak(state, now) {
   const { last, count } = state.streak;

@@ -16,6 +16,8 @@ export const MODES = {
   // 從錯題本的收藏、搜尋結果出發，練指定的題目（opts.ids）
   starred: { name: '收藏的題目', size: 20, explainAlways: true },
   picked: { name: '搜尋到的題目', size: 20, explainAlways: true },
+  // 一科一個單元一個單元過關：每關先出 30 題，答錯就在這關後面補類似題（見 path.js）
+  path: { name: '單元闖關', size: 30 },
 };
 
 export function createSession(mode, queue) {
@@ -63,6 +65,19 @@ export function submit(s, outcome, chosen = null) {
   }
   s.log.push({ id: q.id, outcome, chosen });
   return points;
+}
+
+/**
+ * 剛答對的那題，玩家自己標成「猜的」（guess）或「不太確定」（unsure），kind = null 取消標記。
+ * 標了就不算進答對數；分數與連擊照算，不影響遊戲節奏。
+ */
+export function markLast(s, kind) {
+  const e = s.log[s.log.length - 1];
+  if (!e || e.outcome !== 'right') return;
+  if (!e.mark && kind) s.right--;
+  if (e.mark && !kind) s.right++;
+  if (kind) e.mark = kind;
+  else delete e.mark;
 }
 
 /** 無盡模式補題：接在佇列最後 */

@@ -545,23 +545,38 @@ p {
 
 .mode-pair {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: 1.15fr 1fr 1fr;
   gap: 10px;
 }
 
 .mode-pair .mode {
   min-height: 70px;
+  min-width: 0;
+  padding: 0 4px;
 }
 
 .mode-pair .mode .mode-title {
-  font-size: 1.2rem;
+  font-size: 1.12rem;
+  white-space: nowrap;
+}
+
+.mode-pair .mode-sub {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mode.free {
   background: color-mix(in srgb, var(--good) 24%, var(--card));
 }
 
-.mode.free .mode-sub {
+/* 單元闖關：珊瑚色，跟自由練習的綠分開 */
+.mode.path {
+  background: color-mix(in srgb, var(--accent-2) 24%, var(--card));
+}
+
+:is(.mode.free, .mode.path) .mode-sub {
   color: color-mix(in srgb, var(--ink) 88%, transparent);
 }
 
@@ -669,6 +684,7 @@ p {
 .sheet-tab[aria-selected='true'] {
   background: color-mix(in srgb, var(--c) 30%, var(--card));
   box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink);
 }
 
 .unit-list {
@@ -717,6 +733,37 @@ p {
   background: transparent;
   border-color: var(--line-soft);
   color: transparent;
+}
+
+/* 單元闖關：還沒解鎖、在「選單元」關掉的關畫成虛線；現在這關像按鈕一樣浮起來 */
+.path-unit[aria-disabled='true'] {
+  border-style: dashed;
+  border-color: var(--line-soft);
+  color: var(--muted);
+  background: transparent;
+}
+
+.path-unit[aria-disabled='true'] .unit-check {
+  background: transparent;
+  border-color: var(--line-soft);
+}
+
+.path-unit[data-status='off'] .unit-name {
+  text-decoration: line-through;
+}
+
+.path-unit[data-status='current'] {
+  border-width: 2px;
+  box-shadow: var(--pop);
+}
+
+.path-unit[data-status='current'] .unit-meta {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.unit-check .ico {
+  margin: 0;
 }
 
 .unit-name {
@@ -1121,9 +1168,16 @@ p {
 
 .play-foot {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  row-gap: 8px;
   min-height: 56px;
   flex: none;
+}
+
+/* 旁邊有「猜對的」「練類似題」時縮窄，真的擠不下才換到下一行 */
+.play-foot .next-btn {
+  flex: 1 1 64px;
 }
 
 .ghost-btn {
@@ -1181,6 +1235,68 @@ p {
   width: 100%;
   margin: 0 0 12px;
   min-height: 48px;
+}
+
+/* 答對後「猜對的」「不太確定」：小一號的切換鈕，跟「繼續」並排 */
+.certain {
+  flex: none;
+  display: flex;
+  gap: 6px;
+  margin-right: 10px;
+}
+
+.certain-btn {
+  min-height: 54px;
+  padding: 0 10px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink-soft);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.certain-btn:active,
+.certain-btn[aria-pressed='true'] {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.certain-btn[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent-2) 30%, var(--card));
+  border-width: 2px;
+  color: var(--ink);
+}
+
+.certain-btn[aria-pressed='true']::before {
+  content: '✓ ';
+}
+
+/* 標了其中一個就收起另一個，騰出位置給「練類似題」 */
+.certain.marked .certain-btn[aria-pressed='false'] {
+  display: none;
+}
+
+/* 手機上（直放或橫放的右欄）「猜對的」和「練類似題」同時出現時，類似題按鈕省掉題數 */
+@media (max-width: 400px), (orientation: landscape) and (max-height: 500px) {
+  .certain:not([hidden]) ~ .related-btn .related-n {
+    display: none;
+  }
+}
+
+.secondary-btn:disabled,
+.primary-btn:disabled {
+  opacity: 0.45;
+}
+
+/* 闖關答錯時解析下面的小字：這關最後補了一題類似題 */
+.path-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-2-ink);
 }
 
 .secondary-btn {
@@ -2639,7 +2755,13 @@ p {
   .chip-name { font-size: 0.85rem; }
   .chip-name::before { display: none; }
   .brand h1 { font-size: 1.05rem; }
-  .mode-pair .mode .mode-title { font-size: 1.02rem; }
+  .mode-pair { gap: 8px; }
+  .mode-pair .mode .mode-title { font-size: 0.98rem; }
+}
+
+/* 320 寬的舊手機：三個大按鈕的圖示先拿掉，標題才放得下 */
+@media (max-width: 340px) {
+  .mode-pair .mode-title .ico { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

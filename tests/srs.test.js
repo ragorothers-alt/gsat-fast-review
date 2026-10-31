@@ -45,6 +45,23 @@ describe('schedule', () => {
     expect(isWeak(c)).toBe(true);
   });
 
+  it('答對後標「猜對的」等同不會：回到第 0 盒、進錯題本，答對次數不加', () => {
+    const before = schedule(schedule(undefined, 'right', NOW), 'right', NOW); // 第 3 盒
+    const c = schedule(before, 'guess', NOW + 5);
+    expect(c).toMatchObject({ box: 0, parked: true, seen: 3, right: 2, wrong: 0, due: NOW + 5 + INTERVALS[0] });
+    expect(isWeak(c)).toBe(true);
+  });
+
+  it('標「不太確定」：10 分鐘後再考，留在錯題本直到升回第 3 盒', () => {
+    let c = schedule(undefined, 'unsure', NOW);
+    expect(c).toMatchObject({ box: 1, parked: false, seen: 1, right: 0, wrong: 0, due: NOW + INTERVALS[1] });
+    expect(isWeak(c)).toBe(true);
+    c = schedule(c, 'right', NOW); // 2
+    expect(isWeak(c)).toBe(true);
+    c = schedule(c, 'right', NOW); // 3
+    expect(isWeak(c)).toBe(false);
+  });
+
   it('按「不會」之後，答對一次還不能離開錯題本，要升到第 3 盒', () => {
     let c = schedule(undefined, 'skip', NOW);
     c = schedule(c, 'right', NOW); // 1

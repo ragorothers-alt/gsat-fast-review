@@ -2,19 +2,23 @@
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, schedule, shuffle } from '../srs.js';
-import { MODES, advance, createSession, current, extend, isCorrect, submit, tick, multiplier } from '../session.js';
+import { MODES, advance, createSession, current, extend, isCorrect, markLast, submit, tick, multiplier } from '../session.js';
+import { currentUnit, followUp, pathProgress, pathUnits, settleRuns } from '../path.js';
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
-import { recordAnswer, today } from '../stats.js';
+import { adjustRight, recordAnswer, today } from '../stats.js';
 import { setFlag, setStar } from '../sync.js';
-import { topicLabel } from '../units.js';
+import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
 import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
 
-const RIGHT_DELAY = 650;
+/** 答對後多久自動換題：留一點時間給玩家按「猜對的」「不太確定」 */
+const RIGHT_DELAY = 1400;
+/** 自動換題的模式裡按了「猜對的／不太確定」，稍等一下讓按鈕狀態看得見再換題 */
+const MARK_DELAY = 350;
 const SWIPE_THRESHOLD = 80;
 /** 自由練習補題時，最近答過的幾題先不出 */
 const RECENT = 8;
@@ -47,6 +51,9 @@ export function initPlay(ctx) {
     copy: $('#copy-q'),
     related: $('#related'),
     more: $('#card-more'),
+    certain: $('#certain'),
+    guess: $('#guess'),
+    unsure: $('#unsure'),
   };
   const byId = new Map(ctx.bank.map((x) => [x.id, x]));
 
@@ -54,6 +61,7 @@ export function initPlay(ctx) {
   let q = null;
   let order = null; // 單選題：畫面上第 i 個按鈕 → 原始選項索引
   let pendingRelated = []; // 這題答錯後可以接著練的類似題
+  let lastRight = null; // 剛答對的那題 { id, before, at }：標成猜的時，從答題前的紀錄重新排程
   let phase = 'idle'; // idle | answering | feedback
   let autoNext = 0;
   let raf = 0;
@@ -98,6 +106,7 @@ export function initPlay(ctx) {
    *   subjects：只出這幾科、而且不管首頁關掉的單元（從錯題本進來時）；ids：只出這幾題（收藏、搜尋結果）
    */
   ctx.startRound = (mode, opts = {}) => {
+    if (mode === 'path') return startPath(opts);
     let units = opts.units ?? null;
     if (mode === 'weak' && !units) {
       const { subjects, excludedUnits } = ctx.state.settings;
@@ -131,11 +140,76 @@ export function initPlay(ctx) {
       );
       return;
     }
-    s = createSession(mode, queue);
     // 「再來一輪」時沿用：指定的單元、錯題延伸的錯題（剛練過的類似題會自動避開）；從首頁進來的弱點加強則重新找
+    begin(mode, queue, opts);
+  };
+
+  /**
+   * 單元闖關：開始（或接著做）這科現在該闖的關。
+   * @param {{ subject?: string, unit?: string }} opts unit：指定要闖（或重闖已過關）的單元，做到一半就接著做
+   */
+  function startPath({ subject = ctx.state.pathLast ?? ctx.state.settings.subjects[0] ?? SUBJECTS[0].id, unit } = {}) {
+    const units = pathUnits(subject, ctx.state.settings.excludedUnits);
+    const prog = pathProgress(ctx.state, subject);
+    settleRuns(prog);
+    const target = unit ?? currentUnit(units, prog);
+    if (!target) {
+      ctx.toast('這科全部過關了！可以挑一關重新挑戰');
+      ctx.openPath?.(subject);
+      return;
+    }
+    const run = prog.runs[target];
+    let queue = run ? run.ids.map((id) => byId.get(id)).filter((x) => x && !ctx.state.flags[x.id]) : [];
+    let index = run ? Math.min(run.index, queue.length) : 0;
+    if (index >= queue.length) {
+      queue = queueFor('path', { subjects: [subject], units: [unitKey(subject, target)] });
+      index = 0;
+    }
+    if (!queue.length) {
+      ctx.toast('這個單元沒有可以出的題目');
+      return;
+    }
+    ctx.state.pathLast = subject;
+    begin('path', queue, { subject, unit: target }, { index, extra: run && index ? run.extra : [], path: { subject, unit: target } });
+    // 先存下這關的題目順序，中途離開也能接著做
+    savePath(index);
+    ctx.save();
+  }
+
+  /** 闖關：記下這關的題目順序與下一題的位置 */
+  function savePath(nextIndex) {
+    pathProgress(ctx.state, s.path.subject).runs[s.path.unit] = {
+      ids: s.queue.map((x) => x.id),
+      index: nextIndex,
+      extra: [...s.extra],
+    };
+  }
+
+  /** 闖關答錯（或看解答、標成猜的）：在這關最後補一題類似題；回傳補進來的題目 */
+  function addFollowUp(missed) {
+    const off = new Set(ctx.state.settings.excludedUnits);
+    const avoid = Object.keys(ctx.state.flags);
+    // 跨單元題結合了被關掉的單元時也不出
+    if (missed.links) for (const x of ctx.bank) if (x.links && isUnitOff(x, off)) avoid.push(x.id);
+    const pick = followUp(ctx.bank, missed, s.queue.map((x) => x.id), avoid);
+    s.queue.push(pick);
+    if (pick !== missed) s.extra.add(pick.id);
+    return pick;
+  }
+
+  /**
+   * @param {{ index?: number, extra?: string[], path?: { subject: string, unit: string } }} [resume]
+   *   闖關接續上次：從第 index 題開始，extra 是之前補進來的類似題
+   */
+  function begin(mode, queue, opts, { index = 0, extra = [], path = null } = {}) {
+    s = createSession(mode, queue);
+    s.index = index;
     s.opts = opts;
-    // 作答中按「練 3 題類似題」插進來的題目
-    s.extra = new Set();
+    // 作答中按「練 3 題類似題」、闖關答錯補進來的題目
+    s.extra = new Set(extra);
+    s.path = path;
+    // 闖關裡答對後標成猜的，補進來的題目：取消標記時要拿掉
+    s.followUps = new Map();
     el.timer.hidden = s.timeLeft === null;
     el.score.textContent = '0';
     renderCombo();
@@ -145,7 +219,7 @@ export function initPlay(ctx) {
       lastT = performance.now();
       raf = requestAnimationFrame(loop);
     }
-  };
+  }
 
   function loop(t) {
     const dt = (t - lastT) / 1000;
@@ -176,7 +250,9 @@ export function initPlay(ctx) {
     el.explain.hidden = true;
     el.next.hidden = true;
     el.related.hidden = true;
+    el.certain.hidden = true;
     pendingRelated = [];
+    lastRight = null;
     el.skip.hidden = false;
     const counted = s.timeLeft === null && !MODES[s.mode].endless;
     el.progress.textContent = counted ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
@@ -268,10 +344,17 @@ export function initPlay(ctx) {
   function resolve(outcome, displayValue, chosen) {
     phase = 'feedback';
     const now = Date.now();
-    ctx.state.cards[q.id] = schedule(ctx.state.cards[q.id], outcome, now);
+    const card = ctx.state.cards[q.id];
+    ctx.state.cards[q.id] = schedule(card, outcome, now);
+    lastRight = outcome === 'right' ? { id: q.id, before: card, at: now } : null;
     const before = today(ctx.state, now).answered;
     recordAnswer(ctx.state, outcome, now);
     const points = submit(s, outcome, chosen);
+    if (s.path) {
+      if (outcome !== 'right') addFollowUp(q);
+      savePath(s.index + 1);
+      el.progress.textContent = `${s.index + 1} / ${s.queue.length}`;
+    }
     ctx.save();
 
     const goal = ctx.state.settings.goal;
@@ -301,8 +384,10 @@ export function initPlay(ctx) {
       ctx.world.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, color, 30 + Math.min(s.combo, 10) * 4);
       sfx.right(s.combo);
       showPop(`+${points}`);
+      showCertainty();
       if (!MODES[s.mode].explainAlways) {
         el.skip.hidden = true;
+        el.next.hidden = false;
         autoNext = setTimeout(next, RIGHT_DELAY);
         return;
       }
@@ -313,21 +398,79 @@ export function initPlay(ctx) {
       restartAnimation(el.card, 'shake');
     }
     el.explain.innerHTML = `<b>${icon('bulb')}${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
+    if (s.path && outcome !== 'right') el.explain.insertAdjacentHTML('beforeend', `<span class="path-note">${icon('loop')}這關最後補了一題類似題</span>`);
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
     el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     updateMore();
     el.skip.hidden = true;
     // 答錯或不會：可以馬上再練幾題同單元的類似題（快閃模式在計時，不打斷）
-    pendingRelated =
-      outcome === 'right' || s.timeLeft !== null
-        ? []
-        : relatedQuestions(ctx.bank, q, { count: RELATED_COUNT, exclude: avoidIds(now) });
-    el.related.hidden = !pendingRelated.length;
-    el.related.innerHTML = `${icon('loop')}練 ${pendingRelated.length} 題類似題`;
+    offerRelated(outcome !== 'right');
     el.next.hidden = false;
     el.next.focus({ preventScroll: true });
   }
+
+  /** 答錯、看解答或標成猜的之後，提供「練 3 題類似題」；快閃在計時、闖關會自動補題，都不另外提供 */
+  function offerRelated(on) {
+    pendingRelated =
+      on && s.timeLeft === null && !s.path ? relatedQuestions(ctx.bank, q, { count: RELATED_COUNT, exclude: avoidIds(Date.now()) }) : [];
+    el.related.hidden = !pendingRelated.length;
+    el.related.innerHTML = `${icon('loop')}練<span class="related-n"> ${pendingRelated.length} 題</span>類似題`;
+  }
+
+  // ── 答對後：其實是猜的、不太確定 ─────────────────────────
+  function showCertainty() {
+    el.certain.hidden = false;
+    renderCertainty();
+  }
+
+  function renderCertainty() {
+    const mark = s.log[s.log.length - 1]?.mark;
+    el.guess.setAttribute('aria-pressed', String(mark === 'guess'));
+    el.unsure.setAttribute('aria-pressed', String(mark === 'unsure'));
+    // 標了其中一個就收起另一個，騰出位置給「練類似題」；再按一次取消
+    el.certain.classList.toggle('marked', !!mark);
+  }
+
+  /**
+   * 剛答對的題目標成「猜的」或「不太確定」；再按一次同一個就取消。
+   * 排程從答題前的紀錄重算，當天的答對數扣回來；闖關裡還會在這關最後補一題類似題。
+   */
+  function setCertainty(kind) {
+    if (phase !== 'feedback' || !lastRight) return;
+    const was = s.log[s.log.length - 1].mark ?? null;
+    const mark = was === kind ? null : kind;
+    const now = Date.now();
+    ctx.state.cards[lastRight.id] = schedule(lastRight.before, mark ?? 'right', now);
+    if (!was && mark) adjustRight(ctx.state, -1, lastRight.at);
+    if (was && !mark) adjustRight(ctx.state, 1, lastRight.at);
+    markLast(s, mark);
+    if (s.path) {
+      if (mark && !was) s.followUps.set(q.id, addFollowUp(q));
+      if (!mark && was) {
+        // 補進來的題還沒做到就拿掉
+        const added = s.followUps.get(q.id);
+        const at = s.queue.lastIndexOf(added);
+        if (at > s.index) s.queue.splice(at, 1);
+        s.extra.delete(added?.id);
+        s.followUps.delete(q.id);
+      }
+      savePath(s.index + 1);
+      el.progress.textContent = `${s.index + 1} / ${s.queue.length}`;
+    }
+    ctx.save();
+    renderCertainty();
+    if (MODES[s.mode].explainAlways) {
+      offerRelated(!!mark);
+      return;
+    }
+    // 自動換題的模式：標好就換下一題；取消標記則照原本的節奏
+    clearTimeout(autoNext);
+    autoNext = setTimeout(next, mark ? MARK_DELAY : RIGHT_DELAY);
+  }
+
+  el.guess.addEventListener('click', () => setCertainty('guess'));
+  el.unsure.addEventListener('click', () => setCertainty('unsure'));
 
   el.related.addEventListener('click', () => {
     if (phase !== 'feedback' || !pendingRelated.length) return;
@@ -397,6 +540,18 @@ export function initPlay(ctx) {
     clearTimeout(autoNext);
     phase = 'idle';
     ctx.world.setFocusSubject(null);
+    if (s.path) {
+      // 這關的題目都答完（最後補的類似題也答對了）就過關，結算畫面接著帶到下一關；沒做完就接著做這關
+      const { subject, unit } = s.path;
+      const prog = pathProgress(ctx.state, subject);
+      settleRuns(prog);
+      const run = prog.runs[unit];
+      s.path.done = !run;
+      s.path.left = run ? run.ids.length - run.index : 0;
+      s.path.next = currentUnit(pathUnits(subject, ctx.state.settings.excludedUnits), prog);
+      s.opts = run ? { subject, unit } : { subject };
+      ctx.save();
+    }
     ctx.showResult(s);
   }
 
@@ -481,6 +636,7 @@ export function initPlay(ctx) {
       e.preventDefault();
       return next();
     }
+    if (phase === 'feedback' && lastRight && (e.key === 'g' || e.key === 'u')) return setCertainty(e.key === 'g' ? 'guess' : 'unsure');
     if (phase !== 'answering') return;
     if (q.type === 'mc' && /^[1-4]$/.test(e.key)) choose(Number(e.key) - 1);
     else if (q.type === 'tf' && e.key === 'ArrowLeft') choose(false);

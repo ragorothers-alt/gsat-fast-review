@@ -36,6 +36,58 @@ test('單選題點選項作答，答對或答錯都有回饋', async ({ page }) 
   await expect(page.locator('#q-explain')).toBeVisible();
 });
 
+test('答對後標「猜對的」：結算列出這題，今天的答對數不算它', async ({ page }) => {
+  await openHome(page);
+  await startMode(page, 'free');
+  // 每題點第一個選項，直到答對一題（答對才會出現「猜對的」）
+  for (let i = 0; i < 40; i++) {
+    await page.locator('#answers .answer').first().click();
+    if (await page.locator('#certain').isVisible()) break;
+    await page.locator('#next').click();
+  }
+  await page.locator('#guess').click();
+  await expect(page.locator('#guess')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#unsure')).toBeHidden();
+  await expect(page.locator('#related')).toBeVisible();
+  await page.locator('#quit').click();
+  await expect(page.locator('#r-list')).toContainText('答對了，但你標了「猜對的」');
+  await expect(page.locator('#r-acc')).toHaveText('0%');
+  await page.locator('#r-home').click();
+  await expect(page.locator('#daily-acc')).toHaveText('正確率 0%');
+});
+
+test('單元闖關：每關先出 30 題，看解答就在這關最後補一題，離開後從下一題接著做', async ({ page }) => {
+  await openHome(page);
+  await page.locator('#open-path').click();
+  await expect(page.locator('#path-sheet')).toBeVisible();
+  await expect(page.locator('#path-reset')).toBeDisabled();
+  const unit = await page.locator('#path-list .path-unit[data-status="current"] .unit-name').first().textContent();
+  await expect(page.locator('#path-list .path-unit[data-status="locked"]').first()).toHaveAttribute('aria-disabled', 'true');
+  await page.locator('#path-go').click();
+  await expect(page.locator('#play-progress')).toHaveText('1 / 30');
+  await expect(page.locator('#q-topic')).toContainText(unit);
+
+  await page.locator('#skip').click();
+  await expect(page.locator('#play-progress')).toHaveText('1 / 31');
+  await expect(page.locator('#q-explain .path-note')).toBeVisible();
+  await page.locator('#next').click();
+  await expect(page.locator('#play-progress')).toHaveText('2 / 31');
+
+  await page.locator('#quit').click();
+  await expect(page.locator('#r-mode')).toHaveText(`單元闖關・${unit}`);
+  await expect(page.locator('#r-cheer')).toHaveText('這關還有 30 題，下次從這裡接著做。');
+  await expect(page.locator('#r-again')).toHaveText('繼續這一關');
+  await page.locator('#r-again').click();
+  await expect(page.locator('#play-progress')).toHaveText('2 / 31');
+
+  // 這次一題都沒答就離開：直接回首頁
+  await page.locator('#quit').click();
+  await expect(page.locator('#path-sub')).toHaveText(/・第 1 關$/);
+  await page.locator('#open-path').click();
+  await expect(page.locator('#path-go')).toHaveText(`繼續：${unit}`);
+  await expect(page.locator('#path-list .path-unit[data-status="current"] .unit-meta').first()).toHaveText('進行中 1 / 31');
+});
+
 test('收藏的題目出現在錯題本的「收藏」，搜尋找得到並能練一輪', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'ten');

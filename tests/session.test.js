@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { advance, createSession, current, extend, isCorrect, isOver, multiplier, submit, tick } from '../src/session.js';
-import { currentStreak, dayKey, recordAnswer, today } from '../src/stats.js';
+import { advance, createSession, current, extend, isCorrect, isOver, markLast, multiplier, submit, tick } from '../src/session.js';
+import { adjustRight, currentStreak, dayKey, recordAnswer, today } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
 const queue = [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' }, { id: 'e' }];
@@ -23,6 +23,28 @@ describe('session', () => {
     expect(s.maxCombo).toBe(4);
     expect(s).toMatchObject({ right: 4, wrong: 0, skipped: 1 });
     expect(s.log.map((e) => e.outcome)).toEqual(['right', 'right', 'right', 'right', 'skip']);
+  });
+
+  it('答對後標成猜的或不太確定：不算答對，分數連擊照算；換標記不重扣，取消再加回', () => {
+    const s = createSession('ten', queue);
+    submit(s, 'right');
+    markLast(s, 'guess');
+    expect(s).toMatchObject({ right: 0, score: 10, combo: 1 });
+    expect(s.log[0]).toMatchObject({ outcome: 'right', mark: 'guess' });
+    markLast(s, 'unsure');
+    expect(s.right).toBe(0);
+    expect(s.log[0].mark).toBe('unsure');
+    markLast(s, null);
+    expect(s.right).toBe(1);
+    expect(s.log[0]).not.toHaveProperty('mark');
+  });
+
+  it('答錯或看解答的題不能標', () => {
+    const s = createSession('ten', queue);
+    submit(s, 'wrong');
+    markLast(s, 'guess');
+    expect(s.log[0]).not.toHaveProperty('mark');
+    expect(s.right).toBe(0);
   });
 
   it('題目出完就結束', () => {
@@ -73,6 +95,18 @@ describe('stats', () => {
     recordAnswer(st, 'skip', day1);
     expect(today(st, day1)).toEqual({ answered: 2, right: 1 });
     expect(dayKey(day1)).toBe('2026-10-27');
+  });
+
+  it('答對後標成猜的：那天的答對數扣回來（這台的同步紀錄也是），取消再加回；作答量不變', () => {
+    const st = freshState();
+    st.cloud = { device: 'me', devices: {}, legacy: {} };
+    recordAnswer(st, 'right', day1);
+    adjustRight(st, -1, day1);
+    expect(today(st, day1)).toEqual({ answered: 1, right: 0 });
+    expect(st.cloud.devices.me[dayKey(day1)]).toEqual({ answered: 1, right: 0 });
+    adjustRight(st, 1, day1);
+    expect(today(st, day1)).toEqual({ answered: 1, right: 1 });
+    expect(st.cloud.devices.me[dayKey(day1)]).toEqual({ answered: 1, right: 1 });
   });
 
   it('連續天數：隔天練習 +1，中斷一天就重來', () => {

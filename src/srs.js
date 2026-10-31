@@ -11,8 +11,10 @@ export const MAX_BOX = INTERVALS.length - 1;
  * 依作答結果更新一張卡片的排程。
  * 按「不會？看解答」（skip）在排程上等同答錯：回到第 0 盒、1 分鐘後到期；
  * 只是不算進答錯次數（wrong），也不打斷畫面的節奏。
+ * 答對後自己標「猜的」（guess）等同不會；標「不太確定」（unsure）10 分鐘後再考，
+ * 兩者都不算答對次數，所以會留在錯題本，之後隔開時間答對才離開。
  * @param {object|undefined} card 舊紀錄（沒看過則為 undefined）
- * @param {'right'|'wrong'|'skip'} outcome skip = 不會、直接看解答
+ * @param {'right'|'wrong'|'skip'|'guess'|'unsure'} outcome skip = 不會、直接看解答
  * @param {number} now
  */
 export function schedule(card, outcome, now) {
@@ -24,10 +26,13 @@ export function schedule(card, outcome, now) {
     // 第一次見到就答對：直接跳到隔天再考
     c.box = c.seen === 1 ? 2 : Math.min(MAX_BOX, c.box + 1);
     c.parked = false;
+  } else if (outcome === 'unsure') {
+    c.box = 1;
+    c.parked = false;
   } else {
     if (outcome === 'wrong') c.wrong++;
-    // parked：最近一次是按「不會」
-    c.parked = outcome === 'skip';
+    // parked：最近一次是按「不會」或自己說是猜的
+    c.parked = outcome === 'skip' || outcome === 'guess';
     c.box = 0;
   }
   c.due = now + INTERVALS[c.box];

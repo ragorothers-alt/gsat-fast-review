@@ -200,7 +200,11 @@
             </button>
             <button class="mode free" type="button" data-mode="free">
               <span class="mode-title"><svg class="ico" aria-hidden="true"><use href="#i-paw"/></svg>自由練習</span>
-              <span class="mode-sub">不限時・想停就停</span>
+              <span class="mode-sub">不限時慢慢練</span>
+            </button>
+            <button id="open-path" class="mode path" type="button">
+              <span class="mode-title"><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg>單元闖關</span>
+              <span class="mode-sub" id="path-sub">一關一關過</span>
             </button>
           </div>
           <div class="mode-row">
@@ -261,6 +265,11 @@
         <div id="answers" class="answers"></div>
         <footer class="play-foot">
           <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
+          <!-- 答對了但其實是猜的、沒把握：不算答對，之後會再出 -->
+          <div id="certain" class="certain" role="group" aria-label="答對了，但是" hidden>
+            <button id="guess" class="certain-btn" type="button" aria-pressed="false" title="其實是猜的：等同不會，很快會再出">猜對的</button>
+            <button id="unsure" class="certain-btn" type="button" aria-pressed="false" title="沒有把握：10 分鐘後再考一次">不太確定</button>
+          </div>
           <button id="related" class="related-btn" type="button" hidden title="接著練 3 題同單元的類似題"><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg>練 3 題類似題</button>
           <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
         </footer>
@@ -389,6 +398,23 @@
         <nav class="sheet-foot">
           <button id="units-all" class="secondary-btn" type="button">全選</button>
           <button id="units-done" class="primary-btn" type="button">好了</button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 單元闖關：選關 -->
+    <div id="path-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="path-title">
+        <header class="sheet-head">
+          <h2 id="path-title">單元闖關</h2>
+          <button id="path-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <p class="sheet-tip">照單元順序一關一關過。每關先出 30 題；答錯、看解答或標成猜的，就在這關最後補一題類似題，最後一題也答對才過關。</p>
+        <div id="path-tabs" class="sheet-tabs" role="tablist" aria-label="科目"></div>
+        <ul id="path-list" class="unit-list"></ul>
+        <nav class="sheet-foot">
+          <button id="path-reset" class="secondary-btn" type="button">從頭重來</button>
+          <button id="path-go" class="primary-btn" type="button">開始</button>
         </nav>
       </div>
     </div>

@@ -37,6 +37,10 @@ for (const scheme of ['light', 'dark']) {
 
     await page.locator('#open-settings').click();
     await audit(page, '設定');
+    await page.locator('#settings-close').click();
+
+    await page.locator('#open-path').click();
+    await audit(page, '單元闖關');
   });
 }
 
