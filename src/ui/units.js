@@ -4,6 +4,11 @@ import { mastery } from '../srs.js';
 import { icon } from './icons.js';
 import { UNITS, unitKey } from '../units.js';
 
+/** 分頁上方的提醒：數學 A、B 的範圍不同 */
+const NOTES = {
+  math: '只考數學 A 可以關掉「數B 專屬主題」；只考數學 B 可以關掉「空間向量與平面直線」。',
+};
+
 /**
  * @param {object} ctx
  * @param {() => void} onChange 選擇改變後（已存檔）呼叫，讓首頁重畫
@@ -88,6 +93,9 @@ export function initUnitSheet(ctx, onChange) {
       t.classList.toggle('on', settings.subjects.includes(id));
     });
     const subj = SUBJECT_BY_ID[current];
+    const note = $('#units-note');
+    note.hidden = !NOTES[current];
+    note.textContent = NOTES[current] ?? '';
     listEl.style.setProperty('--c', subj.color);
     listEl.innerHTML = '';
     for (const unit of UNITS[current]) {

@@ -1,5 +1,5 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
-import { unitKey } from './units.js';
+import { isUnitOff, unitKey } from './units.js';
 
 export const MINUTE = 60_000;
 export const DAY = 86_400_000;
@@ -55,7 +55,7 @@ export function mastery(questions, cards) {
  * @param {object[]} bank
  * @param {Record<string, object>} cards
  * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
- *   excludedUnits：關掉的單元；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
+ *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
  *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）
  */
 export function buildQueue(
@@ -69,7 +69,7 @@ export function buildQueue(
   const skip = new Set(exclude);
   const pool = bank.filter((q) => {
     const key = unitKey(q.subject, q.topic);
-    return wanted.has(q.subject) && !off.has(key) && (!only || only.has(key)) && !skip.has(q.id) && (!formulaOnly || q.formula);
+    return wanted.has(q.subject) && !isUnitOff(q, off) && (!only || only.has(key)) && !skip.has(q.id) && (!formulaOnly || q.formula);
   });
 
   if (weakOnly) {

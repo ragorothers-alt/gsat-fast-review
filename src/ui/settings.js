@@ -5,6 +5,7 @@ import { GOALS, dayKey } from '../stats.js';
 import { DEFAULT_EXAM_DATE } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { exportBackup, mergeState, parseBackup, setFlag } from '../sync.js';
+import { topicLabel } from '../units.js';
 import { FONT_SCALES, THEMES, applyAppearance } from './appearance.js';
 import { copyText } from './clipboard.js';
 import { setSoundEnabled } from './feedback.js';
@@ -229,7 +230,7 @@ function flagReport(qs) {
   qs.forEach((q, i) => {
     const subj = SUBJECT_BY_ID[q.subject];
     const answer = q.type === 'tf' ? (q.answer ? '對' : '錯') : q.choices[q.answer];
-    lines.push('', `${i + 1}. ${q.id}｜${subj.name}・${q.topic}`, `題目：${q.q}`);
+    lines.push('', `${i + 1}. ${q.id}｜${subj.name}・${topicLabel(q)}`, `題目：${q.q}`);
     if (q.type === 'mc') lines.push(`選項：${q.choices.join(' ／ ')}`);
     lines.push(`目前答案：${answer}`, `解析：${q.explain}`);
   });

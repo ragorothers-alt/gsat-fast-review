@@ -3,7 +3,7 @@ import { accuracyOf, dailySeries, daysUntil, studyPlan, subjectStats, weakUnits 
 import { DAY, mastery } from '../srs.js';
 import { GOALS } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
-import { unitKey } from '../units.js';
+import { isUnitOff } from '../units.js';
 import { icon } from './icons.js';
 
 const pct = (x) => (x === null ? '—' : `${Math.round(x * 100)}%`);
@@ -68,7 +68,7 @@ export function initStats(ctx) {
     if (left <= 0) return;
     const selected = new Set(settings.subjects);
     const off = new Set(settings.excludedUnits);
-    const pool = ctx.bank.filter((q) => selected.has(q.subject) && !off.has(unitKey(q.subject, q.topic)) && !flags[q.id]);
+    const pool = ctx.bank.filter((q) => selected.has(q.subject) && !isUnitOff(q, off) && !flags[q.id]);
     const practiced = pool.filter((q) => cards[q.id]).length;
     // 這 7 天幾乎沒練的話，改用每日目標推估
     const recent = week.reduce((a, d) => a + d.answered, 0) / 7;

@@ -7,6 +7,7 @@ import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
 import { recordAnswer, today } from '../stats.js';
 import { setFlag, setStar } from '../sync.js';
+import { topicLabel } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, visibleLength } from './rich.js';
@@ -170,7 +171,7 @@ export function initPlay(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    el.topic.innerHTML = s.extra.has(q.id) ? `${icon('loop')}${q.topic}・類似題` : q.topic;
+    el.topic.innerHTML = s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q);
     el.text.innerHTML = richHTML(q.q);
     el.explain.hidden = true;
     el.next.hidden = true;

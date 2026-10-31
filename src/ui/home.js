@@ -3,7 +3,7 @@ import { daysUntil, weakUnits } from '../analysis.js';
 import { SUBJECTS } from '../subjects.js';
 import { isWeak, mastery } from '../srs.js';
 import { currentStreak, today } from '../stats.js';
-import { UNITS, unitKey } from '../units.js';
+import { UNITS, isUnitOff, unitKey } from '../units.js';
 import { initSettings } from './settings.js';
 import { initUnitSheet } from './units.js';
 
@@ -63,7 +63,7 @@ export function initHome(ctx) {
     const selected = new Set(settings.subjects);
     const off = new Set(settings.excludedUnits);
     // 被回報的題目暫時不出，也不算進題數
-    const inSelection = ctx.bank.filter((q) => selected.has(q.subject) && !off.has(unitKey(q.subject, q.topic)) && !flags[q.id]);
+    const inSelection = ctx.bank.filter((q) => selected.has(q.subject) && !isUnitOff(q, off) && !flags[q.id]);
 
     chips.forEach((chip) => {
       const id = chip.dataset.subject;

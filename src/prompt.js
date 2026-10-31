@@ -1,5 +1,6 @@
 // 把一題整理成可以直接貼給 ChatGPT 等 AI 家教的文字。純邏輯，方便測試。
 import { SUBJECT_BY_ID } from './subjects.js';
+import { topicLabel } from './units.js';
 
 const LETTERS = ['A', 'B', 'C', 'D'];
 
@@ -15,7 +16,7 @@ export function questionPrompt(q, { order = [0, 1, 2, 3], outcome = null, chosen
   const label = (value) =>
     q.type === 'tf' ? (value ? '正確' : '錯誤') : `(${LETTERS[order.indexOf(value)]}) ${q.choices[value]}`;
 
-  const lines = [`這是一題台灣學測（${subject}・${q.topic}）的${q.type === 'tf' ? '是非題' : '單選題'}：`, ''];
+  const lines = [`這是一題台灣學測（${subject}・${topicLabel(q)}）的${q.type === 'tf' ? '是非題' : '單選題'}：`, ''];
   if (q.type === 'tf') lines.push(`判斷下列敘述是否正確：${q.q}`);
   else lines.push(q.q, ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
 

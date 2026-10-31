@@ -88,7 +88,7 @@ export function initNotebook(ctx) {
     const terms = norm(query).split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
     hay ||= new Map(
-      ctx.bank.map((q) => [q.id, [norm([q.id, SUBJECT_BY_ID[q.subject].name, q.topic, q.q, ...(q.choices ?? [])].join('\n')), norm(q.explain)]]),
+      ctx.bank.map((q) => [q.id, [norm([q.id, SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? [])].join('\n')), norm(q.explain)]]),
     );
     const front = [];
     const back = [];

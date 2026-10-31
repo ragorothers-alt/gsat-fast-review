@@ -14662,5 +14662,2292 @@
     "explain": "applicants 是「申請人」，school transcript 是「學校成績單」；通知對象是申請入學者，並非所有到校的人。",
     "formula": false,
     "level": 1
+  },
+  {
+    "id": "english-955",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The village is ____, far from any city, so we planned the trip ____.",
+    "choices": [
+      "remote / careful",
+      "crowded / carefully",
+      "remote / carefully",
+      "crowded / careful"
+    ],
+    "answer": 2,
+    "explain": "remote 指偏遠的，符合遠離城市；修飾動詞 planned 要用副詞 carefully（仔細地）。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "核心單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-956",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "A ____ conversation lasting two minutes left a strong ____ on me.",
+    "choices": [
+      "brief / impressive",
+      "lengthy / impressive",
+      "brief / impression",
+      "lengthy / impression"
+    ],
+    "answer": 2,
+    "explain": "brief 是短暫的，符合兩分鐘的談話；a strong 後需名詞 impression（印象），不能用形容詞 impressive。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-957",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Keep the fish ____ by putting it in the fridge ____ after buying it.",
+    "choices": [
+      "fresh / immediate",
+      "stale / immediately",
+      "fresh / immediately",
+      "stale / immediate"
+    ],
+    "answer": 2,
+    "explain": "放進冰箱是為了保持 fresh（新鮮的）；修飾放入的時間用副詞 immediately（立刻）。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "核心單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-958",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The customer was ____ about the price, so I explained it again as ____ as possible.",
+    "choices": [
+      "certain / polite",
+      "certain / politely",
+      "confused / politely",
+      "confused / polite"
+    ],
+    "answer": 2,
+    "explain": "需要再說明表示對價格 confused（困惑的）；修飾 explained 用副詞 politely（有禮貌地）。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "核心單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-959",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The story matched known facts and sounded ____, but the reporter still wanted independent ____ before printing it.",
+    "choices": [
+      "absurd / evident",
+      "credible / evident",
+      "absurd / evidence",
+      "credible / evidence"
+    ],
+    "answer": 3,
+    "explain": "已知事實吻合，表示 credible（可信的）；independent 後接名詞 evidence（證據），不用形容詞 evident（明顯的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-960",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "A referee must remain ____ and assess each player ____ rather than favor the home team.",
+    "choices": [
+      "neutral / fair",
+      "neutral / fairly",
+      "hostile / fairly",
+      "hostile / fair"
+    ],
+    "answer": 1,
+    "explain": "neutral 是中立的，符合不偏袒主場隊伍；修飾 assess（評估）用副詞 fairly（公平地）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-961",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "With our small budget, this plan is ____ because it needs no ____ equipment.",
+    "choices": [
+      "impossible / expensive",
+      "feasible / expensive",
+      "feasible / expense",
+      "impossible / expense"
+    ],
+    "answer": 1,
+    "explain": "無須昂貴設備使計畫 feasible（可行的）；修飾 equipment 用形容詞 expensive（昂貴的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-962",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The schedule is ____, allowing a quick ____ if our guests arrive late.",
+    "choices": [
+      "rigid / adjustment",
+      "flexible / adjustment",
+      "rigid / adjust",
+      "flexible / adjust"
+    ],
+    "answer": 1,
+    "explain": "flexible 指可彈性調整的；a quick 後接名詞 adjustment（調整），不能接動詞 adjust。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-963",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We ____ the camera from Jo, who ____ it herself the day before.",
+    "choices": [
+      "borrowed / will buy",
+      "borrowed / had bought",
+      "lent / had bought",
+      "lent / will buy"
+    ],
+    "answer": 1,
+    "explain": "從 Jo 借入要用 borrowed；她購買相機早於借相機，以過去完成式 had bought 表示。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "核心單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-964",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Workers ____ a new road right now to ____ the traffic problem.",
+    "choices": [
+      "are building / ease",
+      "have built / ease",
+      "are building / cause",
+      "have built / cause"
+    ],
+    "answer": 0,
+    "explain": "right now 表正在施工，用 are building；修路是為了 ease（緩解）交通問題，不是 cause（造成）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-965",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Since May, our team ____ for its ____ service, which customers say is always on time.",
+    "choices": [
+      "has been praised / careless",
+      "was praised / careless",
+      "was praised / reliable",
+      "has been praised / reliable"
+    ],
+    "answer": 3,
+    "explain": "since May 連到現在，用現在完成式被動 has been praised；準時的服務是 reliable（可靠的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-966",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The mechanic ____ the worn brakes yesterday to ____ another accident.",
+    "choices": [
+      "replaced / prevent",
+      "replaced / cause",
+      "has replaced / prevent",
+      "has replaced / cause"
+    ],
+    "answer": 0,
+    "explain": "yesterday 指明過去時間，用 replaced；更換磨損煞車是為了 prevent（預防）事故。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "核心單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-967",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The food ____ to each shelter before the storm, leaving ____ supplies that met every family's needs.",
+    "choices": [
+      "had been allocated / inadequate",
+      "had allocated / inadequate",
+      "had been allocated / sufficient",
+      "had allocated / sufficient"
+    ],
+    "answer": 2,
+    "explain": "物資在暴風雨前被分配，用 had been allocated；能滿足各家庭需求表示 sufficient（充足的），不是 inadequate（不足的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-968",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The plan ____ by the board yesterday because it would ____ the entire budget.",
+    "choices": [
+      "has rejected / exceed",
+      "was rejected / restore",
+      "has rejected / restore",
+      "was rejected / exceed"
+    ],
+    "answer": 3,
+    "explain": "yesterday 搭配過去式被動 was rejected（被否決）；超出預算用 exceed，restore 是恢復。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-969",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "I ____ the accident as it happened; I ____ outside the bakery at that moment.",
+    "choices": [
+      "anticipated / have stood",
+      "witnessed / was standing",
+      "witnessed / have stood",
+      "anticipated / was standing"
+    ],
+    "answer": 1,
+    "explain": "親眼看到事故用 witnessed（目擊），不是 anticipated（預期）；當時正站著用過去進行式。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-970",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The results ____ tomorrow; until then, the report must remain ____ and cannot be shared.",
+    "choices": [
+      "will announce / public",
+      "will be announced / public",
+      "will be announced / confidential",
+      "will announce / confidential"
+    ],
+    "answer": 2,
+    "explain": "結果將被公布，用未來式被動 will be announced；不得分享表示須 confidential（保密的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-971",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "While Leo ____ home last night, his careless turn resulted ____ a crash moments later.",
+    "choices": [
+      "has driven / in",
+      "was driving / from",
+      "has driven / from",
+      "was driving / in"
+    ],
+    "answer": 3,
+    "explain": "last night 的進行中背景用 was driving；轉向後才發生事故，應為 result in（導致），不是 result from（起因於）。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "片語與搭配詞",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-972",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The complaint ____ by our staff, who took care ____ it before noon.",
+    "choices": [
+      "has handled / for",
+      "was handled / for",
+      "was handled / of",
+      "has handled / of"
+    ],
+    "answer": 2,
+    "explain": "客訴是被處理，用 was handled；take care of 是處理，介系詞不能換成 for。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-973",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "At yesterday's meeting, no objection ____ raised ____ the proposed entrance fee.",
+    "choices": [
+      "was / to",
+      "was / for",
+      "has / for",
+      "has / to"
+    ],
+    "answer": 0,
+    "explain": "提出異議是 raise an objection to；objection 為單數且被提出，用過去式被動 was raised。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-974",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "By next Friday, each guest ____ compensated ____ the delay in serving breakfast.",
+    "choices": [
+      "will have been / for",
+      "will have / with",
+      "will have been / with",
+      "will have / for"
+    ],
+    "answer": 0,
+    "explain": "compensate someone for 表為某損失或不便補償某人；客人被補償，到未來期限用 will have been compensated。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-975",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The charity is committed ____ getting meals ____ to isolated families.",
+    "choices": [
+      "for / delivering",
+      "to / delivered",
+      "for / delivered",
+      "to / delivering"
+    ],
+    "answer": 1,
+    "explain": "be committed to 是致力於；get meals delivered 表讓餐點被送達，餐點接受動作，須用過去分詞 delivered。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "片語與搭配詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-976",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We succeeded ____ getting the fallen tree ____ before noon.",
+    "choices": [
+      "to / removing",
+      "in / removing",
+      "in / removed",
+      "to / removed"
+    ],
+    "answer": 2,
+    "explain": "succeed in 是成功做到；get the tree removed 表讓倒樹被移走，受詞 tree 接受動作，用 removed。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "片語與搭配詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-977",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The residents objected ____ ____ awake by the late-night drilling.",
+    "choices": [
+      "against / keeping",
+      "against / being kept",
+      "to / being kept",
+      "to / keeping"
+    ],
+    "answer": 2,
+    "explain": "object to 是反對；居民是被噪音弄得無法入睡，要用被動動名詞 being kept。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-978",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We took advantage ____ the quiet afternoon ____ the speech without interruptions.",
+    "choices": [
+      "of / to rehearse",
+      "from / rehearse",
+      "of / rehearse",
+      "from / to rehearse"
+    ],
+    "answer": 0,
+    "explain": "take advantage of 是利用；to rehearse（排練）是不定詞，表示利用這段時間的目的。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-979",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ the train was crowded, we found seats. ____, we did not have to stand.",
+    "choices": [
+      "Although / Otherwise",
+      "Despite / As a result",
+      "Despite / Otherwise",
+      "Although / As a result"
+    ],
+    "answer": 3,
+    "explain": "後面是完整子句，用 Although（雖然），不用 Despite；找到座位所以不用站，以 As a result（因此）表結果，Otherwise 表否則。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-980",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We could not use the gym ____ repairs. ____, at that very moment, workers were fixing its roof.",
+    "choices": [
+      "because / Afterwards",
+      "because of / Afterwards",
+      "because of / Meanwhile",
+      "because / Meanwhile"
+    ],
+    "answer": 2,
+    "explain": "repairs 是名詞，前接 because of；工人同時持續修理，用 Meanwhile（與此同時），不是 Afterwards（之後）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-981",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "This program, ____ works without an internet connection, suits travelers. ____, it costs nothing to download.",
+    "choices": [
+      "what / Otherwise",
+      "which / Moreover",
+      "which / Otherwise",
+      "what / Moreover"
+    ],
+    "answer": 1,
+    "explain": "非限定關係子句用 which 指 program；免費下載是另一優點，用 Moreover（此外），非 Otherwise（否則）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-982",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We lowered the music ____ our guests could talk. ____, conversation became much easier.",
+    "choices": [
+      "so that / Conversely",
+      "in case of / Conversely",
+      "in case of / Consequently",
+      "so that / Consequently"
+    ],
+    "answer": 3,
+    "explain": "so that 加完整子句表目的；後句是降低音量的結果，用 Consequently（因此），不是 Conversely（反過來說）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-983",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Rita usually buys the cheapest meals and is ____. ____, she spent a fortune on dinner yesterday.",
+    "choices": [
+      "economical / Accordingly",
+      "economical / Nevertheless",
+      "lavish / Nevertheless",
+      "lavish / Accordingly"
+    ],
+    "answer": 1,
+    "explain": "economical 指節省的，與花大錢吃一餐相反；Nevertheless（儘管如此）承接反預期，Accordingly 表因此。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-984",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The two tests were ____ in accuracy, giving equally reliable results. ____, we chose the cheaper test.",
+    "choices": [
+      "equivalent / Therefore",
+      "unequal / In contrast",
+      "equivalent / In contrast",
+      "unequal / Therefore"
+    ],
+    "answer": 0,
+    "explain": "equivalent 是相等的，符合兩種測試同樣準確；因此可選較便宜者，用 Therefore（因此），不是 In contrast（相較之下）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-985",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The two accounts ____ each other: one says noon, the other midnight. ____, we cannot accept both.",
+    "choices": [
+      "confirm / Similarly",
+      "contradict / Similarly",
+      "confirm / Consequently",
+      "contradict / Consequently"
+    ],
+    "answer": 3,
+    "explain": "兩種時間不同，表示證詞 contradict（互相矛盾），不是 confirm（證實）；不能都採信是結果，用 Consequently。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-986",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Participation is ____. ____, students must attend rather than choose whether to join.",
+    "choices": [
+      "voluntary / In other words",
+      "compulsory / In other words",
+      "voluntary / On the contrary",
+      "compulsory / On the contrary"
+    ],
+    "answer": 1,
+    "explain": "必須出席表示 compulsory（強制的）；後句改述前句意義，用 In other words（換句話說）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-987",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "While ____ for her turn, Lea read a novel ____ her brother had lent her.",
+    "choices": [
+      "waited / which",
+      "waited / what",
+      "waiting / which",
+      "waiting / what"
+    ],
+    "answer": 2,
+    "explain": "Lea 主動等待，用 waiting；novel 是先行詞，關係子句缺 lent 的受詞，用 which，不用 what。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-988",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ the safety course, Jo could explain ____ the alarm worked.",
+    "choices": [
+      "Having been completed / what",
+      "Having completed / how",
+      "Having completed / what",
+      "Having been completed / how"
+    ],
+    "answer": 1,
+    "explain": "Jo 主動先完成課程，用 Having completed；解釋警報如何運作用 how，what 不表示方式。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-989",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The tools ____ in this box belong to the artist ____ studio we built.",
+    "choices": [
+      "stored / whose",
+      "storing / whose",
+      "storing / whom",
+      "stored / whom"
+    ],
+    "answer": 0,
+    "explain": "工具被存放，用 stored 縮減被動關係子句；whose studio 表藝術家的工作室，關係詞須表所有關係。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-990",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Although ____ a place on the team, Hana chose a job ____ allowed her to work outdoors.",
+    "choices": [
+      "offering / what",
+      "offering / that",
+      "offered / what",
+      "offered / that"
+    ],
+    "answer": 3,
+    "explain": "Hana 是被提供名額，用 offered 縮減讓步子句；job 有先行詞，後接 that 作關係子句主詞。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-991",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ the system been tested, the error ____ detected before yesterday's launch.",
+    "choices": [
+      "Had / would be",
+      "Had / would have been",
+      "Were / would be",
+      "Were / would have been"
+    ],
+    "answer": 1,
+    "explain": "與過去事實相反，用 Had 引導倒裝條件句；錯誤本來會被發現，用 would have been detected。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-992",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Our security system has always been weak; if it were stronger, the files ____ ____ last night.",
+    "choices": [
+      "would not have been / stealing",
+      "would not be / stolen",
+      "would not be / stealing",
+      "would not have been / stolen"
+    ],
+    "answer": 3,
+    "explain": "系統一向薄弱，假設較強的持續狀態可影響昨晚結果；過去未實現的被動結果用 would not have been stolen（本不會被偷）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-993",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ I free today, I would join you, but my boss ____ me three urgent tasks since breakfast.",
+    "choices": [
+      "Had / gave",
+      "Were / has given",
+      "Had / has given",
+      "Were / gave"
+    ],
+    "answer": 1,
+    "explain": "與現在事實相反的倒裝條件句用 Were I free；since breakfast 連到現在，主句用 has given。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-994",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "I wish the brakes ____ checked before yesterday's ride; the accident ____ while we were going down a hill.",
+    "choices": [
+      "have been / has occurred",
+      "have been / occurred",
+      "had been / occurred",
+      "had been / has occurred"
+    ],
+    "answer": 2,
+    "explain": "wish 對過去未檢查表示遺憾，用 had been checked；昨天發生事故用 occurred，不用現在完成式。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-995",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Seats were ____, so not until another chair arrived ____ everyone sit down.",
+    "choices": [
+      "limited / could",
+      "abundant / could",
+      "abundant / can",
+      "limited / can"
+    ],
+    "answer": 0,
+    "explain": "limited 是有限的，符合須再搬椅子；not until 置句首使主句倒裝，過去能力用 could。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "假設語氣與特殊句構",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-996",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The ____ mistakes you make, the less time you ____ correcting them.",
+    "choices": [
+      "less / save",
+      "fewer / waste",
+      "less / waste",
+      "fewer / save"
+    ],
+    "answer": 1,
+    "explain": "mistakes 是可數複數，用 fewer；錯誤越少，浪費於訂正的時間越少，用 waste。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-997",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Please explain ____ for everyone to understand; your current explanation is too ____.",
+    "choices": [
+      "enough simply / complex",
+      "simple enough / obvious",
+      "simply enough / complex",
+      "simple enough / complex"
+    ],
+    "answer": 2,
+    "explain": "explain 用副詞 simply（簡單地）修飾，enough 放副詞後；目前說明太 complex（複雜的），所以需要簡化。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "假設語氣與特殊句構",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-998",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "I would rather you ____ the invitation yesterday; your refusal made the host feel ____.",
+    "choices": [
+      "had accepted / grateful",
+      "accepted / hurt",
+      "had accepted / hurt",
+      "accepted / grateful"
+    ],
+    "answer": 2,
+    "explain": "對他人過去行為的偏好用 would rather 加過去完成式 had accepted；遭拒後感到 hurt（難過），不是 grateful（感激的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-999",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "To ____ her identity, the witness insisted on ____ behind a screen during the interview.",
+    "choices": [
+      "reveal / being seated",
+      "reveal / seating",
+      "conceal / seating",
+      "conceal / being seated"
+    ],
+    "answer": 3,
+    "explain": "conceal 是隱藏，符合用屏風遮住身分；證人是被安排入座，介系詞 on 後用 being seated。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1000",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The athlete seems ____ ____ from the tournament last week; her name is missing from the final list.",
+    "choices": [
+      "to have / recruited",
+      "to have / withdrawn",
+      "to be / recruited",
+      "to be / withdrawn"
+    ],
+    "answer": 1,
+    "explain": "退出發生在上週且早於現在的推測，用 to have withdrawn；withdraw from 是退出，recruit 是招募。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1001",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The group raised money ____ its reading program, hoping ____ free lessons next year.",
+    "choices": [
+      "to sustain / offering",
+      "to restrict / to offer",
+      "to restrict / offering",
+      "to sustain / to offer"
+    ],
+    "answer": 3,
+    "explain": "sustain 是維持，符合募款延續計畫；hope 後接不定詞 to offer（提供）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1002",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Ben was ____ to apply because he feared ____ by the interviewers.",
+    "choices": [
+      "reluctant / being rejected",
+      "reluctant / rejecting",
+      "eager / being rejected",
+      "eager / rejecting"
+    ],
+    "answer": 0,
+    "explain": "reluctant 是不情願的，符合害怕面試結果；Ben 是被拒絕，用被動動名詞 being rejected。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1003",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Rather than keep the broken bike, we ____ ____ a new one and now ride it daily.",
+    "choices": [
+      "refused / to buy",
+      "refused / buying",
+      "agreed / to buy",
+      "agreed / buying"
+    ],
+    "answer": 2,
+    "explain": "後文已買車且每天騎，應用 agreed（同意），不是 refused（拒絕）；agree 後接不定詞 to buy（購買）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1004",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ too much on decorations left us without enough money to ____ the band.",
+    "choices": [
+      "Spending / fire",
+      "Spent / fire",
+      "Spent / hire",
+      "Spending / hire"
+    ],
+    "answer": 3,
+    "explain": "Spending（花費）作主詞，不能用過去式 Spent；須花錢聘請樂團用 hire，fire 是解僱。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1005",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "After the race, we stopped ____ and drank water to ____ our strength.",
+    "choices": [
+      "to rest / recover",
+      "rested / recover",
+      "rested / reduce",
+      "to rest / reduce"
+    ],
+    "answer": 0,
+    "explain": "stopped to rest 是停下原活動去休息；喝水是為了 recover（恢復）體力，不是 reduce（減少）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1006",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "I immediately knew who she was: I ____ her voice when I heard her ____.",
+    "choices": [
+      "forgot / sang",
+      "recognized / sing",
+      "recognized / sang",
+      "forgot / sing"
+    ],
+    "answer": 1,
+    "explain": "立刻知道是誰表示 recognized（認出）聲音，不是 forgot（忘記）；heard 後接受詞與原形 sing（唱歌），不能接 sang。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1007",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We are satisfied ____ ____ the team has achieved despite its tiny budget.",
+    "choices": [
+      "with / that",
+      "with / what",
+      "for / that",
+      "for / what"
+    ],
+    "answer": 1,
+    "explain": "be satisfied with 是對……滿意；what 兼作 achieved 的受詞，that 不能補出缺少的受詞。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1008",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "You qualify ____ a refund ____ you return the unused ticket before Friday.",
+    "choices": [
+      "for / despite",
+      "to / provided that",
+      "for / provided that",
+      "to / despite"
+    ],
+    "answer": 2,
+    "explain": "qualify for 加名詞表示符合資格；provided that（只要）後接條件子句，despite 不能直接接完整子句。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1009",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Pay attention ____ the label, ____ tells you how to store the medicine.",
+    "choices": [
+      "to / which",
+      "on / which",
+      "on / what",
+      "to / what"
+    ],
+    "answer": 0,
+    "explain": "pay attention to 是注意；which 引導非限定關係子句，指前面的 label，不能用 what。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1010",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ they were innocent, the prisoners were deprived ____ their freedom.",
+    "choices": [
+      "Despite / from",
+      "Although / from",
+      "Despite / of",
+      "Although / of"
+    ],
+    "answer": 3,
+    "explain": "Although 後接完整讓步子句；be deprived of 是被剝奪，這裡指自由被剝奪。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1011",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "There was strong ____ to the fee; most members disliked it. ____, the council rejected it.",
+    "choices": [
+      "oppose / Consequently",
+      "opposition / Nevertheless",
+      "opposition / Consequently",
+      "oppose / Nevertheless"
+    ],
+    "answer": 2,
+    "explain": "形容詞 strong 後接名詞 opposition（反對）；議會否決收費提案是反對所造成的結果，用 Consequently（因此）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1012",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The road crossing was ____. ____, we used the bridge to reach the other side safely.",
+    "choices": [
+      "unsafe / Instead",
+      "unsafely / Instead",
+      "unsafely / Similarly",
+      "unsafe / Similarly"
+    ],
+    "answer": 0,
+    "explain": "was 後用形容詞 unsafe（不安全的）；改走人行橋是替代方案，用 Instead（改為），非 Similarly（同樣地）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1013",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The team worked ____. ____, it finished later than the slower group because its task was much larger.",
+    "choices": [
+      "efficiently / Therefore",
+      "efficient / Therefore",
+      "efficient / Nevertheless",
+      "efficiently / Nevertheless"
+    ],
+    "answer": 3,
+    "explain": "修飾 worked 用副詞 efficiently（有效率地）；有效率卻較晚完成，用 Nevertheless 表轉折。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1014",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The room needs ____. ____, the broken windows must be replaced.",
+    "choices": [
+      "improve / On the contrary",
+      "improve / For example",
+      "improvement / On the contrary",
+      "improvement / For example"
+    ],
+    "answer": 3,
+    "explain": "needs 後需名詞 improvement（改善）；換掉破窗是改善的例子，用 For example，並非反駁前句。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1015",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Her ____ ____ she would repay the loan reassured us.",
+    "choices": [
+      "assure / which",
+      "assurance / which",
+      "assurance / that",
+      "assure / that"
+    ],
+    "answer": 2,
+    "explain": "Her 後需名詞 assurance（保證）；that 引導同位語子句說明保證內容，後面子句不缺成分。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1016",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We need a ____ assistant ____ can check the records without making errors.",
+    "choices": [
+      "reliable / who",
+      "reliable / whom",
+      "reliably / who",
+      "reliably / whom"
+    ],
+    "answer": 0,
+    "explain": "修飾 assistant 用形容詞 reliable（可靠的）；關係代名詞在子句中作主詞，用 who，不用 whom。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1017",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ the ropes looked strong, we decided to ____ them before the climb.",
+    "choices": [
+      "Although / strength",
+      "Despite / strengthen",
+      "Despite / strength",
+      "Although / strengthen"
+    ],
+    "answer": 3,
+    "explain": "Although 後接完整子句；to 後接原形動詞 strengthen（加強），不能用名詞 strength。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1018",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The machine runs ____ ____ its simple design, which has fewer moving parts.",
+    "choices": [
+      "efficiently / because of",
+      "efficiency / because",
+      "efficiency / because of",
+      "efficiently / because"
+    ],
+    "answer": 0,
+    "explain": "修飾 runs 用副詞 efficiently（有效率地）；its simple design 是名詞片語，原因用 because of。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1019",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "So ____ was the noise that ____ hear the speaker.",
+    "choices": [
+      "loudly / we could barely",
+      "loudly / could we barely",
+      "loud / could we barely",
+      "loud / we could barely"
+    ],
+    "answer": 3,
+    "explain": "was 後接形容詞 loud（大聲的）；so...that 的倒裝在主句，that 子句仍用正常語序 we could barely。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1020",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Never before ____ such ____ from a waiter; his insults shocked us.",
+    "choices": [
+      "have we experienced / rudeness",
+      "we have experienced / rude",
+      "have we experienced / rude",
+      "we have experienced / rudeness"
+    ],
+    "answer": 0,
+    "explain": "Never before 置句首需倒裝 have we；such 後此處需名詞 rudeness（無禮），不是形容詞 rude。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1021",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The more ____ the directions are, the ____ mistakes beginners make.",
+    "choices": [
+      "precise / less",
+      "precise / fewer",
+      "precisely / less",
+      "precisely / fewer"
+    ],
+    "answer": 1,
+    "explain": "are 前的補語要用形容詞 precise（精確的）；mistakes 是可數複數，連動比較用 fewer。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1022",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "It was because of her ____ that ____ her account.",
+    "choices": [
+      "honest / did we believe",
+      "honesty / we believed",
+      "honest / we believed",
+      "honesty / did we believe"
+    ],
+    "answer": 1,
+    "explain": "because of 後需名詞 honesty（誠實）；強調句 that 後維持正常語序 we believed，不倒裝。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1023",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The files that ____ damaged since the pipe burst are the ones ____ we must copy first.",
+    "choices": [
+      "has been / what",
+      "have been / which",
+      "have been / what",
+      "has been / which"
+    ],
+    "answer": 1,
+    "explain": "files 是複數，since 連到現在，用 have been damaged；ones 有先行詞，後面的受詞關係代名詞用 which。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1024",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Keep your receipt ____ the refund ____ next week; you may need it as proof of purchase.",
+    "choices": [
+      "during / is paid",
+      "until / will be paid",
+      "during / will be paid",
+      "until / is paid"
+    ],
+    "answer": 3,
+    "explain": "until 後接完整時間子句，during 不行；未來時間副詞子句用現在式，退款被支付，用 is paid。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1025",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The guard asked ____ when the alarm ____ last night.",
+    "choices": [
+      "what was I doing / has gone off",
+      "what I was doing / has gone off",
+      "what I was doing / went off",
+      "what was I doing / went off"
+    ],
+    "answer": 2,
+    "explain": "間接問句用直述語序 what I was doing；last night 明示過去時間，警報響起用 went off，不用 has gone off。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1026",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ the documents ____ before the fire or not remained unknown.",
+    "choices": [
+      "If / have copied",
+      "Whether / have copied",
+      "If / had been copied",
+      "Whether / had been copied"
+    ],
+    "answer": 3,
+    "explain": "主詞位置的是否子句用 Whether，不用 If；文件在火災前被複製，用過去完成式被動 had been copied。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1027",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "When we visited last June, the house ____. ____, it had stood empty for years.",
+    "choices": [
+      "had been restored / Previously",
+      "has been restored / Likewise",
+      "had been restored / Likewise",
+      "has been restored / Previously"
+    ],
+    "answer": 0,
+    "explain": "修復早於六月探訪，用 had been restored（已被修復）；修復前的空置狀態用 Previously（先前），不是表同樣地的 Likewise。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1028",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The service ____ twice since Monday. ____, customers still praise its speed.",
+    "choices": [
+      "has failed / Nevertheless",
+      "had failed / Therefore",
+      "has failed / Therefore",
+      "had failed / Nevertheless"
+    ],
+    "answer": 0,
+    "explain": "since Monday 連到現在，用 has failed；故障卻仍受稱讚，用 Nevertheless（儘管如此）表轉折。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1029",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "In 2020, engineers said the dam ____ the following year. ____, the dam was finished in 2025.",
+    "choices": [
+      "would be finished / In fact",
+      "will finish / In fact",
+      "will finish / Likewise",
+      "would be finished / Likewise"
+    ],
+    "answer": 0,
+    "explain": "從2020年轉述未來且水壩被完工，用 would be finished；In fact（事實上）補述實際2025年才完工，Likewise 表同樣地。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1030",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "By tomorrow's opening, all seats ____. ____, buying a seat at the door will be impossible.",
+    "choices": [
+      "will have been sold / Likewise",
+      "will have been sell / Likewise",
+      "will have been sell / Consequently",
+      "will have been sold / Consequently"
+    ],
+    "answer": 3,
+    "explain": "到明天開場前座位將已售出，用 will have been sold，been 後接過去分詞 sold；無法現場買票是結果，用 Consequently（因此）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1031",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "____ Ana stopped ____ late at night, she would sleep better now.",
+    "choices": [
+      "Were / to eat",
+      "Were / eating",
+      "Had / eating",
+      "Had / eaten"
+    ],
+    "answer": 2,
+    "explain": "Had Ana stopped 等於 If Ana had stopped，假設過去已停止；停止吃用 stop eating，不能接 eaten。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1032",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Only after the doors opened ____ heard ____ the first note.",
+    "choices": [
+      "was the singer / to sing",
+      "was the singer / sing",
+      "the singer was / to sing",
+      "the singer was / sing"
+    ],
+    "answer": 0,
+    "explain": "Only after 置句首，主句需倒裝 was the singer；感官動詞改被動後，用 heard to sing。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "不定詞、動名詞與分詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1033",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The listeners yawned from lack of interest. The more ____ they felt, the ____ the speaker planned to end the talk.",
+    "choices": [
+      "bored / soonest",
+      "boring / soonest",
+      "boring / sooner",
+      "bored / sooner"
+    ],
+    "answer": 3,
+    "explain": "打呵欠且失去興趣，表示聽眾感到 bored（無聊的），不是 boring（令人無聊的）；連動比較用 sooner（越早），不用最高級 soonest。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "不定詞、動名詞與分詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1034",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "It was on Tuesday that ____ the damaged screen ____ by a technician.",
+    "choices": [
+      "we had / replacing",
+      "we had / replaced",
+      "had we / replacing",
+      "had we / replaced"
+    ],
+    "answer": 1,
+    "explain": "強調句 that 後維持 we had 的正常語序；have 加受詞加 replaced 表請人更換，螢幕是被更換的。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "不定詞、動名詞與分詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1035",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "With wells empty, a ____ of clean water left the village ____ to disease.",
+    "choices": [
+      "supply / vulnerable",
+      "supply / immune",
+      "lack / vulnerable",
+      "lack / immune"
+    ],
+    "answer": 2,
+    "explain": "lack 是缺乏，符合水井乾涸；缺水使村民 vulnerable to disease（易受疾病侵害），不是 immune（有免疫力的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1036",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The spill caused serious ____, so the town hired experts to ____ the river.",
+    "choices": [
+      "damage / contaminate",
+      "damage / restore",
+      "benefit / contaminate",
+      "benefit / restore"
+    ],
+    "answer": 1,
+    "explain": "spill 造成 damage（損害）；聘請專家是為了 restore（恢復）河川狀況，不是 contaminate（污染）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1037",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The report contains a ____ the author admits inventing; we must stay ____ about its accuracy.",
+    "choices": [
+      "fact / confident",
+      "lie / confident",
+      "lie / skeptical",
+      "fact / skeptical"
+    ],
+    "answer": 2,
+    "explain": "作者承認捏造的是 lie（謊言），不是 fact（事實）；因此須 skeptical（懷疑的），不能對準確性有信心。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1038",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We need another ____: the original plan is not ____ with our limited funds.",
+    "choices": [
+      "choice / feasible",
+      "problem / compulsory",
+      "choice / compulsory",
+      "problem / feasible"
+    ],
+    "answer": 0,
+    "explain": "原方案經費不足，所以需要另一個 choice（選擇）；原計畫不 feasible（可行的），compulsory 是強制的。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1039",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We must comply ____ the rules; refusing could ____ our jobs and get us fired.",
+    "choices": [
+      "to / secure",
+      "with / secure",
+      "to / endanger",
+      "with / endanger"
+    ],
+    "answer": 3,
+    "explain": "comply with 是遵守；可能被解僱表示拒絕會 endanger（危及）工作，而非 secure（確保）工作。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1040",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We have run ____ cooking oil, so our supplies are ____ and we cannot prepare dinner.",
+    "choices": [
+      "out of / exhausted",
+      "over / abundant",
+      "over / exhausted",
+      "out of / abundant"
+    ],
+    "answer": 0,
+    "explain": "run out of 是用完；因此 supplies are exhausted（物資耗盡），不會是 abundant（充足的）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1041",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "The neighbors decided to ____ through a ____: music could play by day but must stop at nine.",
+    "choices": [
+      "make up / compromise",
+      "fall out / compromise",
+      "fall out / conflict",
+      "make up / conflict"
+    ],
+    "answer": 0,
+    "explain": "make up 此處指和好，fall out 指鬧翻；白天可放音樂、晚上須停止，兼顧雙方需求，是 compromise（妥協）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1042",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "We must take the safety risk into ____ because protecting lives is our main ____.",
+    "choices": [
+      "account / obstacle",
+      "account / priority",
+      "effect / obstacle",
+      "effect / priority"
+    ],
+    "answer": 1,
+    "explain": "take...into account 是將……納入考量；保護生命是 priority（優先事項），obstacle 是障礙。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "進階單字"
+    ]
+  },
+  {
+    "id": "english-1043",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "To ____ the shelter, Mia signed ____ for a weekend of unpaid work. 'support / up' fits both blanks.",
+    "answer": true,
+    "explain": "support 是支持，符合投入無薪工作；sign up for 是報名參加，因此兩格都正確。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "核心單字",
+      "片語與搭配詞"
+    ]
+  },
+  {
+    "id": "english-1044",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "____ he was tired, Ben ____ to help; he said yes without hesitation. 'Although / refused' fits both blanks.",
+    "answer": false,
+    "explain": "Although（雖然）可接完整子句；Ben 毫不猶豫答應幫忙，應填 agreed（同意），不是 refused（拒絕）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1045",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "We expected safe stairs, but they were ____. ____, we avoided them. 'dangerous / Nevertheless' fits both blanks.",
+    "answer": false,
+    "explain": "dangerous（危險的）符合避開樓梯的原因；後句是結果，應用 Therefore（因此），不能用表轉折的 Nevertheless（儘管如此）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1046",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The residents had to ____ ____ the river had flooded their homes. 'evacuate / because' fits both blanks.",
+    "answer": true,
+    "explain": "evacuate 是撤離，符合住家淹水的情境；because 後接完整子句，說明撤離原因。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1047",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The chair demanded that each member ____ the ____ before the meeting. 'read / agenda' fits both blanks.",
+    "answer": true,
+    "explain": "demand 表要求時，that 子句用原形 read；agenda 是議程，符合會議前閱讀的情境。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1048",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Please ____ an effort to explain the difference ____. 'make / clear' fits both blanks.",
+    "answer": false,
+    "explain": "make an effort 是努力；修飾 explain（解釋）須用副詞 clearly（清楚地），不能用形容詞 clear。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-1049",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Lena used ____ jog every morning, ____ she? 'to / didn't' fits both blanks.",
+    "answer": true,
+    "explain": "used to V 表過去習慣；肯定敘述的附加問句用否定式 didn't she，兩格都正確。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1050",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The show was ____, not canceled. ____, it took place later. 'called off / In fact' fits both blanks.",
+    "answer": false,
+    "explain": "called off 是取消，與 not canceled 矛盾，應改 put off（延期）；In fact 補充稍後仍演出的事實。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1051",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The ____ of the package ____ confirmed yesterday. 'arrival / has been' fits both blanks.",
+    "answer": false,
+    "explain": "arrival（抵達）是名詞，可接 of the package；yesterday 明示過去時間，被動應用 was confirmed（已獲確認），不是 has been confirmed。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-1052",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The proposal seemed ____, so we agreed ____ it a try. 'promising / to give' fits both blanks.",
+    "answer": true,
+    "explain": "promising 是有前景的，作 seemed 的補語；agree 後接不定詞 to give，兩格都正確。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "詞性與構詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1053",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Never before ____ the museum ____ closed for so long. 'has / being' fits both blanks.",
+    "answer": false,
+    "explain": "Never before 置句首，has the museum 的倒裝正確；現在完成式後需過去分詞，應為 been closed。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1054",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Only after Jo explained ____ we understand ____ the alarm worked. 'did / how' fits both blanks.",
+    "answer": true,
+    "explain": "Only after 置句首，主句倒裝成 did we understand；how 引導名詞子句，表示警報如何運作，兩格都正確。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1055",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "We chose ____ more plastic. ____, we refilled our old bottles. 'not to buy / Instead' fits both blanks.",
+    "answer": true,
+    "explain": "chose not to buy 是選擇不買；改用舊瓶是替代方案，用 Instead（改為），兩格都正確。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "不定詞、動名詞與分詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1056",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "I didn't save it; if I had, I ____ it now. ____, I must rewrite it. 'will have / Therefore' fits both blanks.",
+    "answer": false,
+    "explain": "未存檔是事實，反事實條件影響現在，應用 would have（會擁有）；Therefore（因此）連接必須重寫的後果。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "假設語氣與特殊句構",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1057",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The leak caused most losses; it was the ____ cause. We checked it ____. 'principal / thoroughly' fits both blanks.",
+    "answer": true,
+    "explain": "造成大部分損失，故為 principal（主要的）原因；修飾 checked 用 thoroughly（徹底地），兩格都正確。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "詞性與構詞"
+    ]
+  },
+  {
+    "id": "english-1058",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The files ____ ____ online right now so everyone can read them. 'are being / concealed' fits both blanks.",
+    "answer": false,
+    "explain": "right now 配合 are being 表正在被處理；供大家閱讀表示 disclosed（公開），不是 concealed（隱藏）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "進階單字",
+      "時態與語態"
+    ]
+  },
+  {
+    "id": "english-1059",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "We apologized ____ keeping the guests ____ outside. 'for / waited' fits both blanks.",
+    "answer": false,
+    "explain": "apologize for 是為……道歉；keep the guests waiting 表讓客人持續等候，用主動的 waiting（等待），不能用 waited。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1060",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "____ we left, Jo was already asleep. ____, she missed our goodbye. 'By the time / Consequently' fits both blanks.",
+    "answer": true,
+    "explain": "By the time 加子句表示到某時；Jo 已睡著而錯過道別是因果關係，用 Consequently（因此）。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1061",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The volunteers pledged ____ the forest by avoiding ____ trees. 'to conserve / cut down' fits both blanks.",
+    "answer": false,
+    "explain": "conserve 是保育，pledge 後接 to conserve 正確；avoid 後需動名詞，應改 cutting down（砍伐）。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "進階單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1062",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Not until the speech ended ____ we understand its ____. 'did / significance' fits both blanks.",
+    "answer": true,
+    "explain": "Not until 置句首需主句倒裝 did we understand；its 後接名詞 significance（意義），兩格都正確。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "假設語氣與特殊句構"
+    ]
+  },
+  {
+    "id": "english-1063",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The student ____ won yesterday's match ____ the trophy home last night. 'who / took' fits both blanks.",
+    "answer": true,
+    "explain": "who 在關係子句作主詞，指 student；last night 是明確過去時間，主句用 took（帶走）。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "時態與語態",
+      "子句與連接詞"
+    ]
+  },
+  {
+    "id": "english-1064",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The ice makes the road ____, so we recommend ____ until it melts. 'slippery / to wait' fits both blanks.",
+    "answer": false,
+    "explain": "slippery（濕滑的）符合結冰路面；recommend 後直接接動名詞，應為 waiting（等待），不能用 to wait。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "核心單字",
+      "不定詞、動名詞與分詞"
+    ]
+  },
+  {
+    "id": "english-1065",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A: Could we meet at six? B: ____ A: I mean six in the evening.",
+    "choices": [
+      "Would you like me to book a table?",
+      "Do you mean morning or evening?",
+      "Could we choose a different day?",
+      "How long do you plan to stay?"
+    ],
+    "answer": 1,
+    "explain": "I mean 是「我的意思是」；後句補充晚上六點，因此應先問 morning or evening「上午或晚上」，釐清時間。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1066",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "What do red envelopes represent at Lunar New Year in Taiwan?",
+    "choices": [
+      "Thanks for help with preparing dinner.",
+      "Rewards for success in school exams.",
+      "Wishes for good luck in the year ahead.",
+      "Money earned for work done for the family."
+    ],
+    "answer": 2,
+    "explain": "農曆新年的紅包傳達對收禮者的祝福，象徵平安與好運；good luck 是「好運」。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1067",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "In Japan, which use of chopsticks at a meal is associated with funerals?",
+    "choices": [
+      "Laying them on a rest beside the bowl.",
+      "Using them to lift food from your own plate.",
+      "Tapping them on the edge of a rice bowl.",
+      "Standing them upright in a bowl of rice."
+    ],
+    "answer": 3,
+    "explain": "在日本，將筷子直插飯中會使人聯想到祭祀亡者，是用餐禁忌；upright 是「直立地」，funeral 是「喪禮」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1068",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "At dinner, a guest sees eye contact as rude; the host sees it as polite. Why might they misunderstand each other?",
+    "choices": [
+      "They give the same behavior different meanings.",
+      "They have different levels of skill in English.",
+      "They have different interests in the meal's topic.",
+      "They have different amounts of time for the meal."
+    ],
+    "answer": 0,
+    "explain": "eye contact 是「眼神接觸」；同一行為在雙方的文化觀點中代表不同意義，可能因此把對方的禮貌誤讀為失禮。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1069",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A guide describes a country's dining customs. What best reveals a visitor's own food preferences?",
+    "choices": [
+      "Ask the visitor which foods they enjoy eating.",
+      "Follow the guide's account of typical local meals.",
+      "Ask someone else who has the same nationality.",
+      "Use the rules for formal dinners in that country."
+    ],
+    "answer": 0,
+    "explain": "preferences 是「偏好」；要了解個人喜歡哪些食物，應直接詢問本人，不能以同國籍者的習慣或文化介紹代替。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1070",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Canada celebrates a harvest holiday in October; the United States, in November. These holidays fall in the same month.",
+    "answer": false,
+    "explain": "harvest holiday 是「慶祝收穫的節日」；加拿大感恩節在十月，美國在十一月，月份不同，題幹末句與前文不符。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1071",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "A festival keeps its old songs but adds new dances. It shows both cultural change and continuity.",
+    "answer": true,
+    "explain": "continuity 是「延續」；保留舊歌是文化傳承，加入新舞是文化變遷，兩者能並存。",
+    "formula": false,
+    "level": 2
   }
 ]

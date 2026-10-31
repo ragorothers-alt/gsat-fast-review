@@ -21162,5 +21162,4169 @@
     "explain": "每個轉移機率都是兩規則對應機率的加權平均；權重各為 $\\frac12$，故等效矩陣為 $\\frac12(P+Q)$。",
     "formula": true,
     "level": 2
+  },
+  {
+    "id": "math-1379",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等比數列首項為 $2$、公比為 $3$。已知 $\\log2\\approx0.3010$、$\\log3\\approx0.4771$，首個不小於 $1000$ 的項是第幾項？",
+    "choices": [
+      "$7$",
+      "$6$",
+      "$8$",
+      "$9$"
+    ],
+    "answer": 0,
+    "explain": "$\\log a_n=0.3010+(n-1)0.4771\\ge3$，得 $n\\ge6.66$，故最小整數為 $7$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數列與級數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1380",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等比數列首項為 $1$、公比為 $2$，前 $n$ 項和為 $S_n$。若 $\\log_2(S_n+1)=5$，則 $n$ 為何？",
+    "choices": [
+      "$4$",
+      "$5$",
+      "$6$",
+      "$7$"
+    ],
+    "answer": 1,
+    "explain": "等比和為 $S_n=2^n-1$，所以 $\\log_2(S_n+1)=\\log_2(2^n)=n=5$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "指數與對數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1381",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "任何各項皆正的等差數列，將每項取常用對數後，仍是等差數列。",
+    "answer": false,
+    "explain": "例如 $1,2,3$ 的相鄰比值不同，故對數差 $\\log2$ 與 $\\log(3/2)$ 不相等。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數列與級數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1382",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等比數列各項皆正，令 $b_n=\\log_{10}a_n$。若 $b_2=1,b_5=4$，則 $a_3$ 為何？",
+    "choices": [
+      "$10$",
+      "$1000$",
+      "$100$",
+      "$10000$"
+    ],
+    "answer": 2,
+    "explain": "$b_n$ 為等差數列，公差為 $(4-1)/3=1$，故 $b_3=2$、$a_3=100$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "數列與級數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1383",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等比數列首項為 $1$、公比為 $2$。$\\log_2a_1+\\log_2a_2+\\cdots+\\log_2a_5$ 等於多少？",
+    "choices": [
+      "$5$",
+      "$15$",
+      "$31$",
+      "$10$"
+    ],
+    "answer": 3,
+    "explain": "五個對數依序為 $0,1,2,3,4$，其和為 $10$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "指數與對數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1384",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "某活動第一輪送 $1$ 張票，此後每輪送票數為前輪的 $9$ 倍。前三輪總票數為 $S$，則 $\\log_{10}S$ 位於何處？",
+    "choices": [
+      "$1<\\log_{10}S<2$",
+      "$0<\\log_{10}S<1$",
+      "$2<\\log_{10}S<3$",
+      "$3<\\log_{10}S<4$"
+    ],
+    "answer": 0,
+    "explain": "$S=1+9+81=91$，由 $10<91<100$ 得對數介於 $1$ 與 $2$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "數列與級數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1385",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等比數列首項為 $8$、公比為 $-1/2$。前六項中，只對正的項取以 $2$ 為底的對數；所得對數的總和為何？",
+    "choices": [
+      "$6$",
+      "$3$",
+      "$0$",
+      "$-3$"
+    ],
+    "answer": 1,
+    "explain": "正項是 $a_1=8,a_3=2,a_5=1/2$，其對數為 $3,1,-1$，總和為 $3$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數列與級數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1386",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "等比數列首項為 $1$、公比為 $3$。已知 $\\log_{10}3\\approx0.4771$，前五項的乘積在十進位表示法中共有 $5$ 位數。",
+    "answer": true,
+    "explain": "乘積為 $3^{0+1+2+3+4}=3^{10}$，其常用對數約為 $4.771$，介於 $4$ 與 $5$，故有 $5$ 位數。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數列與級數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1387",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "首項係數為 $1$ 的三次多項式，其三個相異實根成等差數列。已知三根和為 $6$、積為 $6$，一次項係數為何？",
+    "choices": [
+      "$6$",
+      "$9$",
+      "$11$",
+      "$13$"
+    ],
+    "answer": 2,
+    "explain": "三根可寫成 $2-d,2,2+d$；積為 $2(4-d^2)=6$，故 $d^2=1$，兩兩乘積和為 $12-d^2=11$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "多項式函數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1388",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等差數列的公差為 $2$，前兩項恰為 $x^2-6x+8=0$ 的兩根，且由小到大排列。此數列第五項為何？",
+    "choices": [
+      "$8$",
+      "$12$",
+      "$14$",
+      "$10$"
+    ],
+    "answer": 3,
+    "explain": "方程式兩根為 $2,4$，故 $a_5=2+4\\times2=10$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1389",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "首項係數為 $1$ 的三次多項式，其三個正實根依序成等比數列，常數項為 $-64$。三根的中間項為何？",
+    "choices": [
+      "$4$",
+      "$2$",
+      "$8$",
+      "$16$"
+    ],
+    "answer": 0,
+    "explain": "三根乘積為 $64$；等比三項的乘積等於中間項的三次方，故中間項為 $4$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1390",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "數列的前 $n$ 項和為 $S_n=n^2+2n$。使 $a_n^2-10a_n+21\\le0$ 的正整數 $n$ 有幾個？",
+    "choices": [
+      "$2$",
+      "$3$",
+      "$4$",
+      "$5$"
+    ],
+    "answer": 1,
+    "explain": "$a_n=S_n-S_{n-1}=2n+1$（首項亦符合）。不等式給 $3\\le a_n\\le7$，故 $n=1,2,3$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數列與級數",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1391",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "令 $a_n=f(n)$，其中 $f(x)=x^2-3x$；再令 $b_n=a_{n+1}-a_n$。數列 $b_n$ 的公差為何？",
+    "choices": [
+      "$1$",
+      "$-2$",
+      "$2$",
+      "$-3$"
+    ],
+    "answer": 2,
+    "explain": "$b_n=(n+1)^2-3(n+1)-(n^2-3n)=2n-2$，是公差為 $2$ 的等差數列。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1392",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "首項係數為 $1$ 的三次多項式，三根依序成等差數列且根和為 $9$；即使三根不全相異，仍有因式 $x-3$。",
+    "answer": true,
+    "explain": "等差三項的中項等於三項平均，故中間根為 $9/3=3$，因式定理給出 $x-3$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1393",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "工坊每日產量成等差數列，第一天 $1$ 件、每天增加 $2$ 件。產 $x$ 件的當日成本為 $C(x)=x^2+1$ 元，第三天比第二天多花幾元？",
+    "choices": [
+      "$4$",
+      "$8$",
+      "$25$",
+      "$16$"
+    ],
+    "answer": 3,
+    "explain": "第二、三天產量為 $3,5$，成本差為 $(25+1)-(9+1)=16$ 元。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數列與級數",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1394",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形 $ABC$ 中，$AB=AC=2,BC=2\\sqrt3$。令 $\\vec u=\\overrightarrow{AB},\\vec v=\\overrightarrow{AC}$，則 $|2\\vec u+\\vec v|$ 為何？",
+    "choices": [
+      "$2\\sqrt3$",
+      "$2$",
+      "$\\sqrt{20}$",
+      "$6$"
+    ],
+    "answer": 0,
+    "explain": "餘弦定理得 $\\cos A=-1/2$，故 $\\vec u\\cdot\\vec v=-2$；所求平方為 $16+4+4(-2)=12$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "平面向量",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1395",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形 $ABC$ 中，$A=60^\\circ,B=30^\\circ,BC=2\\sqrt3$。$\\overrightarrow{AB}\\cdot\\overrightarrow{AC}$ 等於多少？",
+    "choices": [
+      "$2$",
+      "$4$",
+      "$4\\sqrt3$",
+      "$8$"
+    ],
+    "answer": 1,
+    "explain": "$C=90^\\circ$，正弦定理得 $AB=4,AC=2$。內積為 $4\\times2\\cos60^\\circ=4$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "平面向量",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1396",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "平面向量 $\\vec u,\\vec v$ 的長分別為 $2,3$，夾角為 $30^\\circ$。以 $\\vec u+\\vec v$、$\\vec u-\\vec v$ 為鄰邊的平行四邊形面積為何？",
+    "choices": [
+      "$3$",
+      "$6\\sqrt3$",
+      "$6$",
+      "$12$"
+    ],
+    "answer": 2,
+    "explain": "原兩向量張成面積為 $2\\times3\\sin30^\\circ=3$；和、差向量的行列式是原來的 $-2$ 倍，面積為 $6$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "平面向量",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1397",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "三角形 $ABC$ 中，$A=90^\\circ,B=30^\\circ,BC=2$。令 $\\vec u=\\overrightarrow{AB}/\\sqrt3,\\vec v=\\overrightarrow{AC}$，則 $2\\vec u+\\vec v$ 與 $\\vec u+2\\vec v$ 的夾角餘弦必定為 $4/5$。",
+    "answer": true,
+    "explain": "三角比給 $AB=\\sqrt3,AC=1$，故 $\\vec u,\\vec v$ 是垂直單位向量。兩和向量內積為 $4$、長皆為 $\\sqrt5$，夾角餘弦為 $4/5$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "平面向量",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1398",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "平面單位向量 $\\vec u,\\vec v$ 滿足 $\\vec u\\cdot\\vec v=1/2$。實數 $t$ 為何時，$|2\\vec u+t\\vec v|$ 最小？",
+    "choices": [
+      "$-2$",
+      "$2$",
+      "$1$",
+      "$-1$"
+    ],
+    "answer": 3,
+    "explain": "長度平方為 $4+t^2+2t=(t+1)^2+3$，故 $t=-1$ 時長度最小。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "平面向量",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1399",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形 $ABC$ 中，$AB=2,AC=4$，$AD$ 為內角平分線且 $D$ 在 $BC$ 上。若 $A$ 為原點、$B$ 的位置向量為 $\\vec u$、$C$ 為 $\\vec v$，則 $D$ 的位置向量為何？",
+    "choices": [
+      "$\\frac23\\vec u+\\frac13\\vec v$",
+      "$\\frac13\\vec u+\\frac23\\vec v$",
+      "$\\frac12\\vec u+\\frac12\\vec v$",
+      "$\\frac14\\vec u+\\frac34\\vec v$"
+    ],
+    "answer": 0,
+    "explain": "由共高面積與正弦面積式得 $BD:DC=AB:AC=1:2$，內分點向量為 $(2\\vec u+\\vec v)/3$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "平面向量",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1400",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "點 $P$ 的位置向量為 $(1,0)+t(0,2)$，$t$ 可為任意實數。此軌跡與圓 $x^2+y^2=1$ 有幾個交點？",
+    "choices": [
+      "$0$",
+      "$1$",
+      "$2$",
+      "$4$"
+    ],
+    "answer": 1,
+    "explain": "軌跡為直線 $x=1$。代入圓得 $y=0$，僅有一個交點。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "直線與圓",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1401",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "平面上 $\\vec u=(3,4)$。所有滿足 $\\overrightarrow{OP}\\cdot\\vec u=10$ 的點 $P$ 所成直線，與圓 $x^2+y^2=4$ 的位置關係為何？",
+    "choices": [
+      "相交於兩點",
+      "沒有交點",
+      "相切",
+      "通過圓心"
+    ],
+    "answer": 2,
+    "explain": "內積條件為 $3x+4y=10$，圓心到此線距離為 $10/5=2$，等於半徑。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "直線與圓",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1402",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "$A=(0,0),B=(6,0)$。若 $\\overrightarrow{AP}=\\frac13\\overrightarrow{AB}$，則 $P$ 在圓 $(x-3)^2+y^2=1$ 上。",
+    "answer": true,
+    "explain": "向量關係給 $P=(2,0)$；代入圓式得 $(2-3)^2=1$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "平面向量",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1403",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "圓 $x^2+y^2=25$ 的弦端點為 $A,B$，且 $\\overrightarrow{OA}+\\overrightarrow{OB}=(0,6)$。此弦的長度為何？",
+    "choices": [
+      "$4$",
+      "$6$",
+      "$10$",
+      "$8$"
+    ],
+    "answer": 3,
+    "explain": "向量和的一半是弦中點 $(0,3)$；圓心到弦距離為 $3$，半弦長為 $\\sqrt{25-9}=4$，故弦長為 $8$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "直線與圓",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1404",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "$P=(3,4)$ 在圓 $x^2+y^2=25$ 上。點 $Q$ 滿足 $\\overrightarrow{PQ}=t(1,k)$，其中 $t\\ne0$。若 $PQ$ 所在直線為圓在 $P$ 的切線，則 $k$ 為何？",
+    "choices": [
+      "$-\\frac34$",
+      "$\\frac34$",
+      "$-\\frac43$",
+      "$\\frac43$"
+    ],
+    "answer": 0,
+    "explain": "切線方向與半徑 $(3,4)$ 垂直，故 $(1,k)\\cdot(3,4)=3+4k=0$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "平面向量",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1405",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "點 $P(t)=(1,1)+t(1,-1)$。當 $0\\le t\\le2$ 時，$P(t)$ 到直線 $x-y=4$ 的最短距離為何？",
+    "choices": [
+      "$1$",
+      "$0$",
+      "$\\sqrt2$",
+      "$2\\sqrt2$"
+    ],
+    "answer": 1,
+    "explain": "$x-y=2t$，距離為 $|2t-4|/\\sqrt2$；$t=2$ 在允許範圍內，可達零。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "直線與圓",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1406",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "五個座位排成一列，依序編號 $1$ 至 $5$，等機率選兩個。已知兩座位不相鄰，含有 $1$ 號座位的機率為何？",
+    "choices": [
+      "$\\frac25$",
+      "$\\frac35$",
+      "$\\frac12$",
+      "$\\frac23$"
+    ],
+    "answer": 2,
+    "explain": "不相鄰座位對共 $\\binom52-4=6$ 對；含 $1$ 號者可配 $3,4,5$ 號，共 $3$ 對。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "排列組合",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1407",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "把字母 $A,A,B,C$ 排成字串，每種不同字串等機率。已知兩個 $A$ 不相鄰，第一個字母為 $B$ 的機率為何？",
+    "choices": [
+      "$\\frac14$",
+      "$\\frac13$",
+      "$\\frac12$",
+      "$\\frac16$"
+    ],
+    "answer": 3,
+    "explain": "先排 $B,C$ 再將兩個 $A$ 放入三個空隙，得 $2\\binom32=6$ 種；首字為 $B$ 僅 $BACA$ 一種。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "機率",
+      "排列組合"
+    ]
+  },
+  {
+    "id": "math-1408",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "將甲、乙、丙、丁、戊、己等機率分成三個不命名的兩人小組。甲乙不同組且丙丁不同組的機率為何？",
+    "choices": [
+      "$\\frac23$",
+      "$\\frac35$",
+      "$\\frac45$",
+      "$\\frac8{15}$"
+    ],
+    "answer": 0,
+    "explain": "共 $15$ 種分法。甲乙同組、丙丁同組各 $3$ 種，兩對都同組有 $1$ 種，故所求為 $(15-3-3+1)/15=2/3$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "排列組合",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1409",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "從 $(0,0)$ 到 $(3,2)$，只向右或向上走單位步。在不經 $(1,1)$ 的最短路徑中等機率選一條，通過 $(2,0)$ 的機率為 $3/4$。",
+    "answer": true,
+    "explain": "全路徑有 $\\binom52=10$ 條，經 $(1,1)$ 的有 $2\\times3=6$ 條；剩下 $4$ 條中，經 $(2,0)$ 的有 $3$ 條。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "排列組合",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1410",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從三位男生、三位女生中等機率選兩人。令 $A$ 為「兩人皆男」，$B$ 為「指定男生甲入選」。$A,B$ 的關係為何？",
+    "choices": [
+      "獨立，因 $P(A\\mid B)=P(A)$",
+      "不獨立，因 $P(A\\mid B)>P(A)$",
+      "互斥，因 $P(A\\cap B)=0$",
+      "不獨立，因 $P(A\\mid B)<P(A)$"
+    ],
+    "answer": 1,
+    "explain": "$P(A)=\\binom32/\\binom62=1/5$；甲入選後同伴五選一，其中兩男，故 $P(A\\mid B)=2/5$。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "機率",
+      "排列組合"
+    ]
+  },
+  {
+    "id": "math-1411",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "五人甲乙丙丁戊等機率排成一列。已知首尾是甲、乙（次序不限），丙排在正中央的機率為何？",
+    "choices": [
+      "$\\frac15$",
+      "$\\frac25$",
+      "$\\frac13$",
+      "$\\frac12$"
+    ],
+    "answer": 2,
+    "explain": "條件下有 $2!3!$ 種排法；丙居中有 $2!2!$ 種，比值為 $1/3$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "排列組合",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1412",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從 $1,2,3,4,5,6$ 中等機率選兩個不同數。兩數和為偶數或兩數皆為 $3$ 的倍數的機率為何？",
+    "choices": [
+      "$\\frac25$",
+      "$\\frac8{15}$",
+      "$\\frac35$",
+      "$\\frac7{15}$"
+    ],
+    "answer": 3,
+    "explain": "和為偶數有 $2\\binom32=6$ 對；皆為 $3$ 的倍數只有 $\\{3,6\\}$，與前者不重疊，故為 $7/15$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "排列組合",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1413",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "把兩顆可區分的球各自獨立且等機率放入甲乙兩盒，則甲盒球數的三種可能值 $0,1,2$ 各以 $1/3$ 的機率出現。",
+    "answer": false,
+    "explain": "四種等可能投放中，甲盒球數為 $0,1,2$ 的方式數為 $1,2,1$，機率為 $1/4,1/2,1/4$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "機率",
+      "排列組合"
+    ]
+  },
+  {
+    "id": "math-1414",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三張卡的數值為 $0,0,6$，平均數為 $\\bar x$。等機率抽一張，數值記為 $X$；獎金為 $|X-\\bar x|$ 元，期望獎金為何？",
+    "choices": [
+      "$\\frac83$ 元",
+      "$2$ 元",
+      "$\\frac43$ 元",
+      "$4$ 元"
+    ],
+    "answer": 0,
+    "explain": "$\\bar x=2$，偏差絕對值為 $2,2,4$，故期望獎金為 $(2+2+4)/3=8/3$ 元。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "機率",
+      "數據分析"
+    ]
+  },
+  {
+    "id": "math-1415",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "四張卡的分數為 $2,4,6,8$。等機率抽一張，已知抽得分數大於這四筆資料的平均數，其條件期望值為何？",
+    "choices": [
+      "$5$",
+      "$7$",
+      "$6$",
+      "$8$"
+    ],
+    "answer": 1,
+    "explain": "原平均為 $5$，條件下只剩 $6,8$ 兩張且等可能，故條件期望為 $7$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數據分析",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1416",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "四張卡為 $0,0,2,2$。等機率抽一張，將其數值依這四筆資料標準化為 $Z$。$P(Z\\ge1)$ 為何？標準差以筆數為分母。",
+    "choices": [
+      "$\\frac14$",
+      "$\\frac34$",
+      "$\\frac12$",
+      "$1$"
+    ],
+    "answer": 2,
+    "explain": "平均為 $1$、標準差為 $1$，四個標準化值為 $-1,-1,1,1$，符合者占一半。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "機率",
+      "數據分析"
+    ]
+  },
+  {
+    "id": "math-1417",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "甲組兩人分數都是 $0$，乙組一人分數為 $6$。先等機率選一組再在組內等機率選人，所得分數期望比全體平均高多少？",
+    "choices": [
+      "$0$",
+      "$2$",
+      "$3$",
+      "$1$"
+    ],
+    "answer": 3,
+    "explain": "全體平均為 $6/3=2$；先等機率選組的期望為 $(0+6)/2=3$，差為 $1$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數據分析",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1418",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "一組資料只含 $0,4$，平均數為 $1$。每次等機率抽一筆，放回後獨立再抽一筆，至少一次抽到 $4$ 的機率為何？",
+    "choices": [
+      "$\\frac7{16}$",
+      "$\\frac14$",
+      "$\\frac1{16}$",
+      "$\\frac34$"
+    ],
+    "answer": 0,
+    "explain": "由平均數得 $4$ 占 $1/4$；兩次都未抽到 $4$ 的機率為 $(3/4)^2=9/16$，所求為 $7/16$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "機率",
+      "數據分析"
+    ]
+  },
+  {
+    "id": "math-1419",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "四張卡的數值為 $1,3,5,9$。等機率不放回抽兩張，兩數平均大於四張卡中位數的機率為 $1/2$。",
+    "answer": true,
+    "explain": "四卡中位數為 $4$；六個等可能配對中，僅 $(1,9),(3,9),(5,9)$ 的平均大於 $4$，故機率為 $1/2$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "機率",
+      "數據分析"
+    ]
+  },
+  {
+    "id": "math-1420",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "先等機率選甲乙一組，再於組內等機率選人。甲組一半及格、及格者平均 $60$ 分；乙組全員及格、平均 $90$ 分。已知選到及格者，其分數期望為何？",
+    "choices": [
+      "$70$",
+      "$80$",
+      "$75$",
+      "$85$"
+    ],
+    "answer": 1,
+    "explain": "及格且來自甲乙的機率比為 $(1/2)(1/2):(1/2)1=1:2$，故條件期望為 $(60+2\\times90)/3=80$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "數據分析",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1421",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "兩張卡的數值為 $-2,2$。等機率抽一張，再獨立擲公平硬幣；正面保留數值、反面改為 $0$。所得數值的標準差為 $1$。",
+    "answer": false,
+    "explain": "$-2,0,2$ 的機率為 $1/4,1/2,1/4$，平均為 $0$，變異數為 $4/4+4/4=2$，標準差是 $\\sqrt2$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數據分析",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1422",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "矩陣 $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ 將坐標直行向量左乘後得新點。直線 $x+y=2$ 的像與 $x$ 軸交於何處？",
+    "choices": [
+      "$(1,0)$",
+      "$(4,0)$",
+      "$(2,0)$",
+      "$(0,2)$"
+    ],
+    "answer": 2,
+    "explain": "新坐標為 $X=x+y,Y=y$，故像為 $X=2$，與 $x$ 軸交於 $(2,0)$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1423",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "圓 $x^2+y^2=1$ 的每點均以 $A=\\begin{pmatrix}2&0\\\\0&2\\end{pmatrix}$ 左乘其坐標直行向量。所得圖形與直線 $x+y=3$ 有幾個交點？",
+    "choices": [
+      "$1$",
+      "$2$",
+      "$4$",
+      "$0$"
+    ],
+    "answer": 3,
+    "explain": "像為半徑 $2$ 的圓；圓心到直線距離 $3/\\sqrt2>2$，所以沒有交點。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1424",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "以矩陣 $A=\\begin{pmatrix}1&1\\\\0&0\\end{pmatrix}$ 變換平面各點。像集合所在直線與圓 $(x-1)^2+(y-2)^2=4$ 的關係為何？",
+    "choices": [
+      "相切",
+      "相交於兩點",
+      "沒有交點",
+      "通過圓心"
+    ],
+    "answer": 0,
+    "explain": "新坐標為 $(x+y,0)$，像集合為 $x$ 軸；圓心到 $x$ 軸距離為 $2$，等於半徑。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1425",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "變換 $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ 把點 $P$ 送到 $(3,1)$。原來的點 $P$ 到直線 $x+y=1$ 的距離為何？",
+    "choices": [
+      "$0$",
+      "$\\sqrt2$",
+      "$1$",
+      "$2\\sqrt2$"
+    ],
+    "answer": 1,
+    "explain": "由 $A^{-1}$ 或反解得 $P=(2,1)$；距離為 $|2+1-1|/\\sqrt2=\\sqrt2$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "直線與圓",
+      "矩陣"
+    ]
+  },
+  {
+    "id": "math-1426",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "以 $A=\\begin{pmatrix}0&1\\\\1&0\\end{pmatrix}$ 左乘點坐標，圓 $(x-1)^2+(y-2)^2=1$ 的切線 $x=0$ 會變成像圓的切線 $y=0$。",
+    "answer": true,
+    "explain": "變換交換兩坐標，圓心變為 $(2,1)$、半徑仍為 $1$；$x=0$ 的像為 $y=0$，仍與像圓相切。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1427",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "矩陣 $A=\\begin{pmatrix}1&1\\\\1&t\\end{pmatrix}$ 沒有反方陣。直線 $x+ty=2$ 到圓 $x^2+y^2=1$ 的最短距離為何？",
+    "choices": [
+      "$0$",
+      "$1$",
+      "$\\sqrt2-1$",
+      "$\\sqrt2+1$"
+    ],
+    "answer": 2,
+    "explain": "行列式 $t-1=0$，故 $t=1$；圓心到直線的距離為 $\\sqrt2$，再減半徑 $1$，得 $\\sqrt2-1$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "矩陣",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1428",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "以 $xy$ 平面為水平地面， $A=(0,0,0),B=(6,0,0)$，塔頂 $T=(3,4,h)$，$h>0$。從 $A$ 看 $T$ 的仰角為 $45^\\circ$，則三角形 $ABT$ 面積為何？",
+    "choices": [
+      "$15$",
+      "$3\\sqrt{34}$",
+      "$6\\sqrt{41}$",
+      "$3\\sqrt{41}$"
+    ],
+    "answer": 3,
+    "explain": "水平距離為 $5$，故 $h=5$。$T$ 到 $x$ 軸距離為 $\\sqrt{4^2+5^2}=\\sqrt{41}$，面積為 $6\\sqrt{41}/2$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "空間向量與平面直線",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1429",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "空間三點為 $A=(0,0,0),B=(2,0,0),C=(1,1,\\sqrt2)$。三角形 $ABC$ 的外接圓半徑為何？",
+    "choices": [
+      "$\\frac{2\\sqrt3}{3}$",
+      "$1$",
+      "$\\sqrt2$",
+      "$2$"
+    ],
+    "answer": 0,
+    "explain": "三邊長皆為 $2$，各內角為 $60^\\circ$；由 $2R=2/\\sin60^\\circ$，得 $R=2\\sqrt3/3$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "空間向量與平面直線",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1430",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "空間三點為 $O=(0,0,0),A=(1,0,1),B=(0,2,0)$。三角形 $OAB$ 最小內角的正切值為何？",
+    "choices": [
+      "$\\sqrt2$",
+      "$\\frac1{\\sqrt2}$",
+      "$\\frac1{\\sqrt3}$",
+      "$\\sqrt3$"
+    ],
+    "answer": 1,
+    "explain": "$\\overrightarrow{OA}\\cdot\\overrightarrow{OB}=0$，兩直角邊長為 $\\sqrt2,2$。最小角對較短邊，正切為 $\\sqrt2/2$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "空間向量與平面直線",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1431",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "$P=(0,0,2)$，$Q$ 在平面 $x+y+z=0$ 上。若線段 $PQ$ 與該平面夾角為 $30^\\circ$，則 $PQ$ 必定長 $2/\\sqrt3$。",
+    "answer": false,
+    "explain": "$P$ 到平面距離為 $2/\\sqrt3$，等於 $PQ\\sin30^\\circ$，故 $PQ=4/\\sqrt3$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "空間向量與平面直線",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1432",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "空間兩直線的方向向量為 $(1,0,1)$、$(0,1,1)$。取與兩方向平行、長皆為 $2$ 且夾銳角的兩線段作三角形鄰邊，第三邊長為何？",
+    "choices": [
+      "$\\sqrt2$",
+      "$2\\sqrt2$",
+      "$2$",
+      "$2\\sqrt3$"
+    ],
+    "answer": 2,
+    "explain": "方向夾角的餘弦為 $1/(\\sqrt2\\sqrt2)=1/2$，即 $60^\\circ$；餘弦定理得第三邊平方為 $4$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "空間向量與平面直線",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1433",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "$A=(-1,0,0),B=(1,0,0)$，$P$ 在平面 $x=0$ 上且 $|OP|=\\sqrt3$，$O$ 為原點。令 $\\theta=\\angle APB$，則 $\\cos(2\\theta)$ 為何？",
+    "choices": [
+      "$\\frac12$",
+      "$0$",
+      "$-\\frac{\\sqrt3}{2}$",
+      "$-\\frac12$"
+    ],
+    "answer": 3,
+    "explain": "$PA=PB=\\sqrt{1+3}=2$，且 $AB=2$，故 $\\theta=60^\\circ$；$\\cos(2\\theta)=\\cos120^\\circ=-1/2$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "空間向量與平面直線",
+      "三角函數"
+    ]
+  },
+  {
+    "id": "math-1434",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "三角形位於平面 $x+\\sqrt3z=0$，兩邊長為 $2,3$、夾角為 $30^\\circ$。正射影到 $xy$ 平面後的面積為 $3\\sqrt3/4$。",
+    "answer": true,
+    "explain": "原面積為 $(1/2)\\times2\\times3\\sin30^\\circ=3/2$；兩平面夾角餘弦為 $\\sqrt3/2$，投影面積為 $3\\sqrt3/4$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "空間向量與平面直線",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1435",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "平面 $x=0$ 與 $x+\\sqrt3z=0$ 的較小夾角為 $\\theta$。$\\cos(2\\theta)$ 為何？",
+    "choices": [
+      "$-\\frac12$",
+      "$\\frac12$",
+      "$\\frac{\\sqrt3}{2}$",
+      "$-\\frac{\\sqrt3}{2}$"
+    ],
+    "answer": 0,
+    "explain": "法向量的銳夾角滿足 $\\cos\\theta=1/2$，故 $\\cos2\\theta=2(1/2)^2-1=-1/2$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "空間向量與平面直線",
+      "三角函數"
+    ]
+  },
+  {
+    "id": "math-1436",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "實數 $x$ 滿足 $|x-1|\\le1$。二次函數 $f(x)=(x-3)^2$ 在此條件下的最小值為何？",
+    "choices": [
+      "$0$",
+      "$1$",
+      "$4$",
+      "$9$"
+    ],
+    "answer": 1,
+    "explain": "絕對值條件給 $0\\le x\\le2$；最接近頂點橫坐標 $3$ 的是 $x=2$，故最小值為 $1$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數與式",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1437",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "令 $f(x)=x^2-2x$。實數 $x$ 滿足 $f(|x|)=3$，則所有相異實數解的平方和為何？",
+    "choices": [
+      "$2$",
+      "$9$",
+      "$18$",
+      "$6$"
+    ],
+    "answer": 2,
+    "explain": "令 $t=|x|\\ge0$，得 $(t-3)(t+1)=0$，故 $t=3$、$x=\\pm3$；平方和為 $9+9=18$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "數與式"
+    ]
+  },
+  {
+    "id": "math-1438",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "函數 $y=|x^2-4x+3|$ 與直線 $y=1$ 有幾個相異交點？",
+    "choices": [
+      "$2$",
+      "$4$",
+      "$1$",
+      "$3$"
+    ],
+    "answer": 3,
+    "explain": "分別解 $x^2-4x+3=1$ 與 $=-1$；前者兩根，後者為 $(x-2)^2=0$，共三個相異解。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "多項式函數",
+      "數與式"
+    ]
+  },
+  {
+    "id": "math-1439",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "方程式 $\\left(\\frac{x^2-1}{x-1}\\right)^2=4$ 的相異實數解，總共有兩個。",
+    "answer": false,
+    "explain": "原式要求 $x\\ne1$。約分後 $(x+1)^2=4$ 得 $x=1,-3$，捨去 $1$，只剩一個解。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "數與式",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1440",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "多項式 $f(x)$ 的係數皆為有理數，且 $f(\\sqrt2)=0$。$f(x)$ 除以 $x^2-2$ 的餘式為何？",
+    "choices": [
+      "$0$",
+      "$1$",
+      "$x$",
+      "$x+1$"
+    ],
+    "answer": 0,
+    "explain": "餘式寫成 $ax+b$，其中 $a,b$ 為有理數；由 $a\\sqrt2+b=0$ 及 $\\sqrt2$ 無理，得 $a=b=0$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "多項式函數",
+      "數與式"
+    ]
+  },
+  {
+    "id": "math-1441",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "設 $f(x)=x^2+ax+b$，其中 $a,b$ 為實數。若 $|f(1)|+|f(3)|=0$，則 $a+b$ 為何？",
+    "choices": [
+      "$1$",
+      "$-1$",
+      "$4$",
+      "$-4$"
+    ],
+    "answer": 1,
+    "explain": "兩個絕對值均非負，故 $f(1)=f(3)=0$；$f(x)=(x-1)(x-3)=x^2-4x+3$，所以 $a+b=-1$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數與式",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1442",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形 $ABC$ 中，$A=75^\\circ,B=45^\\circ,AB=2\\sqrt3$。$BC$ 為何？",
+    "choices": [
+      "$\\sqrt6-\\sqrt2$",
+      "$2\\sqrt2$",
+      "$\\sqrt6+\\sqrt2$",
+      "$2\\sqrt3$"
+    ],
+    "answer": 2,
+    "explain": "$C=60^\\circ$，正弦定理得 $BC=4\\sin75^\\circ$；由和角公式得 $\\sin75^\\circ=(\\sqrt6+\\sqrt2)/4$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "三角函數",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1443",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形兩邊長為 $3,5$，夾角為 $\\theta$，對邊長為 $4$。另一三角形兩邊長為 $5,5$、夾角為 $2\\theta$，其面積為何？",
+    "choices": [
+      "$6$",
+      "$\\frac{15}2$",
+      "$24$",
+      "$12$"
+    ],
+    "answer": 3,
+    "explain": "餘弦定理得 $\\cos\\theta=3/5$、$\\sin\\theta=4/5$。由 $\\sin2\\theta=24/25$，面積為 $(25/2)(24/25)=12$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "三角函數",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1444",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "三角形有兩內角滿足 $B=2A$；若其對邊為 $a,b$，則 $b=2a\\cos^2A$。",
+    "answer": false,
+    "explain": "正弦定理及倍角公式給 $b/a=\\sin2A/\\sin A=2\\cos A$，不應再將餘弦平方。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "三角函數",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1445",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形 $ABC$ 中，$A=B=\\theta$ 且 $\\cos(2\\theta)=1/2$。若 $AB=2\\sqrt3$，則 $AC$ 為何？",
+    "choices": [
+      "$2$",
+      "$\\sqrt3$",
+      "$2\\sqrt3$",
+      "$4$"
+    ],
+    "answer": 0,
+    "explain": "$0<2\\theta<180^\\circ$，故 $2\\theta=60^\\circ$、$C=120^\\circ$；正弦定理給 $AC=2$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "三角函數",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1446",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "半徑為 $2$ 的扇形弧長為 $2\\pi/3$。圓心與兩弧端所成三角形的面積為何？",
+    "choices": [
+      "$1$",
+      "$\\sqrt3$",
+      "$\\pi$",
+      "$2\\sqrt3$"
+    ],
+    "answer": 1,
+    "explain": "圓心角為 $(2\\pi/3)/2=\\pi/3$，即 $60^\\circ$；三角形面積為 $(1/2)\\times2\\times2\\sin60^\\circ=\\sqrt3$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "三角函數",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1447",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三角形內角 $A,B$ 滿足 $\\tan A=1/2,\\tan B=1/3$，且 $A$ 的對邊長為 $2\\sqrt5$。$C$ 的對邊長為何？",
+    "choices": [
+      "$\\sqrt{10}$",
+      "$2\\sqrt5$",
+      "$5\\sqrt2$",
+      "$5$"
+    ],
+    "answer": 2,
+    "explain": "兩角皆銳角，和角公式得 $A+B=45^\\circ$，故 $C=135^\\circ$。又 $\\sin A=1/\\sqrt5$，正弦定理得對邊長 $5\\sqrt2$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "三角函數",
+      "三角比"
+    ]
+  },
+  {
+    "id": "math-1448",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "資料有 $\\bar x=1,\\bar y=2,\\sigma_x=1,\\sigma_y=2,r=1/2$。$y$ 對 $x$ 的迴歸直線與 $y=3$ 交於何處？",
+    "choices": [
+      "$(1,3)$",
+      "$(3,3)$",
+      "$(4,3)$",
+      "$(2,3)$"
+    ],
+    "answer": 3,
+    "explain": "迴歸斜率為 $r\\sigma_y/\\sigma_x=1$，且過平均點 $(1,2)$，故方程式為 $y=x+1$，交點 $(2,3)$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數據分析",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1449",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "一組資料的 $y$ 對 $x$ 迴歸直線為 $y=x+2$，且 $\\bar x=1$。平均點 $(\\bar x,\\bar y)$ 到直線 $x+y=0$ 的距離為何？",
+    "choices": [
+      "$2\\sqrt2$",
+      "$\\sqrt2$",
+      "$2$",
+      "$3\\sqrt2$"
+    ],
+    "answer": 0,
+    "explain": "迴歸直線過平均點，故 $\\bar y=3$；點 $(1,3)$ 到直線距離為 $4/\\sqrt2=2\\sqrt2$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "數據分析",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1450",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "某資料的雙向迴歸直線為 $y=x/2+2$、$x=y/2+1/2$，則其平均點在圓 $(x-2)^2+y^2=9$ 上。",
+    "answer": true,
+    "explain": "平均點是兩迴歸直線的交點，解得 $(2,3)$；代入圓式為 $0^2+3^2=9$，故在圓上。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "數據分析",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1451",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "資料有 $\\bar x=\\bar y=0,\\sigma_x=1,\\sigma_y=6,r=1/2$。觀測點 $(1,5)$ 到 $y$ 對 $x$ 的迴歸直線距離為何？",
+    "choices": [
+      "$2$",
+      "$\\frac2{\\sqrt{10}}$",
+      "$\\frac23$",
+      "$\\frac2{\\sqrt3}$"
+    ],
+    "answer": 1,
+    "explain": "斜率為 $r\\sigma_y/\\sigma_x=3$，迴歸線是 $y=3x$；所求為 $|3-5|/\\sqrt{3^2+1}=2/\\sqrt{10}$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "直線與圓",
+      "數據分析"
+    ]
+  },
+  {
+    "id": "math-1452",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從 $1,2,3,4,5$ 中選三個不同數作為三筆資料。平均數與中位數相同的選法共有幾種？",
+    "choices": [
+      "$3$",
+      "$5$",
+      "$4$",
+      "$6$"
+    ],
+    "answer": 2,
+    "explain": "由小到大為 $a,b,c$，條件給 $a+c=2b$。符合的三數組為 $(1,2,3),(2,3,4),(3,4,5),(1,3,5)$，共 $4$ 種。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數據分析",
+      "排列組合",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1453",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "資料有 $\\bar x=0,\\bar y=0,\\sigma_x=1,\\sigma_y=2,r=1/2$。以迴歸直線預測 $x=1$ 時所得點，相對於圓 $x^2+y^2=2$ 位於何處？",
+    "choices": [
+      "圓內",
+      "圓外",
+      "圓心",
+      "圓上"
+    ],
+    "answer": 3,
+    "explain": "迴歸直線為 $y=x$，預測點 $(1,1)$ 滿足 $1^2+1^2=2$，位於圓上。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "數據分析",
+      "直線與圓"
+    ]
+  },
+  {
+    "id": "math-1454",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "轉移矩陣 $P=\\begin{pmatrix}0&1/2\\\\1&1/2\\end{pmatrix}$ 以直行表示轉出狀態。兩個體起初皆在狀態 $2$，彼此獨立轉移兩步後，至少一個在 $1$ 的機率為何？",
+    "choices": [
+      "$\\frac7{16}$",
+      "$\\frac14$",
+      "$\\frac12$",
+      "$\\frac9{16}$"
+    ],
+    "answer": 0,
+    "explain": "$P^2$ 的第一列第二行為 $1/4$，即單一個體兩步後在 $1$ 的機率；所求為 $1-(3/4)^2=7/16$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "矩陣",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1455",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "轉移矩陣 $P=\\begin{pmatrix}1/2&1/4\\\\1/2&3/4\\end{pmatrix}$ 以直行表示轉出。初始在狀態 $1$，已知第二步回到 $1$，第一步在 $2$ 的機率為何？",
+    "choices": [
+      "$\\frac14$",
+      "$\\frac13$",
+      "$\\frac12$",
+      "$\\frac23$"
+    ],
+    "answer": 1,
+    "explain": "兩步回到 $1$ 的機率為 $1/4+1/8=3/8$，經 $2$ 回來的機率為 $1/8$，條件機率為 $1/3$。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "矩陣",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1456",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從 $0,1,2,3$ 中等機率抽出 $t$。矩陣 $A=\\begin{pmatrix}1&t\\\\t&1\\end{pmatrix}$ 有反方陣的機率為何？",
+    "choices": [
+      "$\\frac14$",
+      "$\\frac12$",
+      "$\\frac34$",
+      "$1$"
+    ],
+    "answer": 2,
+    "explain": "行列式為 $1-t^2$，四個可能值中僅 $t=1$ 使其為零；其餘三值可逆，機率為 $3/4$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1457",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "$X,Y$ 獨立且各以相同機率取 $0,1$。令 $A=\\begin{pmatrix}1&X\\\\0&1\\end{pmatrix},B=\\begin{pmatrix}1&0\\\\Y&1\\end{pmatrix}$，則 $AB=BA$ 的機率為 $3/4$。",
+    "answer": true,
+    "explain": "兩乘積的對角元素相同當且僅當 $XY=0$；僅 $X=Y=1$ 不符合，機率為 $1/4$，故所求為 $3/4$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1458",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "等機率取 $n=1,2,3,4$，令 $A=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$。若 $A^n\\binom10$ 的第一分量為正，得 $4$ 元，否則得 $0$ 元。期望獎金為何？",
+    "choices": [
+      "$0$ 元",
+      "$2$ 元",
+      "$4$ 元",
+      "$1$ 元"
+    ],
+    "answer": 3,
+    "explain": "四種 $n$ 所得第一分量依序為 $0,-1,0,1$，僅 $n=4$ 中獎，期望獎金為 $4\\times(1/4)=1$ 元。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1459",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "以 $A=\\begin{pmatrix}2&0\\\\0&1\\end{pmatrix}$ 變換向量後，原本互相垂直的 $(1,1)$ 與 $(1,-1)$，其像仍互相垂直。",
+    "answer": false,
+    "explain": "像向量為 $(2,1),(2,-1)$，內積為 $4-1=3\\ne0$，故不垂直。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "平面向量",
+      "矩陣"
+    ]
+  },
+  {
+    "id": "math-1460",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "平面向量 $\\vec u\\ne\\vec v$，且 $A\\vec u=A\\vec v$，其中 $A=\\begin{pmatrix}1&1\\\\1&1\\end{pmatrix}$。$\\vec u-\\vec v$ 與下列哪個向量平行？",
+    "choices": [
+      "$(1,-1)$",
+      "$(1,1)$",
+      "$(1,0)$",
+      "$(0,1)$"
+    ],
+    "answer": 0,
+    "explain": "設 $\\vec u-\\vec v=(a,b)\\ne(0,0)$；$A(\\vec u-\\vec v)=0$ 給 $a+b=0$，故與 $(1,-1)$ 平行。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1461",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "變換 $A=\\begin{pmatrix}2&0\\\\0&1\\end{pmatrix}$ 對向量 $(1,1)$ 的長度倍率平方，除以此變換的面積倍率，結果為何？",
+    "choices": [
+      "$1$",
+      "$\\frac54$",
+      "$\\frac52$",
+      "$2$"
+    ],
+    "answer": 1,
+    "explain": "長度倍率平方為 $(2^2+1^2)/(1^2+1^2)=5/2$；面積倍率為 $|\\det A|=2$，比值為 $5/4$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "平面向量",
+      "矩陣"
+    ]
+  },
+  {
+    "id": "math-1462",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "以 $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ 變換向量。雖然兩像向量 $(1,0),(1,1)$ 不垂直，兩個原向量仍互相垂直。",
+    "answer": true,
+    "explain": "乘反方陣或反解得原向量為 $(1,0),(0,1)$，內積為零。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1463",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "$A=\\begin{pmatrix}2&0\\\\0&1\\end{pmatrix},B=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$，$\\vec u=(1,1)$。$AB\\vec u-BA\\vec u$ 的長度為何？",
+    "choices": [
+      "$0$",
+      "$\\sqrt2$",
+      "$1$",
+      "$2$"
+    ],
+    "answer": 2,
+    "explain": "$AB\\vec u=(4,1)$、$BA\\vec u=(3,1)$，差為 $(1,0)$，長度為 $1$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "矩陣",
+      "平面向量"
+    ]
+  },
+  {
+    "id": "math-1464",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "只用 $0,1$ 排成字串，相鄰不可都是 $1$。令長度 $n$ 的合法字串數為 $a_n$；已知 $a_8=55,a_9=89$，則 $a_{10}$ 為何？",
+    "choices": [
+      "$90$",
+      "$110$",
+      "$178$",
+      "$144$"
+    ],
+    "answer": 3,
+    "explain": "按最後一段為 $0$ 或 $01$ 分類，得 $a_n=a_{n-1}+a_{n-2}$，所以 $a_{10}=89+55=144$。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "數列與級數",
+      "排列組合"
+    ]
+  },
+  {
+    "id": "math-1465",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "某社團第 $1$ 週有 $3$ 人，每週增加 $1$ 人。從社員中選兩人搭檔，第 $4$ 週的選法比第 $1$ 週多幾種？",
+    "choices": [
+      "$12$",
+      "$3$",
+      "$6$",
+      "$15$"
+    ],
+    "answer": 0,
+    "explain": "第 $4$ 週人數為 $3+3=6$，選法增加 $\\binom62-\\binom32=15-3=12$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "排列組合",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1466",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "把 $n$ 個不同物件全排一列的方法數記為 $a_n$，則數列 $a_1,a_2,a_3,\\ldots$ 是公比固定的等比數列。",
+    "answer": false,
+    "explain": "$a_n=n!$，相鄰兩項比為 $a_{n+1}/a_n=n+1$，會隨 $n$ 改變，故不是等比數列。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數列與級數",
+      "排列組合"
+    ]
+  },
+  {
+    "id": "math-1467",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "禮堂三排座位數依序成等差數列，首排 $1$ 席、末排 $3$ 席。任選兩個不同排的座位，共有幾種選法？",
+    "choices": [
+      "$9$",
+      "$11$",
+      "$12$",
+      "$15$"
+    ],
+    "answer": 1,
+    "explain": "三排席數為 $1,2,3$，共 $6$ 席。全部配對 $\\binom62=15$，扣除同排的 $0+1+3=4$ 對，得 $11$ 種。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "排列組合",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1468",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "把 $n$ 個不同物件全排一列的方法數記為 $a_n$，令 $b_n=a_{n+1}/a_n$。$b_1+b_2+b_3+b_4$ 為何？",
+    "choices": [
+      "$10$",
+      "$12$",
+      "$14$",
+      "$24$"
+    ],
+    "answer": 2,
+    "explain": "$a_n=n!$，故 $b_n=(n+1)!/n!=n+1$；所求為 $2+3+4+5=14$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "數列與級數",
+      "排列組合"
+    ]
+  },
+  {
+    "id": "math-1469",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從整數 $-1,0,1,2,3$ 中等機率抽出 $X$。使 $4^X-6\\cdot2^X+8\\le0$ 的機率為何？",
+    "choices": [
+      "$\\frac15$",
+      "$\\frac35$",
+      "$\\frac45$",
+      "$\\frac25$"
+    ],
+    "answer": 3,
+    "explain": "令 $t=2^X$，得 $(t-2)(t-4)\\le0$，所以 $1\\le X\\le2$；五值中有兩值符合，機率為 $2/5$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "指數與對數",
+      "多項式函數",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1470",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "$x>0$，令 $f(x)=(\\log_2x)^2-2\\log_2x+3$。使 $f(x)$ 達最小值的 $x$ 為何？",
+    "choices": [
+      "$2$",
+      "$1$",
+      "$4$",
+      "$8$"
+    ],
+    "answer": 0,
+    "explain": "令 $t=\\log_2x$，則 $f=(t-1)^2+2$，最小時 $t=1$，故 $x=2$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1471",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "令 $f(t)=t^2-6t+8$、$g(x)=f(3^x)$。同時滿足 $g(x)=0$ 與 $g(x+1)=0$ 的實數 $x$ 為何？",
+    "choices": [
+      "$0$",
+      "無實數解",
+      "$1$",
+      "$2$"
+    ],
+    "answer": 1,
+    "explain": "$f$ 的根為 $2,4$。若兩條件成立，$3^x$ 與 $3^{x+1}$ 都須為根，但其比為 $3$，與兩根比值 $2$ 不合，故無解。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "多項式函數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1472",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "方程式 $\\log_2(x-1)+\\log_2(3-x)=0$ 恰有一個實數解。",
+    "answer": true,
+    "explain": "定義域為 $1<x<3$。合併對數得 $(x-1)(3-x)=1$，即 $(x-2)^2=0$；唯一解 $x=2$ 符合定義域。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "指數與對數",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1473",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "方程式 $t^2-6t+8=0$ 的兩根為 $a,b$。$\\log_2a+\\log_2b$ 等於多少？",
+    "choices": [
+      "$2$",
+      "$4$",
+      "$3$",
+      "$6$"
+    ],
+    "answer": 2,
+    "explain": "兩根為 $2,4$，皆為正數；利用根積 $ab=8$ 得對數和為 $\\log_2 8=3$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "指數與對數",
+      "多項式函數"
+    ]
+  },
+  {
+    "id": "math-1474",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從整數 $-2,-1,0,1,2$ 中等機率取一數 $X$，則 $|X-1|\\le1$ 的機率為何？",
+    "choices": [
+      "$\\frac15$",
+      "$\\frac25$",
+      "$\\frac45$",
+      "$\\frac35$"
+    ],
+    "answer": 3,
+    "explain": "不等式等價於 $0\\le X\\le2$，符合者為 $0,1,2$，共三個。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "數與式",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1475",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從標有 $1,\\sqrt2,\\sqrt8$ 的三張卡中等機率不放回抽兩張。兩數乘積是有理數的機率為何？",
+    "choices": [
+      "$\\frac13$",
+      "$0$",
+      "$\\frac23$",
+      "$1$"
+    ],
+    "answer": 0,
+    "explain": "三個等可能配對中，只有 $\\sqrt2\\times\\sqrt8=4$ 為有理數，其他兩對乘積皆為無理數。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數與式",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1476",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "從整數 $-2,-1,0,1,2,3$ 中等機率取 $X$。已知 $|X|\\le2$，則 $|X-1|<2$ 的條件機率為何？",
+    "choices": [
+      "$\\frac12$",
+      "$\\frac35$",
+      "$\\frac25$",
+      "$\\frac45$"
+    ],
+    "answer": 1,
+    "explain": "條件下共有 $-2,-1,0,1,2$ 五值；再滿足 $-1<X<3$ 者為 $0,1,2$，故為 $3/5$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數與式",
+      "機率"
+    ]
+  },
+  {
+    "id": "math-1477",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "空間各點的 $(x,y)$ 坐標以 $A=\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ 變換，$z$ 不變。平面 $x+z=1$ 的像平面方程式為何？",
+    "choices": [
+      "$x-z=1$",
+      "$-y+z=1$",
+      "$y+z=1$",
+      "$x+y=1$"
+    ],
+    "answer": 2,
+    "explain": "新坐標為 $X=-y,Y=x,Z=z$，故原式 $x+z=1$ 成為 $Y+Z=1$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "空間向量與平面直線",
+      "矩陣"
+    ]
+  },
+  {
+    "id": "math-1478",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "空間點 $P=(1,2,3)$ 的水平坐標以 $\\begin{pmatrix}0&-1\\\\1&0\\end{pmatrix}$ 變換，$z$ 不變。像點到平面 $x+z=0$ 的距離為何？",
+    "choices": [
+      "$\\frac3{\\sqrt2}$",
+      "$2\\sqrt2$",
+      "$\\frac5{\\sqrt2}$",
+      "$\\frac1{\\sqrt2}$"
+    ],
+    "answer": 3,
+    "explain": "像點為 $(-2,1,3)$，到平面距離為 $|-2+3|/\\sqrt{1^2+1^2}=1/\\sqrt2$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "矩陣",
+      "空間向量與平面直線"
+    ]
+  },
+  {
+    "id": "math-1479",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "空間直線 $L:(x,y,z)=(t,t,t+1)$ 的水平坐標以 $A=\\begin{pmatrix}1&1\\\\0&1\\end{pmatrix}$ 變換，$z$ 不變。像直線與平面 $x-y-z=-1$ 的關係為何？",
+    "choices": [
+      "整條包含在平面內",
+      "平行且不在平面內",
+      "只交於一點",
+      "垂直於平面"
+    ],
+    "answer": 0,
+    "explain": "像直線為 $(2t,t,t+1)$，對所有 $t$ 皆有 $x-y-z=2t-t-(t+1)=-1$，故整條包含在平面內。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "空間向量與平面直線",
+      "矩陣"
+    ]
+  },
+  {
+    "id": "math-1480",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "函數 $f(x)=2^{\\sin x}$ 的最小值為 $1/4$。",
+    "answer": false,
+    "explain": "$-1\\le\\sin x\\le1$，且 $2^t$ 遞增，故最小值在 $\\sin x=-1$ 時取到，為 $2^{-1}=1/2$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "三角函數",
+      "指數與對數"
+    ]
+  },
+  {
+    "id": "math-1481",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "在 $0\\le x<2\\pi$ 中，函數 $f(x)=\\log_2(\\sin2x)$ 的定義域為何？",
+    "choices": [
+      "$(0,\\pi)$",
+      "$(0,\\frac\\pi2)\\cup(\\pi,\\frac{3\\pi}2)$",
+      "$(0,\\frac\\pi2)\\cup(\\frac{3\\pi}2,2\\pi)$",
+      "$(0,2\\pi)$"
+    ],
+    "answer": 1,
+    "explain": "對數真數須正，即 $\\sin2x>0$；在指定範圍內對應兩段 $(0,\\pi/2)$ 與 $(\\pi,3\\pi/2)$。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "指數與對數",
+      "三角函數"
+    ]
+  },
+  {
+    "id": "math-1482",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "訊號 $f(t)=2^{-t}\\cos(\\pi t)$，依序取 $t=0,2,4,\\ldots$ 的函數值作數列。這個等比數列的公比為何？",
+    "choices": [
+      "$\\frac12$",
+      "$-\\frac12$",
+      "$\\frac14$",
+      "$-\\frac14$"
+    ],
+    "answer": 2,
+    "explain": "各取樣時刻 $\\cos(\\pi t)=1$，時間每增加 $2$，$2^{-t}$ 乘以 $2^{-2}=1/4$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "三角函數",
+      "指數與對數",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1483",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三筆資料依序成等差數列，首項為 $2$、末項為 $6$。以筆數為分母計算變異數，最大一筆的標準化數值為何？",
+    "choices": [
+      "$1$",
+      "$\\sqrt{\\frac23}$",
+      "$\\sqrt3$",
+      "$\\sqrt{\\frac32}$"
+    ],
+    "answer": 3,
+    "explain": "中項與平均皆為 $4$，標準差為 $\\sqrt{(4+0+4)/3}=\\sqrt{8/3}$；最大值標準化為 $2/\\sqrt{8/3}=\\sqrt{3/2}$。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數據分析",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1484",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "三筆正資料成公比為 $2$ 的等比數列，中位數為 $6$。平均數比中位數大多少？",
+    "choices": [
+      "$1$",
+      "$0$",
+      "$2$",
+      "$3$"
+    ],
+    "answer": 0,
+    "explain": "三筆為 $3,6,12$，平均為 $7$，與中位數相差 $1$。",
+    "formula": false,
+    "level": 1,
+    "links": [
+      "數列與級數",
+      "數據分析"
+    ]
+  },
+  {
+    "id": "math-1485",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "五筆依序成公差非零的等差數列資料，刪去首末項後，剩下三筆的標準差仍可能比原來大。變異數皆以各自筆數為分母。",
+    "answer": false,
+    "explain": "原偏差為 $-2d,-d,0,d,2d$，變異數 $2d^2$；剩下三筆變異數為 $2d^2/3$，標準差變小。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數據分析",
+      "數列與級數"
+    ]
+  },
+  {
+    "id": "math-1486",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "在 $0\\le x<2\\pi$ 中，方程式 $|\\sin x-1/2|=1/2$ 有幾個相異實數解？",
+    "choices": [
+      "$2$",
+      "$3$",
+      "$4$",
+      "$1$"
+    ],
+    "answer": 1,
+    "explain": "絕對值拆成 $\\sin x=1$ 或 $\\sin x=0$，解為 $\\pi/2,0,\\pi$，共三個。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "數與式",
+      "三角函數"
+    ]
+  },
+  {
+    "id": "math-1487",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "對所有實數 $x$，$\\sqrt{1-\\cos2x}$ 恆等於下列何者？",
+    "choices": [
+      "$\\sqrt2\\sin x$",
+      "$2|\\sin x|$",
+      "$\\sqrt2|\\sin x|$",
+      "$\\sqrt2|\\cos x|$"
+    ],
+    "answer": 2,
+    "explain": "由 $1-\\cos2x=2\\sin^2x$，開平方須取非負值，故為 $\\sqrt2|\\sin x|$。",
+    "formula": true,
+    "level": 2,
+    "links": [
+      "三角函數",
+      "數與式"
+    ]
+  },
+  {
+    "id": "math-1488",
+    "subject": "math",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "實數 $x$ 滿足 $|x-\\pi/4|\\le\\pi/4$。$|\\sin x+\\cos x|$ 的最小值為何？",
+    "choices": [
+      "$0$",
+      "$\\frac{\\sqrt2}{2}$",
+      "$\\sqrt2$",
+      "$1$"
+    ],
+    "answer": 3,
+    "explain": "條件為 $0\\le x\\le\\pi/2$；和式為 $\\sqrt2\\sin(x+\\pi/4)\\ge1$，且兩端點取等號。",
+    "formula": true,
+    "level": 3,
+    "links": [
+      "數與式",
+      "三角函數"
+    ]
+  },
+  {
+    "id": "math-1489",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "在球面上畫一個圓，若該圓所在的平面通過球心，這個圓稱為什麼？",
+    "choices": [
+      "緯線的一段",
+      "小圓",
+      "經線的半圈",
+      "大圓"
+    ],
+    "answer": 3,
+    "explain": "通過球心的平面與球面的交圓稱為大圓，半徑與球半徑相同。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1490",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "同一球面上的所有大圓，半徑都相等。",
+    "answer": true,
+    "explain": "大圓的圓心就是球心，半徑皆等於球半徑。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1491",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "用平面切球，截出一個非退化的小圓。將平面平行移近球心，交圓的半徑如何改變？",
+    "choices": [
+      "維持不變",
+      "變小",
+      "變大",
+      "先變小再變大"
+    ],
+    "answer": 2,
+    "explain": "平面越接近球心，截出的圓越大；通過球心時成為大圓。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1492",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "東經 40 度的經線，要與哪條經線合成一個完整的大圓？",
+    "choices": [
+      "西經 140 度",
+      "東經 50 度",
+      "西經 40 度",
+      "東經 140 度"
+    ],
+    "answer": 0,
+    "explain": "經度相差 180 度的兩條經線，各為半圓，合起來形成經線圈。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1493",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "部分經線不通過北極與南極。",
+    "answer": false,
+    "explain": "每條經線都是連接南北兩極的半圓；非赤道且非極點的緯線圈則不通過兩極。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1494",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "把東經 0 度與 180 度合成經線圈，再把東經 90 度與西經 90 度合成另一圈。兩圈在哪裡相交？",
+    "choices": [
+      "南極與一個赤道點",
+      "北極與南極",
+      "北極與一個赤道點",
+      "赤道的兩個對向點"
+    ],
+    "answer": 1,
+    "explain": "兩個經線圈所在平面的交線是地軸，所以在球面上交於南北兩極。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1495",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球半徑為 $10$，北緯 $60^\\circ$ 的緯線圓半徑為多少？",
+    "choices": [
+      "$5\\sqrt3$",
+      "$5$",
+      "$20$",
+      "$10$"
+    ],
+    "answer": 1,
+    "explain": "緯線圓半徑為 $R\\cos\\theta$，故為 $10\\cos60^\\circ=5$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1496",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "北半球一條緯線圓的半徑是球半徑的一半，該緯線的緯度為何？",
+    "choices": [
+      "北緯 $45^\\circ$",
+      "北緯 $60^\\circ$",
+      "北緯 $30^\\circ$",
+      "北緯 $90^\\circ$"
+    ],
+    "answer": 1,
+    "explain": "由 $R\\cos\\theta=R/2$，得 $\\cos\\theta=1/2$，北緯為 $60^\\circ$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1497",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "在同一球面上，即使分居南北半球，北緯 30 度與南緯 30 度的緯線圓仍一樣大。",
+    "answer": true,
+    "explain": "緯度的正負只改變緯線圈位於赤道哪一側，不改變半徑。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1498",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球半徑為 $2$，北緯 $30^\\circ$ 的緯線所在平面，距球心多遠？",
+    "choices": [
+      "$\\sqrt3$",
+      "$2$",
+      "$1$",
+      "$1/2$"
+    ],
+    "answer": 2,
+    "explain": "緯線所在平面的高度為 $R\\sin\\theta$，故距球心 $2\\sin30^\\circ=1$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1499",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "將地球視為球體，赤道周長為 $40000$ 公里。沿北緯 $60^\\circ$ 的緯線，走經度相差 $72^\\circ$ 的短弧，距離為多少公里？",
+    "choices": [
+      "$8000$",
+      "$2000$",
+      "$10000$",
+      "$4000$"
+    ],
+    "answer": 3,
+    "explain": "該緯圈周長為赤道的一半，即 $20000$ 公里；$72^\\circ$ 占一圈的 $1/5$，故走 $4000$ 公里。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1500",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "兩城市都在北緯 30 度，經度相差 60 度。忽略地形，沿緯線短弧與球面最短路線相比，何者正確？",
+    "choices": [
+      "緯線短弧較長",
+      "大圓短弧較長",
+      "兩弧等長，但路線不同",
+      "兩弧等長，且路線重合"
+    ],
+    "answer": 0,
+    "explain": "非赤道的緯線是小圓，兩城的球面最短路線則沿大圓短弧。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1501",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "球面上兩相異且不互為對蹠點的點，仍可能有兩條不同且同為最短的大圓弧相連。",
+    "answer": false,
+    "explain": "這兩點與球心決定唯一平面，且大圓的短弧唯一；對蹠點才有多條最短弧。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1502",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "球面上一對對蹠點，可能有不只一條最短的球面路線。",
+    "answer": true,
+    "explain": "通過這一對點的每個大圓，其半圓弧長皆為球周長的一半，都是最短路線。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1503",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球半徑為 $R$。甲乙都在北緯 $30^\\circ$，經度相差 $180^\\circ$。兩地的球面最短距離為何？",
+    "choices": [
+      "$\\frac{2\\pi R}{3}$",
+      "$\\pi R$",
+      "$\\frac{\\sqrt3\\pi R}{2}$",
+      "$\\frac{\\pi R}{3}$"
+    ],
+    "answer": 0,
+    "explain": "沿同一經線圈經北極走，兩段各跨 $60^\\circ$，合計 $120^\\circ$，弧長為 $2\\pi R/3$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1504",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球半徑為 $2$，赤道上兩點經度相差 $90^\\circ$，球面最短距離為何？",
+    "choices": [
+      "$\\pi$",
+      "$2\\pi$",
+      "$4\\pi$",
+      "$\\pi/2$"
+    ],
+    "answer": 0,
+    "explain": "赤道是大圓；$90^\\circ$ 短弧是整圈四分之一，長為 $2\\pi\\times2/4=\\pi$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1505",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球半徑為 $6$。甲在北緯 $30^\\circ$，乙與甲在同一條經線上，兩地的球面最短距離為 $\\pi$。乙的緯度有哪些可能？",
+    "choices": [
+      "赤道或南緯 $60^\\circ$",
+      "赤道或北緯 $60^\\circ$",
+      "北緯 $60^\\circ$ 或南緯 $30^\\circ$",
+      "北緯 $30^\\circ$ 或南緯 $30^\\circ$"
+    ],
+    "answer": 1,
+    "explain": "距離 $\\pi$ 為周長 $12\\pi$ 的 $1/12$，跨緯度 $30^\\circ$；由北緯 $30^\\circ$ 向南、北各得赤道、北緯 $60^\\circ$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1506",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方體兩相鄰面共稜為 $AB$。兩點在不同面上，距共稜各為 $1,2$，垂足在稜上的間距為 $4$。只走這兩面，最短距離為何？",
+    "choices": [
+      "$5$",
+      "$\\sqrt{13}$",
+      "$\\sqrt{17}$",
+      "$7$"
+    ],
+    "answer": 0,
+    "explain": "攤平後，垂直共稜方向的距離為 $1+2=3$，另方向為 $4$，故長 $\\sqrt{3^2+4^2}=5$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1507",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方體相鄰兩面共稜長 $6$。甲乙在不同面，距稜各 $1,2$，兩垂足分別在稜的兩端。只走兩面，最短路線從甲的垂足算起，在距離多少處跨稜？",
+    "choices": [
+      "$1$",
+      "$3$",
+      "$2$",
+      "$4$"
+    ],
+    "answer": 2,
+    "explain": "展開圖的直線被共稜分為 $1:2$，故沿稜方向也分為 $1:2$，跨點距甲的垂足 $6/3=2$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1508",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "螞蟻從長方體一面的內部到相鄰面的內部，只走這兩面並跨過共稜。把兩面攤平後，最短路線會在跨稜處轉一個直角。",
+    "answer": false,
+    "explain": "兩面攤平後，最短路線是直線；攤平前看似轉折，不等於展開後仍有直角。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1509",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "邊長為 $1,2,4$ 的長方體，螞蟻沿表面從一頂點走到空間對頂點，最短距離為何？",
+    "choices": [
+      "$\\sqrt{29}$",
+      "$5$",
+      "$\\sqrt{21}$",
+      "$7$"
+    ],
+    "answer": 1,
+    "explain": "三類展開距離平方為 $(1+2)^2+4^2=25$、$(1+4)^2+2^2=29$、$(2+4)^2+1^2=37$，最短為 $5$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1510",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方體邊長為 $2,3,h$，且 $h\\ge3$。沿表面連接空間對頂點的最短距離為 $13$，則 $h$ 為多少？",
+    "choices": [
+      "$10$",
+      "$13$",
+      "$12$",
+      "$15$"
+    ],
+    "answer": 2,
+    "explain": "合併較短兩邊所得距離最短，故 $(2+3)^2+h^2=13^2$，得 $h^2=144$，所以 $h=12$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1511",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "正立方體沿表面連接一對空間對頂點時，將任一組兩條邊長相加，作為三類標準展開的一邊，必定得到相同的最短距離。",
+    "answer": true,
+    "explain": "設邊長為 $a$，三類展開皆有兩方向長 $2a,a$，最短距離同為 $a\\sqrt5$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1512",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方體底面邊長為 $4,5$、高 $12$。甲在底面邊界，乙在頂面邊界；乙的正下方沿底面邊界到甲，兩方向距離為 $5,13$。只走側面，最短距離為何？",
+    "choices": [
+      "$\\sqrt{313}$",
+      "$17$",
+      "$18$",
+      "$13$"
+    ],
+    "answer": 3,
+    "explain": "側面帶展開後，比較 $\\sqrt{5^2+12^2}=13$ 與 $\\sqrt{13^2+12^2}=\\sqrt{313}$，取 $13$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1513",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方體左右寬 $6$、前後深 $4$、高 $8$。由前面中心經頂面到後面中心，只走這三面，最短距離為何？",
+    "choices": [
+      "$12$",
+      "$10$",
+      "$16$",
+      "$8$"
+    ],
+    "answer": 0,
+    "explain": "展開後兩中心對齊，距離為前面半高 $4$ 加頂面深 $4$ 加後面半高 $4$，共 $12$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1514",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "有人把長方體兩個空間對頂點之間的空間對角線長，當作螞蟻沿表面的最短距離。這個做法錯在哪裡？",
+    "choices": [
+      "所用路線中段位於同一面內",
+      "所用路線中段沿著長方體稜線",
+      "所用路線中段穿過長方體內部",
+      "所用路線中段落在長方體外部"
+    ],
+    "answer": 2,
+    "explain": "空間對角線的中段不在表面，不能作為表面爬行路線；必須比較合法展開圖中的路線。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1515",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "將地球視為球體，北緯 $45^\\circ$ 緯線圈的圓心在哪裡？",
+    "choices": [
+      "赤道面上、球心東方",
+      "地軸上、球心南方",
+      "赤道面上、球心西方",
+      "地軸上、球心北方"
+    ],
+    "answer": 3,
+    "explain": "緯線圈的圓心是地軸與該緯線平面的交點；北緯的緯線平面位於球心北方。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1516",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球半徑為 $5$，一截平面距球心 $3$。該平面與球面的交圓半徑為多少？",
+    "choices": [
+      "$3$",
+      "$4$",
+      "$\\sqrt{34}$",
+      "$5$"
+    ],
+    "answer": 1,
+    "explain": "球心、交圓圓心及交圓上一點構成直角三角形，交圓半徑為 $\\sqrt{5^2-3^2}=4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1517",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "用包含雙圓錐軸線的平面切雙圓錐面，截痕是通過頂點的兩條相交直線。",
+    "answer": true,
+    "explain": "含軸平面沿雙圓錐兩側的母線切開；兩條母線延伸成通過頂點的兩條直線。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1518",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "單點透視圖中，等高路燈沿垂直畫面的縱深方向等距排列，燈頂連線不通過視點。越靠近消失點，圖上相鄰燈頂的間距如何變化？",
+    "choices": [
+      "越來越小",
+      "保持相同",
+      "越來越大",
+      "先增大後減小"
+    ],
+    "answer": 0,
+    "explain": "透視會壓縮遠處的距離；實際等距的燈頂，投影間距會隨深度增加而縮小。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1519",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "截平面垂直於正圓錐的軸，且通過頂點。此平面與圓錐面的交集為何？",
+    "choices": [
+      "一個圓",
+      "一條直線",
+      "兩條相交直線",
+      "一個點"
+    ],
+    "answer": 3,
+    "explain": "垂直於軸且通過頂點的平面，只接觸圓錐面的頂點；沒有半徑大於零的截圓。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1520",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "某平面地圖把經線與緯線畫成互相垂直的直線。將兩地在圖上以直線相連，對應的球面路線就是大圓短弧。",
+    "answer": false,
+    "explain": "例如沿北緯30度在圖上畫水平線，對應球面上的小圓緯線弧，並非大圓短弧。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1521",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方體底面邊長為 $4,5$，高 $12$。甲在底面邊界，乙在頂面邊界；乙的正下方沿底面邊界到甲，兩方向距離皆為 $9$。只走側面，最短路有幾條、各長多少？",
+    "choices": [
+      "1條，各長 $15$",
+      "2條，各長 $21$",
+      "2條，各長 $15$",
+      "4條，各長 $15$"
+    ],
+    "answer": 2,
+    "explain": "側面帶的兩種最短展開，水平距離均為 $9$、高為 $12$；兩條路都長 $\\sqrt{9^2+12^2}=15$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1522",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "理想透視成像中，物體與視點保持不動，畫面保持平行並移至原先距視點的2倍處。像高變為原來的幾倍？",
+    "choices": [
+      "$1$",
+      "$1/2$",
+      "$4$",
+      "$2$"
+    ],
+    "answer": 3,
+    "explain": "由相似三角形，物體與視點不動時，像高正比於畫面到視點的距離，所以變為2倍。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1523",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "在無限延伸的雙圓錐上，某平面截痕為非圓橢圓。保持截平面方向不變而平移，未通過頂點時，截痕仍可能變成拋物線。",
+    "answer": false,
+    "explain": "平移不改變截平面與圓錐軸或母線的夾角，因此仍截出非圓橢圓；變成拋物線須改變方向。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1524",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "用不通過頂點、且垂直於軸的平面切正圓錐面，截痕是哪一種曲線？",
+    "choices": [
+      "雙曲線",
+      "非圓的橢圓",
+      "拋物線",
+      "圓"
+    ],
+    "answer": 3,
+    "explain": "正圓錐繞軸旋轉對稱，垂直於軸的截平面所留下的截痕為圓。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1525",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "在同一個正圓錐的同側，用兩個垂直於軸的平面截出圓。離頂點較遠的平面，其截圓如何？",
+    "choices": [
+      "由圓變成橢圓",
+      "半徑相同",
+      "半徑較小",
+      "半徑較大"
+    ],
+    "answer": 3,
+    "explain": "同側圓錐面離頂點越遠越寬；平面仍垂直於軸，所以截痕仍是圓。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1526",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "用不過頂點的斜平面截正圓錐，只截到一葉，截痕封閉且不是圓。它是哪種曲線？",
+    "choices": [
+      "雙曲線",
+      "拋物線",
+      "兩條相交直線",
+      "橢圓"
+    ],
+    "answer": 3,
+    "explain": "斜平面若截出非圓的封閉曲線，就是橢圓；拋物線與雙曲線不封閉。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1527",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "任何不通過頂點的傾斜截平面，與正圓錐面相交所得的截痕都是橢圓。",
+    "answer": false,
+    "explain": "傾斜程度不同也可截出拋物線或雙曲線；只有傾斜這個條件不足以決定截痕。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1528",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "在忽略其他天體擾動的模型中，行星繞恆星運行的封閉軌道通常以哪種曲線描述？",
+    "choices": [
+      "螺旋線",
+      "拋物線",
+      "橢圓",
+      "雙曲線"
+    ],
+    "answer": 2,
+    "explain": "行星繞恆星的理想封閉軌道是橢圓；此處只辨認形狀，不計算軌道參數。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1529",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "手電筒光束邊界視為正圓錐面。兩面平行牆皆垂直光軸，離光源距離比為 $1:2$，兩圓形光斑的面積比為何？",
+    "choices": [
+      "$1:2$",
+      "$1:8$",
+      "$1:4$",
+      "$1:\\sqrt2$"
+    ],
+    "answer": 2,
+    "explain": "截圓半徑與離錐頂的距離成正比；半徑比為 $1:2$，面積比為 $1:4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1530",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "平面不通過圓錐頂點，平行於一條母線，且只截到雙圓錐的一葉。截痕為何？",
+    "choices": [
+      "圓",
+      "雙曲線",
+      "橢圓",
+      "拋物線"
+    ],
+    "answer": 3,
+    "explain": "截平面平行於母線並只截到一葉時，得到不封閉的拋物線。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1531",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "忽略空氣阻力並把重力視為固定向下，斜向拋出的球在空中的路徑是拋物線的一段。",
+    "answer": true,
+    "explain": "斜拋的水平運動均勻，鉛直運動受固定重力影響，形成拋物線形狀。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1532",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "碟形天線若採旋轉拋物面，通過其對稱軸的截面輪廓仍是拋物線的一段。",
+    "answer": true,
+    "explain": "旋轉拋物面由拋物線繞對稱軸旋轉而成，含軸截面的輪廓為拋物線。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1533",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一個不過頂點的平面，同時截到雙圓錐的上、下兩葉。整個截痕是哪種曲線？",
+    "choices": [
+      "雙曲線",
+      "拋物線",
+      "圓",
+      "橢圓"
+    ],
+    "answer": 0,
+    "explain": "雙曲線的兩支分別來自上、下兩葉，整個截痕不封閉。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1534",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "平面平行於正圓錐的軸而不包含該軸，截無限延伸的雙圓錐時，仍可能得到封閉的橢圓。",
+    "answer": false,
+    "explain": "這類平面會截到上下兩葉，得到雙曲線，不會形成封閉的橢圓。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1535",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一個不過頂點的截平面原先截出非圓橢圓，逐漸傾斜到平行於母線，且仍只截一葉。此時截痕如何改變？",
+    "choices": [
+      "由封閉橢圓變成不封閉拋物線",
+      "由封閉橢圓變成封閉圓",
+      "由封閉橢圓變成兩支雙曲線",
+      "由封閉橢圓變成兩條相交線"
+    ],
+    "answer": 0,
+    "explain": "平行於母線是橢圓與雙曲線截法之間的臨界情形，此時得到拋物線。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1536",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "理想 A 系列紙張（忽略尺寸取整）的長邊與短邊之比為何？",
+    "choices": [
+      "$3:2$",
+      "$\\sqrt2:1$",
+      "$2:1$",
+      "$\\sqrt3:1$"
+    ],
+    "answer": 1,
+    "explain": "A 系列紙張的長寬比為 $\\sqrt2$，沿長邊對半分割後仍保有這個比例。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1537",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "長方形長邊為 $L$、短邊為 $S$，沿長邊對半分成兩張；小張與原張相似。長寬比 $L/S$ 應滿足哪個式子？",
+    "choices": [
+      "$\\frac{L}{S}=\\frac{S}{L/2}$",
+      "$\\frac{L}{S}=\\frac{L/2}{S}$",
+      "$\\frac{L}{S}=\\frac{L+S}{S}$",
+      "$\\frac{L}{S}=\\frac{L}{S/2}$"
+    ],
+    "answer": 0,
+    "explain": "小張的長邊是 $S$、短邊是 $L/2$，所以兩張的長寬比應為 $L/S=S/(L/2)$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1538",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "忽略尺寸取整誤差與裁切損耗，將一張 A4 沿長邊對半分成兩張 A5，單張 A5 的面積是 A4 的一半，且兩者形狀相似。",
+    "answer": true,
+    "explain": "面積對半，長寬比則保持不變；相似不代表每條邊都變成一半。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1539",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "黃金比例常以大於 $1$ 的數 $\\varphi$ 表示，它的精確值為何？",
+    "choices": [
+      "$\\frac{\\sqrt5-1}{2}$",
+      "$\\frac{1+\\sqrt3}{2}$",
+      "$\\frac{1+\\sqrt5}{2}$",
+      "$\\frac{1+\\sqrt2}{2}$"
+    ],
+    "answer": 2,
+    "explain": "黃金比例為 $\\varphi=(1+\\sqrt5)/2$，約為 $1.618$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1540",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一線段分成長段 $a$ 與短段 $b$，滿足黃金比例。哪個式子表示「全長比長段，等於長段比短段」？",
+    "choices": [
+      "$\\frac{a+b}{a}=\\frac{b}{a}$",
+      "$\\frac{a+b}{a}=\\frac{a}{b}$",
+      "$\\frac{a}{b}=\\frac{a-b}{a}$",
+      "$\\frac{a+b}{b}=\\frac{a}{b}$"
+    ],
+    "answer": 1,
+    "explain": "黃金分割比較的是全長與長段、長段與短段兩組比例，分母不能對調。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1541",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "黃金長方形短邊為 $1$、長邊為 $\\varphi>1$。切去邊長 $1$ 的正方形，剩下長方形與原圖相似，可得哪個等式？",
+    "choices": [
+      "$\\varphi+\\varphi-1=1$",
+      "$\\varphi/(\\varphi-1)=1$",
+      "$\\varphi(\\varphi-1)=2$",
+      "$\\varphi(\\varphi-1)=1$"
+    ],
+    "answer": 3,
+    "explain": "剩下兩邊為 $1,\\varphi-1$，由相似得 $\\varphi=1/(\\varphi-1)$，整理為 $\\varphi(\\varphi-1)=1$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1542",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "海報等比例放大，長與寬各變為原來的 $3/2$ 倍，印刷面積變為原來的幾倍？",
+    "choices": [
+      "$3$",
+      "$9/4$",
+      "$27/8$",
+      "$3/2$"
+    ],
+    "answer": 1,
+    "explain": "相似圖形的面積比是長度比的平方，故為 $(3/2)^2=9/4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1543",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一個等比例放大的實心模型，體積變成原來的 $8$ 倍。它的每條邊長變成原來的幾倍？",
+    "choices": [
+      "$4$",
+      "$\\sqrt8$",
+      "$2$",
+      "$8$"
+    ],
+    "answer": 2,
+    "explain": "體積比為長度比的三次方；$2^3=8$，所以邊長變成 $2$ 倍。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1544",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "兩個實心且形狀相似的模型，較大者體積為較小者的8倍。若每單位表面積用漆量相同，大模型表面用漆量是小模型的幾倍？",
+    "choices": [
+      "$16$",
+      "$4$",
+      "$8$",
+      "$2$"
+    ],
+    "answer": 1,
+    "explain": "體積比 8 對應邊長比 2；表面積比為 4，所以用漆量也是 4 倍。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1545",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "單點透視圖中，所有朝同一縱深方向、垂直於畫面且不通過視點的平行直線，其投影延長線都指向同一消失點。",
+    "answer": true,
+    "explain": "同一縱深方向的平行線，在單點透視中投影朝同一消失點匯聚。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1546",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "單點透視圖中的兩條水平線，即使在實物中平行於畫面，延長後仍會相交於縱深方向的消失點。",
+    "answer": false,
+    "explain": "實物中平行於畫面的水平線，投影仍互相平行，不朝縱深消失點匯聚。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1547",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "同一透視圖中，兩支等高直桿都平行於畫面，沿垂直畫面方向距視點的深度分別為 4 公尺與 12 公尺。近桿的像高是遠桿的幾倍？",
+    "choices": [
+      "$1/3$",
+      "$3$",
+      "$2$",
+      "$9$"
+    ],
+    "answer": 1,
+    "explain": "物體實際高度相同時，像高與到視點的深度成反比；此處為 12 除以 4，得 3 倍。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1548",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "同一透視圖中，甲桿高 2 公尺、乙桿高 3 公尺，皆平行畫面且像高相同。沿垂直畫面方向，甲距視點深度為 4 公尺，乙的深度為多少公尺？",
+    "choices": [
+      "$4$",
+      "$6$",
+      "$8/3$",
+      "$12$"
+    ],
+    "answer": 1,
+    "explain": "像高由實高與深度的比決定；乙實高是甲的 1.5 倍，深度也須為 1.5 倍，即 6 公尺。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1549",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。球半徑 $R$，東經 $\\phi$、北緯 $\\theta$ 的坐標為何？",
+    "choices": [
+      "$(R\\cos\\phi,R\\sin\\phi,R\\sin\\theta)$",
+      "$(R\\sin\\theta\\cos\\phi,R\\sin\\theta\\sin\\phi,R\\cos\\theta)$",
+      "$(R\\cos\\theta\\sin\\phi,R\\cos\\theta\\cos\\phi,R\\sin\\theta)$",
+      "$(R\\cos\\theta\\cos\\phi,R\\cos\\theta\\sin\\phi,R\\sin\\theta)$"
+    ],
+    "answer": 3,
+    "explain": "先投影至赤道面得半徑 $R\\cos\\theta$，再依經度分成 $x,y$；高度為 $R\\sin\\theta$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1550",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。半徑為 $3$，赤道上東經 $90^\\circ$ 的點為何？",
+    "choices": [
+      "$(0,0,3)$",
+      "$(0,-3,0)$",
+      "$(3,0,0)$",
+      "$(0,3,0)$"
+    ],
+    "answer": 3,
+    "explain": "赤道上的高度為零；東經 90 度位在正 y 軸，距原點為 3。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1551",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。半徑為 $R$ 時，北極的坐標仍可能因所標經度不同而改變。",
+    "answer": false,
+    "explain": "北極固定是 $(0,0,R)$。兩極的經度無法唯一指定，但點的位置不會改變。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1552",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。半徑為 $2$，北緯 $60^\\circ$、經度 $0^\\circ$ 的點為何？",
+    "choices": [
+      "$(1,0,\\sqrt3)$",
+      "$(0,1,\\sqrt3)$",
+      "$(1,\\sqrt3,0)$",
+      "$(\\sqrt3,0,1)$"
+    ],
+    "answer": 0,
+    "explain": "經度為零所以 $y=0$；$x=2\\cos60^\\circ=1$，$z=2\\sin60^\\circ=\\sqrt3$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1553",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。半徑為 $4$，北緯 $30^\\circ$、東經 $60^\\circ$ 的點為何？",
+    "choices": [
+      "$(\\sqrt3,3,2\\sqrt3)$",
+      "$(3,\\sqrt3,2)$",
+      "$(1,\\sqrt3,2\\sqrt3)$",
+      "$(\\sqrt3,3,2)$"
+    ],
+    "answer": 3,
+    "explain": "赤道投影半徑為 $2\\sqrt3$，乘 $\\cos60^\\circ,\\sin60^\\circ$ 得 $\\sqrt3,3$；高度為 $2$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1554",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "半徑為 $2$ 的球面上，甲乙都在南緯 $30^\\circ$，分居東經與西經 $60^\\circ$。兩點間穿過球內的直線距離為何？",
+    "choices": [
+      "$1$",
+      "$2\\sqrt3$",
+      "$3$",
+      "$4$"
+    ],
+    "answer": 2,
+    "explain": "緯圈半徑為 $\\sqrt3$；兩點的東西分量為 $\\pm\\sqrt3\\sin60^\\circ=\\pm3/2$，其餘分量相同，故距離為 $3$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1555",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。球上一點的 $x<0,y>0,z>0$，它位於哪個範圍？",
+    "choices": [
+      "北半球、東經 0 度到 90 度之間",
+      "南半球、西經 90 度到 180 度之間",
+      "南半球、東經 90 度到 180 度之間",
+      "北半球、東經 90 度到 180 度之間"
+    ],
+    "answer": 3,
+    "explain": "z 為正表示北半球；赤道面投影在第二象限，對應東經 90 度到 180 度之間。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1556",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。半徑為 $2$，點 $(1,\\sqrt3,0)$ 的經緯度為何？",
+    "choices": [
+      "赤道、東經 $60^\\circ$",
+      "北緯 $60^\\circ$、經度 $0^\\circ$",
+      "赤道、東經 $30^\\circ$",
+      "赤道、西經 $60^\\circ$"
+    ],
+    "answer": 0,
+    "explain": "$z=0$ 表示赤道，$x/R=1/2$、$y/R=\\sqrt3/2$，對應東經 $60^\\circ$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1557",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。同一經度、南北緯度數相同的兩點，$x,y$ 坐標相同而 $z$ 坐標互為相反數。",
+    "answer": true,
+    "explain": "餘弦不因緯度正負改變，正弦則變號，因此只有 $z$ 分量反號。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1558",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "球心為原點，赤道面為 $xy$ 平面，本初子午線赤道點在正 $x$ 軸，東經朝正 $y$ 軸，北極在正 $z$ 軸。同在北緯 $30^\\circ$、分居東經與西經 $60^\\circ$ 的兩點，三個坐標都互為相反數。",
+    "answer": false,
+    "explain": "這兩點只有 $y$ 互為相反數，$x$ 與 $z$ 坐標相同；它們並非對蹠點。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1559",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "球面上甲點在北緯 $30^\\circ$、東經 $60^\\circ$，其對蹠點的經緯度為何？",
+    "choices": [
+      "南緯 $30^\\circ$、西經 $120^\\circ$",
+      "南緯 $30^\\circ$、西經 $60^\\circ$",
+      "北緯 $30^\\circ$、西經 $120^\\circ$",
+      "南緯 $60^\\circ$、東經 $120^\\circ$"
+    ],
+    "answer": 0,
+    "explain": "對蹠點的三個坐標皆反號，所以南北緯對調、經度相差 $180^\\circ$，即西經 $120^\\circ$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1560",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "本金為 $1$，年利率為 $100\\%$，一年平均計息 $n$ 次的年末金額為 $(1+1/n)^n$。當計息分得很細，金額最接近哪個數？",
+    "choices": [
+      "$2.718$",
+      "$10$",
+      "$1$",
+      "$2$"
+    ],
+    "answer": 0,
+    "explain": "$(1+1/n)^n$ 隨計息次數增加而趨近 $e\\approx2.718$，不需使用微積分求值。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1561",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "固定本金與正的名目年利率，一年內複利計息次數越多，年末金額就一定能超過任意指定的金額。",
+    "answer": false,
+    "explain": "計息次數增加時金額會趨近連續複利的有限金額 $Pe^r$，不會無上限增加。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1562",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "記號 $\\ln x$ 表示哪一個底數的對數？",
+    "choices": [
+      "$2$",
+      "$10$",
+      "$e$",
+      "$x$"
+    ],
+    "answer": 2,
+    "explain": "$\\ln$ 是自然對數的記號，底數是 $e\\approx2.718$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1563",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "自然對數滿足 $\\ln e=1$。",
+    "answer": true,
+    "explain": "由 $e^1=e$，以 $e$ 為底的對數 $\\ln e$ 就是 $1$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1564",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一筆投資的期末金額 $A$ 與本金 $P$ 滿足 $\\ln(A/P)=\\ln1.2$。這段期間的總報酬率為何？",
+    "choices": [
+      "$120\\%$",
+      "$12\\%$",
+      "$1.2\\%$",
+      "$20\\%$"
+    ],
+    "answer": 3,
+    "explain": "自然對數互逆得 $A/P=1.2$，總報酬率為 $1.2-1=20\\%$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1565",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "本金 $P$ 元，以固定連續年利率 $5\\%$ 計息，不另存取。經過 $t$ 年的金額應如何表示？",
+    "choices": [
+      "$P(1.05)^t$",
+      "$P(1+0.05t)$",
+      "$Pe^{5t}$",
+      "$Pe^{0.05t}$"
+    ],
+    "answer": 3,
+    "explain": "連續複利模型為 $Pe^{rt}$，年利率 $5\\%$ 要以小數 $r=0.05$ 代入。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1566",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "本金為 $100$ 元，以連續年利率 $12\\%$ 計息，經過半年後的金額為何？",
+    "choices": [
+      "$100e^{0.12}$",
+      "$100(1.12)$",
+      "$100e^{0.06}$",
+      "$100e^{0.24}$"
+    ],
+    "answer": 2,
+    "explain": "年利率配上以年為單位的時間，$rt=0.12\\times0.5=0.06$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1567",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "不另存取的帳戶，以連續年利率 $r=\\ln2$ 計息。三年後金額為原本金的幾倍？",
+    "choices": [
+      "$6$",
+      "$3$",
+      "$2$",
+      "$8$"
+    ],
+    "answer": 3,
+    "explain": "三年倍率為 $e^{3\\ln2}=(e^{\\ln2})^3=2^3=8$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1568",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "連續年利率為 $7\\%$，不另存取。取 $\\ln2\\approx0.693$，本金約幾年加倍？",
+    "choices": [
+      "$4.95$ 年",
+      "$19.8$ 年",
+      "$9.9$ 年",
+      "$14.3$ 年"
+    ],
+    "answer": 2,
+    "explain": "加倍時間為 $\\ln2/r\\approx0.693/0.07=9.9$ 年。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1569",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "固定正的連續年利率提高為原來的兩倍，不另存取時，本金的加倍時間也提高為原來的兩倍。",
+    "answer": false,
+    "explain": "加倍時間與連續利率成反比；利率加倍，加倍時間會縮為原來的一半。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1570",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一筆存款以固定連續年利率計息，預計 $10$ 年加倍。取 $\\ln2\\approx0.693$，連續年利率約為多少？",
+    "choices": [
+      "$14.4\\%$",
+      "$0.693\\%$",
+      "$10\\%$",
+      "$6.93\\%$"
+    ],
+    "answer": 3,
+    "explain": "由 $10r=\\ln2$，得 $r\\approx0.0693=6.93\\%$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1571",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "一筆本金先以連續年利率 $10\\%$ 計息 $2$ 年，再以 $5\\%$ 計息 $2$ 年，途中不另存取。期末金額是本金的幾倍？",
+    "choices": [
+      "$e^{0.15}$",
+      "$e^{0.4}$",
+      "$e^{0.3}$",
+      "$e^{0.2}$"
+    ],
+    "answer": 2,
+    "explain": "分段成長倍率相乘，為 $e^{0.1\\times2}e^{0.05\\times2}=e^{0.3}$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1572",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "帳戶以連續年利率 $r=\\ln4$ 計息。起初存入 $100$ 元，半年後再存入 $100$ 元，其他時間無存取。一年後共有多少元？",
+    "choices": [
+      "$400$ 元",
+      "$600$ 元",
+      "$500$ 元",
+      "$800$ 元"
+    ],
+    "answer": 1,
+    "explain": "首筆一年後為 $100e^{\\ln4}=400$；後筆只計半年，為 $100e^{(\\ln4)/2}=200$，合計 $600$ 元。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1573",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "相同本金與相同正名目年利率下，連續複利的一年利息一定高於一年只計息一次者。",
+    "answer": true,
+    "explain": "設本金為 $P$、正名目年利率為 $r$。兩者本利和分別為 $Pe^r$ 與 $P(1+r)$，前者較大，故利息也較多。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1574",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "甲有 $100$ 元、乙有 $200$ 元，連續年利率各為 $4\\%,2\\%$，均不另存取。取 $\\ln2\\approx0.693$，甲約幾年追上乙？",
+    "choices": [
+      "$69.3$ 年",
+      "$17.325$ 年",
+      "$34.65$ 年",
+      "$50$ 年"
+    ],
+    "answer": 2,
+    "explain": "由 $100e^{0.04t}=200e^{0.02t}$ 得 $e^{0.02t}=2$，故 $t\\approx0.693/0.02=34.65$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1575",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "某數量第一年增加 $25\\%$，第二年增加 $80\\%$。若改成兩年都以相同年成長率增加而終值相同，該年率為何？",
+    "choices": [
+      "$52.5\\%$",
+      "$50\\%$",
+      "$125\\%$",
+      "$105\\%$"
+    ],
+    "answer": 1,
+    "explain": "兩年倍率為 $1.25\\times1.8=2.25=1.5^2$，故平均年成長率為 $50\\%$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1576",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "某地人口由 $1000$ 人增至 $1728$ 人，共經過三年。若每年成長率視為相同，平均年成長率為何？",
+    "choices": [
+      "$72.8\\%$",
+      "$24.27\\%$",
+      "$20\\%$",
+      "$12\\%$"
+    ],
+    "answer": 2,
+    "explain": "三年總倍率為 $1.728=1.2^3$，每年倍率為 $1.2$，所以平均年成長率是 $20\\%$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1577",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "某商品先漲價 $20\\%$，再降價 $20\\%$，最後價格低於原價。",
+    "answer": true,
+    "explain": "最後倍率為 $1.2\\times0.8=0.96$，是原價的 $96\\%$。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1578",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "某指數一年下跌 $20\\%$。若下一年恰好回到下跌前的數值，第二年須上漲多少？",
+    "choices": [
+      "$40\\%$",
+      "$16\\%$",
+      "$20\\%$",
+      "$25\\%$"
+    ],
+    "answer": 3,
+    "explain": "原值看作 $100$，跌至 $80$ 後須增加 $20$；$20/80=25\\%$。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1579",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "兩年的年成長率分別為 $50\\%$ 與 $-40\\%$，其算術平均為正，因此平均年成長率也是正的。",
+    "answer": false,
+    "explain": "兩年倍率為 $1.5\\times0.6=0.9<1$，幾何平均倍率小於 $1$，平均年成長率是負的。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1580",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "某數量兩年後回到起始值，且過程中的數量皆為正。用等效固定年成長率描述這兩年，平均年成長率為何？",
+    "choices": [
+      "$0\\%$",
+      "$1\\%$",
+      "$50\\%$",
+      "$100\\%$"
+    ],
+    "answer": 0,
+    "explain": "終值等於初值，兩年總倍率為 1，等效每年倍率也是 1，所以平均年成長率為零。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1581",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "某數量前兩年每年成長 $10\\%$，後一年成長 $20\\%$。三年的平均年成長率為何？",
+    "choices": [
+      "$\\sqrt{1.1\\times1.2}-1$",
+      "$\\sqrt[3]{1.1^2\\times1.2}-1$",
+      "$\\sqrt[3]{1.1\\times1.2}-1$",
+      "$(10\\%+20\\%)/2$"
+    ],
+    "answer": 1,
+    "explain": "前段占兩年，倍率 $1.1$ 要乘兩次；三年總倍率取三次方根，再減 $1$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1582",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "甲第一年成長 10%、第二年成長 20%；乙順序相反。兩者起始數量相同，且中途不增減投入。兩年的平均年成長率如何比較？",
+    "choices": [
+      "須先知道起始數量",
+      "兩者相等",
+      "乙較高",
+      "甲較高"
+    ],
+    "answer": 1,
+    "explain": "總倍率都是 1.1 乘以 1.2；乘法順序不影響總倍率，也不影響等效平均年成長率。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1583",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "地震規模差為 $\\Delta M$ 時，能量比近似 $10^{1.5\\Delta M}$。若兩組地震的規模差相同，較大者相對較小者的能量如何變化？",
+    "choices": [
+      "能量乘上相同倍率",
+      "能量增加相同數值",
+      "能量除以規模差值",
+      "能量乘上規模比值"
+    ],
+    "answer": 0,
+    "explain": "規模差相同，$10^{1.5\\Delta M}$ 的值就相同，因此能量比相同，不是能量差相同。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1584",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "依近似模型，地震規模差 $\\Delta M$ 時能量比為 $10^{1.5\\Delta M}$。規模 $7$ 的能量約是規模 $5$ 的幾倍？",
+    "choices": [
+      "$10000$",
+      "$1000$",
+      "$100$",
+      "$63.2$"
+    ],
+    "answer": 1,
+    "explain": "規模差為 $2$，能量比為 $10^{1.5\\times2}=10^3=1000$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1585",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "能量比近似 $10^{1.5\\Delta M}$。兩次同規模地震的能量總和，約等於規模比其中一次大多少的單次地震？取 $\\log2\\approx0.30$。",
+    "choices": [
+      "$0.2$",
+      "$0.3$",
+      "$0.45$",
+      "$2$"
+    ],
+    "answer": 0,
+    "explain": "合計能量是單次的 $2$ 倍；$1.5\\Delta M=\\log2\\approx0.30$，所以 $\\Delta M\\approx0.2$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1586",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "一筆投資的本金 $P>0$、期末金額 $A>0$，但對數報酬 $\\ln(A/P)$ 仍可能為負。",
+    "answer": true,
+    "explain": "例如期末剩本金的一半，$A/P=1/2>0$，但 $\\ln(1/2)<0$，表示這段期間虧損。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1587",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "理財報表記錄各期對數報酬 $\\ln(A_{\\mathrm{end}}/A_{\\mathrm{start}})$。不另存取時，兩期分別為 $0.1,0.2$，整段對數報酬為何？",
+    "choices": [
+      "$0.15$",
+      "$0.02$",
+      "$0.3$",
+      "$1.32$"
+    ],
+    "answer": 2,
+    "explain": "相鄰期間的成長倍率相乘，取自然對數後可相加，整段對數報酬為 0.1 加 0.2。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1588",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "帳戶一年後金額倍率為 $e^{0.08}$，同年物價倍率為 $e^{0.03}$。按購買力計算，期末是期初的幾倍？",
+    "choices": [
+      "$e^{0.08}$",
+      "$e^{0.05}$",
+      "$e^{0.11}$",
+      "$e^{0.08}-e^{0.03}$"
+    ],
+    "answer": 1,
+    "explain": "購買力倍率為金額倍率除以物價倍率，即 $e^{0.08}/e^{0.03}=e^{0.05}$。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1589",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "列聯表的列分「戴眼鏡／未戴」，行分「搭公車／未搭」。其中「未戴」列與「搭公車」行交格的次數為 8，這 8 人代表什麼？",
+    "choices": [
+      "未戴眼鏡且未搭公車的人",
+      "未戴眼鏡或搭公車的人",
+      "未戴眼鏡且搭公車的人",
+      "戴眼鏡且未搭公車的人"
+    ],
+    "answer": 2,
+    "explain": "列與行交格同時滿足該列及該行的條件，對應兩事件的交集。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1590",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "列聯表把學生依「有無參加社團」與「有無住宿」分類；參加且住宿 6 人、參加未住宿 4 人、未參加且住宿 3 人、兩者皆否 7 人。參加社團共有幾人？",
+    "choices": [
+      "$9$ 人",
+      "$10$ 人",
+      "$6$ 人",
+      "$13$ 人"
+    ],
+    "answer": 1,
+    "explain": "參加社團這一列須包含住宿與未住宿，共 6 加 4 等於 10 人。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1591",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "用「有無參加社團」與「有無住宿」填2×2列聯表。一位同時參加兩個社團且住宿的學生，應如何計次？",
+    "choices": [
+      "在「參加且住宿」格計2人",
+      "在「參加且住宿」格計1人",
+      "在「參加」列的兩格各計1人",
+      "在「住宿」行的兩格各計1人"
+    ],
+    "answer": 1,
+    "explain": "分類只問有無參加，社團個數不影響計次；每位學生只落在一個交格，計1人。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1592",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "列聯表記錄：參加且通過 12 人、參加未通過 8 人、未參加且通過 6 人、兩者皆否 14 人。從參加者等機率選一人，通過的機率為何？",
+    "choices": [
+      "$3/10$",
+      "$9/20$",
+      "$3/5$",
+      "$2/3$"
+    ],
+    "answer": 2,
+    "explain": "已知參加，分母只取參加這一列的 12 加 8 人，故為 12 除以 20，即 3/5。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1593",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "列聯表四格為：甲且乙 6、甲且非乙 4、非甲且乙 3、非甲且非乙 7。隨機選一人，已知甲時為乙的機率，等於已知乙時為甲的機率。",
+    "answer": false,
+    "explain": "前者為 6/10，後者為 6/9；交格相同，但條件不同導致分母不同。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1594",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "將一張2×2列聯表的每格次數都乘以相同正整數，兩分類原本的獨立或不獨立關係會保持不變。",
+    "answer": true,
+    "explain": "四格、邊際合計及總人數都同比例放大，各種機率與條件比例保持不變，因此獨立性不變。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1595",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "40 人的列聯表中，甲共 10 人、乙共 16 人。等機率選一人，若甲乙獨立，「甲且非乙」應有幾人？",
+    "choices": [
+      "$6$ 人",
+      "$4$ 人",
+      "$10$ 人",
+      "$24$ 人"
+    ],
+    "answer": 0,
+    "explain": "獨立時甲組的乙比例也是 16/40，甲且乙有 4 人；甲且非乙為 10 減 4，得 6 人。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1596",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "列聯表的四格次數依序為：甲且乙 4、僅甲 6、僅乙 8、兩者皆否 2。改畫文氏圖時，兩圓聯集內共有幾人？",
+    "choices": [
+      "$18$ 人",
+      "$14$ 人",
+      "$20$ 人",
+      "$22$ 人"
+    ],
+    "answer": 0,
+    "explain": "聯集包含交集、僅甲、僅乙三格，共 4 加 6 加 8 等於 18 人。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1597",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "mc",
+    "q": "2×2 列聯表把 20 人依有無搭車分列、依有無住宿分行。兩個列合計之和與兩個行合計之和都是 20；若再把這四個邊際合計相加，每人被算幾次？",
+    "choices": [
+      "$2$ 次",
+      "$1$ 次",
+      "$4$ 次",
+      "$3$ 次"
+    ],
+    "answer": 0,
+    "explain": "每個人恰屬於一列與一行，列合計計入一次，行合計又計入一次，共兩次。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1598",
+    "subject": "math",
+    "topic": "數B 專屬主題",
+    "type": "tf",
+    "q": "兩班列聯表四格依序為甲乙均是、僅甲、僅乙、兩者均否，次數為 $(1,1,1,1)$ 與 $(4,2,2,1)$。按人數比例計算機率，各班兩事件獨立，合併後卻不獨立。",
+    "answer": true,
+    "explain": "各班四格交叉乘積分別相等：$1\\times1=1\\times1$、$4\\times1=2\\times2$；合併後 $5\\times2\\ne3\\times3$，故不獨立。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "math-1599",
+    "subject": "math",
+    "topic": "三角比",
+    "type": "mc",
+    "q": "雷達以極坐標記錄兩點 $P=(2,210^\\circ)$、$Q=(5,210^\\circ)$，半徑單位為公里。$P,Q$ 之間的直線距離為多少公里？",
+    "choices": [
+      "$3$",
+      "$7$",
+      "$\\sqrt{29}$",
+      "$\\sqrt{21}$"
+    ],
+    "answer": 0,
+    "explain": "兩點的角度相同，位於從原點出發的同一射線上；距離為兩個半徑之差 $5-2=3$ 公里。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1600",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "空間向量 $\\vec a=(1,-1,2)$、$\\vec b=(0,2,-1)$，則 $2\\vec a+\\vec b$ 為何？",
+    "choices": [
+      "$(2,0,5)$",
+      "$(2,0,3)$",
+      "$(2,-4,5)$",
+      "$(2,2,3)$"
+    ],
+    "answer": 1,
+    "explain": "先得 $2\\vec a=(2,-2,4)$，再將對應分量相加，得 $(2,0,3)$。",
+    "formula": true,
+    "level": 1
+  },
+  {
+    "id": "math-1601",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "四面體 $OABC$ 中，$O=(0,0,0)$、$A=(2,0,0)$、$B=(0,2,0)$、$C=(0,0,2)$。$M,N$ 分別為 $OA,BC$ 中點，則 $\\overrightarrow{MN}$ 為何？",
+    "choices": [
+      "$(1,1,1)$",
+      "$(-2,2,2)$",
+      "$(-1,1,1)$",
+      "$(1,-1,-1)$"
+    ],
+    "answer": 2,
+    "explain": "由係數積與相加得 $M=\\frac12(O+A)=(1,0,0)$、$N=\\frac12(B+C)=(0,1,1)$，故 $\\overrightarrow{MN}=N-M=(-1,1,1)$。",
+    "formula": true,
+    "level": 3
+  },
+  {
+    "id": "math-1602",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "tf",
+    "q": "三個非零空間向量相加為零向量，就必能以它們為三邊向量，排成面積大於 $0$ 的三角形。",
+    "answer": false,
+    "explain": "例如 $(1,0,0),(1,0,0),(-2,0,0)$ 相加為零，卻都沿同一直線，依序首尾相接後三個頂點共線，面積為零。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1603",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "無人機的位移指令為空間向量 $\\vec u,\\vec v,\\vec w$，其中 $\\vec u,\\vec v$ 非零且不平行，$\\vec w=\\vec u+\\vec v$。指令 $2\\vec w-\\vec u$ 可改寫成何者？",
+    "choices": [
+      "$\\vec u+\\vec v$",
+      "$2\\vec u+\\vec v$",
+      "$2\\vec u+2\\vec v$",
+      "$\\vec u+2\\vec v$"
+    ],
+    "answer": 3,
+    "explain": "代入後為 $2(\\vec u+\\vec v)-\\vec u=\\vec u+2\\vec v$；係數須同時乘入括號中的兩個向量。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1604",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "mc",
+    "q": "空間向量 $\\vec u,\\vec v,\\vec w$ 各自的三個分量相加都等於 $1$。向量 $2\\vec u-\\vec v+3\\vec w$ 的三個分量相加為何？",
+    "choices": [
+      "$4$",
+      "$1$",
+      "$6$",
+      "$0$"
+    ],
+    "answer": 0,
+    "explain": "各分量先作線性組合再相加，等於先求各向量的分量和再組合，故為 $2\\times1-1+3\\times1=4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1605",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "tf",
+    "q": "由長方體同一頂點出發、位於三個相鄰面上的三條面對角線，其向量和必為由該頂點指向相對頂點的空間對角線向量的兩倍。",
+    "answer": true,
+    "explain": "每條鄰邊向量都在兩條面對角線中出現，因此相加時各鄰邊向量都計入兩次，恰為空間對角線向量的兩倍。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1606",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "三階行列式 $\\begin{vmatrix}1&0&1\\\\0&2&0\\\\1&0&3\\end{vmatrix}$ 的值為何？",
+    "choices": [
+      "$6$",
+      "$4$",
+      "$8$",
+      "$2$"
+    ],
+    "answer": 1,
+    "explain": "沿第二橫列展開，只有中央元素 $2$ 有貢獻，得 $2(1\\times3-1\\times1)=4$。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1607",
+    "subject": "math",
+    "topic": "空間向量與平面直線",
+    "type": "tf",
+    "q": "若三重積 $T=\\vec a\\cdot(\\vec b\\times\\vec c)\\ne0$，則循環交換後的 $\\vec b\\cdot(\\vec c\\times\\vec a)$ 仍可能與 $T$ 異號。",
+    "answer": false,
+    "explain": "循環交換相當於對調兩次，三階行列式不變；因此 $\\vec b\\cdot(\\vec c\\times\\vec a)=T$，符號相同。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1608",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "下列哪項條件足以保證三階行列式的值為 $0$？",
+    "choices": [
+      "主對角線的三個元素皆為 $0$",
+      "三個橫列的元素和皆為 $1$",
+      "三個橫列的元素和皆為 $0$",
+      "主對角線的三個元素皆為 $1$"
+    ],
+    "answer": 2,
+    "explain": "三個直行向量相加等於零向量，因此可用其中兩個表示第三個，行列式為零。對角線全為零或全為一，均無此保證。",
+    "formula": true,
+    "level": 2
+  },
+  {
+    "id": "math-1609",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "下列三式任取兩式聯立都有解：$x+y=1$、$y+z=1$、$x+2y+z=3$。三式一起聯立時，解的情況為何？",
+    "choices": [
+      "恰有一組解",
+      "恰有兩組解",
+      "有無窮多組解",
+      "沒有解"
+    ],
+    "answer": 3,
+    "explain": "前兩式相加得 $x+2y+z=2$，與第三式矛盾，故沒有解；任兩式有解不能保證三式有共同解。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1610",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "tf",
+    "q": "將三元一次聯立方程組的前兩式同時換成它們的和與差，第三式不變，所得方程組仍與原方程組同解。",
+    "answer": true,
+    "explain": "新前兩式相加再除以 $2$，可還原原第一式；相減再除以 $2$，可還原原第二式，因此變換可逆且解集合相同。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1611",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "某三元一次聯立方程組有兩組解 $(1,0,2)$ 及 $(3,2,0)$。下列何者必為它的解？",
+    "choices": [
+      "$(2,1,1)$",
+      "$(4,2,2)$",
+      "$(2,2,-2)$",
+      "$(-2,-2,2)$"
+    ],
+    "answer": 0,
+    "explain": "把兩組解的對應分量取平均，每個一次方程式的左側也取平均，仍等於原常數，故 $(2,1,1)$ 必為解。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1612",
+    "subject": "math",
+    "topic": "矩陣",
+    "type": "mc",
+    "q": "方程組 $x+y+z=6$、$x-y=0$、$2x+2y+2z=12$ 有無窮多組解。$2x+z$ 的值為何？",
+    "choices": [
+      "$3$",
+      "$6$",
+      "$0$",
+      "$12$"
+    ],
+    "answer": 1,
+    "explain": "第一式加上第二式，得 $2x+z=6$。雖然各未知數未唯一確定，這個組合的值仍固定。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1613",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "甲依對市場的瞭解，估計新商品熱賣機率為七成；乙依同條件大量試驗的相對次數，估計零件故障機率為一成。甲、乙依序屬於哪類機率？",
+    "choices": [
+      "客觀機率、客觀機率",
+      "主觀機率、主觀機率",
+      "主觀機率、客觀機率",
+      "客觀機率、主觀機率"
+    ],
+    "answer": 2,
+    "explain": "甲依個人資訊與判斷給出主觀機率；乙由可重複試驗的相對次數估計客觀機率。分類依據是估計來源。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1614",
+    "subject": "math",
+    "topic": "機率",
+    "type": "tf",
+    "q": "估計主觀機率時，歷史資料與專業知識可作為個人判斷的依據。",
+    "answer": true,
+    "explain": "主觀機率來自個人根據已有資訊作出的判斷；這些資訊可以包含歷史資料、經驗與專業知識。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1615",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "小志綜合球隊狀況，主觀估計獲勝機率為 $0.6$；得知主力缺席後改為 $0.4$。這次修改最直接反映什麼？",
+    "choices": [
+      "原估計變動，代表主觀機率的使用方式有誤",
+      "新資訊可查證，代表新估計已是客觀機率",
+      "調降獲勝機率，代表對球隊的支持程度降低",
+      "因納入新資訊，重新調整個人的判斷"
+    ],
+    "answer": 3,
+    "explain": "主觀機率反映當下資訊下的判斷，可隨新資訊調整；前後估計不同不構成機率公理的矛盾。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "math-1616",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "在相同條件下測試兩批零件：第一批 $10$ 件中 $2$ 件故障，第二批 $30$ 件中 $18$ 件故障。合併資料，以相對次數估計故障機率為何？",
+    "choices": [
+      "$\\frac12$",
+      "$\\frac25$",
+      "$\\frac35$",
+      "$\\frac15$"
+    ],
+    "answer": 0,
+    "explain": "合併後故障 $2+18=20$ 件、共 $10+30=40$ 件，估計為 $20/40=1/2$；兩批件數不同，不能直接平均各批故障比例。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "math-1617",
+    "subject": "math",
+    "topic": "機率",
+    "type": "mc",
+    "q": "小玲希望喜愛的隊伍奪冠，卻因傷兵較多只主觀估計奪冠機率為兩成。這裡的「兩成」表達什麼？",
+    "choices": [
+      "對這支隊伍的喜愛程度",
+      "對奪冠會發生的相信程度",
+      "該隊歷屆奪冠的相對次數",
+      "相同條件實驗的奪冠比例"
+    ],
+    "answer": 1,
+    "explain": "主觀機率量化對事件會發生的相信程度；希望結果發生的強烈程度與機率估計是兩回事。",
+    "formula": false,
+    "level": 1
   }
 ]

@@ -2,12 +2,13 @@
 // 題庫格式驗證：node scripts/validate-questions.mjs [--partial] [檔案...]
 // 不帶檔案時檢查 src/data/questions/ 底下全部 JSON。有錯誤時 exit code 1。
 // topic 必須是 src/units.js 列出的單元，且每個單元至少 MIN_PER_UNIT 題。
+// 跨單元綜合的題目必須有 links（結合的 2–3 個同科單元），其他題目不可有。
 // --partial：只檢查格式，不檢查單元題數（用來驗證還沒併入題庫的新題檔，檔名仍須是 <科目>.json）。
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SUBJECT_BY_ID, SUBJECTS } from '../src/subjects.js';
-import { MIN_PER_UNIT, UNITS } from '../src/units.js';
+import { CROSS_UNIT, MIN_PER_UNIT, UNITS } from '../src/units.js';
 import { checkText } from './text-check.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -16,7 +17,7 @@ const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links']);
 
 const args = process.argv.slice(2);
 const partial = args.includes('--partial');
@@ -72,6 +73,14 @@ for (const file of files) {
     if (typeof it.topic !== 'string' || !it.topic.trim()) err('缺少 topic');
     else if (!units.includes(it.topic)) err(`topic「${it.topic}」不在 src/units.js 的 ${subject} 單元清單裡`);
     else stats.topics.set(it.topic, stats.topics.get(it.topic) + 1);
+    if (it.topic === CROSS_UNIT) {
+      const links = it.links;
+      if (!Array.isArray(links) || links.length < 2 || links.length > 3) err(`${CROSS_UNIT}的題目要有 links：結合的 2–3 個單元`);
+      else {
+        for (const u of links) if (u === CROSS_UNIT || !units.includes(u)) err(`links 的「${u}」不是 ${subject} 的一般單元`);
+        if (new Set(links).size !== links.length) err('links 有重複的單元');
+      }
+    } else if (it.links !== undefined) err(`只有${CROSS_UNIT}的題目可以有 links`);
     if (typeof it.formula !== 'boolean') err('formula 必須是 true/false');
     else if (it.formula) stats.formula++;
     if (![1, 2, 3].includes(it.level)) err('level 必須是 1、2 或 3');
