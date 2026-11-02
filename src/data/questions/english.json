@@ -16949,5 +16949,1593 @@
     "explain": "continuity 是「延續」；保留舊歌是文化傳承，加入新舞是文化變遷，兩者能並存。",
     "formula": false,
     "level": 2
+  },
+  {
+    "id": "english-1072",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Use running water to ____ the soap off the cup without rubbing or soaking it.",
+    "choices": [
+      "rinse",
+      "soak",
+      "polish",
+      "wipe"
+    ],
+    "answer": 0,
+    "explain": "流動清水洗去肥皂，且排除搓擦與浸泡，應選rinse＝沖洗；soak＝浸泡，wipe＝擦拭，polish＝磨亮。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1073",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "To mail the scarf flat, ____ it once along the middle.",
+    "choices": [
+      "fold",
+      "stretch",
+      "twist",
+      "roll"
+    ],
+    "answer": 0,
+    "explain": "flat與along the middle提示沿中線對折；fold＝摺疊，roll＝捲起，twist＝扭轉。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1074",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The lid was too ____; water escaped around its edge.",
+    "choices": [
+      "loose",
+      "stiff",
+      "smooth",
+      "tight"
+    ],
+    "answer": 0,
+    "explain": "水從蓋子邊緣流出，表示沒有鎖緊；loose＝鬆的，tight＝緊的，stiff＝僵硬的。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1075",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The river is ____ here; I can stand with the water below my knees.",
+    "choices": [
+      "narrow",
+      "mild",
+      "smooth",
+      "shallow"
+    ],
+    "answer": 3,
+    "explain": "水位低於膝蓋是在說深度；shallow＝淺的，narrow＝狹窄的，smooth＝平滑的。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1076",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "Their friendship grew warmer after a joke ended months of silence. 'Warmer' means ____.",
+    "choices": [
+      "more public",
+      "closer",
+      "more formal",
+      "older"
+    ],
+    "answer": 1,
+    "explain": "笑話打破長期沉默，使友誼更親近；warmer在此＝更融洽的，不是更公開、正式或歷史更久。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1077",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The printer swallowed my last sheet and stopped. 'Swallowed' means ____.",
+    "choices": [
+      "pushed it out",
+      "pulled it inside",
+      "cut it in half",
+      "printed it twice"
+    ],
+    "answer": 1,
+    "explain": "印表機把紙吞進去後停住；swallow＝吞嚥，此處轉指捲入，未說印兩次或切半。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1078",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "The news hit Rosa hard; she cried all evening. Here, 'hit' describes an emotional effect.",
+    "answer": true,
+    "explain": "哭了一晚顯示消息造成情緒衝擊；hit hard＝造成沉重打擊，並非身體被打。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1079",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "The club has deep roots in town: three generations have joined. 'Roots' refers to its future plans.",
+    "answer": false,
+    "explain": "三代居民參與指向過去建立的深厚連結；roots＝根基，不是未來計畫。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1080",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The choir weathered a year without funding and kept singing. 'Weathered' means ____.",
+    "choices": [
+      "welcomed",
+      "survived",
+      "predicted",
+      "shortened"
+    ],
+    "answer": 1,
+    "explain": "仍持續唱歌表示撐過缺乏經費的時期；weather作動詞＝安然度過，funding＝經費。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1081",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Repeated insults fueled the argument, making both sides angrier. 'Fueled' means ____.",
+    "choices": [
+      "postponed",
+      "summarized",
+      "settled",
+      "intensified"
+    ],
+    "answer": 3,
+    "explain": "雙方更生氣，表示爭執被加劇；fuel＝助長，intensify＝加劇，settle＝解決。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1082",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The talks bridged the gap between the teams; they now agree. 'Bridged' means ____.",
+    "choices": [
+      "concealed",
+      "measured",
+      "widened",
+      "reduced"
+    ],
+    "answer": 3,
+    "explain": "從有分歧到同意，表示縮小差距；bridge the gap＝彌合差距，conceal＝隱藏。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1083",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Give Arun time to digest the report before asking his opinion. 'Digest' means ____.",
+    "choices": [
+      "rewrite",
+      "publish",
+      "understand",
+      "distribute"
+    ],
+    "answer": 2,
+    "explain": "先理解報告才能提出意見；digest在此＝消化、理解資訊，不是重寫或發布。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1084",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "A familiar meal routine anchored her hectic days, giving her stability. 'Anchored' means ____.",
+    "choices": [
+      "gave stability to",
+      "added variety to",
+      "provided news about",
+      "placed limits on"
+    ],
+    "answer": 0,
+    "explain": "固定用餐習慣讓忙亂生活安定下來；anchor＝使穩定，hectic＝忙亂的，stability＝穩定。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1085",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Staff screened the entries for copied work before judging them. 'Screened' means ____.",
+    "choices": [
+      "translated",
+      "ranked",
+      "examined",
+      "displayed"
+    ],
+    "answer": 2,
+    "explain": "評選前先查有無抄襲，screen＝審查；entry＝參賽作品，不是已經排名。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1086",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The review praised the acting but questioned the ending. Its approval was ____.",
+    "choices": [
+      "indifferent",
+      "qualified",
+      "hostile",
+      "enthusiastic"
+    ],
+    "answer": 1,
+    "explain": "肯定演技卻質疑結尾，表示贊同有所保留；qualified＝有保留的，enthusiastic＝熱烈的，hostile＝敵意的。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-1087",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The change raised the score from 80 to 81 out of 100, a ____ improvement.",
+    "choices": [
+      "steady",
+      "complete",
+      "marginal",
+      "dramatic"
+    ],
+    "answer": 2,
+    "explain": "只提高一分，屬小幅改善；marginal＝微小的，steady＝穩定持續的，單次變化無法判斷持續性。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1088",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Without giving evidence, the seller asserts that the vase is ancient. 'Asserts' means ____.",
+    "choices": [
+      "denies firmly",
+      "hints indirectly",
+      "checks carefully",
+      "states confidently"
+    ],
+    "answer": 3,
+    "explain": "沒有證據仍斷言是真古物；assert＝肯定地聲稱，本身不代表查證成功。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1089",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Lea dismissed the idea without discussing it. She ____ the idea.",
+    "choices": [
+      "supported",
+      "rejected",
+      "examined",
+      "delayed"
+    ],
+    "answer": 1,
+    "explain": "未討論就dismiss，表示拒絕考慮；dismiss＝摒棄、駁回，不是延後處理。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1090",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "The pass mark was 60. Niko scored 61 and said he 'barely passed.' This description fits.",
+    "answer": true,
+    "explain": "比及格線多一分是勉強及格；barely＝勉強、僅僅，barely passed仍表示通過。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1091",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A play got equal praise and criticism. Its 'mixed reviews' express a shared negative opinion.",
+    "answer": false,
+    "explain": "mixed reviews＝褒貶不一的評論，不是共同負評；praise＝稱讚，criticism＝批評。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1092",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A report calls the theft 'alleged'; no verdict is given. This wording confirms that the theft occurred.",
+    "answer": false,
+    "explain": "alleged＝被指稱的、尚未證實的，不能據此確認竊案已發生；verdict＝判決。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1093",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "Of 100 messages about the mural, 96 praised it. Describing the support as 'overwhelming' fits.",
+    "answer": true,
+    "explain": "100則留言中96則稱讚，支持比例懸殊；overwhelming＝壓倒性的，mural＝壁畫，並不表示全數贊成。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1094",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The plants grew better after watering increased. The gardener attributed their growth ____ the extra water.",
+    "choices": [
+      "by",
+      "for",
+      "with",
+      "to"
+    ],
+    "answer": 3,
+    "explain": "attribute A to B＝把A歸因於B，生長是結果，增加的水是所認定的原因。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1095",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The room had nowhere to sit, so donors furnished it ____ chairs.",
+    "choices": [
+      "of",
+      "for",
+      "with",
+      "to"
+    ],
+    "answer": 2,
+    "explain": "furnish a place with something＝為某處提供設備；房間是接受椅子的場所，donor＝捐贈者。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1096",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The two bird calls sound alike. A recording helps us distinguish one ____ the other.",
+    "choices": [
+      "from",
+      "with",
+      "for",
+      "to"
+    ],
+    "answer": 0,
+    "explain": "distinguish A from B＝區分A與B；此處以錄音辨認兩種相似鳥鳴，call＝鳴叫聲。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1097",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The parcel went to the wrong island because its label was missing. The missing label resulted ____ this error.",
+    "choices": [
+      "in",
+      "with",
+      "from",
+      "for"
+    ],
+    "answer": 0,
+    "explain": "because已明示缺少標籤是原因、誤送是結果；result in＝導致，result from＝起因於，因果方向相反。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1098",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Staff reserve the front seats ____ guests who need extra legroom.",
+    "choices": [
+      "for",
+      "with",
+      "from",
+      "by"
+    ],
+    "answer": 0,
+    "explain": "reserve something for someone＝為某人保留某物；本句主詞staff是執行者，guests是受益者；legroom＝腿部空間。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1099",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Loose wires could ____ a threat to workers walking through the workshop.",
+    "choices": [
+      "take",
+      "pose",
+      "hold",
+      "bear"
+    ],
+    "answer": 1,
+    "explain": "pose a threat to＝對……構成威脅；loose wires＝鬆脫的電線。其他動詞不構成此搭配。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1100",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "Before choosing seeds, I consulted the farmer about the soil. 'About' correctly introduces the topic.",
+    "answer": true,
+    "explain": "consult someone about something＝就某事請教某人；farmer是請教對象，soil＝土壤，是議題。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1101",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "The bakery supplies bread to schools. Here, 'to schools' identifies where the bakery gets its bread.",
+    "answer": false,
+    "explain": "supply＝供應；supply bread to schools表示供應麵包給學校，to指出接受者，並非來源。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1102",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The tent is too small, so we ruled it out for the trip. We ____.",
+    "choices": [
+      "saved it for later use",
+      "removed it from our options",
+      "chose it over the others",
+      "checked it for damage"
+    ],
+    "answer": 1,
+    "explain": "因帳篷太小而rule it out＝排除這個選項；不是暫存、檢查或選用。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1103",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The guide touched on local farming, then spent an hour on pottery. The farming topic was ____.",
+    "choices": [
+      "explained in detail",
+      "mentioned briefly",
+      "discussed throughout",
+      "left unmentioned"
+    ],
+    "answer": 1,
+    "explain": "touch on＝簡略提及；與後面花一小時談陶藝形成篇幅對比，pottery＝陶藝。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1104",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "As the cheers faded, excitement gave way to disappointment. What happened?",
+    "choices": [
+      "Excitement replaced disappointment.",
+      "Both feelings grew stronger.",
+      "Disappointment replaced excitement.",
+      "Both feelings disappeared."
+    ],
+    "answer": 2,
+    "explain": "A give way to B＝A被B取代，所以興奮轉為失望；fade＝漸弱。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1105",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "'I work tonight. Can I take a rain check on dinner?' The speaker wants to ____.",
+    "choices": [
+      "check the weather before dinner",
+      "invite more people to dinner",
+      "accept the invitation another time",
+      "change the location for tonight"
+    ],
+    "answer": 2,
+    "explain": "take a rain check＝改日再接受邀請；今晚工作是無法赴約的原因，與查天氣無關。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1106",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "The missing payment came to light during the review. This means the review kept the payment secret.",
+    "answer": false,
+    "explain": "come to light＝被發現、曝光；查核使漏款事件浮現，並非保密，payment＝款項。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1107",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "'Fine,' he said, avoiding my eyes. Reading between the lines may reveal feelings he did not state.",
+    "answer": true,
+    "explain": "read between the lines＝領會言外之意；避開目光可作推論線索，may沒有斷言他必定生氣。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1108",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Aya changes her route when roads close. Her travel plans show ____.",
+    "choices": [
+      "flexibility",
+      "flexibly",
+      "inflexible",
+      "flexible"
+    ],
+    "answer": 0,
+    "explain": "能隨封路調整行程是彈性；show後需名詞flexibility＝彈性，flexible是形容詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1109",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Bo counts every bead twice. His work is marked by ____.",
+    "choices": [
+      "precise",
+      "imprecise",
+      "precisely",
+      "precision"
+    ],
+    "answer": 3,
+    "explain": "反覆清點顯示精確；by後需名詞precision＝精確，precise＝精確的，precisely＝精確地。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1110",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "A new ramp lets wheelchairs enter. It makes the hall more ____.",
+    "choices": [
+      "accessible",
+      "accessibility",
+      "accessibly",
+      "access"
+    ],
+    "answer": 0,
+    "explain": "坡道讓輪椅可進入，make＋受詞＋形容詞，故用accessible＝可進入的；ramp＝坡道。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1111",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The fee is hidden in small print. The ad does not state it ____.",
+    "choices": [
+      "clear",
+      "clarity",
+      "clearly",
+      "clarify"
+    ],
+    "answer": 2,
+    "explain": "費用藏在小字中，未清楚說明；修飾state用副詞clearly＝清楚地，clarity＝清晰。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1112",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The three conflicting dates on the notice were ____ to readers.",
+    "choices": [
+      "confuse",
+      "confused",
+      "confusing",
+      "confusion"
+    ],
+    "answer": 2,
+    "explain": "日期衝突使讀者困惑，confusing to readers＝令讀者困惑的；confused通常搭配about，表示感到困惑。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1113",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The survey left out night workers. Their ____ weakened its findings.",
+    "choices": [
+      "exclusive",
+      "exclude",
+      "exclusively",
+      "exclusion"
+    ],
+    "answer": 3,
+    "explain": "夜班工作者被排除，their後需名詞exclusion＝排除；exclude是動詞，exclusive是形容詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1114",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "tf",
+    "q": "The scale gives different weights for the same stone. 'Unreliable' is a suitable description of the scale.",
+    "answer": true,
+    "explain": "同一石頭測出不同重量，故秤不可靠；unreliable＝不可靠的，un-在此表否定。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1115",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "tf",
+    "q": "The loss made the players lose hope. 'The players felt discouraging' correctly describes their feelings.",
+    "answer": false,
+    "explain": "球員感到灰心應用discouraged；discouraging＝令人灰心的，描述引發感受的人事物。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1116",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "I began tending this garden in May and still do it daily. Since May, I ____ it.",
+    "choices": [
+      "have been tending",
+      "had been tending",
+      "was tending",
+      "will be tending"
+    ],
+    "answer": 0,
+    "explain": "從五月持續到現在，用現在完成進行式；have been tending＝一直照料，過去完成式須另有過去基準。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1117",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "The painter arrives tomorrow; work has not started. The room ____ yet.",
+    "choices": [
+      "has not painted",
+      "has not been painted",
+      "had not been painted",
+      "will not have painted"
+    ],
+    "answer": 1,
+    "explain": "截至現在尚未動工，用has not been painted＝尚未被粉刷；房間接受動作，had not been painted則須另有過去基準。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1118",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "Last Monday, we thought the boat would arrive that Friday. The arrival is presented as ____.",
+    "choices": [
+      "a repeated event on Mondays",
+      "a completed event before Monday",
+      "a future event viewed from today",
+      "a future event viewed from Monday"
+    ],
+    "answer": 3,
+    "explain": "上週一是過去的思考時間，以當時為基準，該週五尚未到來；would arrive＝從過去觀點看將抵達。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1119",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "Ona still works here. She joined in June. 'She had worked here since June' correctly states this at present.",
+    "answer": false,
+    "explain": "敘述延續到現在應為has worked；had worked須有過去參照點，since June＝自六月以來。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1120",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "The curator packed the vase herself before noon. Which report matches?",
+    "choices": [
+      "The vase was packed by the curator before noon.",
+      "The curator received a packed vase before noon.",
+      "The vase will be packed by the curator before noon.",
+      "The curator had someone pack the vase before noon."
+    ],
+    "answer": 0,
+    "explain": "herself表親自打包，花瓶是受事者；was packed by＝被……打包，curator＝策展人；另三項改變角色、時間或執行者。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1121",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "The keys were copied by a locksmith for Ivo. This sentence identifies the locksmith as the person who copied them.",
+    "answer": true,
+    "explain": "by引出執行複製的人；locksmith＝鎖匠，for Ivo表示為Ivo製作，並非Ivo親自複製。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1122",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The chef to ____ we recommended this market now buys fish there.",
+    "choices": [
+      "which",
+      "whom",
+      "where",
+      "whose"
+    ],
+    "answer": 1,
+    "explain": "把市場推薦給主廚，主廚是to的受詞；先行詞為人，介系詞後用whom，chef＝主廚。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1123",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "This is the tiny brush with ____ the artist paints dots on shells.",
+    "choices": [
+      "whose",
+      "which",
+      "what",
+      "where"
+    ],
+    "answer": 1,
+    "explain": "畫家用這支刷子畫點，with表示工具；物的關係代名詞用which，shell＝貝殼。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1124",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "I chose another solution. Still, I thanked Ada. Join: I thanked Ada ____ I chose another solution.",
+    "choices": [
+      "so that",
+      "as soon as",
+      "even though",
+      "now that"
+    ],
+    "answer": 2,
+    "explain": "雖選別的方法仍道謝，是讓步關係；even though＝雖然，so that＝為了，as soon as＝一……就。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1125",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "tf",
+    "q": "Keep the stage lights off until the music starts. This instruction means turning them on before the music starts.",
+    "answer": false,
+    "explain": "until＝直到，燈須維持關閉到音樂開始，不能解讀為開始前就開燈；stage lights＝舞臺燈。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1126",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The team learned local history by ____ older residents about their childhood.",
+    "choices": [
+      "to interview",
+      "interviewed",
+      "interview",
+      "interviewing"
+    ],
+    "answer": 3,
+    "explain": "by後接動名詞表示方法；interviewing＝訪談，團隊透過訪問居民了解地方歷史。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1127",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Our duties include sorting donated clothes and ____ torn pockets.",
+    "choices": [
+      "to mend",
+      "mended",
+      "mend",
+      "mending"
+    ],
+    "answer": 3,
+    "explain": "and連接同為duties內容的兩項活動，需與sorting並列用mending＝修補；pocket＝口袋。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1128",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "We mapped old wells instead of digging new ones. 'Digging' is correctly used after 'instead of.'",
+    "answer": true,
+    "explain": "instead of後可接動名詞，digging形式正確；instead of＝而非，well＝水井。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1129",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "We sold stones ____ by sand and waves; the sea had smoothed their edges.",
+    "choices": [
+      "polishing",
+      "were polished",
+      "polish",
+      "polished"
+    ],
+    "answer": 3,
+    "explain": "石頭被砂與海浪磨光，用過去分詞polished修飾；polish＝磨光，edge＝邊緣。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1130",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "The woman translating the menu asked about a dish. Here, 'translating' says someone else was translating for her.",
+    "answer": false,
+    "explain": "translating＝正在翻譯，主動修飾woman，表示她親自翻譯；不是別人替她翻譯。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1131",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Jin knew how to fix the wheel but waited for help. Which phrase describes his unused ability?",
+    "choices": [
+      "cannot have fixed it",
+      "could have fixed it",
+      "must have fixed it",
+      "will have fixed it"
+    ],
+    "answer": 1,
+    "explain": "問的是未使用的能力，could have fixed it＝當時本可修好；cannot have與must have表對過去的推測，非此處重點。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1132",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "'Did Vera label the jars?' 'She meant to, but forgot.' What did Vera intend to do?",
+    "choices": [
+      "Forget the jars.",
+      "Ask about the labels.",
+      "Read the labels.",
+      "Label the jars."
+    ],
+    "answer": 3,
+    "explain": "meant to後省略label the jars，表示原本打算貼標籤；intend＝打算，jar＝罐子。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1133",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "tf",
+    "q": "I ordered the rice spicy, but the soup mild. Here, 'mild' describes how I wanted the rice.",
+    "answer": false,
+    "explain": "後半省略I ordered，mild是the soup的受詞補語，指湯的口味；spicy＝辣的，mild＝清淡的。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1134",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Nell replaced long forms with one checkbox. This saved visitors time. 'This' refers to ____.",
+    "choices": [
+      "simplifying the forms",
+      "lengthening the forms",
+      "counting the visitors",
+      "adding more questions"
+    ],
+    "answer": 0,
+    "explain": "this回指把冗長表單改成單一勾選框的做法；simplify＝簡化，checkbox＝勾選框。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1135",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Rui stored ripe plums beside empty bowls. They would spoil by Monday. 'They' refers to ____.",
+    "choices": [
+      "the bowls",
+      "the storage days",
+      "the empty spaces",
+      "the plums"
+    ],
+    "answer": 3,
+    "explain": "會腐壞的是熟李子，不是距離they最近的碗；plum＝李子，spoil＝腐壞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1136",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A tailor met a sailor near the dock. The clothing maker waved. Who waved?",
+    "choices": [
+      "The tailor.",
+      "The sailor.",
+      "Both people.",
+      "A third person."
+    ],
+    "answer": 0,
+    "explain": "clothing maker＝做衣服的人，承接tailor＝裁縫；sailor＝水手，不是新增第三個人物。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1137",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Several notes criticized the price; one praised it. The positive comment came last. Which came last?",
+    "choices": [
+      "A note criticizing the price.",
+      "The note praising the price.",
+      "The note listing each price.",
+      "A note asking for a price."
+    ],
+    "answer": 1,
+    "explain": "positive comment＝正面評論，對應praised the price＝稱讚價格；不是批評或詢價。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1138",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Tao and his sister rented bikes. Only hers had a basket. Which bike had a basket?",
+    "choices": [
+      "Neither rented bike.",
+      "Both rented bikes.",
+      "Tao's bike.",
+      "His sister's bike."
+    ],
+    "answer": 3,
+    "explain": "hers是所有格代名詞，指his sister的腳踏車；basket＝籃子，only表示只有她那輛有。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1139",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Eli gave Pia two plans, but she rejected both. 'Both' refers to the two plans.",
+    "answer": true,
+    "explain": "rejected的受詞both承接two plans，指兩個方案，不是兩名人物；reject＝拒絕。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1140",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Old jeans become bags at our workshop. Even damaged pockets find a second use here. Best heading?",
+    "choices": [
+      "Choosing Clothes for Work",
+      "The History of Denim Prices",
+      "New Uses for Old Clothes",
+      "Repairing Workshop Machines"
+    ],
+    "answer": 2,
+    "explain": "兩句都在談舊衣再利用，故以新用途為主題；jeans＝牛仔褲，a second use＝再次利用。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1141",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Some rooms serve two purposes daily. One becomes a kitchen after morning art lessons. The second sentence ____.",
+    "choices": [
+      "gives an example of the first",
+      "gives a reason to cancel art",
+      "questions the need for kitchens",
+      "compares two different rooms"
+    ],
+    "answer": 0,
+    "explain": "同一房間先上美術課再當廚房，是兩種用途的具體例子；purpose＝用途，example＝例證。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1142",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "P: Bea lifted the lid of the wooden box. Q: Its hands had stopped at noon. Insert: 'Inside, she found a clock.'",
+    "choices": [
+      "It does not fit the passage.",
+      "Before P.",
+      "Between P and Q.",
+      "After Q."
+    ],
+    "answer": 2,
+    "explain": "先開盒發現時鐘，後句its hands才有明確指涉；lid＝蓋子，hands在此＝時針與分針。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-1143",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A cafe repairs cups instead of replacing them. It also reuses jars for storing sugar. Best conclusion?",
+    "choices": [
+      "The cafe stores damaged jars.",
+      "The cafe tries to reduce waste.",
+      "The cafe avoids buying sugar.",
+      "The cafe makes its own cups."
+    ],
+    "answer": 1,
+    "explain": "修杯與重用罐子共同指向減少廢棄物；reduce waste＝減少浪費，不能推知不買糖或自行製杯。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1144",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Mina could not hear train announcements clearly. A screen now displays each message in large letters. Pattern?",
+    "choices": [
+      "Claim followed by objection.",
+      "Problem followed by solution.",
+      "Two contrasting predictions.",
+      "Two causes of the same problem."
+    ],
+    "answer": 1,
+    "explain": "先呈現聽不清的問題，再提出大字螢幕方案；announcement＝公告，solution＝解決方法。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1145",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Market stalls once used different tokens. Now all accept the same kind. 'Simpler Payments' is a suitable heading.",
+    "answer": true,
+    "explain": "從各攤各用一種代幣，改為共用一種，支付更簡便；stall＝攤位，token＝代幣，payment＝支付。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1146",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "The guide offers tips for indoor plants. Its example covers repairing fences outside. The example supports the topic.",
+    "answer": false,
+    "explain": "修戶外圍籬無法支持室內養植物的建議，例證離題；indoor＝室內的，fence＝圍籬。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1147",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Six volunteers tasted the new menu and liked it. What does this tell us?",
+    "choices": [
+      "The old menu was less popular.",
+      "Customers would pay more for it.",
+      "These tasters liked the menu.",
+      "Most regular customers liked it."
+    ],
+    "answer": 2,
+    "explain": "證據只涵蓋六位試吃者的喜好，未比較舊菜單或調查付費意願；volunteer＝志願者，taster＝試吃者。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1148",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The gadget is clever, yet I would wait for longer trials. The writer is ____.",
+    "choices": [
+      "eager to buy it immediately",
+      "interested but cautious",
+      "uninterested in the design",
+      "convinced by long trials"
+    ],
+    "answer": 1,
+    "explain": "clever是肯定，wait for longer trials表示仍審慎；gadget＝小裝置，cautious＝謹慎的。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1149",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Ira kept the receipt but skipped registration. Free repairs require both. Which follows?",
+    "choices": [
+      "Ira has not met the repair requirements.",
+      "Ira no longer owns the product.",
+      "Registration would replace the receipt.",
+      "The receipt counts as registration."
+    ],
+    "answer": 0,
+    "explain": "免費維修同時要求收據與登記，缺登記就不符；receipt＝收據，registration＝登記。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1150",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A seller claims its cloth holds more water per square cm. Which comparison with a rival cloth tests this?",
+    "choices": [
+      "Water held by soaked pieces of equal area.",
+      "Total wet weight of pieces of equal area.",
+      "Dry weight of pieces of equal area.",
+      "Water held by pieces of equal thickness."
+    ],
+    "answer": 0,
+    "explain": "每平方公分的吸水量要控制布面積，再比吸收的水重；濕布總重含原布重，不能當吸水量。area＝面積。",
+    "formula": false,
+    "level": 3
+  },
+  {
+    "id": "english-1151",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Noise fell from 60 to 40 units. Sleep was not measured. Which claim lacks support?",
+    "choices": [
+      "The measured noise decreased.",
+      "The earlier noise level was 60.",
+      "People slept better afterward.",
+      "The later noise level was 40."
+    ],
+    "answer": 2,
+    "explain": "只量噪音，未量睡眠，不能判斷睡得更好；lack support＝缺乏支持，decrease＝下降。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1152",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Only weekday users were surveyed. Their views describe the sample, but weekend users may differ.",
+    "answer": true,
+    "explain": "只訪問平日使用者，週末族群可能有不同看法；sample＝樣本，survey＝調查。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1153",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Groups using lamps A and B read at the same speed. This provides some evidence that B enables faster reading than A.",
+    "answer": false,
+    "explain": "兩組讀速相同，沒有支持B燈比A燈讀得更快的證據；at the same speed＝以相同速度，evidence＝證據。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1154",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Chess 10:00; drama 10:30; choir 11:00. Each lasts 30 min. May stays 10:20–11:00. Which full session fits?",
+    "choices": [
+      "Chess only.",
+      "Drama only.",
+      "Chess and choir.",
+      "Choir only."
+    ],
+    "answer": 1,
+    "explain": "戲劇10:30至11:00全落在停留時間內；棋類已開始，合唱在離開時才開始。drama＝戲劇，choir＝合唱。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1155",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "From the gate go east to the hut, north to the pond, then west to the tower. At the pond, you ____.",
+    "choices": [
+      "turn right",
+      "turn back",
+      "turn left",
+      "keep going straight"
+    ],
+    "answer": 2,
+    "explain": "抵達池塘時面向北，要往西須左轉；hut＝小屋，pond＝池塘，tower＝塔。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1156",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Packing: 9:00; sealing: 9:20; loading: 9:50. The gap after sealing is longer than the gap before it.",
+    "answer": true,
+    "explain": "封口前一段20分鐘，後一段30分鐘，後段較長；sealing＝封口，loading＝裝載。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1157",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Relative to a well: shed west, gate east, field south. The shed and field are on opposite sides of the well.",
+    "answer": false,
+    "explain": "西與南不是相反方向；相對兩側是西側棚屋與東側大門。well＝水井，shed＝棚屋。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1158",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "These tools travel well but break easily. Their ____ is poor.",
+    "choices": [
+      "portability",
+      "portable",
+      "durability",
+      "durable"
+    ],
+    "answer": 2,
+    "explain": "易壞代表耐用性差，their後需名詞durability＝耐用性；portability＝便攜性，與優點相符而非缺點。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1159",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Buses run often but rarely arrive on time. Service is frequent but lacks ____.",
+    "choices": [
+      "punctual",
+      "frequent",
+      "punctuality",
+      "frequency"
+    ],
+    "answer": 2,
+    "explain": "班次多卻不準時，缺的是punctuality＝準時，且lacks後需名詞；frequency＝頻率，punctual＝準時的。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1160",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Students chose to join; paid staff were required to attend. Only the students participated ____.",
+    "choices": [
+      "compulsory",
+      "voluntary",
+      "voluntarily",
+      "compulsorily"
+    ],
+    "answer": 2,
+    "explain": "學生自行選擇，職員必須出席；修飾participated須用副詞voluntarily＝自願地；compulsorily＝強制地。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1161",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "A kiosk sells tickets quickly but offers no event details. Its service is ____.",
+    "choices": [
+      "efficiency",
+      "information",
+      "informative",
+      "efficient"
+    ],
+    "answer": 3,
+    "explain": "售票快速對應efficient＝有效率的；此處用形容詞描述服務特性。informative＝提供資訊的，不符未提供活動細節的材料。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1162",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Writers choose topics alone but edit together. 'Topic choice is independent; editing is cooperative' is a valid summary.",
+    "answer": true,
+    "explain": "自行選題、共同編輯，分別對應independent＝獨立的及cooperative＝合作的；摘要的名詞與形容詞配置也正確。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1163",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Ana: 'Fewer boxes, please.' Bo: 'Reuse the wrapping.' Both want to ____.",
+    "choices": [
+      "cut back on packaging",
+      "put packaging costs first",
+      "stick to disposable packaging",
+      "make room for more packaging"
+    ],
+    "answer": 0,
+    "explain": "少用盒子、重用包裝都減少包裝消耗；cut back on＝減少，兩人未討論成本或增加包裝空間。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1164",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Cai: 'The pay is low.' Dev: 'Yes, but the hours suit me.' They see eye to eye on ____.",
+    "choices": [
+      "the convenient hours",
+      "the demanding work",
+      "the need to quit",
+      "the low pay"
+    ],
+    "answer": 3,
+    "explain": "Dev的yes認同薪水低，但工時合適只是Dev的看法；see eye to eye＝意見一致，pay＝薪資。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1165",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Uma: 'No ride before a battery check.' Wes: 'Check the brakes before riding.' Both favor ____.",
+    "choices": [
+      "getting better with practice",
+      "sticking to a fixed schedule",
+      "making up for lost time",
+      "playing it safe"
+    ],
+    "answer": 3,
+    "explain": "兩人都主張先檢查再騎，符合play it safe＝謹慎行事；沒有趕進度、固定時程或練習的資訊。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1166",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "Paz: 'The launch should be today.' Gil: 'I agree; training can wait.' They agree to hold off on the launch.",
+    "answer": false,
+    "explain": "兩人都贊成今天推出，延後的是訓練；hold off on＝延後，launch＝推出，與題目摘要相反。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "片語與搭配詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1167",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Staff planned to inspect rooms Friday but did so the following Monday. Which summary is correct?",
+    "choices": [
+      "The staff were inspected before the planned date.",
+      "The rooms were inspected after the planned date.",
+      "The rooms were inspected before the planned date.",
+      "The staff were inspected after the planned date."
+    ],
+    "answer": 1,
+    "explain": "實際下週一晚於原定週五，且被檢查的是房間；were inspected＝被檢查，following＝接下來的。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1168",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Lea sent the forms Tuesday. Staff are checking them now. Which summary keeps both events?",
+    "choices": [
+      "The forms were sent Tuesday and have been checked.",
+      "The forms were checked Tuesday and are being sent.",
+      "The forms were being checked Tuesday and were then sent.",
+      "The forms were sent Tuesday and are being checked."
+    ],
+    "answer": 3,
+    "explain": "were sent＝被寄出，表週二完成的動作；are being checked＝正被查核；have been checked則表已完成。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1169",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "tf",
+    "q": "The bridge was tested May 2 and opened May 5. 'It had been tested before it opened' preserves the order.",
+    "answer": true,
+    "explain": "先檢測再開放，過去完成被動had been tested可標明開放前已完成；preserve the order＝保留順序。",
+    "formula": false,
+    "level": 2,
+    "links": [
+      "時態與語態",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1170",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "A queue grows with one clerk. A second clerk starts serving, and waits fall. Best topic sentence?",
+    "choices": [
+      "Waiting times fall when more clerks serve customers.",
+      "Waiting times rise when more clerks serve customers.",
+      "Waiting times fall when more clerks to serve customers.",
+      "Waiting times rise when more clerks to serve customers."
+    ],
+    "answer": 0,
+    "explain": "增員後等候變短，用fall；when後須完整子句，故用clerks serve，不能用to serve；queue＝隊伍。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1171",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "A garden grows crops needing shade and crops needing sun. Which topic sentence fits?",
+    "choices": [
+      "Gardeners need spots what offer different light levels.",
+      "Gardeners need spots what offer the same light level.",
+      "Gardeners need spots that offer different light levels.",
+      "Gardeners need spots that offer the same light level."
+    ],
+    "answer": 2,
+    "explain": "兩類作物需要不同光照；spots後用that引導關係子句，不能用what；shade＝遮蔭處，sun＝陽光。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "子句與連接詞",
+      "轉折語與篇章"
+    ]
   }
 ]
