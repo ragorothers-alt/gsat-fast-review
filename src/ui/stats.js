@@ -1,5 +1,5 @@
-// 學習分析：整體概況、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
-import { accuracyOf, dailySeries, daysUntil, studyPlan, subjectStats, weakUnits } from '../analysis.js';
+// 學習分析：整體概況、考前規劃、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
+import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, studyPlan, subjectStats, weakUnits } from '../analysis.js';
 import { DAY, mastery } from '../srs.js';
 import { GOALS } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
@@ -8,6 +8,8 @@ import { icon } from './icons.js';
 
 const pct = (x) => (x === null ? '—' : `${Math.round(x * 100)}%`);
 const TRAIN_UNITS = 3;
+/** 題庫存量上方最多列幾個新題快用完的單元，其餘展開各科看 */
+const LOW_SHOWN = 6;
 
 export function initStats(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -15,13 +17,15 @@ export function initStats(ctx) {
   const known = new Set(ctx.bank.map((q) => q.id));
   let weak = [];
 
-  ctx.showStats = () => {
+  /** @param {string} [section] 直接捲到這一區（例如首頁的「看存量」進來是 stock） */
+  ctx.showStats = (section) => {
     render();
     // 弱點單元所屬科目的貓趴在最上面的卡片上；還沒有弱點時換成目前選的科目
     const cast = [...new Set(weak.map((u) => u.subject))];
     ctx.world.setCast(cast.length ? cast : ctx.state.settings.subjects.slice(0, 3));
     ctx.show('stats');
     $('#stats .stats-scroll').scrollTop = 0;
+    if (section) $(`#stats-${section}`)?.scrollIntoView({ block: 'start' });
   };
 
   function render() {
@@ -42,6 +46,7 @@ export function initStats(ctx) {
     $('#stats-tiles').innerHTML = tiles.map(([v, k]) => `<div class="tile"><b>${v}</b><span>${k}</span></div>`).join('');
 
     renderPlan(now, week);
+    renderStock();
     weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, limit: 5 });
     renderWeak();
 
@@ -54,7 +59,7 @@ export function initStats(ctx) {
         return `<li style="--c:${subj.color}">
           <span class="tag">${subj.name}</span>
           <span class="subject-meta">練過 ${s.practiced}／${s.total} 題・正確率 ${pct(s.accuracy)}</span>
-          <span class="unit-meter" aria-label="熟練度 ${m}%"><i style="width:${m}%"></i></span>
+          <span class="unit-meter" role="img" aria-label="熟練度 ${m}%"><i style="width:${m}%"></i></span>
         </li>`;
       })
       .join('');
@@ -99,6 +104,60 @@ export function initStats(ctx) {
     $('#plan-done').style.width = `${p.coverage * 100}%`;
     $('#plan-proj').style.width = `${(p.projectedCoverage - p.coverage) * 100}%`;
     $('#plan-legend').textContent = p.remaining ? `已練過 ${done}%・照這個步調考前約 ${proj}%` : '';
+  }
+
+  /** 題庫存量：選的範圍還有幾題沒做過；新題快用完的單元列在上面，各科可以展開看每個單元 */
+  function renderStock() {
+    const { cards, flags, settings } = ctx.state;
+    const stock = bankStock(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, flags });
+    const low = lowStock(stock);
+    const n = (x) => x.toLocaleString('zh-TW');
+    const share = (u) => (u.total ? (u.fresh / u.total) * 100 : 0);
+
+    if (!stock.subjects.length) {
+      $('#stock-text').textContent = '先在首頁選要練的科目。';
+    } else {
+      $('#stock-text').textContent =
+        `選的範圍還有 ${n(stock.fresh)} 題沒做過（共 ${n(stock.total)} 題）。` +
+        (low.length
+          ? `有 ${low.length} 個單元的新題剩不到 ${LOW_STOCK} 題，做完後這些單元只會出複習題：`
+          : `每個單元都還有 ${LOW_STOCK} 題以上沒做過，新題夠用。`);
+    }
+
+    $('#stock-low').innerHTML =
+      low
+        .slice(0, LOW_SHOWN)
+        .map((u) => {
+          const subj = SUBJECT_BY_ID[u.subject];
+          return `<li style="--c:${subj.color}"><span class="tag">${subj.name}</span><span class="stock-name">${u.unit}</span><b>${u.fresh ? `剩 ${u.fresh} 題` : '全做過'}</b></li>`;
+        })
+        .join('') + (low.length > LOW_SHOWN ? `<li class="stock-more">還有 ${low.length - LOW_SHOWN} 個單元，展開下面各科可以看到</li>` : '');
+
+    // 展開狀態要留著：作答回來重畫時，原本打開的科目維持打開
+    const open = new Set([...document.querySelectorAll('#stock-subjects details[open]')].map((d) => d.dataset.subject));
+    $('#stock-subjects').innerHTML = stock.subjects
+      .map((s) => {
+        const subj = SUBJECT_BY_ID[s.subject];
+        const lowN = s.units.filter(isLowStock).length;
+        const units = s.units
+          .map(
+            (u) => `<li class="stock-unit${isLowStock(u) ? ' low' : ''}">
+              <span class="stock-name">${u.unit}</span>
+              <span class="stock-n">剩 ${u.fresh}／${u.total}</span>
+              <span class="unit-meter" aria-hidden="true"><i style="width:${share(u)}%"></i></span>
+            </li>`,
+          )
+          .join('');
+        return `<li style="--c:${subj.color}"><details data-subject="${s.subject}"${open.has(s.subject) ? ' open' : ''}>
+          <summary>
+            <span class="tag">${subj.name}</span>
+            <span class="subject-meta">還沒做過 ${n(s.fresh)}／${n(s.total)} 題${lowN ? `<em>${lowN} 個單元的新題快用完</em>` : ''}</span>
+            <span class="unit-meter" aria-hidden="true"><i style="width:${share(s)}%"></i></span>
+          </summary>
+          <ul class="stock-units">${units}</ul>
+        </details></li>`;
+      })
+      .join('');
   }
 
   $('#plan-goal').addEventListener('click', (e) => {

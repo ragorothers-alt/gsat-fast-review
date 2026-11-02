@@ -41,6 +41,11 @@ for (const scheme of ['light', 'dark']) {
 
     await page.locator('#open-path').click();
     await audit(page, '單元闖關');
+    await page.locator('#path-close').click();
+
+    await page.locator('#open-stock').click();
+    await page.locator('#stock-subjects summary').first().click();
+    await audit(page, '學習分析');
   });
 }
 

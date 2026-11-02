@@ -226,7 +226,7 @@
             </button>
           </div>
         </nav>
-        <p class="foot" id="bank-info"></p>
+        <p class="foot"><span id="bank-info"></span><button id="open-stock" class="foot-link" type="button" hidden>看存量 ›</button></p>
       </section>
 
       <!-- 作答 -->
@@ -332,6 +332,13 @@
             <div class="plan-meter" aria-hidden="true"><i id="plan-done"></i><i id="plan-proj"></i></div>
             <p id="plan-legend" class="plan-legend"></p>
             <button id="plan-goal" class="secondary-btn" type="button" hidden></button>
+          </section>
+
+          <section id="stats-stock" class="stats-block paper">
+            <h3><svg class="ico" aria-hidden="true"><use href="#i-book"/></svg>題庫存量<small>依首頁選的科目與單元；作答過就不算新題</small></h3>
+            <p id="stock-text" class="plan-text"></p>
+            <ul id="stock-low" class="stock-low"></ul>
+            <ul id="stock-subjects" class="stock-list"></ul>
           </section>
 
           <section class="stats-block paper">

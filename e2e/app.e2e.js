@@ -4,7 +4,24 @@ import { answerToResult, expect, openHome, skipToResult, startMode, test } from 
 test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await openHome(page);
   await expect(page.locator('#subject-chips .chip')).toHaveCount(10);
-  await expect(page.locator('#bank-info')).toContainText(/題庫共 \d+ 題/);
+  await expect(page.locator('#bank-info')).toContainText(/還沒做過 \d+／\d+ 題/);
+});
+
+test('首頁的「還沒做過」題數作答後減少；「看存量」打開學習分析的題庫存量', async ({ page }) => {
+  await openHome(page);
+  const fresh = async () => Number((await page.locator('#bank-info').textContent()).match(/還沒做過 (\d+)／/)[1]);
+  const before = await fresh();
+  await startMode(page, 'ten');
+  await skipToResult(page);
+  await page.locator('#r-home').click();
+  expect(await fresh()).toBe(before - 10);
+
+  await page.locator('#open-stock').click();
+  await expect(page.locator('#stats-stock')).toBeInViewport();
+  await expect(page.locator('#stock-text')).toContainText(`還有 ${(before - 10).toLocaleString('zh-TW')} 題沒做過`);
+  // 展開一科看各單元還剩幾題
+  await page.locator('#stock-subjects summary').first().click();
+  await expect(page.locator('#stock-subjects details[open] .stock-unit').first()).toContainText(/剩 \d+／\d+/);
 });
 
 test('10 題一輪：作答到結算，算進今日進度', async ({ page }) => {

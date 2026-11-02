@@ -1,7 +1,8 @@
-// 學習分析：各單元與各科的作答統計、弱點單元、每日走勢、學測倒數。純邏輯，不碰 DOM。
+// 學習分析：各單元與各科的作答統計、弱點單元、題庫存量、每日走勢、學測倒數。純邏輯，不碰 DOM。
+import { PATH_SIZE } from './path.js';
 import { isWeak, mastery } from './srs.js';
 import { dayKey, shiftDay } from './stats.js';
-import { UNITS, unitKey } from './units.js';
+import { UNITS, isUnitOff, unitKey } from './units.js';
 
 /** 作答（含看解答）少於這個次數的單元，資料太少，不列入弱點排名 */
 export const MIN_SEEN = 4;
@@ -61,6 +62,52 @@ export function subjectStats(bank, cards, subjects) {
     }
     return { subject, total: qs.length, practiced, accuracy: seen ? right / seen : null, mastery: mastery(qs, cards) };
   });
+}
+
+/** 單元裡沒做過的題目少於一關單元闖關的題數，就算新題快用完了 */
+export const LOW_STOCK = PATH_SIZE;
+
+/**
+ * 題庫存量：選的範圍裡，各科、各單元還有幾題沒做過（沒有作答紀錄）。
+ * 被回報而暫停出題的題目不算；結合了關掉單元的跨單元題也不出，所以不算（見 isUnitOff）。
+ * @param {{ subjects: string[], excludedUnits?: string[], flags?: Record<string, unknown> }} opts
+ * @returns {{ total: number, fresh: number, subjects: { subject: string, total: number, fresh: number, units: { unit: string, key: string, total: number, fresh: number }[] }[] }}
+ */
+export function bankStock(bank, cards, { subjects, excludedUnits = [], flags = {} }) {
+  const off = new Set(excludedUnits);
+  // 單元鍵 → [這科的統計, 這個單元的統計]，一題同時算進兩邊
+  const slots = new Map();
+  const list = subjects.map((subject) => {
+    const s = { subject, total: 0, fresh: 0, units: [] };
+    for (const unit of UNITS[subject] ?? []) {
+      const key = unitKey(subject, unit);
+      if (off.has(key)) continue;
+      const u = { unit, key, total: 0, fresh: 0 };
+      s.units.push(u);
+      slots.set(key, [s, u]);
+    }
+    return s;
+  });
+  for (const q of bank) {
+    const slot = slots.get(unitKey(q.subject, q.topic));
+    if (!slot || flags[q.id] || isUnitOff(q, off)) continue;
+    for (const x of slot) {
+      x.total++;
+      if (!cards[q.id]) x.fresh++;
+    }
+  }
+  const sum = (k) => list.reduce((a, s) => a + s[k], 0);
+  return { total: sum('total'), fresh: sum('fresh'), subjects: list };
+}
+
+/** 單元的新題快用完了：沒做過的不到 LOW_STOCK 題（沒有題目可出的單元不算） */
+export const isLowStock = (u) => u.total > 0 && u.fresh < LOW_STOCK;
+
+/** 新題快用完的單元，剩得少的排前面 */
+export function lowStock(stock) {
+  return stock.subjects
+    .flatMap((s) => s.units.filter(isLowStock).map((u) => ({ subject: s.subject, ...u })))
+    .sort((a, b) => a.fresh - b.fresh);
 }
 
 /** 最近 days 天（含今天）每天的作答量，由舊到新 */

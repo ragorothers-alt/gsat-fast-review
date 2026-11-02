@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { accuracyOf, dailySeries, daysUntil, studyPlan, subjectStats, weakUnits } from '../src/analysis.js';
+import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, lowStock, studyPlan, subjectStats, weakUnits } from '../src/analysis.js';
 import { GOALS } from '../src/stats.js';
-import { UNITS } from '../src/units.js';
+import { CROSS_UNIT, UNITS } from '../src/units.js';
 
 const [U1, U2, U3] = UNITS.math;
 const q = (id, topic) => ({ id, subject: 'math', topic });
@@ -46,6 +46,38 @@ describe('統計', () => {
     expect(daysUntil('2026-10-29', now)).toBe(1);
     expect(daysUntil('2026-10-28', now)).toBe(0);
     expect(daysUntil('2027-01-22', now)).toBe(86);
+  });
+});
+
+describe('題庫存量', () => {
+  const many = (prefix, topic, n) => Array.from({ length: n }, (_, i) => q(`${prefix}${i}`, topic));
+  const stocked = [...many('a', U1, 40), ...many('b', U2, 35)];
+  const unit = (stock, name) => stock.subjects[0].units.find((u) => u.unit === name);
+
+  it('各科、各單元還有幾題沒做過；被回報暫停出題的不算', () => {
+    const s = bankStock(stocked, { a0: c(1, 1), a1: c(1, 0), b0: c(2, 1) }, { subjects: ['math'], flags: { a2: 1 } });
+    expect(s).toMatchObject({ total: 74, fresh: 71 });
+    expect(s.subjects[0]).toMatchObject({ subject: 'math', total: 74, fresh: 71 });
+    expect(unit(s, U1)).toMatchObject({ total: 39, fresh: 37 });
+    expect(unit(s, U2)).toMatchObject({ total: 35, fresh: 34 });
+  });
+
+  it('關掉的單元不列也不算，結合了它的跨單元題也不算', () => {
+    const cross = (id, links) => ({ ...q(id, CROSS_UNIT), links });
+    const s = bankStock([q('a', U1), q('b', U2), cross('x', [U1, U2]), cross('y', [U1, U3])], {}, { subjects: ['math'], excludedUnits: [`math/${U2}`] });
+    expect(unit(s, U2)).toBeUndefined();
+    expect(unit(s, CROSS_UNIT)).toMatchObject({ total: 1, fresh: 1 });
+    expect(s.total).toBe(2);
+  });
+
+  it(`新題不到 ${LOW_STOCK} 題的單元算快用完，剩得少的排前面；沒有題目的單元不算`, () => {
+    const cards = Object.fromEntries(many('a', U1, 15).map((x) => [x.id, c(1, 1)]));
+    expect(lowStock(bankStock(stocked, cards, { subjects: ['math'] })).map((u) => [u.unit, u.fresh])).toEqual([[U1, 25]]);
+    const all = Object.fromEntries(stocked.map((x) => [x.id, c(1, 1)]));
+    expect(lowStock(bankStock(stocked, all, { subjects: ['math'] })).map((u) => [u.unit, u.fresh])).toEqual([
+      [U1, 0],
+      [U2, 0],
+    ]);
   });
 });
 

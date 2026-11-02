@@ -54,6 +54,7 @@ export function initHome(ctx) {
   ctx.openSettings = (section) => settingsSheet.open(section);
   $('#open-notebook').addEventListener('click', () => ctx.showNotebook());
   $('#daily').addEventListener('click', () => ctx.showStats());
+  $('#open-stock').addEventListener('click', () => ctx.showStats('stock'));
 
   document.querySelectorAll('#home [data-mode]').forEach((btn) => {
     btn.addEventListener('click', () => ctx.startRound(btn.dataset.mode));
@@ -118,11 +119,14 @@ export function initHome(ctx) {
 
     const disabled = !inSelection.length;
     document.querySelectorAll('#home [data-mode]').forEach((b) => (b.disabled = disabled));
+    // 還沒做過（沒有作答紀錄）的題目；各單元的細目在學習分析的題庫存量
+    const fresh = inSelection.filter((q) => !cards[q.id]).length;
     $('#bank-info').textContent = ctx.bank.length
       ? disabled
         ? '先選至少一科再開始'
-        : `已選 ${selected.size} 科・${inSelection.length} 題（題庫共 ${ctx.bank.length} 題）`
+        : `已選 ${selected.size} 科・還沒做過 ${fresh}／${inSelection.length} 題`
       : '題庫準備中…';
+    $('#open-stock').hidden = disabled;
 
     ctx.world.setSelected(settings.subjects);
   }
