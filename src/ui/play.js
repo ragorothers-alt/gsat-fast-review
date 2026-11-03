@@ -36,6 +36,7 @@ export function initPlay(ctx) {
     text: $('#q-text'),
     explain: $('#q-explain'),
     answers: $('#answers'),
+    back: $('#back'),
     skip: $('#skip'),
     next: $('#next'),
     progress: $('#play-progress'),
@@ -63,6 +64,7 @@ export function initPlay(ctx) {
   let pendingRelated = []; // 這題答錯後可以接著練的類似題
   let lastRight = null; // 剛答對的那題 { id, before, at }：標成猜的時，從答題前的紀錄重新排程
   let phase = 'idle'; // idle | answering | feedback
+  let looking = false; // 正在回看剛剛的題目：暫停計時、不能作答
   let autoNext = 0;
   let raf = 0;
   let lastT = 0;
@@ -224,8 +226,8 @@ export function initPlay(ctx) {
   function loop(t) {
     const dt = (t - lastT) / 1000;
     lastT = t;
-    // 看解答、動畫期間與切到背景時不扣時間；上限 1 秒是為了切回前景的第一幀，卡頓的手機仍照實扣時
-    if (phase === 'answering' && !document.hidden) {
+    // 看解答、回看上一題、動畫期間與切到背景時不扣時間；上限 1 秒是為了切回前景的第一幀，卡頓的手機仍照實扣時
+    if (phase === 'answering' && !looking && !document.hidden) {
       tick(s, Math.min(dt, 1));
       renderTimer();
       if (s.timeLeft <= 0) return finish();
@@ -253,6 +255,7 @@ export function initPlay(ctx) {
     el.certain.hidden = true;
     pendingRelated = [];
     lastRight = null;
+    el.back.hidden = !s.log.length;
     el.skip.hidden = false;
     const counted = s.timeLeft === null && !MODES[s.mode].endless;
     el.progress.textContent = counted ? `${s.index + 1} / ${s.queue.length}` : `第 ${s.index + 1} 題`;
@@ -350,6 +353,9 @@ export function initPlay(ctx) {
     const before = today(ctx.state, now).answered;
     recordAnswer(ctx.state, outcome, now);
     const points = submit(s, outcome, chosen);
+    // 記下當時的選項順序：回看上一題、複製題目時 (A)–(D) 跟畫面一致
+    if (q.type === 'mc') s.log[s.log.length - 1].order = order;
+    el.back.hidden = true;
     if (s.path) {
       if (outcome !== 'right') addFollowUp(q);
       savePath(s.index + 1);
@@ -569,6 +575,24 @@ export function initPlay(ctx) {
     restartAnimation(el.pop, 'show');
   }
 
+  // 回看這輪剛做過的題目：關掉後回到原本這題，收藏、回報可能在面板裡改過，重畫一次
+  el.back.addEventListener('click', () => {
+    if (phase !== 'answering' || !s.log.length) return;
+    looking = true;
+    stopSpeaking();
+    // 紀錄和題號一對一，闖關接著做時第一筆不是第 1 題
+    const first = s.index - s.log.length;
+    const list = s.log.map((entry, i) => ({ q: byId.get(entry.id), entry, n: first + i + 1 }));
+    ctx.openPast(list, {
+      current: s.index + 1,
+      timed: s.timeLeft !== null,
+      onClose: () => {
+        looking = false;
+        renderMarks();
+      },
+    });
+  });
+
   el.next.addEventListener('click', next);
   el.skip.addEventListener('click', () => {
     if (phase === 'answering') resolve('skip', null, null);
@@ -630,7 +654,7 @@ export function initPlay(ctx) {
 
   // ── 鍵盤（桌機） ─────────────────────────────────────
   document.addEventListener('keydown', (e) => {
-    if (document.querySelector('#play').hidden || !s) return;
+    if (document.querySelector('#play').hidden || !s || looking) return;
     if (e.key === 'Escape') return $('#quit').click();
     if (phase === 'feedback' && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();

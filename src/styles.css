@@ -994,8 +994,11 @@ p {
   margin-right: 0.15em;
 }
 
+/* KaTeX 對齊分數用的隱形撐高元素會伸到公式外面：兩欄選項時會蓋住上面那顆按鈕，點上面卻選到下面。
+   公式本身不用點，讓點擊穿過去給底下真正的按鈕 */
 .katex {
   font-size: 1.08em;
+  pointer-events: none;
 }
 
 .explain {
@@ -1986,6 +1989,98 @@ p {
 .kp-actions .secondary-btn {
   padding: 0;
   font-size: 1.3rem;
+}
+
+/* ── 回看剛剛的題目 ─────────────────────────────────── */
+.past .sheet-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.past-result {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: var(--card);
+  color: var(--muted);
+}
+
+.past-result[data-result='right'] {
+  background: var(--good-bg);
+  color: var(--good-ink);
+}
+
+.past-result[data-result='wrong'] {
+  background: var(--bad-bg);
+  color: var(--bad-ink);
+}
+
+/* 當時的選項：照當時的順序，正解蓋圈、選錯的蓋叉 */
+.past-choices {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.past-choices.tf {
+  grid-template-columns: 1fr 1fr;
+}
+
+.past-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--hand-sm);
+  border: 1.5px solid var(--line-soft);
+  font-size: calc(0.95rem * var(--fs, 1));
+  line-height: 1.5;
+}
+
+.past-choices.tf .past-choice {
+  justify-content: center;
+  font-weight: 800;
+}
+
+.past-choice.right {
+  background: var(--good-bg);
+  border-color: var(--ink);
+}
+
+.past-choice.wrong {
+  background: var(--bad-bg);
+  border-color: var(--ink);
+}
+
+.past-choice.right .key {
+  background: var(--good);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.past-choice.wrong .key {
+  background: var(--bad);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.past-choice .ico.mark {
+  top: -9px;
+  right: -6px;
+  width: 25px;
+  height: 25px;
+  animation: none;
+}
+
+.past-card .explain {
+  margin-top: 14px;
+  animation: none;
 }
 
 /* 單元列旁邊的「重點」按鈕（單元面板、弱點單元） */

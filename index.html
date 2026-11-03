@@ -264,6 +264,8 @@
 
         <div id="answers" class="answers"></div>
         <footer class="play-foot">
+          <!-- 回看這輪剛做過的題目（作答時才有） -->
+          <button id="back" class="ghost-btn" type="button" hidden>‹ 上一題</button>
           <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
           <!-- 答對了但其實是猜的、沒把握：不算答對，之後會再出 -->
           <div id="certain" class="certain" role="group" aria-label="答對了，但是" hidden>
@@ -559,6 +561,25 @@
             <button id="install-ok" class="secondary-btn" type="button">知道了</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 回看剛剛的題目：作答時按「上一題」打開，可以往前翻這輪做過的題目 -->
+    <div id="past-sheet" class="sheet" hidden>
+      <div class="sheet-body past" role="dialog" aria-modal="true" aria-labelledby="past-title">
+        <header class="sheet-head">
+          <h2 id="past-title"><span id="past-n"></span><span id="past-result" class="past-result"></span></h2>
+          <button id="past-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <p id="past-tip" class="sheet-tip" hidden>看的時候暫停計時</p>
+        <div id="past-scroll" class="settings-scroll" tabindex="0" role="region" aria-labelledby="past-title">
+          <article id="past-card" class="r-item past-card"></article>
+        </div>
+        <nav class="kp-actions">
+          <button id="past-prev" class="secondary-btn" type="button" aria-label="再往前一題">‹</button>
+          <button id="past-back" class="primary-btn" type="button"></button>
+          <button id="past-next" class="secondary-btn" type="button" aria-label="往後一題">›</button>
+        </nav>
       </div>
     </div>
 

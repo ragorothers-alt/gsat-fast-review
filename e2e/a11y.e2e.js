@@ -22,6 +22,9 @@ for (const scheme of ['light', 'dark']) {
     await page.locator('#skip').click();
     await audit(page, '看解答');
     await page.locator('#next').click();
+    await page.locator('#back').click();
+    await audit(page, '回看上一題');
+    await page.locator('#past-back').click();
     await skipToResult(page);
     await audit(page, '結算');
 

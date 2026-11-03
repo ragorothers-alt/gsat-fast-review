@@ -53,6 +53,77 @@ test('單選題點選項作答，答對或答錯都有回饋', async ({ page }) 
   await expect(page.locator('#q-explain')).toBeVisible();
 });
 
+test('作答時回看上一題：當時的選項順序、正解與解析，看完回到原本那題', async ({ page }) => {
+  await openHome(page);
+  await startMode(page, 'ten');
+  await expect(page.locator('#back')).toBeHidden();
+  const q1 = await page.locator('#q-text').textContent();
+  const choices1 = await page.locator('#answers .answer-text').allTextContents();
+  await page.locator('#skip').click();
+  await expect(page.locator('#back')).toBeHidden();
+  await page.locator('#next').click();
+
+  const q2 = await page.locator('#q-text').textContent();
+  await page.locator('#answers .answer').first().click();
+  await expect(page.locator('#next')).toBeVisible();
+  // 答對會自己換題，按「繼續」時可能已經換過了，所以不用 locator.click 等按鈕
+  await page.evaluate(() => document.querySelector('#next').click());
+  await expect(page.locator('#play-progress')).toHaveText('3 / 10');
+  const q3 = await page.locator('#q-text').textContent();
+
+  await page.locator('#back').click();
+  await expect(page.locator('#past-sheet')).toBeVisible();
+  await expect(page.locator('#past-n')).toHaveText('第 2 題');
+  await expect(page.locator('#past-result')).toHaveText(/^答(對|錯)$/);
+  await expect(page.locator('#past-card .r-q')).toHaveText(q2);
+  await expect(page.locator('#past-next')).toBeDisabled();
+  await page.locator('#past-prev').click();
+  await expect(page.locator('#past-n')).toHaveText('第 1 題');
+  await expect(page.locator('#past-result')).toHaveText('看了解答');
+  await expect(page.locator('#past-card .r-q')).toHaveText(q1);
+  await expect(page.locator('#past-card .past-choice .answer-text')).toHaveText(choices1);
+  await expect(page.locator('#past-card .past-choice.right')).toHaveCount(1);
+  await expect(page.locator('#past-card .explain')).toBeVisible();
+  await expect(page.locator('#past-prev')).toBeDisabled();
+
+  // 回到原本那題，還沒作答
+  await expect(page.locator('#past-back')).toHaveText('回到第 3 題');
+  await page.locator('#past-back').click();
+  await expect(page.locator('#past-sheet')).toBeHidden();
+  await expect(page.locator('#q-text')).toHaveText(q3);
+  await expect(page.locator('#answers .answer:disabled')).toHaveCount(0);
+  // Esc 只關面板，不會結束這一輪
+  await page.locator('#back').click();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('#past-sheet')).toBeHidden();
+  await expect(page.locator('#play')).toBeVisible();
+});
+
+// KaTeX 對齊分數的隱形元素曾經伸出公式、蓋住上一排的選項：點上面那顆卻選到下面那顆
+test('兩欄的分數選項，點哪裡都選到那一顆', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await openHome(page);
+  await page.locator('#open-notebook').click();
+  await page.locator('#notebook-views [data-view="search"]').click();
+  await page.locator('#notebook-search').fill('math-685');
+  await expect(page.locator('#notebook-count')).toHaveText('1');
+  await page.locator('#notebook-train').click();
+  await expect(page.locator('#answers.grid-2 .answer')).toHaveCount(4);
+  const stray = await page.locator('#answers .answer').evaluateAll((buttons) =>
+    buttons.map((b) => {
+      const r = b.getBoundingClientRect();
+      let n = 0;
+      for (let x = 0.1; x < 1; x += 0.2)
+        for (let y = 0.1; y < 1; y += 0.2) {
+          const hit = document.elementFromPoint(r.left + r.width * x, r.top + r.height * y)?.closest('.answer');
+          if (hit && hit !== b) n++;
+        }
+      return n;
+    }),
+  );
+  expect(stray).toEqual([0, 0, 0, 0]);
+});
+
 test('答對後標「猜對的」：結算列出這題，今天的答對數不算它', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'free');

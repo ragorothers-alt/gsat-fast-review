@@ -11,6 +11,7 @@ import { initHome } from './ui/home.js';
 import { initInstall } from './ui/install.js';
 import { initKeypoints } from './ui/keypoints.js';
 import { initNotebook } from './ui/notebook.js';
+import { initPast } from './ui/past.js';
 import { initPlay } from './ui/play.js';
 import { initReminder } from './ui/reminder.js';
 import { initResult } from './ui/result.js';
@@ -89,6 +90,7 @@ function start(bank) {
   initScratch(ctx);
   initHome(ctx);
   initPlay(ctx);
+  initPast(ctx);
   initResult(ctx);
   initStats(ctx);
   initNotebook(ctx);
