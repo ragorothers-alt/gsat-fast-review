@@ -1,5 +1,5 @@
 // 主要流程：首頁、作答到結算、收藏與搜尋、設定、手機橫放、離線開啟
-import { answerToResult, expect, openHome, skipToResult, startMode, test } from './fixtures.js';
+import { answerToResult, expect, openHome, skipToResult, startMode, test, waitForBoot } from './fixtures.js';
 
 test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await openHome(page);
@@ -133,7 +133,7 @@ test('設定：深色模式與字體大小，重新整理後還在', async ({ pa
   await page.locator('#font-options button', { hasText: '特大' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await page.reload();
-  await expect(page.locator('#boot')).toBeHidden();
+  await waitForBoot(page);
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--fs').trim())).toBe('1.25');
 });
@@ -155,7 +155,7 @@ test('裝好離線快取後，斷網也能開', async ({ browser, baseURL }) => 
   const page = await context.newPage();
   await page.route('https://gsat-sync.ragorothers.workers.dev/**', (route) => route.abort());
   await page.goto('./');
-  await expect(page.locator('#boot')).toBeHidden();
+  await waitForBoot(page);
   // 等 service worker 把所有檔案存進快取並接手這個頁面
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
@@ -163,7 +163,7 @@ test('裝好離線快取後，斷網也能開', async ({ browser, baseURL }) => 
   });
   await context.setOffline(true);
   await page.reload();
-  await expect(page.locator('#boot')).toBeHidden();
+  await waitForBoot(page);
   await expect(page.locator('#subject-chips .chip')).toHaveCount(10);
   await page.locator('[data-mode="ten"]').click();
   await expect(page.locator('#play')).toBeVisible();

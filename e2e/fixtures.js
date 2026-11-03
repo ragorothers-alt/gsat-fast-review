@@ -16,10 +16,15 @@ export const test = base.extend({
 
 export { expect };
 
+/** 等題庫載入完成：題庫有兩萬多題，平行跑的測試一起下載、解析時會超過預設的 10 秒，所以放寬 */
+export async function waitForBoot(page) {
+  await expect(page.locator('#boot')).toBeHidden({ timeout: 30_000 });
+}
+
 /** 開首頁並等題庫載入完成 */
 export async function openHome(page) {
   await page.goto('./');
-  await expect(page.locator('#boot')).toBeHidden();
+  await waitForBoot(page);
   await expect(page.locator('#home')).toBeVisible();
 }
 
