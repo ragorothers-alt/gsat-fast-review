@@ -56,7 +56,7 @@ export function initPlay(ctx) {
     guess: $('#guess'),
     unsure: $('#unsure'),
   };
-  const byId = new Map(ctx.bank.map((x) => [x.id, x]));
+  const byId = ctx.byId;
 
   let s = null;
   let q = null;
@@ -151,6 +151,8 @@ export function initPlay(ctx) {
    * @param {{ subject?: string, unit?: string }} opts unit：指定要闖（或重闖已過關）的單元，做到一半就接著做
    */
   function startPath({ subject = ctx.state.pathLast ?? ctx.state.settings.subjects[0] ?? SUBJECTS[0].id, unit } = {}) {
+    // 首頁沒選的科目在背景補載中：等它載好再開始
+    if (ctx.bankLoading() && !ctx.bank.some((x) => x.subject === subject)) return ctx.afterBank(() => startPath({ subject, unit }));
     const units = pathUnits(subject, ctx.state.settings.excludedUnits);
     const prog = pathProgress(ctx.state, subject);
     settleRuns(prog);

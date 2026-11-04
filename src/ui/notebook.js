@@ -83,13 +83,37 @@ export function initNotebook(ctx) {
     return SUBJECTS.flatMap((s) => (UNITS[s.id] ?? []).map((unit) => ({ subject: s.id, unit })));
   }
 
+  const indexEntry = (q) => [q.id, [norm([q.id, SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? [])].join('\n')), norm(q.explain)]];
+
+  /**
+   * 搜尋索引（每題正規化過的文字）：一打開搜尋分頁就趁空檔分段建立，第一次打字不會卡住畫面；
+   * 離開錯題本就丟掉，不一直佔著記憶體。題庫補上其他科之後重建。
+   */
+  function prepareIndex() {
+    if (hay && hay.size === ctx.bank.length) return;
+    const bank = ctx.bank;
+    const map = new Map();
+    hay = map;
+    let i = 0;
+    const step = (deadline) => {
+      if (hay !== map) return;
+      const until = performance.now() + 8;
+      while (i < bank.length && (deadline?.timeRemaining?.() > 1 || performance.now() < until)) map.set(...indexEntry(bank[i++]));
+      if (i < bank.length) idle(step);
+    };
+    idle(step);
+  }
+  const idle = (fn) => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 200 }) : setTimeout(fn, 0));
+
   /** 每個詞都要出現；題幹、選項、單元裡就找得到的排前面，只在解析裡出現的排後面 */
   function searchItems(query) {
     const terms = norm(query).split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
-    hay ||= new Map(
-      ctx.bank.map((q) => [q.id, [norm([q.id, SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? [])].join('\n')), norm(q.explain)]]),
-    );
+    // 索引還沒建完（打字很快，或題庫剛補上其他科）：剩下的直接補完
+    if (!hay || hay.size < ctx.bank.length) {
+      hay ??= new Map();
+      for (const q of ctx.bank) if (!hay.has(q.id)) hay.set(...indexEntry(q));
+    }
     const front = [];
     const back = [];
     for (const q of ctx.bank) {
@@ -193,13 +217,17 @@ export function initNotebook(ctx) {
     filter = 'all';
     render();
     $('#notebook-scroll').scrollTop = 0;
-    if (view === 'search') input.focus({ preventScroll: true });
+    if (view === 'search') {
+      prepareIndex();
+      input.focus({ preventScroll: true });
+    }
   }
 
   /** @param {'wrong'|'star'|'cards'|'search'} [initial] 打開哪個分頁；沒指定就回到上次看的 */
   ctx.showNotebook = (initial) => {
     if (initial) view = initial;
     filter = 'all';
+    if (view === 'search') prepareIndex();
     render();
     // 錯最多的科目，牠們的貓趴在最上面的卡片上
     const bySubject = new Map();
@@ -247,6 +275,8 @@ export function initNotebook(ctx) {
     else ctx.startRound(view === 'star' ? 'starred' : 'picked', { ids: items.map((q) => q.id) });
   });
   $('#notebook-back').addEventListener('click', () => ctx.goHome());
+  // 離開錯題本（回首頁、從搜尋結果開始練…）就丟掉搜尋索引
+  new MutationObserver(() => screen.hidden && (hay = null)).observe(screen, { attributes: true, attributeFilter: ['hidden'] });
   document.addEventListener('keydown', (e) => {
     // 搜尋框裡按 Esc 是清空關鍵字（瀏覽器內建），不離開
     if (e.key === 'Escape' && !screen.hidden && !(e.target === input && input.value)) ctx.goHome();

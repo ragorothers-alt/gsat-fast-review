@@ -14,10 +14,28 @@ export const THEMES = [
   ['dark', '深色'],
 ];
 
+/**
+ * 背景動畫（three.js 的貓咪場景）：完整 = 每秒 30 張；省電 = 每秒 12 張、解析度降低；關閉 = 不載入場景。
+ * 自動：記憶體或核心數少的手機用省電。
+ */
+export const MOTIONS = [
+  ['auto', '自動'],
+  ['on', '完整'],
+  ['lite', '省電'],
+  ['off', '關閉'],
+];
+
 const systemDark = matchMedia('(prefers-color-scheme: dark)');
 
 export function resolveTheme(theme) {
   return theme === 'dark' || (theme !== 'light' && systemDark.matches) ? 'dark' : 'light';
+}
+
+/** 實際的動畫等級：'on' | 'lite' | 'off' */
+export function resolveMotion(motion) {
+  if (motion === 'on' || motion === 'lite' || motion === 'off') return motion;
+  const weak = (navigator.deviceMemory ?? 8) <= 4 || (navigator.hardwareConcurrency ?? 8) <= 4;
+  return weak ? 'lite' : 'on';
 }
 
 /**
@@ -31,6 +49,7 @@ export function applyAppearance(settings, world) {
   root.style.setProperty('--fs', String(settings.fontScale));
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', PAPER[theme]);
   world?.setNight(theme === 'dark');
+  world?.setMotion(resolveMotion(settings.motion));
   try {
     localStorage.setItem(KEY, JSON.stringify({ theme: settings.theme, fontScale: settings.fontScale }));
   } catch {

@@ -10,7 +10,7 @@ import { sfx } from './feedback.js';
 
 export function initResult(ctx) {
   const $ = (sel) => document.querySelector(sel);
-  const byId = new Map(ctx.bank.map((q) => [q.id, q]));
+  const byId = ctx.byId;
   let last = { mode: 'blitz', opts: {} };
   let misses = [];
 

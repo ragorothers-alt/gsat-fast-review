@@ -23,6 +23,9 @@ const BREED_OF = {
 const BOIL_FPS = 8;
 // 手繪動畫每秒 30 張就夠順；不必跟著螢幕更新率（60–120 Hz）一直重畫，長時間刷題比較省電、不發燙
 const FRAME_MS = 1000 / 30;
+// 省電模式、系統要求減少動態，或一陣子沒碰螢幕（例如在讀長題目）：每秒 12 張就好
+const LITE_MS = 1000 / 12;
+const IDLE_AFTER = 20_000;
 const SHELF_UNIT = 100; // 書架幾何用 100px 當 1 單位，抖動才會跟貓一致
 const MAX_CAST = 5;
 
@@ -32,6 +35,7 @@ const NOOP_WORLD = {
   setFocusSubject() {},
   setCast() {},
   setNight() {},
+  setMotion() {},
   setCombo() {},
   react() {},
   burst() {},
@@ -43,8 +47,9 @@ const NOOP_WORLD = {
 /**
  * @param {HTMLCanvasElement} canvas
  * @param {Record<'home'|'play'|'result'|'stats', () => DOMRect | null>} anchors 各畫面貓咪要對齊的 DOM 區塊
+ * @param {{ motion?: 'on' | 'lite' }} [opts] 省電模式：解析度降低、每秒畫的張數減少
  */
-export function createWorld(canvas, anchors) {
+export function createWorld(canvas, anchors, { motion = 'on' } = {}) {
   let renderer;
   try {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' });
@@ -53,8 +58,13 @@ export function createWorld(canvas, anchors) {
     document.body.classList.add('no-webgl');
     return NOOP_WORLD;
   }
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+  // 系統的「減少動態」：貓不跳、塗鴉不動、線條不抖；使用中切換也跟著變
+  const reducedQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  let reduced = reducedQuery.matches;
+  reducedQuery.addEventListener?.('change', () => (reduced = reducedQuery.matches));
+  let level = motion;
+  // 高解析度螢幕的像素數是 CSS 尺寸的好幾倍；省電模式解析度降一點，線條稍微軟一些但少畫很多像素
+  const pixelRatio = Math.min(window.devicePixelRatio || 1, motion === 'lite' ? 1.25 : 2);
   renderer.setPixelRatio(pixelRatio);
   renderer.setClearColor(0x000000, 0);
 
@@ -93,6 +103,10 @@ export function createWorld(canvas, anchors) {
   let width = 1;
   let height = 1;
   const pointer = { x: 0, y: 0, at: -1e9 };
+  // 最近一次有事發生（作答反應、換畫面、按鍵）：之後一陣子照常速畫，動作才順
+  let wokeAt = performance.now();
+  const wake = () => (wokeAt = performance.now());
+  window.addEventListener('keydown', wake);
   const timer = new THREE.Timer();
   const tint = new THREE.Vector3(1, 1, 1);
 
@@ -194,8 +208,12 @@ export function createWorld(canvas, anchors) {
   }
 
   function buildShelves(r, rows) {
-    const key = [r.left, r.width, ...rows].map(Math.round).join(',');
-    if (key === shelfKey) return;
+    // 幾何以各層木板自己的高度為原點建立，只有寬度或層數改變才重建；捲動時只移動位置
+    const key = [r.left, r.width, rows.length].map(Math.round).join(',');
+    if (key === shelfKey) {
+      shelves.forEach((m, i) => (m.position.y = -rows[i]));
+      return;
+    }
     shelfKey = key;
     for (const s of shelves) {
       scene.remove(s);
@@ -205,7 +223,7 @@ export function createWorld(canvas, anchors) {
     const x0 = (r.left + 4) / u;
     const x1 = (r.left + r.width - 4) / u;
     shelves = rows.map((y, i) => {
-      const yy = -y / u;
+      const yy = 0;
       const mid = (x0 + x1) / 2;
       const plank = spline(
         [[x0, yy], [mid, yy - 0.012], [x1, yy], [x1 + 0.012, yy - 0.04], [x1, yy - 0.08], [mid, yy - 0.09], [x0, yy - 0.08], [x0 - 0.012, yy - 0.04]],
@@ -214,6 +232,7 @@ export function createWorld(canvas, anchors) {
       const p = new Part().fill(plank, '#ecd8b5').stroke(plank, INK, 2.4 / u, { closed: true, seed: i, pressure: 0.4, edge: true });
       const m = p.mesh(shelfMat, 60 + i);
       m.scale.setScalar(u);
+      m.position.y = -y;
       scene.add(m);
       return m;
     });
@@ -223,8 +242,10 @@ export function createWorld(canvas, anchors) {
   let elapsed = 0;
   let lastFrame = -Infinity;
   function frame(now) {
+    const idle = now - pointer.at > IDLE_AFTER && now - wokeAt > IDLE_AFTER && shakeT <= 0;
+    const interval = level === 'lite' || reduced || idle ? LITE_MS : FRAME_MS;
     // 留一點容許誤差，60 Hz 螢幕上才會穩定隔一幀畫一次，而不是掉到 20 張
-    if (now - lastFrame < FRAME_MS - 3) return;
+    if (now - lastFrame < interval - 3) return;
     lastFrame = now;
     // 剛從背景切回來時 reset 在這一幀開始之後，差值可能是負的
     const dt = Math.max(0, Math.min(timer.update(now).getDelta(), 0.05));
@@ -296,9 +317,10 @@ export function createWorld(canvas, anchors) {
     pointer.at = performance.now();
   });
 
-  // 切到背景時停止繪圖省電
+  // 切到背景或關掉背景動畫時停止繪圖
   function syncLoop() {
-    if (document.hidden) renderer.setAnimationLoop(null);
+    canvas.hidden = level === 'off';
+    if (document.hidden || level === 'off') renderer.setAnimationLoop(null);
     else {
       timer.reset();
       renderer.setAnimationLoop(frame);
@@ -321,6 +343,7 @@ export function createWorld(canvas, anchors) {
     },
     setScene(name) {
       if (name === mode) return;
+      wake();
       mode = name;
       if (name !== 'play') api.setCombo(0);
       for (const cat of cats) cat.ducking = false;
@@ -361,8 +384,14 @@ export function createWorld(canvas, anchors) {
       if (cat) cat.excite = Math.min(n / 8, 1);
       if (!n) for (const c of cats) c.excite = 0;
     },
+    /** 背景動畫等級：on／lite 只改每秒畫幾張；off 停止繪圖、藏起畫布 */
+    setMotion(m) {
+      level = m;
+      syncLoop();
+    },
     /** 當前科目的貓對作答結果做反應 */
     react(outcome) {
+      wake();
       const cat = focusId && catById[focusId];
       if (!cat) return;
       if (outcome === 'right') {
@@ -383,6 +412,7 @@ export function createWorld(canvas, anchors) {
       if (!reduced) shakeT = 0.3;
     },
     celebrate() {
+      wake();
       cast.forEach((id, i) => {
         const cat = catById[id];
         if (!reduced) cat.hop(0.45, 0.25 + i * 0.12);

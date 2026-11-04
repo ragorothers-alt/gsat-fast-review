@@ -40,7 +40,8 @@ export function initHome(ctx) {
   ctx.world.onCatTap = toggle;
 
   const unitSheet = initUnitSheet(ctx, () => render());
-  $('#open-units').addEventListener('click', () => unitSheet.open());
+  ctx.openUnits = () => unitSheet.open();
+  $('#open-units').addEventListener('click', () => ctx.openUnits());
 
   $('#toggle-all').addEventListener('click', () => {
     const all = settings.subjects.length === SUBJECTS.length;
@@ -50,7 +51,7 @@ export function initHome(ctx) {
   });
 
   const settingsSheet = initSettings(ctx, () => render());
-  $('#open-settings').addEventListener('click', () => settingsSheet.open());
+  $('#open-settings').addEventListener('click', () => ctx.openSettings());
   ctx.openSettings = (section) => settingsSheet.open(section);
   $('#open-notebook').addEventListener('click', () => ctx.showNotebook());
   $('#daily').addEventListener('click', () => ctx.showStats());

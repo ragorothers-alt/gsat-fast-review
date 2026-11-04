@@ -254,6 +254,48 @@ test('設定：深色模式與字體大小，重新整理後還在', async ({ pa
   expect(await page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--fs').trim())).toBe('1.25');
 });
 
+test('只選一科時先載入那一科就能開始玩，其他科在背景補上', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { subjects: ['english'] } }));
+  });
+  // 數學題庫晚一點才回來：首頁不必等它
+  let release;
+  const held = new Promise((r) => (release = r));
+  await page.route('**/assets/math-*.json', async (route) => {
+    await held;
+    await route.continue();
+  });
+  await openHome(page);
+  await startMode(page, 'ten');
+  await expect(page.locator('#q-subject')).toContainText('英文');
+  // 還沒作答就離開：直接回首頁
+  await page.locator('#quit').click();
+  await expect(page.locator('#home')).toBeVisible();
+  release();
+  // 學習分析要用到每一科：數學載完後各科都有題數
+  await page.locator('#daily').click();
+  await expect(page.locator('#stats')).toBeVisible();
+  await expect(page.locator('#stats-subjects')).toContainText('數學');
+});
+
+test('背景動畫關閉：不載入背景場景的程式', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { motion: 'off' } }));
+  });
+  const scene = [];
+  page.on('request', (req) => /assets\/scene-/.test(req.url()) && scene.push(req.url()));
+  await openHome(page);
+  await expect(page.locator('#world')).toBeHidden();
+  await startMode(page, 'ten');
+  expect(scene).toEqual([]);
+  // 改成省電：這時才載入，畫布出現
+  await page.locator('#quit').click();
+  await page.locator('#open-settings').click();
+  await page.locator('#motion-options button', { hasText: '省電' }).click();
+  await expect(page.locator('#world')).toBeVisible();
+  await expect.poll(() => scene.length).toBeGreaterThan(0);
+});
+
 test('手機橫放：首頁不用捲動，作答時題目在左、選項在右', async ({ page }, info) => {
   test.skip(info.project.name !== 'phone', '只看手機');
   await page.setViewportSize({ width: 844, height: 390 });

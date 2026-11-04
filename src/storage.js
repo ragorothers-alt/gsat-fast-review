@@ -38,6 +38,8 @@ export function freshState() {
       examDate: DEFAULT_EXAM_DATE,
       theme: 'auto',
       fontScale: 1,
+      // motion：背景動畫 auto／on／lite／off（見 ui/appearance.js）
+      motion: 'auto',
       reminder: { on: false, hour: 20 },
     },
   };

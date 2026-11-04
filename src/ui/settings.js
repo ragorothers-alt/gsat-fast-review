@@ -6,7 +6,7 @@ import { DEFAULT_EXAM_DATE } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { exportBackup, mergeState, parseBackup, setFlag } from '../sync.js';
 import { topicLabel } from '../units.js';
-import { FONT_SCALES, THEMES, applyAppearance } from './appearance.js';
+import { FONT_SCALES, MOTIONS, THEMES, applyAppearance } from './appearance.js';
 import { copyText } from './clipboard.js';
 import { setSoundEnabled } from './feedback.js';
 import { richHTML } from './rich.js';
@@ -19,14 +19,16 @@ export function initSettings(ctx, onChange) {
   const $ = (sel) => document.querySelector(sel);
   const sheet = $('#settings-sheet');
   const settings = ctx.state.settings;
-  const byId = new Map(ctx.bank.map((q) => [q.id, q]));
+  const byId = ctx.byId;
   const dateInput = $('#exam-date');
   const soundBtn = $('#sound-toggle');
   const fileInput = $('#import-file');
   const flagList = $('#flag-list');
 
-  // 題庫裡已經沒有的題目不必再列在回報清單
-  for (const id of Object.keys(ctx.state.flags)) if (!byId.has(id)) delete ctx.state.flags[id];
+  // 題庫裡已經沒有的題目不必再列在回報清單（等每一科都載入了才判斷，不然會刪掉還沒載入那科的回報）
+  ctx.bankReady.then(() => {
+    for (const id of Object.keys(ctx.state.flags)) if (!byId.has(id)) delete ctx.state.flags[id];
+  });
 
   function commit() {
     ctx.save();
@@ -77,6 +79,7 @@ export function initSettings(ctx, onChange) {
     });
   const themeBtns = segButtons('#theme-options', THEMES, 'theme');
   const fontBtns = segButtons('#font-options', FONT_SCALES, 'fontScale');
+  const motionBtns = segButtons('#motion-options', MOTIONS, 'motion');
 
   // ── 音效 ───────────────────────────────────────────
   setSoundEnabled(settings.sound);
@@ -189,6 +192,7 @@ export function initSettings(ctx, onChange) {
     soundBtn.setAttribute('aria-checked', String(settings.sound));
     for (const [value, btn] of themeBtns) btn.setAttribute('aria-pressed', String(settings.theme === value));
     for (const [value, btn] of fontBtns) btn.setAttribute('aria-pressed', String(settings.fontScale === value));
+    for (const [value, btn] of motionBtns) btn.setAttribute('aria-pressed', String(settings.motion === value));
     ctx.renderCloud?.();
     ctx.renderReminder?.();
     ctx.renderInstall?.();

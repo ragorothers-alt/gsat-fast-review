@@ -152,10 +152,12 @@ export function createDoodles(scene) {
     },
     update(dt, t, speedMul, reduced) {
       for (const d of items) {
+        // 系統開了「減少動態」：塗鴉停在原地，不飄也不擺
         if (!reduced) d.y -= d.speed * speedMul * dt;
         if (d.y < -50) spawn(d, false);
-        d.mesh.position.set(d.x + Math.sin(t * 0.4 + d.phase) * 6, -d.y, 0);
-        d.mesh.rotation.z = d.rot + Math.sin(t * 0.5 + d.phase) * 0.15;
+        const sway = reduced ? 0 : 1;
+        d.mesh.position.set(d.x + Math.sin(t * 0.4 + d.phase) * 6 * sway, -d.y, 0);
+        d.mesh.rotation.z = d.rot + Math.sin(t * 0.5 + d.phase) * 0.15 * sway;
         d.mesh.scale.setScalar(d.size);
       }
     },

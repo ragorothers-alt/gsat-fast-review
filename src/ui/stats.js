@@ -14,7 +14,7 @@ const LOW_SHOWN = 6;
 export function initStats(ctx) {
   const $ = (sel) => document.querySelector(sel);
   const screen = $('#stats');
-  const known = new Set(ctx.bank.map((q) => q.id));
+  const known = ctx.byId;
   let weak = [];
 
   /** @param {string} [section] 直接捲到這一區（例如首頁的「看存量」進來是 stock） */
