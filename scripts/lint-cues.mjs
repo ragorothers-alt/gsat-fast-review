@@ -8,7 +8,8 @@
 //   後面接檔案路徑時只檢查那些檔（例如改寫中的一批題目）
 //
 // 指標：
-//   長度  有一個選項明顯最短或最長（和次短／次長差 3 字以上）時，選它猜中的比例。亂選是 25%
+//   長度  有一個選項明顯最短或最長（和次短／次長差 3 字以上）時，選它猜中的比例。亂選是 25%；
+//         太高是「選最長的」就猜得中，太低是「刪掉最長的」就能提高命中率，兩邊都設門檻
 //   數值  四個選項都是數字的單選題，正解落在中間兩個值的比例。亂放是 50%
 //   絕對  刪去法：刪掉有「只要…就」「一定」「完全」這類絕對詞的選項，從剩下的隨便選一個的命中率。亂選是 25%
 //   語氣  英文是非題：敘述有 always／never／only 這類詞就猜「錯」、沒有就猜「對」的命中率。亂猜是 50%
@@ -23,6 +24,8 @@ const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
 
 /** 門檻：超過就警告（--strict 時失敗） */
 export const LIMITS = { length: 0.35, numeric: 0.62, absolute: 0.28, tone: 0.56 };
+/** 下限：太低也是線索。例如長度突出的選項從來不是正解，學生就能把它刪掉 */
+export const FLOORS = { length: 0.08 };
 /** 長度差幾字以上才算「明顯」 */
 const GAP = 3;
 /** 列入比例前至少要有幾題，題數太少的比例不準 */
@@ -185,11 +188,11 @@ function main() {
   }
   const pct = (x) => (x === null ? '  –  ' : `${(x * 100).toFixed(1).padStart(5)}%`);
   let over = 0;
-  console.log('猜題線索（門檻：長度 ≤ 35%、數值 ≤ 62%、絕對 ≤ 28%、語氣 ≤ 56%）');
+  console.log('猜題線索（門檻：長度 8–35%、數值 ≤ 62%、絕對 ≤ 28%、語氣 ≤ 56%）');
   console.log('科目        長度     數值     絕對     語氣     解析沒寫答案');
   for (const [s, m] of Object.entries(measure(bank))) {
     const cells = ['length', 'numeric', 'absolute', 'tone'].map((k) => {
-      const bad = m[k] !== null && m[k] > LIMITS[k];
+      const bad = m[k] !== null && (m[k] > LIMITS[k] || m[k] < (FLOORS[k] ?? 0));
       if (bad) over++;
       return `${pct(m[k])}${bad ? '⚠' : ' '}`;
     });

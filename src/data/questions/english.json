@@ -278,13 +278,13 @@
     "type": "mc",
     "q": "The repairs cost a ____ amount, so the final bill was extremely high.",
     "choices": [
+      "small",
       "modest",
-      "minor",
       "trivial",
       "considerable"
     ],
     "answer": 3,
-    "explain": "considerable 意為「相當大的」；帳單金額極高，不能選表示「少量的」modest 或「微不足道的」trivial。",
+    "explain": "considerable 表示「相當大的」，符合帳單金額極高；small、modest、trivial 在此均表示金額小或不多。",
     "formula": false,
     "level": 2
   },
@@ -984,11 +984,11 @@
     "choices": [
       "had had",
       "will have",
-      "have",
+      "have had",
       "had"
     ],
     "answer": 3,
-    "explain": "wish 後表達與現在事實相反的願望，用過去式 had「有」；now 排除表示過去遺憾的 had had。",
+    "explain": "wish 後表達與現在事實相反的願望，用過去式 had「有」；now 排除表示過去遺憾的 had had，也不用現在完成式 have had 或未來式 will have。",
     "formula": false,
     "level": 3
   },
@@ -1162,12 +1162,12 @@
     "q": "The driver checked the brakes ____ before the trip.",
     "choices": [
       "carefully",
-      "careful",
+      "safe",
       "caring",
       "care"
     ],
     "answer": 0,
-    "explain": "修飾動詞 checked「檢查」須用副詞 carefully「仔細地」；careful 是形容詞，意為「仔細的」。",
+    "explain": "修飾 checked「檢查」應用副詞 carefully「仔細地」；safe「安全的」、caring「體貼的」是形容詞，care 是名詞或動詞。",
     "formula": false,
     "level": 1
   },
@@ -1212,13 +1212,13 @@
     "type": "mc",
     "q": "To ____ a message is to understand it incorrectly.",
     "choices": [
-      "misplace",
-      "misuse",
-      "mislead",
+      "misrepresent",
+      "mispronounce",
+      "misidentify",
       "misunderstand"
     ],
     "answer": 3,
-    "explain": "misunderstand 意為「誤解」，字首 mis- 表「錯誤地」；misplace 是「放錯地方」，mislead 是「誤導」。",
+    "explain": "misunderstand 是「誤解」；mis- 表「錯誤地」。misrepresent 是「歪曲」，mispronounce 是「發音錯誤」，misidentify 是「辨認錯誤」。",
     "formula": false,
     "level": 2
   },
@@ -1230,12 +1230,12 @@
     "q": "The suffix '-able' in 'reusable' means ____.",
     "choices": [
       "full of",
-      "capable of being",
-      "in the past",
+      "can be",
+      "used to",
       "without"
     ],
     "answer": 1,
-    "explain": "此處字尾 -able 表示「能被……的」，搭配 reuse「重複使用」，reusable 就是「可重複使用的」。",
+    "explain": "字尾 -able 在此表示 can be「能被……」，所以 reusable 是「可重複使用的」；full of「充滿」較接近 -ful 的字義。",
     "formula": false,
     "level": 2
   },
@@ -1392,13 +1392,13 @@
     "type": "mc",
     "q": "A: Could you help me carry this box? B: ____",
     "choices": [
-      "Sure. Let me help you.",
+      "Sure. Let me help.",
       "Congratulations!",
       "You are welcome.",
       "It does not matter."
     ],
     "answer": 0,
-    "explain": "Sure. Let me help you. 意為「當然，讓我幫你」，適合回應請求；You are welcome. 是「不客氣」。",
+    "explain": "Sure. Let me help. 是「當然，讓我幫忙」，可回應請求；You are welcome. 是「不客氣」，用來回應道謝。",
     "formula": false,
     "level": 1
   },
@@ -1475,15 +1475,15 @@
     "subject": "english",
     "topic": "轉折語與篇章",
     "type": "mc",
-    "q": "A: Do you mind if I sit here? B: ____ The seat is free.",
+    "q": "Complete B's reply accepting A's request. A: Do you mind if I sit here? B: ____ The seat is free.",
     "choices": [
-      "Yes, I do. Please find another seat.",
-      "I am afraid so. This seat is taken.",
+      "Yes. Find a new seat.",
+      "I'm afraid I do mind.",
       "Not at all. Go ahead.",
-      "Sorry, I am saving it for a friend."
+      "Sorry. It's reserved."
     ],
     "answer": 2,
-    "explain": "Do you mind ...? 是「你介意……嗎」；Not at all. Go ahead. 表示「完全不介意，請坐」。",
+    "explain": "Do you mind ...? 問是否介意；題目指定接受入座請求，故用 Not at all. Go ahead.「不介意，請坐」；其餘回覆表示拒絕或介意。",
     "formula": false,
     "level": 2
   },
@@ -1562,12 +1562,12 @@
     "q": "The performers bowed to the ____, the people watching the show.",
     "choices": [
       "audience",
-      "crew",
-      "staff",
-      "cast"
+      "actors",
+      "singers",
+      "dancers"
     ],
     "answer": 0,
-    "explain": "audience 是「觀眾、聽眾」，指觀看表演的人；cast 是「全體演員」，crew 是「工作人員」。",
+    "explain": "audience 是「觀眾、聽眾」，指觀看表演的人；actors「演員」、singers「歌手」、dancers「舞者」則是表演者。",
     "formula": false,
     "level": 1
   },
@@ -1731,12 +1731,12 @@
     "q": "The donation was ____; it covered nearly half the hospital's annual costs.",
     "choices": [
       "substantial",
-      "symbolic",
-      "minimal",
-      "moderate"
+      "very small",
+      "insignificant",
+      "quite tiny"
     ],
     "answer": 0,
-    "explain": "substantial 是「大量的、相當可觀的」，能支付近半年度費用；symbolic 在此是「象徵性的」。",
+    "explain": "substantial 是「相當可觀的」；捐款支付年度總費用的近一半，金額重大；very small、insignificant、quite tiny 均表示金額很小，不合語境。",
     "formula": false,
     "level": 2
   },
@@ -1796,15 +1796,15 @@
     "subject": "english",
     "topic": "進階單字",
     "type": "mc",
-    "q": "Unlike the plain entrance, the ceiling had ____ patterns with hundreds of tiny details.",
+    "q": "Unlike the plain entrance, the ceiling had ____ patterns made up of hundreds of carefully arranged, complex details.",
     "choices": [
-      "crude",
-      "plain",
-      "simple",
+      "undecorated",
+      "very plain",
+      "very simple",
       "elaborate"
     ],
     "answer": 3,
-    "explain": "elaborate 作形容詞是「精細複雜的」，符合大量細節；crude 是「粗糙的」，plain 是「樸素的」。",
+    "explain": "elaborate 是「精細複雜的」，符合數百個精心安排且複雜的細節；undecorated「未裝飾的」、very plain「很樸素的」、very simple「很簡單的」皆不合。",
     "formula": false,
     "level": 2
   },
@@ -1832,13 +1832,13 @@
     "type": "mc",
     "q": "The school will ____ its approved recycling plan by placing bins in every classroom.",
     "choices": [
-      "propose",
-      "postpone",
+      "offer",
+      "delay",
       "implement",
       "reject"
     ],
     "answer": 2,
-    "explain": "implement 是「實施」；在每間教室放置回收桶是落實計畫的具體行動，postpone 是「延後」。",
+    "explain": "implement 是「實施」，設置回收桶是落實計畫；offer 是「提供、提出」，delay 是「延後」，reject 是「拒絕」，不合此處的具體執行。",
     "formula": false,
     "level": 2
   },
@@ -1900,13 +1900,13 @@
     "type": "mc",
     "q": "The airline paid money to ____ passengers for their lost luggage.",
     "choices": [
-      "charge",
+      "penalize",
       "compensate",
-      "blame",
-      "fine"
+      "overcharge",
+      "prosecute"
     ],
     "answer": 1,
-    "explain": "compensate 是「補償」，航空公司因行李遺失付錢給乘客；charge 是「收費」，fine 是「罰款」。",
+    "explain": "compensate 是「補償」，此處是因行李遺失付錢給乘客；penalize 是「處罰」，overcharge 是「多收費」，prosecute 是「起訴」。",
     "formula": false,
     "level": 2
   },
@@ -2000,15 +2000,15 @@
     "subject": "english",
     "topic": "進階單字",
     "type": "mc",
-    "q": "The scientist chose to ____ her mistake by openly admitting that she had made it.",
+    "q": "The scientist chose to ____ her mistake by openly admitting it and accurately describing how serious it was.",
     "choices": [
       "acknowledge",
-      "conceal",
-      "justify",
-      "repeat"
+      "cover up",
+      "understate",
+      "overlook"
     ],
     "answer": 0,
-    "explain": "acknowledge 是「承認」；openly admitting「公開承認」直接說明字義，justify 是「為……辯護」，不等於認錯。",
+    "explain": "acknowledge 是「承認」；公開認錯並如實說明嚴重性，排除 cover up「掩蓋」、understate「淡化」與 overlook「忽略」。",
     "formula": false,
     "level": 2
   },
@@ -2230,7 +2230,7 @@
     "subject": "english",
     "topic": "進階單字",
     "type": "tf",
-    "q": "A spontaneous decision is always carefully planned weeks in advance.",
+    "q": "A spontaneous decision is carefully planned weeks in advance.",
     "answer": false,
     "explain": "spontaneous 是「自發的、未經事先安排的」，不是提前數週縝密規劃；in advance 是「事先」。",
     "formula": false,
@@ -2457,13 +2457,13 @@
     "type": "mc",
     "q": "The root bio- in biology refers to ____.",
     "choices": [
-      "sound",
+      "hearing",
       "life",
-      "earth",
-      "light"
+      "the soil",
+      "sunlight"
     ],
     "answer": 1,
-    "explain": "字根 bio- 表示「生命」，biology 是「生物學」；-logy 表示某門學問。",
+    "explain": "bio- 表示 life「生命」，biology 是「生物學」；hearing「聽覺」、the soil「土壤」、sunlight「陽光」都不是這個字根的意思。",
     "formula": false,
     "level": 1
   },
@@ -2558,13 +2558,13 @@
     "type": "mc",
     "q": "By next Friday, we ____ all ten chapters.",
     "choices": [
-      "had finished",
-      "have finished",
+      "had been finishing",
+      "have been finishing",
       "will have finished",
-      "were finishing"
+      "would be finishing"
     ],
     "answer": 2,
-    "explain": "by next Friday 是「到下週五為止」，用未來完成式 will have finished 表示屆時已完成。",
+    "explain": "by next Friday 設定未來截止點，表示屆時已完成，用 will have finished；had／have been finishing 的時間不合，would 也缺少相應語境。",
     "formula": false,
     "level": 2
   },
@@ -2626,13 +2626,13 @@
     "type": "mc",
     "q": "This time tomorrow, we ____ to Taipei by train.",
     "choices": [
-      "had traveled",
+      "had been traveling",
       "will be traveling",
-      "were traveling",
-      "have traveled"
+      "would be traveling",
+      "have been traveling"
     ],
     "answer": 1,
-    "explain": "this time tomorrow「明天這個時候」表示未來某時正在進行的動作，用未來進行式 will be traveling「將正在前往」。",
+    "explain": "this time tomorrow 指明天此刻正在進行的動作，用 will be traveling；had／have been traveling 的時間不合，would 也缺少相應語境。",
     "formula": false,
     "level": 2
   },
@@ -2792,7 +2792,7 @@
       "if",
       "whether",
       "that",
-      "what"
+      "unless"
     ],
     "answer": 1,
     "explain": "介系詞 on 後表示「是否」用 whether，不用 if；get enough support 是「獲得足夠支持」。",
@@ -2951,7 +2951,7 @@
     "subject": "english",
     "topic": "子句與連接詞",
     "type": "tf",
-    "q": "In 'He arrived late, which upset us,' 'which' refers only to the person who arrived.",
+    "q": "In 'He arrived late, which upset us,' 'which' refers to the person who arrived.",
     "answer": false,
     "explain": "which 指前面「他遲到」整件事，這件事讓我們不高興，不是只指 he「他」這個人。",
     "formula": false,
@@ -2984,7 +2984,7 @@
     "subject": "english",
     "topic": "子句與連接詞",
     "type": "tf",
-    "q": "'Whether Mia agrees or not, we will leave' means we will leave only if she agrees.",
+    "q": "'Whether Mia agrees or not, we will leave' means Mia's approval is required for us to leave.",
     "answer": false,
     "explain": "whether ... or not 在此是「不論是否」，表示無論米雅同不同意都會離開，並非以同意為條件。",
     "formula": false,
@@ -3020,7 +3020,7 @@
       "to use"
     ],
     "answer": 3,
-    "explain": "how to use 是「如何使用」，疑問詞 how 後可接不定詞，整體作 show 的受詞。",
+    "explain": "how to use 表示「如何使用」；疑問詞 how 後可接不定詞，how to use this app 整體作 show 的受詞。",
     "formula": false,
     "level": 2
   },
@@ -3243,7 +3243,7 @@
     "subject": "english",
     "topic": "不定詞、動名詞與分詞",
     "type": "tf",
-    "q": "In 'The book is easy to read,' 'read' must be changed to 'be read'.",
+    "q": "'The book is easy to read' needs the passive infinitive 'to be read' to be grammatical.",
     "answer": false,
     "explain": "easy to read 是「容易閱讀」；此句用主動形式的不定詞描述書被閱讀，不必改成 to be read。",
     "formula": false,
@@ -3469,9 +3469,9 @@
     "subject": "english",
     "topic": "假設語氣與特殊句構",
     "type": "tf",
-    "q": "'Not all students agreed' means no students agreed.",
+    "q": "'Not everyone agreed' means that no one agreed.",
     "answer": false,
-    "explain": "not all 是「並非全部」，屬部分否定，不能等同 no students「沒有任何學生」。",
+    "explain": "not everyone 是「並非每個人」，屬部分否定，不等於 no one「沒有人」；原句並未說同意者是零人。",
     "formula": false,
     "level": 2
   },
@@ -3491,9 +3491,9 @@
     "subject": "english",
     "topic": "假設語氣與特殊句構",
     "type": "tf",
-    "q": "If no runner is faster than Jane, Jane must be faster than every other runner.",
+    "q": "If no runner is faster than Jane, it follows that Jane's speed exceeds that of the other runners.",
     "answer": false,
-    "explain": "no runner is faster 是「沒有跑者比她快」，仍可能有人與她同速，不能推論她是唯一最快的跑者。",
+    "explain": "沒有跑者比 Jane 快，仍可能有人與她同速；因此不能推出她的速度高於其他跑者。exceed 是「超過」。",
     "formula": false,
     "level": 3
   },
@@ -3945,13 +3945,13 @@
     "type": "mc",
     "q": "The principal will ____ a speech at the graduation ceremony.",
     "choices": [
-      "deliver",
+      "give",
       "tell",
       "talk",
       "say"
     ],
     "answer": 0,
-    "explain": "deliver a speech 是「發表演說」的搭配；tell 後常接人或故事，talk 不能直接接 a speech。",
+    "explain": "give a speech 是「發表演說」，與 deliver a speech 同義；tell 常接人或故事，talk 與 say 不和 a speech 這樣搭配。",
     "formula": false,
     "level": 2
   },
@@ -4548,12 +4548,12 @@
     "q": "'But for your help, we would have failed.' What does but for mean here?",
     "choices": [
       "Without",
-      "Because of",
-      "In addition to",
-      "In exchange for"
+      "Due to",
+      "Besides",
+      "Despite"
     ],
     "answer": 0,
-    "explain": "but for 在此等於 without「若沒有、要不是」，引出與過去事實相反的條件；本句表示有了你的幫忙才沒有失敗。",
+    "explain": "but for 在此等於 without「若沒有、要不是」；due to 是「由於」，besides 是「除了……之外還」，despite 是「儘管」。",
     "formula": false,
     "level": 2
   },
@@ -4686,7 +4686,7 @@
     "subject": "english",
     "topic": "假設語氣與特殊句構",
     "type": "tf",
-    "q": "After 'I cannot swim,' 'So can I' expresses the same negative meaning.",
+    "q": "After 'I can't swim,' 'So can I' expresses the same negative meaning.",
     "answer": false,
     "explain": "附和否定句應說 Neither can I「我也不會」；So can I 是「我也會」，用來附和肯定句。",
     "formula": false,
@@ -4733,10 +4733,10 @@
     "type": "mc",
     "q": "'Mia told Zoe that she had won.' Without more context, she could refer to ____.",
     "choices": [
-      "neither girl",
-      "only Mia",
-      "only Zoe",
-      "either Mia or Zoe"
+      "Neither",
+      "Mia alone",
+      "Zoe alone",
+      "Mia or Zoe"
     ],
     "answer": 3,
     "explain": "she「她」可能指米雅，也可能指柔伊；本句缺少可排除其中一人的線索，不能只因距離近就認定是柔伊。",
@@ -4874,12 +4874,12 @@
     "q": "The store returned the full price of my defective jacket; this repayment was a ____.",
     "choices": [
       "refund",
-      "receipt",
-      "deposit",
-      "discount"
+      "sales receipt",
+      "down payment",
+      "price reduction"
     ],
     "answer": 0,
-    "explain": "refund 是「退款」，店家把已付的錢退回；discount 是「折扣」，指降低售價。",
+    "explain": "refund 是「退款」，指退回已付的款項；sales receipt 是收據，down payment 是頭期款，price reduction 是降價，都不是題述的退款。",
     "formula": false,
     "level": 2
   },
@@ -5096,11 +5096,11 @@
     "choices": [
       "product",
       "ingredient",
-      "flavor",
+      "seasoning",
       "portion"
     ],
     "answer": 1,
-    "explain": "ingredient 是「食材、原料」，麵粉是製作麵包的主要成分；product 是「成品」，flavor 是「味道」。",
+    "explain": "ingredient 是「食材、原料」，麵粉是麵包的主要成分；product 是「成品」，seasoning 是「調味料」，portion 是「一份、部分」。",
     "formula": false,
     "level": 2
   },
@@ -5635,9 +5635,9 @@
     "subject": "english",
     "topic": "核心單字",
     "type": "tf",
-    "q": "'Curious' fits: 'Showing no interest at all, the child was ____ about the answer.'",
+    "q": "'Curious' fits: 'The child had no interest in the answer and felt ____ about it.'",
     "answer": false,
-    "explain": "curious 是「好奇的」，與完全沒有興趣矛盾；此處可用 indifferent「漠不關心的」。",
+    "explain": "curious 是「好奇的」，與沒有興趣矛盾；此處可用 indifferent「漠不關心的」。",
     "formula": false,
     "level": 2
   },
@@ -5712,7 +5712,7 @@
     "subject": "english",
     "topic": "核心單字",
     "type": "tf",
-    "q": "'Stubborn' fits: 'Mia always willingly changes her views, so she is too ____ to change her mind.'",
+    "q": "'Stubborn' fits: 'Mia readily changes her views, so she is too ____ to change her mind.'",
     "answer": false,
     "explain": "stubborn 是「固執的」；願意改變看法，與固執到不肯改變想法的描述矛盾。",
     "formula": false,
@@ -5723,7 +5723,7 @@
     "subject": "english",
     "topic": "核心單字",
     "type": "tf",
-    "q": "'Visible' fits: 'The ink appears only under a special lamp; in ordinary light, it is ____.'",
+    "q": "'Visible' fits: 'The ink appears under a special lamp but not in ordinary light; in ordinary light, it is ____.'",
     "answer": false,
     "explain": "visible 是「看得見的」；只有特殊燈下才顯現，普通光線下應是 invisible「看不見的」。",
     "formula": false,
@@ -5745,7 +5745,7 @@
     "subject": "english",
     "topic": "核心單字",
     "type": "tf",
-    "q": "'Capable' fits: 'He wants to fix the engine but lacks every required skill; he is ____ of repairing it.'",
+    "q": "'Capable' fits: 'He wants to fix the engine but lacks the skills needed for the task; he is ____ of repairing it.'",
     "answer": false,
     "explain": "capable 是「有能力的」；有意願卻缺乏所需技能，不能說有能力修好，引擎維修能力與意願不同。",
     "formula": false,
@@ -5900,12 +5900,12 @@
     "q": "She studies ____, learning how buildings are designed rather than how machines are built.",
     "choices": [
       "architecture",
-      "psychology",
-      "agriculture",
-      "economics"
+      "medicine",
+      "farming",
+      "finance"
     ],
     "answer": 0,
-    "explain": "architecture 是「建築學」，研究建築設計；psychology 是「心理學」，agriculture 是「農業」，economics 是「經濟學」。",
+    "explain": "architecture 是「建築學」，研究建築設計；medicine 是「醫學」，farming 是「農業」，finance 是「財務、金融」。",
     "formula": false,
     "level": 2
   },
@@ -5982,15 +5982,15 @@
     "subject": "english",
     "topic": "進階單字",
     "type": "mc",
-    "q": "Her ability to explain complex ideas clearly is an ____ to the team, helping everyone work together.",
+    "q": "Her ability to explain complex ideas clearly is ____ to the team, helping everyone work together.",
     "choices": [
-      "expense",
-      "obstacle",
-      "liability",
-      "asset"
+      "an added cost",
+      "an obstacle",
+      "a liability",
+      "an asset"
     ],
     "answer": 3,
-    "explain": "asset 在此是「有助益的人事物、優勢」，清楚說明的能力有利團隊；liability 是「負擔、累贅」。",
+    "explain": "asset 是「有助益的人事物、優勢」，清楚說明的能力有利於團隊；added cost 是「額外成本」，obstacle 是「障礙」，liability 是「負擔」，均不合文意。",
     "formula": false,
     "level": 2
   },
@@ -6041,7 +6041,7 @@
       "cooperation"
     ],
     "answer": 2,
-    "explain": "autonomy 是「自主權」，分部可自行決策而不必請示；supervision 是「監督」，dependence 是「依賴」。",
+    "explain": "autonomy 是「自主權」，分部可自行決策而不必請示總部；supervision 是「監督」，dependence 是「依賴」，cooperation 是「合作」。",
     "formula": false,
     "level": 2
   },
@@ -6069,13 +6069,13 @@
     "type": "mc",
     "q": "The advertisement increased sales and helped ____ the company's income.",
     "choices": [
-      "reduce",
-      "divide",
+      "decrease",
+      "split up",
       "boost",
-      "consume"
+      "eat into"
     ],
     "answer": 2,
-    "explain": "boost 是「提升、促進」，廣告帶動銷售並增加公司收入；reduce 是「減少」，consume 是「消耗」。",
+    "explain": "boost 是「提升、促進」，廣告帶動銷售並增加收入；decrease 是「減少」，split up 是「分割」，eat into 是「侵蝕、耗掉」，均不合文意。",
     "formula": false,
     "level": 2
   },
@@ -6188,13 +6188,13 @@
     "type": "mc",
     "q": "Keep chemicals away from the water supply so they do not ____ it and make it unsafe to drink.",
     "choices": [
-      "protect",
+      "concentrate",
       "contaminate",
-      "filter",
-      "store"
+      "circulate",
+      "conserve"
     ],
     "answer": 1,
-    "explain": "contaminate 是「汙染」，使供水不再能安全飲用；protect 是「保護」，filter 是「過濾」，store 是「儲存」。",
+    "explain": "contaminate 是「汙染」，符合使水無法安全飲用；concentrate 是「濃縮」，circulate 是「使循環」，conserve 是「節約、保存」。",
     "formula": false,
     "level": 2
   },
@@ -6222,13 +6222,13 @@
     "type": "mc",
     "q": "To ensure the teams work together smoothly, the manager will ____ their tasks and schedules.",
     "choices": [
-      "disrupt",
+      "complicate",
       "conceal",
       "coordinate",
-      "neglect"
+      "disregard"
     ],
     "answer": 2,
-    "explain": "coordinate 是「協調」，使各團隊的工作及時程配合順利；disrupt 是「擾亂」，conceal 是「隱瞞」，neglect 是「忽略」。",
+    "explain": "coordinate 是「協調」，使團隊的任務與時程相互配合；complicate 是「使複雜」，conceal 是「隱瞞」，disregard 是「不理會」。",
     "formula": false,
     "level": 2
   },
@@ -6239,13 +6239,13 @@
     "type": "mc",
     "q": "The advertiser tried to ____ customers by secretly using their fears to control their choices.",
     "choices": [
-      "inform",
+      "educate",
       "consult",
-      "protect",
+      "safeguard",
       "manipulate"
     ],
     "answer": 3,
-    "explain": "manipulate 在此是「操控」，暗中利用恐懼左右消費者選擇；inform 是「告知」，protect 是「保護」。",
+    "explain": "manipulate 是「操控」，指暗中利用恐懼左右選擇；educate 是「教育」，consult 是「諮詢」，safeguard 是「保護」。",
     "formula": false,
     "level": 2
   },
@@ -6392,13 +6392,13 @@
     "type": "mc",
     "q": "This ____ system combines advanced technology with many carefully coordinated parts.",
     "choices": [
+      "uncomplicated",
+      "elementary",
       "primitive",
-      "basic",
-      "crude",
       "sophisticated"
     ],
     "answer": 3,
-    "explain": "sophisticated 在此是「精密複雜的」，結合先進技術與協調運作的零件；primitive 是「原始的」，crude 是「粗糙的」。",
+    "explain": "sophisticated 是「精密複雜的」，符合先進技術及協調運作的零件；uncomplicated 是「不複雜的」，elementary 是「初步的」，primitive 是「原始的」。",
     "formula": false,
     "level": 2
   },
@@ -6443,13 +6443,13 @@
     "type": "mc",
     "q": "Which word means 'belonging to the present time'?",
     "choices": [
-      "ancient",
-      "antique",
+      "prehistoric",
+      "historical",
       "contemporary",
       "classical"
     ],
     "answer": 2,
-    "explain": "contemporary 是「當代的、屬於現今的」；ancient 是「古代的」，antique 是「古老的、古董的」，classical 是「古典的」。",
+    "explain": "contemporary 是「當代的、屬於現今的」；prehistoric 是「史前的」，historical 是「歷史上的」，classical 是「古典的」。",
     "formula": false,
     "level": 2
   },
@@ -6477,13 +6477,13 @@
     "type": "mc",
     "q": "He trusted the stranger's impossible promise without question; his friends called him ____.",
     "choices": [
-      "cautious",
-      "doubtful",
-      "suspicious",
+      "wary",
+      "unsure",
+      "dubious",
       "naive"
     ],
     "answer": 3,
-    "explain": "naive 是「天真的、易輕信的」，不加懷疑便相信不可能的承諾；cautious 是「謹慎的」，suspicious 是「懷疑的」。",
+    "explain": "naive 是「天真的、易輕信的」；wary 是「警戒的」，unsure 是「不確定的」，dubious 是「懷疑的」，都不符合毫不懷疑地相信承諾。",
     "formula": false,
     "level": 2
   },
@@ -6559,9 +6559,9 @@
     "subject": "english",
     "topic": "進階單字",
     "type": "tf",
-    "q": "'Eloquent' fits: 'He could not express any idea clearly or fluently; his speech was ____.'",
+    "q": "'Eloquent' fits: 'His speech was confusing and poorly expressed rather than fluent; it was ____.'",
     "answer": false,
-    "explain": "eloquent 是「表達流暢、有說服力的」；完全無法清楚流暢表達的演說不符合此義。",
+    "explain": "eloquent 是「表達流暢、有說服力的」；confusing、poorly expressed 與不流暢的描述不符合此義。",
     "formula": false,
     "level": 2
   },
@@ -6691,7 +6691,7 @@
     "subject": "english",
     "topic": "進階單字",
     "type": "tf",
-    "q": "'Virtual' fits: 'We walked through the actual rooms without digital images; our tour was entirely ____.'",
+    "q": "'Virtual' fits: 'We walked through the actual rooms without digital images; our tour was ____.'",
     "answer": false,
     "explain": "virtual 在此是「虛擬的」，指透過數位方式模擬的參觀；實際走訪真實房間不符合此義。",
     "formula": false,
@@ -6935,13 +6935,13 @@
     "type": "mc",
     "q": "The instructions were confusing, but we finally ____ how the lock worked.",
     "choices": [
-      "filled in",
+      "put off",
       "laid off",
       "ran out",
       "figured out"
     ],
     "answer": 3,
-    "explain": "figure out 是「弄懂、想明白」；此處終於理解鎖如何運作，fill in 是「填寫」。",
+    "explain": "figure out 是「弄懂、想明白」，符合終於理解鎖如何運作；put off 是「延後」，lay off 是「解僱」，run out 是「用完」。",
     "formula": false,
     "level": 2
   },
@@ -7080,7 +7080,7 @@
     "subject": "english",
     "topic": "片語與搭配詞",
     "type": "tf",
-    "q": "If a flood wipes out a village, it leaves the village completely unharmed.",
+    "q": "If a flood wipes out a village, it leaves the village unharmed.",
     "answer": false,
     "explain": "wipe out 是「徹底摧毀、消滅」；unharmed 是「未受損害的」，意思相反。",
     "formula": false,
@@ -7197,7 +7197,7 @@
     "choices": [
       "of",
       "against",
-      "with",
+      "before",
       "from"
     ],
     "answer": 1,
@@ -7458,9 +7458,9 @@
     "subject": "english",
     "topic": "片語與搭配詞",
     "type": "tf",
-    "q": "Being in two minds about accepting a job means being completely certain that you want it.",
+    "q": "Being in two minds about accepting a job means feeling certain that you want to accept it.",
     "answer": false,
-    "explain": "in two minds 是「猶豫不決」；不是完全確定要接受工作，certain 是「確定的」。",
+    "explain": "in two minds 是「猶豫不決」，不是確定想接受；certain 是「確定的」。",
     "formula": false,
     "level": 2
   },
@@ -7645,13 +7645,13 @@
     "type": "mc",
     "q": "The schedule should ____ a balance between study and rest, allowing enough time for both.",
     "choices": [
-      "beat",
+      "tap",
       "strike",
-      "knock",
-      "break"
+      "pat",
+      "rub"
     ],
     "answer": 1,
-    "explain": "strike a balance 是「取得平衡」；此處指兼顧讀書與休息，break「打破」不符合兩者都有足夠時間的語意。",
+    "explain": "strike a balance 是「取得平衡」，此處指兼顧讀書與休息；tap「輕敲」、pat「輕拍」、rub「摩擦」不能用來表達這個意思。",
     "formula": false,
     "level": 2
   },
@@ -7877,12 +7877,12 @@
     "q": "In \"Please water the plants,\" water is a verb meaning ____.",
     "choices": [
       "give water to",
-      "remove water from",
-      "cover completely with water",
-      "grow without water"
+      "take water from",
+      "keep in water",
+      "grow in water"
     ],
     "answer": 0,
-    "explain": "water 作名詞是「水」，此處轉作動詞「澆水」；不是把植物完全淹沒或排掉水。",
+    "explain": "water 在此由名詞「水」轉作動詞「澆水」，即 give water to；不是取走水分，也不表示把植物養在水中。",
     "formula": false,
     "level": 2
   },
@@ -7953,15 +7953,15 @@
     "subject": "english",
     "topic": "詞性與構詞",
     "type": "mc",
-    "q": "The prefix semi- makes a semicircle ____ of a circle.",
+    "q": "How much of a full circle does the prefix semi- in 'semicircle' indicate?",
     "choices": [
-      "half",
-      "one quarter",
-      "twice the size",
-      "three times the size"
+      "one half",
+      "one fourth",
+      "one third",
+      "one sixth"
     ],
     "answer": 0,
-    "explain": "semi- 表示「一半」；semicircle 是「半圓」，circle 是「圓」。",
+    "explain": "semi- 表示 one half「一半」，所以 semicircle 是「半圓」；不是 one fourth「四分之一」、one third「三分之一」或 one sixth「六分之一」。",
     "formula": false,
     "level": 1
   },
@@ -7991,11 +7991,11 @@
     "choices": [
       "the sun",
       "the mind",
-      "the earth",
+      "the planet Earth",
       "the body"
     ],
     "answer": 2,
-    "explain": "geo- 表示「地球、大地」；geography 是「地理學」。",
+    "explain": "geo- 表示「地球、大地」，對應 the planet Earth「地球」；geography 是「地理學」。",
     "formula": false,
     "level": 1
   },
@@ -8331,9 +8331,9 @@
     "subject": "english",
     "topic": "詞性與構詞",
     "type": "tf",
-    "q": "A sleepy child must already be asleep.",
+    "q": "'Sleepy' describes a child who has entered a state of sleep.",
     "answer": false,
-    "explain": "sleepy 是「想睡的」，asleep 是「睡著的」；覺得睏不代表已進入睡眠。",
+    "explain": "sleepy 是「想睡的、睏倦的」，不代表已睡著；asleep 才是「睡著的」。",
     "formula": false,
     "level": 2
   },
@@ -8621,12 +8621,12 @@
     "q": "Which shortened noun means 'an advertisement'?",
     "choices": [
       "ad",
-      "advertise",
-      "advertising",
-      "advertiser"
+      "app",
+      "lab",
+      "gym"
     ],
     "answer": 0,
-    "explain": "ad「廣告」是 advertisement「廣告」的縮略形式；advertise 是動詞「登廣告」，advertiser 是「廣告主」。",
+    "explain": "ad「廣告」是 advertisement 的縮略形式；app 是 application「應用程式」，lab 是 laboratory「實驗室」，gym 是 gymnasium「體育館」。",
     "formula": false,
     "level": 2
   },
@@ -8668,10 +8668,10 @@
       "a family member",
       "a close friend",
       "its subject",
-      "any historian"
+      "a paid historian"
     ],
     "answer": 2,
-    "explain": "auto- 表示「自己」；autobiography 是「自傳」，由傳主自己撰寫，biography 是「傳記」。",
+    "explain": "auto- 表示「自己」；autobiography 是「自傳」，由傳主（its subject）自己撰寫，並非親友或受雇的歷史學家代寫。",
     "formula": false,
     "level": 2
   },
@@ -8691,9 +8691,9 @@
     "subject": "english",
     "topic": "詞性與構詞",
     "type": "tf",
-    "q": "Greenish means completely lacking any green color.",
+    "q": "Greenish means lacking green color.",
     "answer": false,
-    "explain": "greenish 是「略帶綠色的」；-ish 在此表示「稍微、略帶」，不是完全沒有綠色。",
+    "explain": "greenish 是「略帶綠色的」；-ish 在此表示「稍微、略帶」，不是缺乏綠色。",
     "formula": false,
     "level": 1
   },
@@ -8769,9 +8769,9 @@
     "subject": "english",
     "topic": "詞性與構詞",
     "type": "tf",
-    "q": "In \"They must proof their claim with evidence,\" proof is the standard verb meaning demonstrate.",
+    "q": "In \"They should proof their claim with evidence,\" proof is the standard verb meaning demonstrate.",
     "answer": false,
-    "explain": "表示「證明主張」應用動詞 prove；proof 通常是名詞「證據」，此處不能代替 must 後的原形動詞 prove。",
+    "explain": "表示「證明主張」應用 prove；proof 通常是名詞「證據」，此處不能代替 should 後的原形動詞 prove。",
     "formula": false,
     "level": 2
   },
@@ -8850,13 +8850,13 @@
     "type": "mc",
     "q": "Which base-form verb is related to the noun 'breath'?",
     "choices": [
-      "breathless",
+      "breath",
       "breathe",
-      "breathlessly",
-      "breathlessness"
+      "breathing",
+      "breaths"
     ],
     "answer": 1,
-    "explain": "breathe 是動詞「呼吸」，breath 是名詞「一口氣、呼吸」；breathless 是形容詞「喘不過氣的」。",
+    "explain": "breathe 是動詞原形「呼吸」；breath 是名詞「一口氣、呼吸」，breaths 是其複數；breathing 是 -ing 形式，不是原形。",
     "formula": false,
     "level": 2
   },
@@ -9074,9 +9074,9 @@
     "subject": "english",
     "topic": "時態與語態",
     "type": "tf",
-    "q": "In \"The phone is ringing; I will answer it,\" the speaker must have planned the action earlier.",
+    "q": "\"The phone is ringing; I will answer it\" shows that the speaker made the decision before the phone rang.",
     "answer": false,
-    "explain": "此處 will 可表示聽到電話響後的當下決定，不必事先規劃；answer the phone 是「接電話」。",
+    "explain": "此處 will 可表示聽到電話響後的當下決定，句子不能證明事先已有計畫；answer the phone 是「接電話」。",
     "formula": false,
     "level": 2
   },
@@ -9098,10 +9098,10 @@
     "type": "mc",
     "q": "Why might a live sports commentator say, \"Lin passes, Chen shoots\"?",
     "choices": [
-      "Both actions must be daily habits.",
-      "The simple present can describe live action.",
-      "Both actions happened years earlier.",
-      "The speaker is making two promises."
+      "It reports daily habits.",
+      "It describes live action.",
+      "It recalls past events.",
+      "It makes two promises."
     ],
     "answer": 1,
     "explain": "現場賽事評論可用現在簡單式逐一報導動作；commentator 是「評論員」，shoot 是「射門、投籃」。",
@@ -9175,7 +9175,7 @@
     "subject": "english",
     "topic": "時態與語態",
     "type": "tf",
-    "q": "In \"I am thinking about the offer,\" think must mean \"hold an opinion\" and cannot describe an activity.",
+    "q": "In \"I am thinking about the offer,\" think means \"hold an opinion\" rather than \"consider\".",
     "answer": false,
     "explain": "think about 是「考慮」，可表示正在思考的活動；think 表示「認為」時才通常不用進行式。",
     "formula": false,
@@ -9397,12 +9397,12 @@
     "q": "By the time the guests arrive tomorrow, all the meals ____ by the kitchen staff.",
     "choices": [
       "will have prepared",
-      "had been prepared",
+      "would have been prepared",
       "will have been prepared",
-      "will be preparing"
+      "will have been preparing"
     ],
     "answer": 2,
-    "explain": "明天客人抵達時餐點將已備妥，用未來完成式被動；prepare 是「準備」，kitchen staff 是「廚房工作人員」。",
+    "explain": "到明天客人抵達時餐點將已備妥，填 will have been prepared；餐點不是準備動作的執行者，不能用兩個主動形式；would 也缺少相應語境。",
     "formula": false,
     "level": 3
   },
@@ -9532,9 +9532,9 @@
     "q": "Which sentence uses an active verb form to describe how easily a product can be washed?",
     "choices": [
       "This fabric washes easily.",
-      "This fabric is washed every week.",
+      "This fabric is washed daily.",
       "This fabric was being washed.",
-      "This fabric has been washed twice."
+      "This fabric has been washed."
     ],
     "answer": 0,
     "explain": "washes easily 用主動形式表示「容易清洗」的特性；其餘都是 be 加過去分詞的被動式。fabric 是「布料」。",
@@ -9559,10 +9559,10 @@
     "type": "mc",
     "q": "In \"The door remained closed all evening,\" closed describes ____.",
     "choices": [
-      "the person closing it",
+      "a person",
       "a state",
-      "a future plan",
-      "an ongoing action"
+      "a plan",
+      "an action"
     ],
     "answer": 1,
     "explain": "remain 後的 closed 是形容詞，描述門維持關閉的「狀態」，未敘述關門動作；remain 是「保持」。",
@@ -9717,13 +9717,13 @@
     "type": "mc",
     "q": "Which sentence has no passive counterpart with the same verb?",
     "choices": [
-      "They repaired the fence.",
+      "They fixed the gate.",
       "The package arrived.",
-      "The dog chased the boy.",
-      "They announced the result."
+      "The dog chased him.",
+      "They spread the news."
     ],
     "answer": 1,
-    "explain": "arrive「到達」是不及物動詞，沒有受詞可改作被動主詞；repair「修理」、chase「追逐」、announce「宣布」都是及物動詞。",
+    "explain": "arrive「到達」是不及物動詞，沒有受詞可改作被動主詞；fix「修理」、chase「追逐」、spread「傳播」在這些句中都有受詞。",
     "formula": false,
     "level": 2
   },
@@ -9898,7 +9898,7 @@
       "will work"
     ],
     "answer": 2,
-    "explain": "依題意退時，am working 改為 was working，表示說話當時正在工作；then 是「當時」。",
+    "explain": "依題意退時，將現在進行式 am working 改為過去進行式 was working，表示 Ana 說話當時正在工作；then 指「當時」。",
     "formula": false,
     "level": 2
   },
@@ -10105,7 +10105,7 @@
     "subject": "english",
     "topic": "時態與語態",
     "type": "tf",
-    "q": "In \"The Smiths have arrived,\" Smiths names one family, so the verb must be singular.",
+    "q": "In \"The Smiths have arrived,\" Smiths names a family, so \"have\" should be changed to \"has\".",
     "answer": false,
     "explain": "the 加姓氏複數表示「一家人」，動詞用複數，不因是一個家庭而改單數；arrive 是「抵達」。",
     "formula": false,
@@ -10153,12 +10153,12 @@
     "q": "Which sentence correctly leaves the preposition at the end of a relative clause?",
     "choices": [
       "This is the bed which I slept in.",
-      "This is the bed in which I slept in.",
+      "This is the bed which in I slept.",
       "This is the bed which I slept it in.",
-      "This is the bed in which I slept it."
+      "This is the bed in which I slept in."
     ],
     "answer": 0,
-    "explain": "介系詞 in 可留在關係子句末，不可重複 in 或受詞 it；sleep in 是「睡在……裡」，bed 是「床」。",
+    "explain": "which 是句尾 in 的受詞；in 前移時須用 in which，不可加受詞 it 或重複 in。正確句為 This is the bed which I slept in.",
     "formula": false,
     "level": 2
   },
@@ -10248,13 +10248,13 @@
     "type": "mc",
     "q": "\"My cousins who live nearby visit often.\" Which cousins does the relative clause identify?",
     "choices": [
-      "Every cousin, wherever they live.",
-      "The cousins living nearby.",
-      "Only cousins visiting for the first time.",
-      "No particular group of cousins."
+      "Cousins living far away.",
+      "Cousins living nearby.",
+      "Cousins who visit often.",
+      "Cousins at any address."
     ],
     "answer": 1,
-    "explain": "無逗號的限定關係子句限縮 cousins 的範圍，指住附近的那些人；nearby 是「附近」，identify 是「指出」。",
+    "explain": "who live nearby 是限定關係子句，指出住附近的那些 cousins；visit often 是主句的動作，不是關係子句所指出的特徵。",
     "formula": false,
     "level": 2
   },
@@ -10359,9 +10359,9 @@
     "subject": "english",
     "topic": "子句與連接詞",
     "type": "tf",
-    "q": "In \"No matter who calls, stay calm,\" the instruction applies only to calls from certain people.",
+    "q": "In \"No matter who calls, stay calm,\" the instruction excludes calls from strangers.",
     "answer": false,
-    "explain": "No matter who calls 意為「無論誰來電」，並不限特定人士；stay calm 是「保持冷靜」。",
+    "explain": "No matter who calls 是「無論誰來電」，也包含陌生人的來電；stay calm 是「保持冷靜」。",
     "formula": false,
     "level": 2
   },
@@ -10419,8 +10419,8 @@
     "choices": [
       "if",
       "whether",
-      "that",
-      "what"
+      "unless",
+      "that"
     ],
     "answer": 1,
     "explain": "whether 可直接接 to 不定詞表示「是否要……」，if 不可；cancel the trip 是「取消旅行」。",
@@ -10767,12 +10767,12 @@
     "q": "In \"Press this button, and the screen will light up,\" and connects the instruction with ____.",
     "choices": [
       "an unrelated past event",
-      "its expected result",
-      "a reason the button broke",
+      "its result",
+      "why the button broke",
       "a contrasting refusal"
     ],
     "answer": 1,
-    "explain": "祈使句加 and 可表示照做後的結果；press 是「按」，light up 是「亮起」。",
+    "explain": "祈使句加 and 可引出照做後的結果（result）；press 是「按」，light up 是「亮起」，這裡不是解釋按鈕損壞的原因。",
     "formula": false,
     "level": 2
   },
@@ -10828,13 +10828,13 @@
     "type": "mc",
     "q": "Which correction removes the redundant conjunction in \"Because it rained, so we stayed home\"?",
     "choices": [
-      "Delete so.",
-      "Change Because to Since.",
-      "Change rained to poured.",
-      "Change stayed to remained."
+      "Remove so from the main clause.",
+      "Use Since instead of Because.",
+      "Use poured instead of rained.",
+      "Use remained instead of stayed."
     ],
     "answer": 0,
-    "explain": "because 已引導原因子句，主要子句不再加 so；刪 so 即可，redundant 是「多餘的」，stay home 是「待在家」。",
+    "explain": "Because 已引導原因子句，主要子句不再用 so，刪除 so 即可；改用 Since 或替換其他同義字，都沒有移除重複的連接詞。",
     "formula": false,
     "level": 2
   },
@@ -11104,13 +11104,13 @@
     "type": "mc",
     "q": "There were ____ few seats that several guests had to stand.",
     "choices": [
-      "such",
+      "rather",
       "so",
-      "too",
-      "enough"
+      "quite",
+      "fairly"
     ],
     "answer": 1,
-    "explain": "few 修飾複數名詞時用 so few ... that，表示「少到……」；seat 是「座位」，guest 是「客人」。",
+    "explain": "so few ... that 表示「少到……」，用 so 引出結果子句；rather、quite、fairly 不能在此結構中取代 so。seat 是「座位」。",
     "formula": false,
     "level": 2
   },
@@ -11211,13 +11211,13 @@
     "type": "mc",
     "q": "In \"Ella opened the door and waved,\" who performed the second action?",
     "choices": [
-      "An unnamed second person.",
-      "The door.",
-      "Ella.",
-      "The sentence gives no subject for either action."
+      "Another person.",
+      "The door itself.",
+      "Ella herself.",
+      "No named person."
     ],
     "answer": 2,
-    "explain": "兩個並列動詞共用主詞 Ella，第二個動作可省去重複主詞；wave 是「揮手」。",
+    "explain": "opened 和 waved 共用主詞 Ella，所以是 Ella 揮手；door 是 opened 的受詞，不是 waved 的主詞，也沒有另一位未具名的人。",
     "formula": false,
     "level": 1
   },
@@ -11433,15 +11433,15 @@
     "subject": "english",
     "topic": "不定詞、動名詞與分詞",
     "type": "mc",
-    "q": "I meant to reply yesterday, but I forgot. Replying yesterday was ____.",
+    "q": "I meant to reply yesterday, but I forgot. What does \"meant to reply\" express here?",
     "choices": [
-      "a task I had completed",
-      "something I had refused to do",
-      "my intention",
-      "an unexpected result"
+      "a completed task",
+      "a clear refusal",
+      "an intention",
+      "a consequence"
     ],
     "answer": 2,
-    "explain": "mean to V 是「打算做……」，後句說忘了，故只是原本的意圖；reply 是「回覆」。",
+    "explain": "mean to V 表示「打算做」，此處表達回覆的意圖（an intention）；but I forgot 表示當時忘了回覆。mean V-ing 才表示「意味著、會造成某種結果」。",
     "formula": false,
     "level": 2
   },
@@ -11675,7 +11675,7 @@
     "subject": "english",
     "topic": "不定詞、動名詞與分詞",
     "type": "tf",
-    "q": "'She had trouble starting the car' proves that the car never started.",
+    "q": "'She had trouble starting the car' establishes that the engine ultimately failed to start.",
     "answer": false,
     "explain": "have trouble V-ing 只表示「做……有困難」，不能推論最後一定失敗；start the car 是「發動車子」。",
     "formula": false,
@@ -11778,10 +11778,10 @@
     "type": "mc",
     "q": "Not having met the speaker before, I failed to recognize her. The opening phrase states that I ____.",
     "choices": [
-      "was not meeting her at that moment",
+      "was meeting her then",
       "had not met her before",
-      "would never meet her afterward",
-      "had met her but forgotten her name"
+      "would meet her later",
+      "had forgotten her name"
     ],
     "answer": 1,
     "explain": "Not having met 是否定完成分詞，表示在認不出她之前未曾見面；recognize 是「辨認出」。",
@@ -11795,10 +11795,10 @@
     "type": "mc",
     "q": "In 'The guests are eager to please,' the guests ____.",
     "choices": [
-      "are easy for others to satisfy",
-      "must be made happy by others",
+      "are easy to keep happy",
+      "need others to cheer them",
       "want to make others happy",
-      "have already pleased everyone"
+      "have made everyone happy"
     ],
     "answer": 2,
     "explain": "eager to please 指「渴望取悅別人」，guests 執行 please；easy to please 才是「容易被取悅」。",
@@ -11853,11 +11853,11 @@
     "choices": [
       "call",
       "to call",
-      "called",
-      "calls"
+      "be called",
+      "has called"
     ],
     "answer": 0,
-    "explain": "have + 人 + 原形動詞 是「請某人做……」，此處由 assistant「助理」打電話；delay 是「延誤」。",
+    "explain": "have + 人 + 原形動詞 表示「請某人做……」，此處由助理主動打電話，用 call，不用 to call、has called 或被動式 be called。delay 是「延誤」。",
     "formula": false,
     "level": 2
   },
@@ -11911,15 +11911,15 @@
     "subject": "english",
     "topic": "不定詞、動名詞與分詞",
     "type": "mc",
-    "q": "Nina had her wallet stolen on the bus. This describes something she ____.",
+    "q": "To her dismay, Nina had her wallet stolen on the bus. This describes something she ____.",
     "choices": [
       "paid someone to do",
       "planned as a favor",
-      "did to another passenger",
-      "suffered without wanting it"
+      "did to someone else",
+      "suffered unwillingly"
     ],
     "answer": 3,
-    "explain": "have + 受詞 + 過去分詞 也可表「遭遇」；錢包遭竊，不表示請人去偷。stolen 是「被偷走的」。",
+    "explain": "To her dismay 表示「令她沮喪的是」，此處 have + 受詞 + 過去分詞 表示非自願遭遇錢包被偷，不是付錢安排、計畫幫忙或自己對他人做的事。",
     "formula": false,
     "level": 2
   },
@@ -11958,13 +11958,13 @@
     "type": "mc",
     "q": "I saw Mia cross the finish line. The base form presents the crossing as ____.",
     "choices": [
-      "a plan for the future",
+      "a future event",
       "a complete event",
-      "a habit that never changes",
-      "an event heard but not seen"
+      "an ongoing event",
+      "an unseen event"
     ],
     "answer": 1,
-    "explain": "感官動詞後的原形 cross 著重看見完整事件；cross the finish line 是「越過終點線」。",
+    "explain": "感官動詞後的原形 cross 著重看見完整的越線事件；-ing 形式通常著重正在進行的動作。此句不是未來計畫，也不是未看見的事件。",
     "formula": false,
     "level": 2
   },
@@ -12077,7 +12077,7 @@
       "boiling"
     ],
     "answer": 3,
-    "explain": "boiling water 是「正在沸騰的水」；boiled water 是「煮過的水」，未必仍在沸騰。bubble 是「冒泡」。",
+    "explain": "boiling water 是「正在沸騰的水」，用現在分詞表示正在進行的狀態；boiled water 是「煮過的水」，未必仍在沸騰。bubble 是「冒泡」。",
     "formula": false,
     "level": 2
   },
@@ -12361,9 +12361,9 @@
     "q": "The -ing form in 'We went hiking' identifies ____.",
     "choices": [
       "the activity we did",
-      "a destination we traveled to",
-      "a future plan we canceled",
-      "a person who guided us"
+      "a place we visited",
+      "a plan we dropped",
+      "a guide we followed"
     ],
     "answer": 0,
     "explain": "go hiking 是「去健行」，hiking 指所進行的活動，不是目的地或同行者；activity 是「活動」。",
@@ -12445,12 +12445,12 @@
     "q": "If Leo were not afraid of heights, he ____ us on the tower yesterday.",
     "choices": [
       "would have joined",
-      "would join",
-      "will join",
-      "has joined"
+      "would be joining",
+      "will have joined",
+      "has been joining"
     ],
     "answer": 0,
-    "explain": "一般特質是怕高，假設結果在昨天，須用 would have joined「當時本來會加入」。",
+    "explain": "怕高是一般特質，假設結果在 yesterday，用 would have joined「當時本來會加入」；would be joining 不表已過去的結果，will／has 的形式也不合。",
     "formula": false,
     "level": 3
   },
@@ -12613,13 +12613,13 @@
     "type": "mc",
     "q": "'Were I free, I would help' can begin with ____ without changing its meaning.",
     "choices": [
-      "If I had been free",
-      "When I will be free",
-      "Because I am free",
+      "If I am free",
+      "When I am free",
+      "Since I am free",
       "If I were free"
     ],
     "answer": 3,
-    "explain": "Were I free 等於 If I were free，假設目前有空；free 在此是「有空的」。",
+    "explain": "Were I free 是 If I were free 的省略 if 倒裝，表示假設目前有空；If I am free 是實際可能的條件，When、Since 則改成時間或原因，意思不同。",
     "formula": false,
     "level": 2
   },
@@ -12780,9 +12780,9 @@
     "subject": "english",
     "topic": "假設語氣與特殊句構",
     "type": "tf",
-    "q": "'Not only the teacher but also the students agreed' must use inversion after students.",
+    "q": "'Not just the teacher but also the students agreed' requires subject–verb inversion.",
     "answer": false,
-    "explain": "not only ... but also 串接的是主詞，後面維持一般語序；agree 是「同意」。",
+    "explain": "not just ... but also 與 not only ... but also 都可連接主詞；此處連接 teacher 和 students，後面維持一般語序，不倒裝。",
     "formula": false,
     "level": 3
   },
@@ -12793,10 +12793,10 @@
     "type": "mc",
     "q": "Use the subjunctive: The coach insisted that we ____ the injured player.",
     "choices": [
-      "do not rushed",
+      "not rushed",
       "not rush",
       "not rushing",
-      "did not rush"
+      "not rushes"
     ],
     "answer": 1,
     "explain": "題目指定要求用法的假設語氣，否定為 not 加原形；rush 是「催促、使倉促」。",
@@ -12808,7 +12808,7 @@
     "subject": "english",
     "topic": "假設語氣與特殊句構",
     "type": "tf",
-    "q": "'It is essential that every member arrives on time' uses the base-form subjunctive.",
+    "q": "'It is essential that each member arrives on time' uses the base-form subjunctive.",
     "answer": false,
     "explain": "原形假設語氣應用 arrive，不加 s；essential 是「必要的」。",
     "formula": false,
@@ -12838,13 +12838,13 @@
     "type": "mc",
     "q": "At the end of the hall ____ a small wooden table.",
     "choices": [
-      "standing",
+      "stand",
       "stood",
-      "did stood",
-      "was stand"
+      "standing",
+      "standed"
     ],
     "answer": 1,
-    "explain": "地點語放句首，可將主要動詞放名詞主詞前；stood 是 stand「立著、放著」的過去式。",
+    "explain": "句首地點語可引發倒裝，stood 是 stand 的過去式；單數主詞 table 不能搭 stand，standing 不能單獨作限定動詞，standed 不是正確過去式。",
     "formula": false,
     "level": 2
   },
@@ -12912,7 +12912,7 @@
     "q": "'Ray has not signed, and neither has Sue' tells us that Sue ____.",
     "choices": [
       "has not signed",
-      "has already signed",
+      "has just signed",
       "will sign for Ray",
       "asked Ray to sign"
     ],
@@ -13064,12 +13064,12 @@
     "q": "The new desk is ____ wider than the old one, but only by two centimeters.",
     "choices": [
       "very",
-      "a little",
+      "a bit",
       "too",
       "so"
     ],
     "answer": 1,
-    "explain": "a little 可修飾比較級，表示「稍微」；wider 是「更寬的」。",
+    "explain": "a bit 可修飾比較級，表示「稍微」，與 a little 同義；very、too、so 不能在此直接修飾 wider「更寬的」。",
     "formula": false,
     "level": 1
   },
@@ -13112,7 +13112,7 @@
     "subject": "english",
     "topic": "假設語氣與特殊句構",
     "type": "tf",
-    "q": "'The more you earn, the more you spend' means the percentage of income spent must increase.",
+    "q": "'The more you earn, the more you spend' means spending takes up a growing percentage of income.",
     "answer": false,
     "explain": "兩個金額同增，不代表支出比例提高，例如兩者均加倍；income 是「收入」，percentage 是「百分比」。",
     "formula": false,
@@ -13436,13 +13436,13 @@
     "type": "mc",
     "q": "In 'While still young, Helen moved abroad,' the understood subject of while still young is ____.",
     "choices": [
-      "another young person",
-      "the country",
-      "Helen",
-      "the move"
+      "another child",
+      "the new country",
+      "Helen herself",
+      "the trip itself"
     ],
     "answer": 2,
-    "explain": "省略部分還原為 While Helen was still young，與主句共用 Helen；abroad 是「到國外」。",
+    "explain": "while still young 可還原為 While Helen was still young，與主句共用主詞 Helen；不是另一個孩子，也不是國家或旅行本身。",
     "formula": false,
     "level": 2
   },
@@ -13518,10 +13518,10 @@
       "not run",
       "not to run",
       "do not run",
-      "not running"
+      "not ran"
     ],
     "answer": 0,
-    "explain": "had better 的否定是 had better not 加原形；not run 是「不要跑」。",
+    "explain": "had better 的否定形式是 had better not 加原形，所以填 not run「不要跑」；不能加 to 或 do，也不能把 run 改成過去式 ran。",
     "formula": false,
     "level": 2
   },
@@ -13560,7 +13560,7 @@
     "type": "mc",
     "q": "The bag looks nice. More importantly, it protects my laptop. Which feature matters more?",
     "choices": [
-      "Laptop protection",
+      "Protection",
       "Appearance",
       "Low weight",
       "Low price"
@@ -13603,9 +13603,9 @@
     "subject": "english",
     "topic": "轉折語與篇章",
     "type": "tf",
-    "q": "A paragraph describes one failed project. This example alone proves that every project fails.",
+    "q": "A paragraph describes one failed project. This example establishes that projects generally fail.",
     "answer": false,
-    "explain": "one「一個」案例只能說明該次失敗，不能直接推論 every「每個」計畫都會失敗；這是過度概括。",
+    "explain": "單一失敗案例不足以證明計畫普遍失敗；generally 是「普遍地、通常」，從一例推論整體是過度概括。",
     "formula": false,
     "level": 2
   },
@@ -13617,12 +13617,12 @@
     "q": "The task was not just difficult. ____, it was impossible with our tools.",
     "choices": [
       "In fact",
-      "By comparison",
-      "In the meantime",
-      "For instance"
+      "Otherwise",
+      "Meanwhile",
+      "In return"
     ],
     "answer": 0,
-    "explain": "in fact 是「事實上」，由「不只是困難」進一步加強成「用現有工具根本不可能」，不是舉例或時間推移。",
+    "explain": "In fact「事實上」把「不只是困難」進一步加強為「根本不可能」；Otherwise「否則」、Meanwhile「同時」、In return「作為回報」皆不合此處語意。",
     "formula": false,
     "level": 1
   },
@@ -13665,9 +13665,9 @@
     "subject": "english",
     "topic": "轉折語與篇章",
     "type": "tf",
-    "q": "I thought Ben would stay home, but he came after all. The final words confirm my original expectation.",
+    "q": "I thought Ben would stay home, but he came despite my expectations. This outcome confirms my original expectation.",
     "answer": false,
-    "explain": "after all 在此是「結果還是」；原先以為 Ben 會待在家，結果他卻來了，因此是推翻而非證實原先預期。",
+    "explain": "despite my expectations 表示「與我原先預期相反」；原本以為 Ben 不會來，結果卻來了，因此是推翻而非證實原先預期。",
     "formula": false,
     "level": 2
   },
@@ -13723,13 +13723,13 @@
     "type": "mc",
     "q": "The guide lists risks, then ways to avoid them. How is it organized?",
     "choices": [
-      "problem followed by solution",
+      "problem and solution",
       "events in time order",
       "two opposing opinions",
       "items ranked by price"
     ],
     "answer": 0,
-    "explain": "先列 risks「風險」，再提出避免方法，屬於 problem followed by solution「先提出問題，再給解法」的組織。",
+    "explain": "先列 risks「風險」，再提出避免方法，屬 problem and solution「問題與解決方法」的組織，不是時間、對立觀點或價格排序。",
     "formula": false,
     "level": 1
   },
@@ -13963,9 +13963,9 @@
     "subject": "english",
     "topic": "轉折語與篇章",
     "type": "tf",
-    "q": "In 'The park will remain open for good,' for good means only for the present.",
+    "q": "In 'The park will remain open for good,' for good means temporarily.",
     "answer": false,
-    "explain": "for good 是「永久地」，不是 for now「目前、暫時」；不能把永久開放解讀為只在現階段開放。",
+    "explain": "for good 是「永久地」，不是 temporarily「暫時地」；原句表示公園將永久開放。",
     "formula": false,
     "level": 1
   },
@@ -14011,9 +14011,9 @@
     "q": "We discussed the exam. Incidentally, my sister knows the teacher. 'Incidentally' adds ____.",
     "choices": [
       "a side remark",
-      "a necessary conclusion",
-      "the opposite claim",
-      "the next instruction"
+      "a conclusion",
+      "an objection",
+      "an instruction"
     ],
     "answer": 0,
     "explain": "incidentally 是「順帶一提」，補上一句相關的旁支話題，不是必然結論或下一步指示。",
@@ -14053,9 +14053,9 @@
     "subject": "english",
     "topic": "轉折語與篇章",
     "type": "tf",
-    "q": "Visitors may bring snacks such as fruit and nuts. The wording rules out every other snack.",
+    "q": "Visitors may bring snacks such as fruit and nuts. This wording excludes cheese as an additional snack.",
     "answer": false,
-    "explain": "such as 是「例如」，水果和堅果只是例子，並未排除其他點心；rule out 是「排除」。",
+    "explain": "such as 是「例如」，水果和堅果是例子；這種措辭本身並未排除起司等其他點心。exclude 是「排除」。",
     "formula": false,
     "level": 2
   },
@@ -14083,13 +14083,13 @@
     "type": "mc",
     "q": "If your appeal succeeds, the fee is canceled. Failing that, you must pay. When must you pay?",
     "choices": [
-      "Before submitting an appeal",
-      "If the appeal succeeds",
-      "While awaiting the appeal decision",
-      "If the appeal fails"
+      "Before appealing",
+      "After winning it",
+      "During the appeal",
+      "After the appeal has failed"
     ],
     "answer": 3,
-    "explain": "failing that 是「若不成功，則……」；前面的申訴若未成功，才須付費。appeal 在此是「申訴」。",
+    "explain": "failing that 是「若不成功，則……」；此處指申訴失敗後才須付費，不是申訴前、進行中或成功後。appeal 是「申訴」。",
     "formula": false,
     "level": 2
   },
@@ -14162,13 +14162,13 @@
     "type": "mc",
     "q": "Tara locked the gate. Ben did so too. What did Ben do?",
     "choices": [
-      "Asked Tara to lock it",
+      "Asked her to do it",
       "Promised to lock it",
       "Locked the gate",
-      "Checked whether it was locked"
+      "Inspected the lock"
     ],
     "answer": 2,
-    "explain": "did so too 是「也做了同樣的事」，承接 Tara 的 locked the gate「鎖門」，所以 Ben 也鎖了門。",
+    "explain": "did so too 承接已完成的 locked the gate「鎖門」，表示也鎖了門，並非請別人做、承諾稍後做或檢查鎖。",
     "formula": false,
     "level": 2
   },
@@ -14286,9 +14286,9 @@
     "type": "mc",
     "q": "In a cycling guide, 'you should wear a helmet' uses 'you' to address ____.",
     "choices": [
-      "the writer describing their own habits",
-      "a named character in a story",
-      "a speaker quoted in the guide",
+      "the guide's writer",
+      "a story character",
+      "a quoted speaker",
       "readers who cycle"
     ],
     "answer": 3,
@@ -14331,10 +14331,10 @@
     "type": "mc",
     "q": "A robin landed nearby. The bird began to sing. Why use 'the bird'?",
     "choices": [
-      "It describes a new location",
-      "It introduces a second animal",
-      "It compares two different species",
-      "It names the same creature more generally"
+      "It describes another place.",
+      "It introduces another bird.",
+      "It compares different birds.",
+      "It calls that robin a bird."
     ],
     "answer": 3,
     "explain": "robin 是「知更鳥」，bird「鳥」是涵蓋它的較廣類別；換用上位詞仍指同一隻鳥，可形成詞彙銜接。",
@@ -14363,9 +14363,9 @@
     "subject": "english",
     "topic": "轉折語與篇章",
     "type": "tf",
-    "q": "The notice says 'Staff only.' It gives every visitor permission to enter.",
+    "q": "The notice reads 'Entry reserved for staff.' This gives visitors permission to enter.",
     "answer": false,
-    "explain": "Staff only 是「僅限工作人員」，限制進入者身分，並非允許每位訪客入內。",
+    "explain": "Entry reserved for staff 表示「僅限工作人員入內」；告示限制進入者身分，並未准許非工作人員的訪客進入，因此敘述錯誤。",
     "formula": false,
     "level": 1
   },
@@ -14377,8 +14377,8 @@
     "q": "She finally said it: 'I quit.' What does it refer to?",
     "choices": [
       "The speaker herself",
-      "An earlier unnamed object",
-      "The announcement that she quit",
+      "A previously held item",
+      "Her quitting statement",
       "The listener's reply"
     ],
     "answer": 2,
@@ -14393,7 +14393,7 @@
     "type": "mc",
     "q": "The repair failed, but this was clear: the bridge must close. What does this point to?",
     "choices": [
-      "The need to close the bridge",
+      "The required closure",
       "The bridge's opening",
       "An earlier clear day",
       "The failed repair alone"
@@ -14542,8 +14542,8 @@
     "choices": [
       "The writer's",
       "Both speakers'",
-      "Neither speaker's",
-      "Nora's"
+      "No speaker's",
+      "Nora's alone"
     ],
     "answer": 3,
     "explain": "wasteful 是「浪費的」，這個評價來自 Nora；作者明說 disagrees「不同意」，不能把引述當成作者看法。",
@@ -14755,12 +14755,12 @@
     "q": "The story matched known facts and sounded ____, but the reporter still wanted independent ____ before printing it.",
     "choices": [
       "absurd / evident",
-      "credible / evident",
-      "absurd / evidence",
+      "credible / clear",
+      "absurd / proof",
       "credible / evidence"
     ],
     "answer": 3,
-    "explain": "已知事實吻合，表示 credible（可信的）；independent 後接名詞 evidence（證據），不用形容詞 evident（明顯的）。",
+    "explain": "credible「可信的」符合與已知事實吻合；independent 後需要名詞 evidence「證據」，clear、evident 都是形容詞；absurd 是「荒謬的」，不合文意。",
     "formula": false,
     "level": 2,
     "links": [
@@ -15258,13 +15258,13 @@
     "type": "mc",
     "q": "Rita usually buys the cheapest meals and is ____. ____, she spent a fortune on dinner yesterday.",
     "choices": [
-      "economical / Accordingly",
+      "economical / Therefore",
       "economical / Nevertheless",
       "lavish / Nevertheless",
       "lavish / Accordingly"
     ],
     "answer": 1,
-    "explain": "economical 指節省的，與花大錢吃一餐相反；Nevertheless（儘管如此）承接反預期，Accordingly 表因此。",
+    "explain": "economical 是「節省的」，與花大錢吃一餐相反；Nevertheless「儘管如此」承接反預期，Therefore、Accordingly 都表示「因此」。",
     "formula": false,
     "level": 2,
     "links": [
@@ -15365,11 +15365,11 @@
     "choices": [
       "Having been completed / what",
       "Having completed / how",
-      "Having completed / what",
+      "After having completed / what",
       "Having been completed / how"
     ],
     "answer": 1,
-    "explain": "Jo 主動先完成課程，用 Having completed；解釋警報如何運作用 how，what 不表示方式。",
+    "explain": "Jo 主動完成課程，可用 Having completed 或 After having completed；被動式不符主詞。警報如何運作應用 how「如何」，不用 what。",
     "formula": false,
     "level": 3,
     "links": [
@@ -15602,7 +15602,7 @@
       "conceal / being seated"
     ],
     "answer": 3,
-    "explain": "conceal 是隱藏，符合用屏風遮住身分；證人是被安排入座，介系詞 on 後用 being seated。",
+    "explain": "屏風用來隱藏身分，故用 conceal；on 後接動名詞，being seated 表示坐著或就座。seat 表示使人入座時須接受詞，不能用 seating 表示自己坐下。",
     "formula": false,
     "level": 3,
     "links": [
@@ -16668,9 +16668,9 @@
     "subject": "english",
     "topic": "跨單元綜合",
     "type": "tf",
-    "q": "Never before ____ the museum ____ closed for so long. 'has / being' fits both blanks.",
+    "q": "Seldom ____ the museum ____ closed for so long. 'has / being' fits both blanks.",
     "answer": false,
-    "explain": "Never before 置句首，has the museum 的倒裝正確；現在完成式後需過去分詞，應為 been closed。",
+    "explain": "Seldom「很少」置句首引發倒裝，兩格依序填 has、been；has 後用 be 的過去分詞 been，不用現在分詞 being。",
     "formula": false,
     "level": 3,
     "links": [
@@ -16713,9 +16713,9 @@
     "subject": "english",
     "topic": "跨單元綜合",
     "type": "tf",
-    "q": "I didn't save it; if I had, I ____ it now. ____, I must rewrite it. 'will have / Therefore' fits both blanks.",
+    "q": "I didn't save it; if I had, I ____ it now. ____, I need to rewrite it. 'will have / Therefore' fits both blanks.",
     "answer": false,
-    "explain": "未存檔是事實，反事實條件影響現在，應用 would have（會擁有）；Therefore（因此）連接必須重寫的後果。",
+    "explain": "應填 would have、Therefore；would have it now 是「現在就會有它」，have 是主要動詞，不是完成式助動詞；未存檔，因此得重寫。",
     "formula": false,
     "level": 3,
     "links": [
@@ -17420,7 +17420,7 @@
     "q": "The tent is too small, so we ruled it out for the trip. We ____.",
     "choices": [
       "saved it for later use",
-      "removed it from our options",
+      "dropped it as an option",
       "chose it over the others",
       "checked it for damage"
     ],
@@ -18051,12 +18051,12 @@
     "q": "A cafe repairs cups instead of replacing them. It also reuses jars for storing sugar. Best conclusion?",
     "choices": [
       "The cafe stores damaged jars.",
-      "The cafe tries to reduce waste.",
+      "The cafe tries to reduce its waste.",
       "The cafe avoids buying sugar.",
       "The cafe makes its own cups."
     ],
     "answer": 1,
-    "explain": "修杯與重用罐子共同指向減少廢棄物；reduce waste＝減少浪費，不能推知不買糖或自行製杯。",
+    "explain": "修理杯子與重複使用罐子都能減少廢棄物；reduce its waste 在此指減少咖啡館產生的廢棄物。文中無法推知罐子受損、不買糖或自行製作杯子。",
     "formula": false,
     "level": 2
   },
@@ -18369,9 +18369,9 @@
     "q": "Ana: 'Fewer boxes, please.' Bo: 'Reuse the wrapping.' Both want to ____.",
     "choices": [
       "cut back on packaging",
-      "put packaging costs first",
-      "stick to disposable packaging",
-      "make room for more packaging"
+      "focus on package costs",
+      "keep single-use packages",
+      "store extra packaging"
     ],
     "answer": 0,
     "explain": "少用盒子、重用包裝都減少包裝消耗；cut back on＝減少，兩人未討論成本或增加包裝空間。",
@@ -18389,10 +18389,10 @@
     "type": "mc",
     "q": "Cai: 'The pay is low.' Dev: 'Yes, but the hours suit me.' They see eye to eye on ____.",
     "choices": [
-      "the convenient hours",
-      "the demanding work",
+      "the good hours",
+      "the hard work",
       "the need to quit",
-      "the low pay"
+      "the low wages"
     ],
     "answer": 3,
     "explain": "Dev的yes認同薪水低，但工時合適只是Dev的看法；see eye to eye＝意見一致，pay＝薪資。",
@@ -18410,9 +18410,9 @@
     "type": "mc",
     "q": "Uma: 'No ride before a battery check.' Wes: 'Check the brakes before riding.' Both favor ____.",
     "choices": [
-      "getting better with practice",
-      "sticking to a fixed schedule",
-      "making up for lost time",
+      "practicing skills",
+      "keeping a schedule",
+      "catching up later",
       "playing it safe"
     ],
     "answer": 3,

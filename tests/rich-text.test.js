@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { splitMath } from '../src/rich-text.js';
-import { cuesOf, eliminationHit, lengthOutlier, numericRank } from '../scripts/lint-cues.mjs';
+import { FLOORS, LIMITS, cuesOf, eliminationHit, lengthOutlier, measure, numericRank } from '../scripts/lint-cues.mjs';
 
 describe('splitMath（App 與題庫驗證器共用）', () => {
   it('切出 $…$ 公式與一般文字', () => {
@@ -43,6 +43,17 @@ describe('題庫猜題線索（scripts/lint-cues.mjs）', () => {
   it('刪去法：刪掉有絕對詞的選項後從剩下的猜', () => {
     expect(eliminationHit(mc(['一定會下雨', '必定會放晴', '可能會起霧', '完全不會變'], 2))).toBe(1);
     expect(eliminationHit(mc(['甲', '乙', '丙', '丁'], 0))).toBe(0.25);
+  });
+
+  it('長度指標：長度突出的選項從來不是正解也算線索（可以刪掉它），所以有下限', () => {
+    const q = (answer) => mc(['甲', '甲乙丙丁戊', '甲乙丙丁戊', '甲乙丙丁戊'], answer);
+    const never = measure(Array.from({ length: 40 }, () => q(1)));
+    expect(never.math.length).toBe(0);
+    expect(never.math.length).toBeLessThan(FLOORS.length);
+    const fair = measure(Array.from({ length: 40 }, (_, i) => q(i % 4 === 0 ? 0 : 1)));
+    expect(fair.math.length).toBe(0.25);
+    expect(fair.math.length).toBeGreaterThanOrEqual(FLOORS.length);
+    expect(fair.math.length).toBeLessThanOrEqual(LIMITS.length);
   });
 
   it('解析沒寫出最後的數值答案', () => {
