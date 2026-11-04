@@ -1,25 +1,28 @@
 name: Deploy to GitHub Pages
 
+# 推到 main：檢查全部通過才部署。開 PR：只跑檢查，合併前就知道有沒有壞
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # 同一個分支又推了新版本就取消舊的檢查；main 的部署不中途取消（見 deploy 的 concurrency）
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # 固定 Ubuntu 版本：ubuntu-latest 換新版時 playwright install --with-deps 要裝的系統套件可能對不上
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
@@ -30,17 +33,35 @@ jobs:
       # 端對端測試與無障礙檢查：在無頭 Chromium 裡實際操作建置好的版本，沒過就不部署
       - run: npx playwright install --with-deps --only-shell chromium
       - run: npm run e2e
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
+      # 失敗時留下截圖與追蹤檔，到 Actions 頁面下載來看
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-results
+          path: test-results
+          retention-days: 7
+      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/configure-pages@v6
+      - if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # 只有部署這一步拿得到 Pages 的寫入權限
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

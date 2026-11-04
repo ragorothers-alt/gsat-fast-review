@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
-    "validate": "node scripts/validate-questions.mjs && node scripts/validate-keypoints.mjs",
+    "validate": "node scripts/validate-questions.mjs && node scripts/validate-keypoints.mjs && node scripts/lint-cues.mjs",
     "e2e": "playwright test"
   },
   "dependencies": {

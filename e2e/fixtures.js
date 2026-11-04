@@ -6,6 +6,16 @@ export const test = base.extend({
   page: async ({ page }, use) => {
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
+    // 固定亂數種子：每次跑都出同一批題目、同樣的選項順序，無障礙檢查掃到的畫面一樣，失敗才重現得出來
+    await page.addInitScript(() => {
+      let seed = 20261104;
+      Math.random = () => {
+        seed = (seed + 0x6d2b79f5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    });
     await page.route('https://gsat-sync.ragorothers.workers.dev/**', (route) =>
       route.fulfill({ status: 503, contentType: 'application/json', body: '{"error":"blocked in e2e"}' }),
     );
