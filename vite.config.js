@@ -54,27 +54,56 @@ function listFiles(dir) {
 
 function serviceWorkerSource(version, urls) {
   return `// 由 vite.config.js 產生，請勿手動修改
-const CACHE = ${JSON.stringify(version)};
+// 同一個網域（例如 GitHub Pages 的 <帳號>.github.io）底下可能還有別的 App：快取名稱帶上這個 App 的網址，只動自己的快取
+const PREFIX = 'gsat-quiz ' + self.registration.scope + ' ';
+const CACHE = PREFIX + ${JSON.stringify(version)};
 const PRECACHE = ${JSON.stringify(urls, null, 2)};
+// 主程式缺一個就開不起來，要全部下載成功才裝新版；題庫、重點卡、字型下載失敗就先略過，用到時再抓
+const CRITICAL = (url) => url === './' || /\\.(js|css|webmanifest)$/.test(url);
+// 舊版的快取名稱（gsat- 加 12 碼雜湊），升級時一併清掉
+const LEGACY = /^gsat-[0-9a-f]{12}$/;
+const own = (k) => k.startsWith(PREFIX) || LEGACY.test(k);
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches
-      .open(CACHE)
-      .then((c) => Promise.all(PRECACHE.map((url) => reuse(url).then((hit) => (hit ? c.put(url, hit) : c.add(url))))))
-      .then(() => self.skipWaiting()),
+    caches.open(CACHE).then((c) => {
+      const put = (url) =>
+        reuse(url).then((hit) => {
+          if (hit) return c.put(url, hit);
+          // 不含雜湊的網址（./、圖示）要繞過瀏覽器的 HTTP 快取，否則可能把舊版首頁存進新版快取
+          const req = url.startsWith('assets/') ? url : new Request(url, { cache: 'reload' });
+          return fetch(req).then((res) => {
+            if (!res.ok) throw new Error(url + ' ' + res.status);
+            return c.put(url, res);
+          });
+        });
+      return Promise.all(PRECACHE.filter(CRITICAL).map(put)).then(() =>
+        Promise.allSettled(PRECACHE.filter((url) => !CRITICAL(url)).map(put)),
+      );
+    }).then(() => self.skipWaiting()),
   );
 });
 
-// assets/ 底下的檔名含內容雜湊，內容不會變：舊版快取裡有就直接沿用，改版時只下載真的變了的檔案（例如某一科題庫）
-function reuse(url) {
-  return url.startsWith('assets/') ? caches.match(url) : Promise.resolve(undefined);
+/** 只在這個 App 的快取裡找；新版優先，找不到再看還留著的上一版 */
+function ownMatch(req, opts) {
+  return caches.keys().then((keys) =>
+    keys.filter(own).reverse().reduce((p, k) => p.then((hit) => hit || caches.open(k).then((c) => c.match(req, opts))), Promise.resolve(undefined)),
+  );
 }
 
+// assets/ 底下的檔名含內容雜湊，內容不會變：舊版快取裡有就直接沿用，改版時只下載真的變了的檔案（例如某一科題庫）
+function reuse(url) {
+  return url.startsWith('assets/') ? ownMatch(url) : Promise.resolve(undefined);
+}
+
+// 換上新版時保留上一版的快取：還開著的舊頁面（作答中，等回首頁才換新版）之後要載入的重點卡、字型還找得到
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
+      .then((keys) => {
+        const mine = keys.filter((k) => own(k) && k !== CACHE);
+        return Promise.all(mine.slice(0, -1).map((k) => caches.delete(k)));
+      })
       .then(() => self.clients.claim()),
   );
 });
@@ -85,7 +114,7 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   event.respondWith(
-    caches.match(req, { ignoreSearch: req.mode === 'navigate', ignoreVary: true }).then((hit) => {
+    ownMatch(req, { ignoreSearch: req.mode === 'navigate', ignoreVary: true }).then((hit) => {
       if (hit) return hit;
       return fetch(req)
         .then((res) => {
@@ -95,7 +124,7 @@ self.addEventListener('fetch', (event) => {
           }
           return res;
         })
-        .catch(() => (req.mode === 'navigate' ? caches.match('./') : Response.error()));
+        .catch(() => (req.mode === 'navigate' ? ownMatch('./') : Response.error()));
     }),
   );
 });
@@ -120,7 +149,8 @@ self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
-      const open = list.find((c) => 'focus' in c);
+      // 同網域可能開著別的 App 的視窗：只挑這個 App 的
+      const open = list.find((c) => 'focus' in c && c.url.startsWith(self.registration.scope));
       return open ? open.focus() : self.clients.openWindow('./');
     }),
   );

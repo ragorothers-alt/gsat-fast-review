@@ -9,7 +9,8 @@
 //   syncedAt  上次同步成功的時間（顯示用）
 //   legacy    開始同步前的每日作答量：各台取較大值（跟匯入備份檔的規則一樣）
 //   devices   開始同步後，每台裝置各自的每日作答量：各台相加
-import { MARKS, applyMark, mergeCard, mergeStreak } from './sync.js';
+import { everMissed } from './srs.js';
+import { CARD_ID, MARKS, applyMark, cleanCard, mergeCard, mergeStreak } from './sync.js';
 import { dayKey, pruneDaily } from './stats.js';
 
 /** 部署好的 Worker；開發時可用 VITE_SYNC_API 指到本機的 wrangler dev */
@@ -68,20 +69,40 @@ export function stopCloud(state) {
 
 export const cloudOn = (state) => !!state.cloud?.code;
 
-/** 匯入備份檔時帶進來的每日紀錄：當成舊紀錄（取較大值）再重算總量 */
+/**
+ * 匯入備份檔之後：
+ * - 每日紀錄：備份裡的是總量（可能已經含這台同步後的作答），只把比目前總量多出來的部分補進舊紀錄，
+ *   匯回自己剛匯出的備份才不會變成兩倍。
+ * - 匯入的作答紀錄時間多半比上次上傳早，照「上次上傳後的變動」挑不到：下次同步改成全部重新上傳（雲端合併是冪等的）。
+ */
 export function foldLegacy(state, daily, now) {
   const c = state.cloud;
   if (!c) return;
+  const synced = {};
+  for (const days of Object.values(c.devices)) {
+    for (const [k, d] of Object.entries(days)) {
+      const t = (synced[k] ||= { answered: 0, right: 0 });
+      t.answered += d.answered;
+      t.right += d.right;
+    }
+  }
   for (const [k, d] of Object.entries(daily ?? {})) {
+    if (!Number.isSafeInteger(d?.answered) || !Number.isSafeInteger(d?.right)) continue;
     const mine = c.legacy[k] ?? { answered: 0, right: 0 };
-    c.legacy[k] = { answered: Math.max(mine.answered, d?.answered || 0), right: Math.max(mine.right, d?.right || 0) };
+    const s = synced[k] ?? { answered: 0, right: 0 };
+    c.legacy[k] = {
+      answered: Math.max(mine.answered, d.answered - s.answered, 0),
+      right: Math.max(mine.right, d.right - s.right, 0),
+    };
   }
   c.legacyDirty = true;
+  c.pushedAt = 0;
   rebuildDaily(state, now);
 }
 
-const pack = (c) => [c.box, c.due, c.seen, c.right, c.wrong, c.parked ? 1 : 0, c.last];
-const unpack = ([box, due, seen, right, wrong, parked, last]) => ({ box, due, seen, right, wrong, parked: !!parked, last });
+const pack = (c) => [c.box, c.due, c.seen, c.right, c.wrong, c.parked ? 1 : 0, c.last, everMissed(c) ? 1 : 0];
+// 舊版後端只回 7 欄（沒有 missed）：cleanCard 會從次數與盒子推回來
+const unpack = ([box, due, seen, right, wrong, parked, last, missed]) => cleanCard({ box, due, seen, right, wrong, parked: !!parked, last, missed });
 
 /** 要上傳的變動：上次上傳之後作答過的題目、這台這幾天的作答量、回報與收藏；第一次則全部上傳 */
 export function buildPush(state) {
@@ -109,15 +130,22 @@ export function applyPull(state, res, now) {
   const c = state.cloud;
   let changed = 0;
   for (const [id, arr] of Object.entries(res.cards ?? {})) {
+    const card = CARD_ID.test(id) && Array.isArray(arr) && unpack(arr);
+    if (!card) continue;
     const before = state.cards[id];
-    const after = mergeCard(before, unpack(arr));
+    const after = mergeCard(before, card);
     if (!before || after.last !== before.last || after.seen !== before.seen || after.right !== before.right || after.wrong !== before.wrong) changed++;
     state.cards[id] = after;
   }
   for (const [device, day, answered, right] of res.daily ?? []) {
+    // 這台自己的作答量以本機為準（答對後標成猜的會把答對數扣回來，雲端那份可能還是扣之前的）
+    if (device === c.device) continue;
     const map = device ? (c.devices[device] ||= {}) : c.legacy;
     const d = map[day] ?? { answered: 0, right: 0 };
-    map[day] = { answered: Math.max(d.answered, answered), right: Math.max(d.right, right) };
+    // 別台的那一列只有它自己會寫：作答量沒變少就採用雲端的（答對數可能被扣回來）；舊紀錄各台取較大值
+    map[day] = device
+      ? answered >= d.answered ? { answered, right } : d
+      : { answered: Math.max(d.answered, answered), right: Math.max(d.right, right) };
   }
   for (const kind of MARKS) {
     const on = (state[kind] ||= {});
@@ -131,7 +159,7 @@ export function applyPull(state, res, now) {
 }
 
 /** 每日作答量 = 舊紀錄 + 各台開始同步後的作答量；連續天數跟著重算 */
-function rebuildDaily(state, now) {
+export function rebuildDaily(state, now) {
   const c = state.cloud;
   pruneDaily(state, now);
   const daily = {};
@@ -199,22 +227,32 @@ export async function deleteCloud(request, code) {
 export async function syncCloud(state, request, { now = Date.now, keepalive = false } = {}) {
   const c = state.cloud;
   const snapshot = now();
+  // 裝置時間被往回調過：「上次上傳之後」的判斷不可靠，全部重新上傳
+  if (c.pushedAt > snapshot) c.pushedAt = 0;
   const push = buildPush(state);
-  const batches = [];
-  for (let i = 0; i < push.cards.length || i === 0; i += CHUNK) batches.push(push.cards.slice(i, i + CHUNK));
+  // 作答、每日題數、收藏、回報都分批送（後端每批有列數上限）；第一批之外只帶還沒送完的部分
+  const slices = (list, size = CHUNK) => {
+    const out = [];
+    for (let i = 0; i < list.length; i += size) out.push(list.slice(i, i + size));
+    return out;
+  };
+  const cardBatches = slices(push.cards);
+  const dailyBatches = slices(push.daily, 500);
+  const flagBatches = slices(Object.entries(push.flags));
+  const starBatches = slices(Object.entries(push.stars));
+  const count = Math.max(1, cardBatches.length, dailyBatches.length, flagBatches.length, starBatches.length);
   let changed = 0;
-  for (let i = 0; i < batches.length; i++) {
-    const first = i === 0;
+  for (let i = 0; i < count; i++) {
     const res = await request(
       '/v1/sync',
       {
         code: c.code,
         device: c.device,
         since: c.cursor,
-        cards: Object.fromEntries(batches[i]),
-        daily: first ? push.daily : [],
-        flags: first ? push.flags : {},
-        stars: first ? push.stars : {},
+        cards: Object.fromEntries(cardBatches[i] ?? []),
+        daily: dailyBatches[i] ?? [],
+        flags: Object.fromEntries(flagBatches[i] ?? []),
+        stars: Object.fromEntries(starBatches[i] ?? []),
         best: push.best,
       },
       { keepalive },

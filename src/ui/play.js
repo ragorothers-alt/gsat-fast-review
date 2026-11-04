@@ -3,7 +3,7 @@ import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, submit, tick, multiplier } from '../session.js';
-import { currentUnit, followUp, pathProgress, pathUnits, settleRuns } from '../path.js';
+import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
 import { adjustRight, recordAnswer, today } from '../stats.js';
@@ -161,8 +161,17 @@ export function initPlay(ctx) {
       return;
     }
     const run = prog.runs[target];
-    let queue = run ? run.ids.map((id) => byId.get(id)).filter((x) => x && !ctx.state.flags[x.id]) : [];
-    let index = run ? Math.min(run.index, queue.length) : 0;
+    const resumed = run ? resumeRun(run, (id) => byId.has(id) && !ctx.state.flags[id]) : { ids: [], index: 0 };
+    let queue = resumed.ids.map((id) => byId.get(id));
+    let index = resumed.index;
+    if (run?.index > 0 && index >= queue.length) {
+      // 答過幾題了，剩下的都被回報而略過：這關算做完
+      if (!prog.cleared.includes(target)) prog.cleared.push(target);
+      delete prog.runs[target];
+      ctx.save();
+      ctx.toast(`「${target}」剩下的題目都回報過了，這關算完成`);
+      return startPath({ subject });
+    }
     if (index >= queue.length) {
       queue = queueFor('path', { subjects: [subject], units: [unitKey(subject, target)] });
       index = 0;

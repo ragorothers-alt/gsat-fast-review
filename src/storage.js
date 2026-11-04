@@ -1,7 +1,9 @@
 // 進度存在 localStorage。私密瀏覽或被清除時讀不到也要能正常玩，所以全部包 try/catch。
 import { SUBJECTS } from './subjects.js';
+import { rebuildDaily } from './cloud.js';
+import { cleanCard, mergeState } from './sync.js';
 
-const KEY = 'gsat-quiz:v1';
+export const KEY = 'gsat-quiz:v1';
 
 /** 116 學年度學測首日（大考中心簡章：2027/1/22–24）；玩家可在設定裡改成自己的考試日期 */
 export const DEFAULT_EXAM_DATE = '2027-01-22';
@@ -41,32 +43,104 @@ export function freshState() {
   };
 }
 
-export function loadState() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (!raw) return freshState();
-    const saved = JSON.parse(raw);
-    const base = freshState();
+/** 讀不懂的存檔先搬到這裡，不讓下一次存檔蓋掉（關於與診斷可以看到、之後也還救得回來） */
+export const BROKEN_KEY = 'gsat-quiz:broken';
+
+/** 把存檔字串還原成 state；壞掉的卡片個別丟掉，不連累整份進度 */
+export function parseState(raw) {
+  const saved = JSON.parse(raw);
+  if (!saved || typeof saved !== 'object' || Array.isArray(saved)) throw new Error('bad save');
+  const base = freshState();
+  const cards = {};
+  for (const [id, c] of Object.entries(saved.cards ?? {})) {
+    const card = cleanCard(c);
+    if (!card) continue;
     // 舊版按「不會」不會降盒子；現在等同答錯，舊紀錄一併拉回第 0 盒
-    for (const c of Object.values(saved.cards ?? {})) if (c.parked && c.box > 0) c.box = 0;
-    return {
-      ...base,
-      ...saved,
-      streak: { ...base.streak, ...saved.streak },
-      best: { ...base.best, ...saved.best },
-      settings: { ...base.settings, ...saved.settings },
-    };
+    if (card.parked && card.box > 0) card.box = 0;
+    cards[id] = card;
+  }
+  return {
+    ...base,
+    ...saved,
+    cards,
+    streak: { ...base.streak, ...saved.streak },
+    best: { ...base.best, ...saved.best },
+    settings: { ...base.settings, ...saved.settings, reminder: { ...base.settings.reminder, ...saved.settings?.reminder } },
+  };
+}
+
+/** 這個分頁最後一次讀到或寫入的存檔字串：別的分頁寫入時用來判斷有沒有新東西 */
+let lastRaw = null;
+
+export function loadState() {
+  let raw = null;
+  try {
+    raw = localStorage.getItem(KEY);
+    if (!raw) return freshState();
+    const state = parseState(raw);
+    lastRaw = raw;
+    return state;
   } catch {
+    try {
+      if (raw) localStorage.setItem(BROKEN_KEY, raw);
+    } catch {
+      // 連備份都存不了：至少不影響開始玩
+    }
     return freshState();
   }
 }
 
+/** 存檔；空間不足或被封鎖時回傳 false（遊戲照常進行，由呼叫端提示玩家） */
 export function saveState(state) {
   try {
-    localStorage.setItem(KEY, JSON.stringify(state));
+    const raw = JSON.stringify(state);
+    localStorage.setItem(KEY, raw);
+    lastRaw = raw;
+    return true;
   } catch {
-    // 空間不足或被封鎖時放棄儲存，遊戲照常進行
+    return false;
   }
+}
+
+/**
+ * 同時開著兩個分頁（或瀏覽器分頁＋安裝的 App）時，每個分頁都拿著自己那份進度，後存的會整份蓋掉先存的。
+ * 別的分頁存檔時（storage 事件）把它的紀錄併進這個分頁：作答、收藏與回報、每日題數照同步的規則合併，
+ * 設定與闖關進度採用對方較新的那份。合併後回傳 true，呼叫端重畫畫面並存回去。
+ */
+export function absorbState(state, raw) {
+  if (!raw || raw === lastRaw) return false;
+  let other;
+  try {
+    other = parseState(raw);
+  } catch {
+    return false;
+  }
+  lastRaw = raw;
+  const merged = mergeState(state, other).state;
+  Object.assign(state, merged, {
+    settings: Object.assign(state.settings, other.settings),
+    path: other.path,
+    pathLast: other.pathLast,
+    cloud: mergeCloud(state.cloud, other.cloud),
+  });
+  // 開了同步時，每日題數由各台的紀錄加總而來
+  if (state.cloud?.code) rebuildDaily(state, Date.now());
+  return true;
+}
+
+/** 兩個分頁的同步狀態：同一組同步碼時，各台裝置的每日題數取較大值（同一台的兩個分頁各記了一部分） */
+function mergeCloud(mine, other) {
+  if (!mine?.code) return other ?? mine;
+  if (other?.code !== mine.code) return mine;
+  const maxDays = (a, b) => {
+    for (const [k, d] of Object.entries(b ?? {})) {
+      const m = a[k] ?? { answered: 0, right: 0 };
+      a[k] = { answered: Math.max(m.answered, d.answered), right: Math.max(m.right, d.right) };
+    }
+  };
+  maxDays(mine.legacy, other.legacy);
+  for (const [device, days] of Object.entries(other.devices ?? {})) maxDays((mine.devices[device] ||= {}), days);
+  return mine;
 }
 
 /** 請瀏覽器不要在空間吃緊時清掉進度（手機上特別有用） */

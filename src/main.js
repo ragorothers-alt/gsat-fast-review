@@ -3,7 +3,7 @@ import './styles.css';
 import { loadBank } from './data/bank.js';
 import { initErrorReporting } from './errors.js';
 import { createWorld } from './scene.js';
-import { loadState, saveState, requestPersistence } from './storage.js';
+import { KEY, absorbState, loadState, saveState, requestPersistence } from './storage.js';
 import { initAbout } from './ui/about.js';
 import { applyAppearance, watchSystemTheme } from './ui/appearance.js';
 import { initCloud } from './ui/cloud.js';
@@ -40,11 +40,18 @@ const screens = [...document.querySelectorAll('.screen')];
 const toastEl = document.querySelector('#toast');
 let toastTimer = 0;
 
+let saveWarned = false;
+
 const ctx = {
   state,
   world,
   bank: [],
-  save: () => saveState(state),
+  save() {
+    if (saveState(state) || saveWarned) return;
+    // 空間不足或被瀏覽器封鎖：照常能玩，但要讓玩家知道進度沒存進去，趁還開著先匯出備份
+    saveWarned = true;
+    ctx.toast('進度存不進這台裝置（空間不足或被封鎖），請到設定匯出備份');
+  },
   show(id) {
     for (const el of screens) el.hidden = el.id !== id;
     world.setScene(id);
@@ -132,6 +139,13 @@ function boot() {
 document.querySelector('#boot-retry').addEventListener('click', boot);
 boot();
 requestPersistence();
+
+// 另一個分頁（或同時開著的瀏覽器分頁與安裝的 App）存檔了：把它的紀錄併進來，下次存檔才不會整份蓋掉對方。
+// 這裡不立刻存回去：兩個分頁互相觸發存檔會沒完沒了
+window.addEventListener('storage', (e) => {
+  if (e.key !== KEY || !absorbState(state, e.newValue)) return;
+  if (ctx.bank.length && !document.querySelector('#home').hidden) ctx.refreshHome?.();
+});
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   // 新版 sw 下載完並接手後：在首頁（沒開面板）就直接換新版，作答中等回首頁再換

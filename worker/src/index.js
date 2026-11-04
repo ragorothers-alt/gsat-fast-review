@@ -11,6 +11,10 @@ const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 export const SUBJECT_IDS = ['chinese', 'english', 'math', 'physics', 'chemistry', 'biology', 'earth', 'history', 'geography', 'civics'];
 
 const CARD_ID = new RegExp(`^(${SUBJECT_IDS.join('|')})-\\d{3,5}$`);
+/** 作答與標記的時間最多可以比伺服器時間晚多久（裝置時鐘些微不準）；更晚的列不收，免得凍結其他裝置的排程 */
+const CLOCK_SKEW = 86_400_000;
+/** 到期時間最多在作答後多久（最長的複習間隔是 16 天） */
+const MAX_DUE = 40 * 86_400_000;
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 const DEVICE = /^[a-z0-9]{6,16}$/;
 const MAX_BODY = 1_000_000;
@@ -50,8 +54,8 @@ export default {
       }
       if (!body || typeof body !== 'object') throw new HttpError(400, 'bad request');
       if (pathname === '/v1/create') return json(await create(env.DB));
-      if (pathname === '/v1/sync') return await sync(env.DB, body);
-      if (pathname === '/v1/delete') return json(await remove(env.DB, body));
+      if (pathname === '/v1/sync') return await sync(env.DB, body, Date.now(), await codeLimit(env, body));
+      if (pathname === '/v1/delete') return json(await remove(env.DB, await codeLimit(env, body)));
       if (pathname === '/v1/push/subscribe') return json(await subscribe(env.DB, body, Date.now()));
       if (pathname === '/v1/push/unsubscribe') return json(await unsubscribe(env.DB, body));
       if (pathname === '/v1/push/progress') return json(await progress(env.DB, body, Date.now()));
@@ -59,7 +63,9 @@ export default {
       throw new HttpError(404, 'not found');
     } catch (e) {
       if (e instanceof HttpError || e instanceof PushError) return json({ error: e.message }, e.status);
-      throw e;
+      // 資料庫暫時出錯等：回帶 CORS 標頭的 JSON，前端才分得出「伺服器忙」和「沒有網路」
+      console.error(e);
+      return json({ error: 'server error' }, 503);
     }
   },
 
@@ -72,11 +78,28 @@ function json(data, status = 200) {
   return new Response(JSON.stringify(data), { status, headers: { ...CORS, 'Content-Type': 'application/json' } });
 }
 
-/** 每個 IP 每分鐘的請求上限（Cloudflare Rate Limiting binding；本機測試沒有就略過） */
+/**
+ * 每個 IP 每分鐘的請求上限（Cloudflare Rate Limiting binding；本機測試沒有就略過）。
+ * 同步另外依同步碼限制（codeLimit）：學校 Wi-Fi、電信 NAT 很多人共用一個 IP，IP 的上限放寬一點；
+ * 錯誤回報不需同步碼，上限另外算，灌錯誤紀錄不會吃掉同步的額度。
+ */
 async function limit(env, req, pathname) {
-  const limiter = pathname === '/v1/create' ? env.CREATE_LIMIT : env.SYNC_LIMIT;
+  const ip = req.headers.get('cf-connecting-ip') ?? 'unknown';
+  const limiter = pathname === '/v1/create' ? env.CREATE_LIMIT : pathname === '/v1/log' ? env.LOG_LIMIT : env.IP_LIMIT;
+  await take(limiter, ip);
+}
+
+/** 同一組同步碼每分鐘的同步次數上限；回傳正規化後的同步碼 */
+async function codeLimit(env, body) {
+  const code = normalizeCode(body.code);
+  if (!code) throw new HttpError(404, 'unknown code');
+  await take(env.SYNC_LIMIT, code);
+  return code;
+}
+
+async function take(limiter, key) {
   if (!limiter) return;
-  const { success } = await limiter.limit({ key: req.headers.get('cf-connecting-ip') ?? 'unknown' });
+  const { success } = await limiter.limit({ key });
   if (!success) throw new HttpError(429, 'too many requests');
 }
 
@@ -95,9 +118,7 @@ async function hashCode(code) {
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-async function spaceId(db, code) {
-  const normal = normalizeCode(code);
-  if (!normal) throw new HttpError(404, 'unknown code');
+async function spaceId(db, normal) {
   const sid = await db.prepare('SELECT sid FROM spaces WHERE hash = ?1').bind(await hashCode(normal)).first('sid');
   if (sid == null) throw new HttpError(404, 'unknown code');
   return sid;
@@ -115,8 +136,8 @@ async function create(db) {
   return { code: code.match(/.{4}/g).join('-') };
 }
 
-async function remove(db, body) {
-  const sid = await spaceId(db, body.code);
+async function remove(db, code) {
+  const sid = await spaceId(db, code);
   await db.batch(['cards', 'daily', 'flags', 'stars', 'spaces'].map((t) => db.prepare(`DELETE FROM ${t} WHERE sid = ?1`).bind(sid)));
   return { ok: true };
 }
@@ -132,9 +153,10 @@ WHERE sid = ?1 AND (
   EXISTS (SELECT 1 FROM stars WHERE sid = ?1 AND rev > spaces.rev))`;
 
 const UPSERT_CARDS = `
-INSERT INTO cards (sid, id, box, due, seen, rights, wrongs, parked, last, rev)
+INSERT INTO cards (sid, id, box, due, seen, rights, wrongs, parked, last, missed, rev)
 SELECT ?1, j.key, json_extract(j.value, '$[0]'), json_extract(j.value, '$[1]'), json_extract(j.value, '$[2]'),
-       json_extract(j.value, '$[3]'), json_extract(j.value, '$[4]'), json_extract(j.value, '$[5]'), json_extract(j.value, '$[6]'), ${REV}
+       json_extract(j.value, '$[3]'), json_extract(j.value, '$[4]'), json_extract(j.value, '$[5]'), json_extract(j.value, '$[6]'),
+       json_extract(j.value, '$[7]'), ${REV}
 FROM json_each(?2) AS j WHERE true
 ON CONFLICT (sid, id) DO UPDATE SET
   box = CASE WHEN excluded.last > cards.last THEN excluded.box ELSE cards.box END,
@@ -144,8 +166,10 @@ ON CONFLICT (sid, id) DO UPDATE SET
   seen = max(cards.seen, excluded.seen),
   rights = max(cards.rights, excluded.rights),
   wrongs = max(cards.wrongs, excluded.wrongs),
+  missed = max(cards.missed, excluded.missed),
   rev = excluded.rev
-WHERE excluded.last > cards.last OR excluded.seen > cards.seen OR excluded.rights > cards.rights OR excluded.wrongs > cards.wrongs`;
+WHERE excluded.last > cards.last OR excluded.seen > cards.seen OR excluded.rights > cards.rights OR excluded.wrongs > cards.wrongs
+   OR excluded.missed > cards.missed`;
 
 const UPSERT_DAILY = `
 INSERT INTO daily (sid, device, day, answered, rights, rev)
@@ -153,9 +177,11 @@ SELECT ?1, json_extract(j.value, '$[0]'), json_extract(j.value, '$[1]'), json_ex
 FROM json_each(?2) AS j WHERE true
 ON CONFLICT (sid, device, day) DO UPDATE SET
   answered = max(daily.answered, excluded.answered),
-  rights = max(daily.rights, excluded.rights),
+  rights = CASE WHEN daily.device <> '' AND excluded.answered >= daily.answered THEN excluded.rights ELSE max(daily.rights, excluded.rights) END,
   rev = excluded.rev
-WHERE excluded.answered > daily.answered OR excluded.rights > daily.rights`;
+WHERE excluded.answered > daily.answered
+   OR (daily.device = '' AND excluded.rights > daily.rights)
+   OR (daily.device <> '' AND excluded.answered = daily.answered AND excluded.rights <> daily.rights)`;
 
 /** 回報（flags.flagged）與收藏（stars.starred）：{ id: [at, on] }，以較晚的動作為準 */
 const upsertMarks = (table, col) => `
@@ -170,7 +196,7 @@ const UPSERT_STARS = upsertMarks('stars', 'starred');
 // 回傳的 JSON 直接由 SQLite 組好，Worker 不必逐列處理（免費方案每次請求只有 10 ms CPU）
 const PULL = `
 SELECT rev, best,
-  (SELECT json_group_object(id, json_array(box, due, seen, rights, wrongs, parked, last)) FROM cards WHERE sid = ?1 AND rev > ?2) AS cards,
+  (SELECT json_group_object(id, json_array(box, due, seen, rights, wrongs, parked, last, missed)) FROM cards WHERE sid = ?1 AND rev > ?2) AS cards,
   (SELECT json_group_array(json_array(device, day, answered, rights)) FROM daily WHERE sid = ?1 AND rev > ?2) AS daily,
   (SELECT json_group_object(id, json_array(at, flagged)) FROM flags WHERE sid = ?1 AND rev > ?2) AS flags,
   (SELECT json_group_object(id, json_array(at, starred)) FROM stars WHERE sid = ?1 AND rev > ?2) AS stars
@@ -180,14 +206,14 @@ FROM spaces WHERE sid = ?1`;
  * 一次同步：寫入這台的變動，回傳 rev 比 since 新的所有列。
  * 整批在同一個交易裡執行，所以拉回的資料和 rev 一定對得上，不會漏掉同時寫入的另一台。
  */
-async function sync(db, body) {
-  const sid = await spaceId(db, body.code);
+async function sync(db, body, now, code) {
+  const sid = await spaceId(db, code);
   const since = isInt(body.since) ? body.since : 0;
   const best = isInt(body.best, 1e6) ? body.best : 0;
-  const cards = cleanCards(body.cards);
+  const cards = cleanCards(body.cards, now);
   const daily = cleanDaily(body.daily);
-  const flags = cleanMarks(body.flags);
-  const stars = cleanMarks(body.stars);
+  const flags = cleanMarks(body.flags, now);
+  const stars = cleanMarks(body.stars, now);
   const writes = [];
   if (Object.keys(cards).length) writes.push(db.prepare(UPSERT_CARDS).bind(sid, JSON.stringify(cards)));
   if (daily.length) writes.push(db.prepare(UPSERT_DAILY).bind(sid, JSON.stringify(daily)));
@@ -195,7 +221,7 @@ async function sync(db, body) {
   if (Object.keys(stars).length) writes.push(db.prepare(UPSERT_STARS).bind(sid, JSON.stringify(stars)));
 
   const stmts = [...writes];
-  if (writes.length) stmts.push(db.prepare(BUMP).bind(sid, Date.now()));
+  if (writes.length) stmts.push(db.prepare(BUMP).bind(sid, now));
   if (best) stmts.push(db.prepare('UPDATE spaces SET best = ?2 WHERE sid = ?1 AND best < ?2').bind(sid, best));
   stmts.push(db.prepare(PULL).bind(sid, since));
   const results = await db.batch(stmts);
@@ -207,6 +233,8 @@ async function sync(db, body) {
 /** 錯誤紀錄最多保留幾列（舊的先刪） */
 const MAX_ERRORS = 500;
 const clip = (x, max) => (typeof x === 'string' ? x.trim().slice(0, max) : '');
+/** 版本號是 git commit 的前 7 碼（開發中是 dev）；其他的不收，免得被灌成一堆假版本 */
+const VERSION = /^([0-9a-f]{7}|dev)$/;
 
 /**
  * 前端回報的執行錯誤：{ version, message, source, ua }。同一版本、訊息、位置累計次數。
@@ -217,7 +245,7 @@ export async function logError(db, body, now) {
   const message = clip(body.message, 300);
   const source = clip(body.source, 300);
   const ua = clip(body.ua, 200);
-  if (!version || !message) throw new HttpError(400, 'bad log');
+  if (!VERSION.test(version) || !message) throw new HttpError(400, 'bad log');
   await db.batch([
     db
       .prepare(
@@ -225,9 +253,13 @@ export async function logError(db, body, now) {
          ON CONFLICT (version, message, source) DO UPDATE SET count = count + 1, last_at = ?5, ua = ?4`,
       )
       .bind(version, message, source, ua, now),
+    // 只留最新的 500 列（同一毫秒的也照順序截斷，不會因為時間相同而全部留下）
     db
-      .prepare('DELETE FROM errors WHERE last_at < (SELECT last_at FROM errors ORDER BY last_at DESC LIMIT 1 OFFSET ?1)')
-      .bind(MAX_ERRORS - 1),
+      .prepare(
+        `DELETE FROM errors WHERE (version, message, source) NOT IN
+           (SELECT version, message, source FROM errors ORDER BY last_at DESC, version, message, source LIMIT ?1)`,
+      )
+      .bind(MAX_ERRORS),
   ]);
   return { ok: true };
 }
@@ -235,18 +267,23 @@ export async function logError(db, body, now) {
 const isInt = (x, max = Number.MAX_SAFE_INTEGER) => Number.isSafeInteger(x) && x >= 0 && x <= max;
 const isObject = (x) => !!x && typeof x === 'object' && !Array.isArray(x);
 
-/** { id: [box, due, seen, right, wrong, parked, last] }；格式不對的列直接略過 */
-function cleanCards(input) {
+/**
+ * { id: [box, due, seen, right, wrong, parked, last, missed] }；格式不對、時間在未來的列直接略過。
+ * 舊版 App 只送 7 欄（沒有 missed）：從次數與盒子推回來（從沒失手的題目一定在第 2 盒以上、答對次數等於作答次數）
+ */
+function cleanCards(input, now) {
   const out = {};
   if (!isObject(input)) return out;
   const entries = Object.entries(input);
   if (entries.length > MAX_CARDS) throw new HttpError(413, 'too many cards');
   for (const [id, v] of entries) {
-    if (!CARD_ID.test(id) || !Array.isArray(v) || v.length !== 7) continue;
-    const [box, due, seen, right, wrong, parked, last] = v;
+    if (!CARD_ID.test(id) || !Array.isArray(v) || (v.length !== 7 && v.length !== 8)) continue;
+    const [box, due, seen, right, wrong, parked, last, flag = 0] = v;
     if (!isInt(box, 10) || !isInt(due) || !isInt(seen, 1e6) || !isInt(right, 1e6) || !isInt(wrong, 1e6)) continue;
-    if ((parked !== 0 && parked !== 1) || !isInt(last)) continue;
-    out[id] = [box, due, seen, right, wrong, parked, last];
+    if ((parked !== 0 && parked !== 1) || (flag !== 0 && flag !== 1) || !isInt(last)) continue;
+    if (last > now + CLOCK_SKEW || due > last + MAX_DUE) continue;
+    const missed = flag || wrong > 0 || right < seen || parked || box < 2 ? 1 : 0;
+    out[id] = [box, due, seen, right, wrong, parked, last, missed];
   }
   return out;
 }
@@ -267,14 +304,14 @@ function cleanDaily(input) {
   );
 }
 
-/** 回報或收藏：{ id: [at, on] } */
-function cleanMarks(input) {
+/** 回報或收藏：{ id: [at, on] }；時間在未來的不收 */
+function cleanMarks(input, now) {
   const out = {};
   if (!isObject(input)) return out;
   const entries = Object.entries(input);
   if (entries.length > MAX_MARKS) throw new HttpError(413, 'too many marks');
   for (const [id, v] of entries) {
-    if (CARD_ID.test(id) && Array.isArray(v) && v.length === 2 && isInt(v[0]) && (v[1] === 0 || v[1] === 1)) out[id] = v;
+    if (CARD_ID.test(id) && Array.isArray(v) && v.length === 2 && isInt(v[0], now + CLOCK_SKEW) && (v[1] === 0 || v[1] === 1)) out[id] = v;
   }
   return out;
 }

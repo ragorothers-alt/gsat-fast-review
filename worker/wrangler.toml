@@ -10,7 +10,7 @@ database_name = "gsat-sync"
 database_id = "7939f6bd-7fad-4416-9cb9-de309f517f9c"
 migrations_dir = "migrations"
 
-# 每個 IP 每分鐘的請求上限
+# 每分鐘的請求上限：同步依同步碼算；其餘依 IP 算（學校、電信 NAT 很多人共用一個 IP，放寬一點）
 [[ratelimits]]
 name = "SYNC_LIMIT"
 namespace_id = "1001"
@@ -20,6 +20,17 @@ simple = { limit = 60, period = 60 }
 name = "CREATE_LIMIT"
 namespace_id = "1002"
 simple = { limit = 5, period = 60 }
+
+[[ratelimits]]
+name = "IP_LIMIT"
+namespace_id = "1003"
+simple = { limit = 300, period = 60 }
+
+# 錯誤回報（不需同步碼）另外算，灌錯誤紀錄不會吃掉同步的額度
+[[ratelimits]]
+name = "LOG_LIMIT"
+namespace_id = "1004"
+simple = { limit = 20, period = 60 }
 
 # 每日提醒：每個整點檢查一次該提醒誰（push.js）
 [triggers]

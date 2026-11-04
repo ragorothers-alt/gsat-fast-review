@@ -13,19 +13,24 @@ export const MAX_BOX = INTERVALS.length - 1;
  * 只是不算進答錯次數（wrong），也不打斷畫面的節奏。
  * 答對後自己標「猜的」（guess）等同不會；標「不太確定」（unsure）10 分鐘後再考，
  * 兩者都不算答對次數，所以會留在錯題本，之後隔開時間答對才離開。
+ * 還沒到期就又答對（例如連刷好幾輪錯題）不升盒、排程照舊：間隔重複要隔開時間答對才算數。
+ * missed：失手過就記 1，之後不再變回 0（同步合併時取較大值，見 everMissed）。
  * @param {object|undefined} card 舊紀錄（沒看過則為 undefined）
  * @param {'right'|'wrong'|'skip'|'guess'|'unsure'} outcome skip = 不會、直接看解答
  * @param {number} now
  */
 export function schedule(card, outcome, now) {
   const c = { box: 0, due: 0, seen: 0, right: 0, wrong: 0, parked: false, ...card };
+  c.missed = everMissed(card) || outcome !== 'right' ? 1 : 0;
   c.seen++;
   c.last = now;
   if (outcome === 'right') {
     c.right++;
+    c.parked = false;
+    // 還沒到期：記下這次答對，但盒子與到期時間不變
+    if (card && now < card.due) return c;
     // 第一次見到就答對：直接跳到隔天再考
     c.box = c.seen === 1 ? 2 : Math.min(MAX_BOX, c.box + 1);
-    c.parked = false;
   } else if (outcome === 'unsure') {
     c.box = 1;
     c.parked = false;
@@ -48,11 +53,18 @@ export function isWeak(card) {
 }
 
 /**
- * 答對過、而且從沒答錯、按過「不會」或標成猜的、不太確定：已經會了，之後不再出。
- * 只要失手過一次，就照間隔重複繼續複習。（同步合併時 seen、right、wrong 各取最大值，所以也看 wrong）
+ * 失手過：答錯、按過「不會」或標成猜的、不太確定。
+ * 新紀錄看 missed；舊紀錄沒有這個欄位，從次數與盒子推回來：從沒失手的題目一定在第 2 盒以上、答對次數等於作答次數。
+ */
+export function everMissed(card) {
+  return !!card && !!(card.missed || card.wrong || card.right < card.seen || card.parked || card.box < 2);
+}
+
+/**
+ * 答對過、而且從沒失手：已經會了，之後不再出。只要失手過一次，就照間隔重複繼續複習。
  */
 export function neverMissed(card) {
-  return !!card && card.seen > 0 && card.right === card.seen && !card.wrong;
+  return !!card && card.seen > 0 && !everMissed(card);
 }
 
 /** 熟練度 0–1：每題的盒子數平均，沒看過算 0；答對過、從沒失手的不再複習，算滿 */

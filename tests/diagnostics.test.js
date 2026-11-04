@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import worker from '../worker/src/index.js';
+import worker, { logError } from '../worker/src/index.js';
 import { errorEntry, firstFrame } from '../src/errors.js';
 import { speechText } from '../src/ui/speech.js';
 import { createD1 } from './helpers/d1.js';
@@ -60,10 +60,17 @@ describe('同步後端收錯誤回報', () => {
     ]);
   });
 
-  it('過長的欄位會截斷', async () => {
+  it('過長的欄位會截斷；版本號不是 commit 格式就不收', async () => {
     const env = { DB: createD1() };
-    await post(env, { version: 'v'.repeat(50), message: 'm'.repeat(1000), source: '', ua: 'u'.repeat(1000) });
+    expect((await post(env, { version: 'v'.repeat(50), message: 'x' })).status).toBe(400);
+    await post(env, { version: 'abc1234', message: 'm'.repeat(1000), source: '', ua: 'u'.repeat(1000) });
     const row = await env.DB.prepare('SELECT version, message, ua FROM errors').first();
-    expect([row.version.length, row.message.length, row.ua.length]).toEqual([20, 300, 200]);
+    expect([row.version, row.message.length, row.ua.length]).toEqual(['abc1234', 300, 200]);
+  });
+
+  it('最多留 500 列，同一毫秒寫進來的也照樣截斷', async () => {
+    const env = { DB: createD1() };
+    for (let i = 0; i < 505; i++) await logError(env.DB, { version: 'abc1234', message: `e${i}` }, 1000);
+    expect(env.DB.raw.prepare('SELECT count(*) AS n FROM errors').get().n).toBe(500);
   });
 });

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { exportBackup, mergeState, parseBackup, setFlag, setStar } from '../src/sync.js';
+import { exportBackup, mergeCard, mergeState, parseBackup, setFlag, setStar } from '../src/sync.js';
 import { shiftDay } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -28,17 +28,17 @@ describe('backup', () => {
 
 describe('mergeState', () => {
   it('同一題以較晚作答的排程為準，累計次數取較大值', () => {
-    const local = state({ cards: { a: card(10, { box: 3, seen: 5, right: 4, wrong: 1 }) } });
-    const incoming = { cards: { a: card(20, { box: 0, seen: 3, right: 1, wrong: 2 }), b: card(7) } };
+    const local = state({ cards: { 'math-001': card(10, { box: 3, seen: 5, right: 4, wrong: 1 }) } });
+    const incoming = { cards: { 'math-001': card(20, { box: 0, seen: 3, right: 1, wrong: 2 }), 'math-002': card(7) } };
     const { state: s, added, updated } = mergeState(local, incoming);
-    expect(s.cards.a).toMatchObject({ box: 0, last: 20, seen: 5, right: 4, wrong: 2 });
-    expect(s.cards.b.last).toBe(7);
+    expect(s.cards['math-001']).toMatchObject({ box: 0, last: 20, seen: 5, right: 4, wrong: 2 });
+    expect(s.cards['math-002'].last).toBe(7);
     expect({ added, updated }).toEqual({ added: 1, updated: 1 });
   });
 
   it('重複匯入同一份檔案，結果不變', () => {
-    const local = state({ cards: { a: card(10) }, daily: { '2026-10-27': { answered: 5, right: 3 } } });
-    const incoming = { cards: { a: card(30, { seen: 2 }) }, daily: { '2026-10-27': { answered: 8, right: 6 } } };
+    const local = state({ cards: { 'math-001': card(10) }, daily: { '2026-10-27': { answered: 5, right: 3 } } });
+    const incoming = { cards: { 'math-001': card(30, { seen: 2 }) }, daily: { '2026-10-27': { answered: 8, right: 6 } } };
     const once = mergeState(local, incoming).state;
     const twice = mergeState(once, incoming).state;
     expect(twice).toEqual(once);
@@ -46,37 +46,66 @@ describe('mergeState', () => {
   });
 
   it('保留本機設定物件，回報題目取聯集', () => {
-    const local = state({ flags: { a: 5 } });
-    const { state: s } = mergeState(local, { flags: { a: 9, b: 3 } });
+    const local = state({ flags: { 'math-001': 5 } });
+    const { state: s } = mergeState(local, { flags: { 'math-001': 9, 'math-002': 3 } });
     expect(s.settings).toBe(local.settings);
-    expect(s.flags).toEqual({ a: 9, b: 3 });
+    expect(s.flags).toEqual({ 'math-001': 9, 'math-002': 3 });
   });
 
   it('取消回報比另一份的回報晚，就維持取消；比較早則以回報為準', () => {
     const local = state();
-    setFlag(local, 'a', true, 5);
-    setFlag(local, 'a', false, 8);
-    setFlag(local, 'b', false, 2);
-    const { state: s } = mergeState(local, { flags: { a: 6, b: 4 } });
-    expect(s.flags).toEqual({ b: 4 });
-    expect(s.flagsOff).toEqual({ a: 8 });
+    setFlag(local, 'math-001', true, 5);
+    setFlag(local, 'math-001', false, 8);
+    setFlag(local, 'math-002', false, 2);
+    const { state: s } = mergeState(local, { flags: { 'math-001': 6, 'math-002': 4 } });
+    expect(s.flags).toEqual({ 'math-002': 4 });
+    expect(s.flagsOff).toEqual({ 'math-001': 8 });
     // 對方取消得更晚
-    expect(mergeState(s, { flagsOff: { b: 9 } }).state.flags).toEqual({});
+    expect(mergeState(s, { flagsOff: { 'math-002': 9 } }).state.flags).toEqual({});
   });
 
   it('收藏與回報各自合併，互不影響', () => {
     const local = state();
-    setStar(local, 'a', true, 5);
-    setStar(local, 'b', false, 9);
-    const { state: s } = mergeState(local, { stars: { b: 6, c: 3 }, flags: { a: 4 } });
-    expect(s.stars).toEqual({ a: 5, c: 3 });
-    expect(s.starsOff).toEqual({ b: 9 });
-    expect(s.flags).toEqual({ a: 4 });
+    setStar(local, 'math-001', true, 5);
+    setStar(local, 'math-002', false, 9);
+    const { state: s } = mergeState(local, { stars: { 'math-002': 6, 'math-003': 3 }, flags: { 'math-001': 4 } });
+    expect(s.stars).toEqual({ 'math-001': 5, 'math-003': 3 });
+    expect(s.starsOff).toEqual({ 'math-002': 9 });
+    expect(s.flags).toEqual({ 'math-001': 4 });
+  });
+
+  it('欄位不是合理整數的卡片、格式不對的題目 id、時間不是數字的標記，整筆略過', () => {
+    const incoming = {
+      cards: {
+        'math-001': { ...card(5), wrong: 'oops' },
+        'math-002': { ...card(5), box: 100 },
+        'not an id': card(5),
+        'math-003': card(5),
+      },
+      stars: { 'math-004': 'x', 'math-005': 6 },
+      daily: { '2026-10-27': { answered: 'x', right: 0 }, '2026-10-28': { answered: 3, right: 2 } },
+    };
+    const { state: s, added } = mergeState(state(), incoming);
+    expect(Object.keys(s.cards)).toEqual(['math-003']);
+    expect(added).toBe(1);
+    expect(s.stars).toEqual({ 'math-005': 6 });
+    expect(s.daily).toEqual({ '2026-10-28': { answered: 3, right: 2 } });
+  });
+
+  it('一邊看過解答、一邊答對：合併後次數被拉平，但記得失手過', () => {
+    const right = { box: 3, due: 50, seen: 2, right: 2, wrong: 0, parked: false, last: 2 };
+    const skipped = { box: 0, due: 60, seen: 1, right: 0, wrong: 0, parked: true, last: 3 };
+    for (const merged of [mergeCard(right, skipped), mergeCard(skipped, right)]) {
+      expect(merged).toMatchObject({ seen: 2, right: 2, wrong: 0, missed: 1 });
+    }
+    // 之後在另一台連續答對，到期時間照算，missed 仍在
+    const later = mergeCard({ ...right, last: 9, box: 5 }, mergeCard(right, skipped));
+    expect(later.missed).toBe(1);
   });
 
   it('舊版備份沒有收藏欄位也能匯入', () => {
-    const local = state({ stars: { a: 5 } });
-    expect(mergeState(local, { cards: {} }).state.stars).toEqual({ a: 5 });
+    const local = state({ stars: { 'math-001': 5 } });
+    expect(mergeState(local, { cards: {} }).state.stars).toEqual({ 'math-001': 5 });
   });
 
   it('連續天數依合併後的每日紀錄重算', () => {

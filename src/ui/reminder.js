@@ -136,7 +136,7 @@ export function initReminder(ctx) {
       try {
         const sub = await (await registration())?.pushManager.getSubscription();
         if (!sub) return await subscribe();
-        const body = { endpoint: sub.endpoint, tz: tz(), progress: progress() };
+        const body = { endpoint: sub.endpoint, tz: tz(), hour: settings.reminder.hour, progress: progress() };
         const key = JSON.stringify(body);
         if (key === lastReport) return;
         await request('/v1/push/progress', body, { keepalive });

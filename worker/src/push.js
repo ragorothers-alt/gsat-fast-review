@@ -116,10 +116,25 @@ function progressOf(body) {
   };
 }
 
+/**
+ * 瀏覽器給的金鑰要真的能用：p256dh 是 65 bytes 的 P-256 公鑰、auth 是 16 bytes。
+ * 只看字元格式的話，一筆假金鑰會一直留在資料庫、每天送提醒時出錯。
+ */
+async function checkKeys(keys) {
+  try {
+    if (!/^[\w-]{80,100}$/.test(keys.p256dh ?? '') || !/^[\w-]{16,32}$/.test(keys.auth ?? '')) throw new Error();
+    const pub = fromB64url(keys.p256dh);
+    if (pub.length !== 65 || pub[0] !== 4 || fromB64url(keys.auth).length !== 16) throw new Error();
+    await crypto.subtle.importKey('raw', pub, { name: 'ECDH', namedCurve: 'P-256' }, false, []);
+  } catch {
+    throw new PushError(400, 'bad keys');
+  }
+}
+
 export async function subscribe(db, body, now) {
   const endpoint = endpointOf(body);
   const keys = body.keys ?? {};
-  if (!/^[\w-]{80,100}$/.test(keys.p256dh ?? '') || !/^[\w-]{16,32}$/.test(keys.auth ?? '')) throw new PushError(400, 'bad keys');
+  await checkKeys(keys);
   const hour = int(body.hour, 0, 23, 'hour');
   const tz = int(body.tz, -720, 840, 'tz');
   const p = progressOf(body);
@@ -139,14 +154,20 @@ export async function unsubscribe(db, body) {
   return { ok: true };
 }
 
-/** 回報今日進度；訂閱不存在（例如已被推播服務註銷）回 404，App 會重新訂閱 */
+/**
+ * 回報今日進度；訂閱不存在（例如已被推播服務註銷）回 404，App 會重新訂閱。
+ * 新版 App 也帶上提醒時刻：離線時改了時間，連上線後的例行回報就會補上（舊版不帶，維持原本的時刻）
+ */
 export async function progress(db, body, now) {
   const endpoint = endpointOf(body);
   const tz = int(body.tz, -720, 840, 'tz');
+  const hour = body.hour == null ? null : int(body.hour, 0, 23, 'hour');
   const p = progressOf(body);
   const res = await db
-    .prepare('UPDATE push_subs SET tz = ?2, day = ?3, answered = ?4, goal = ?5, streak = ?6, updated_at = ?7 WHERE endpoint = ?1')
-    .bind(endpoint, tz, p.day, p.answered, p.goal, p.streak, now)
+    .prepare(
+      'UPDATE push_subs SET tz = ?2, day = ?3, answered = ?4, goal = ?5, streak = ?6, updated_at = ?7, hour = COALESCE(?8, hour) WHERE endpoint = ?1',
+    )
+    .bind(endpoint, tz, p.day, p.answered, p.goal, p.streak, now, hour)
     .run();
   if (!res.meta.changes) throw new PushError(404, 'unknown subscription');
   return { ok: true };
@@ -168,35 +189,52 @@ export function reminderText(sub, now) {
   return { title: '今天還沒練習', body: '花一分鐘來一輪 60 秒快閃吧！' };
 }
 
+/** 一次 Cron 最多送幾則（免費方案每次執行只能發 50 個對外請求）；送不完的下一個整點接著送 */
+export const BATCH = 40;
+/** 連續幾天送不出去（推播服務一直回錯誤）就刪掉這筆訂閱 */
+const MAX_FAILS = 7;
+/** 這麼久沒打開 App（沒回報進度）就不再提醒 */
+const STALE_MS = 60 * 86_400_000;
+
 /**
  * Cron 每小時呼叫一次。now 往後抓 2 分鐘，觸發時間稍微提早也算在下一個整點。
+ * 當地時間已過提醒時刻、今天還沒提醒過、還沒達標的才送；上一個整點沒輪到的（人太多、Cron 沒跑）晚一點補送。
+ * 每筆訂閱各自處理：一筆金鑰壞掉或推播服務出錯，不影響其他人。
  * @returns {Promise<{ sent: number, gone: number, failed: number }>}
  */
 export async function sendReminders(env, now, fetchImpl = fetch) {
   const db = env.DB;
   const minute = Math.floor((now + 120_000) / 60_000);
-  // 當地時間 = UTC + tz 分鐘；整點對上提醒時刻，而且今天還沒提醒過、還沒達標（分鐘數先轉成整數，除法才是整數除法）
+  // 當地時間 = UTC + tz 分鐘（分鐘數先轉成整數，除法才是整數除法）
   const { results } = await db
     .prepare(
       `WITH t AS (SELECT CAST(?1 AS INTEGER) AS m)
        SELECT endpoint, p256dh, auth, tz, day, answered, goal, streak FROM push_subs, t
-       WHERE ((t.m + tz) % 1440 + 1440) % 1440 / 60 = hour
+       WHERE ((t.m + tz) % 1440 + 1440) % 1440 / 60 >= hour
          AND COALESCE(sent_day, '') <> date((t.m + tz) * 60, 'unixepoch')
-         AND NOT (COALESCE(day, '') = date((t.m + tz) * 60, 'unixepoch') AND answered >= goal)`,
+         AND NOT (COALESCE(day, '') = date((t.m + tz) * 60, 'unixepoch') AND answered >= goal)
+       ORDER BY hour LIMIT ?2`,
     )
-    .bind(minute)
+    .bind(minute, BATCH)
     .all();
 
   const auths = new Map();
   const sent = [];
   const gone = [];
-  let failed = 0;
+  const failed = [];
   await Promise.all(
     results.map(async (sub) => {
-      const aud = new URL(sub.endpoint).origin;
-      if (!auths.has(aud)) auths.set(aud, vapidAuth(env, aud, now));
-      const body = await encryptPayload(utf8(JSON.stringify(reminderText(sub, now))), sub);
       try {
+        const aud = new URL(sub.endpoint).origin;
+        if (!auths.has(aud)) auths.set(aud, vapidAuth(env, aud, now));
+        let body;
+        try {
+          body = await encryptPayload(utf8(JSON.stringify(reminderText(sub, now))), sub);
+        } catch {
+          // 金鑰不能用（舊版沒檢查就收進來的）：這筆訂閱永遠送不出去
+          gone.push(sub.endpoint);
+          return;
+        }
         const res = await fetchImpl(sub.endpoint, {
           method: 'POST',
           headers: {
@@ -211,17 +249,21 @@ export async function sendReminders(env, now, fetchImpl = fetch) {
         // 404／410：使用者關掉通知或解除安裝，訂閱已失效
         if (res.status === 404 || res.status === 410) gone.push(sub.endpoint);
         else if (res.ok) sent.push(sub);
-        else failed++;
+        else failed.push(sub);
       } catch {
-        failed++;
+        failed.push(sub);
       }
     }),
   );
 
+  const today = (s) => localDay(minute * 60_000, s.tz);
   const stmts = [
-    ...sent.map((s) => db.prepare('UPDATE push_subs SET sent_day = ?2 WHERE endpoint = ?1').bind(s.endpoint, localDay(minute * 60_000, s.tz))),
+    ...sent.map((s) => db.prepare('UPDATE push_subs SET sent_day = ?2, fails = 0 WHERE endpoint = ?1').bind(s.endpoint, today(s))),
+    // 送不出去的今天就不再重試（不然每個整點都打一次推播服務），連續好幾天都失敗才刪
+    ...failed.map((s) => db.prepare('UPDATE push_subs SET sent_day = ?2, fails = fails + 1 WHERE endpoint = ?1').bind(s.endpoint, today(s))),
     ...gone.map((e) => db.prepare('DELETE FROM push_subs WHERE endpoint = ?1').bind(e)),
+    db.prepare('DELETE FROM push_subs WHERE fails >= ?1 OR updated_at < ?2').bind(MAX_FAILS, now - STALE_MS),
   ];
-  if (stmts.length) await db.batch(stmts);
-  return { sent: sent.length, gone: gone.length, failed };
+  await db.batch(stmts);
+  return { sent: sent.length, gone: gone.length, failed: failed.length };
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DAY, INTERVALS, MAX_BOX, buildQueue, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
+import { DAY, INTERVALS, MAX_BOX, buildQueue, everMissed, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
 
 const NOW = 1_700_000_000_000;
 
@@ -20,13 +20,23 @@ describe('schedule', () => {
     expect(c).toMatchObject({ seen: 1, right: 1, wrong: 0, parked: false });
   });
 
-  it('之後答對逐盒上升，最高停在最後一盒', () => {
+  it('到期後答對逐盒上升，最高停在最後一盒', () => {
     let c = schedule(undefined, 'wrong', NOW);
-    c = schedule(c, 'right', NOW);
+    c = schedule(c, 'right', c.due);
     expect(c.box).toBe(1);
-    for (let i = 0; i < 10; i++) c = schedule(c, 'right', NOW);
+    for (let i = 0; i < 10; i++) c = schedule(c, 'right', c.due);
     expect(c.box).toBe(MAX_BOX);
-    expect(c.due).toBe(NOW + INTERVALS[MAX_BOX]);
+    expect(c.due).toBe(c.last + INTERVALS[MAX_BOX]);
+  });
+
+  it('還沒到期就又答對：記下次數，但不升盒、到期時間不變（連刷幾輪不能清空錯題本）', () => {
+    const wrong = schedule(undefined, 'wrong', NOW);
+    let c = wrong;
+    for (let i = 1; i <= 3; i++) c = schedule(c, 'right', NOW + i * 1000);
+    expect(c).toMatchObject({ box: 0, due: wrong.due, seen: 4, right: 3, wrong: 1, last: NOW + 3000 });
+    expect(isWeak(c)).toBe(true);
+    // 到期之後答對才升盒
+    expect(schedule(c, 'right', wrong.due).box).toBe(1);
   });
 
   it('答錯回到第 0 盒，很快再出現', () => {
@@ -56,29 +66,29 @@ describe('schedule', () => {
     let c = schedule(undefined, 'unsure', NOW);
     expect(c).toMatchObject({ box: 1, parked: false, seen: 1, right: 0, wrong: 0, due: NOW + INTERVALS[1] });
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', NOW); // 2
+    c = schedule(c, 'right', c.due); // 2
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', NOW); // 3
+    c = schedule(c, 'right', c.due); // 3
     expect(isWeak(c)).toBe(false);
   });
 
   it('按「不會」之後，答對一次還不能離開錯題本，要升到第 3 盒', () => {
     let c = schedule(undefined, 'skip', NOW);
-    c = schedule(c, 'right', NOW); // 1
+    c = schedule(c, 'right', c.due); // 1
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', NOW); // 2
+    c = schedule(c, 'right', c.due); // 2
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', NOW); // 3
+    c = schedule(c, 'right', c.due); // 3
     expect(isWeak(c)).toBe(false);
   });
 
   it('答錯後要升到第 3 盒才離開錯題本', () => {
     let c = schedule(undefined, 'wrong', NOW);
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', NOW); // 1
-    c = schedule(c, 'right', NOW); // 2
+    c = schedule(c, 'right', c.due); // 1
+    c = schedule(c, 'right', c.due); // 2
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', NOW); // 3
+    c = schedule(c, 'right', c.due); // 3
     expect(isWeak(c)).toBe(false);
   });
 });
@@ -97,6 +107,23 @@ describe('neverMissed', () => {
 
   it('兩台裝置合併後答錯次數還在，就不算', () => {
     expect(neverMissed({ box: 2, seen: 1, right: 1, wrong: 1 })).toBe(false);
+  });
+
+  it('失手過就記下 missed，之後再答對幾次都不會消失', () => {
+    let c = schedule(undefined, 'skip', NOW);
+    expect(c.missed).toBe(1);
+    for (let i = 0; i < 6; i++) c = schedule(c, 'right', c.due);
+    expect(c).toMatchObject({ box: MAX_BOX, missed: 1 });
+    expect(neverMissed(c)).toBe(false);
+    expect(schedule(undefined, 'right', NOW).missed).toBe(0);
+  });
+
+  it('沒有 missed 欄位的舊紀錄：從次數、盒子與 parked 推回來', () => {
+    expect(everMissed({ box: 2, seen: 1, right: 1, wrong: 0, parked: false })).toBe(false);
+    // 合併後次數被拉平，但盒子或 parked 還留著看過解答的痕跡
+    expect(everMissed({ box: 0, seen: 1, right: 1, wrong: 0, parked: true })).toBe(true);
+    expect(everMissed({ box: 1, seen: 2, right: 2, wrong: 0, parked: false })).toBe(true);
+    expect(everMissed({ box: 3, seen: 3, right: 2, wrong: 0, parked: false })).toBe(true);
   });
 });
 

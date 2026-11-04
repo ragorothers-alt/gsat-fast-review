@@ -24,12 +24,17 @@ const partial = args.includes('--partial');
 const named = args.filter((a) => !a.startsWith('--'));
 const files = named.length ? named : readdirSync(QUESTION_DIR).filter((f) => f.endsWith('.json')).map((f) => join(QUESTION_DIR, f));
 
+let totalErrors = 0;
+
+// 少了一整科的題庫檔：App 會靜靜地少一科，一定要擋下來
 if (!named.length) {
   const present = new Set(files.map((f) => basename(f, '.json')));
-  for (const s of SUBJECTS) if (!present.has(s.id)) console.error(`✗ 缺少題庫檔 ${s.id}.json`);
+  for (const s of SUBJECTS) {
+    if (present.has(s.id)) continue;
+    console.error(`✗ 缺少題庫檔 ${s.id}.json`);
+    totalErrors++;
+  }
 }
-
-let totalErrors = 0;
 let totalWarnings = 0;
 const seenIds = new Map();
 

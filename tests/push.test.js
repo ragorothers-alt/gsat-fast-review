@@ -111,6 +111,40 @@ describe('每日提醒', () => {
     expect(sentTo.sort()).toEqual([endpoint(1), endpoint(2)]);
   });
 
+  it('格式對但不是有效公鑰的金鑰，訂閱時就擋下', async () => {
+    const fake = { p256dh: 'A'.repeat(87), auth: 'A'.repeat(22) };
+    expect((await post('/v1/push/subscribe', { endpoint: endpoint(1), keys: fake, hour: 20, tz: TW })).status).toBe(400);
+  });
+
+  it('一筆壞掉的訂閱不影響其他人，而且會被刪掉；推播服務一直出錯的隔天才再試', async () => {
+    await post('/v1/push/subscribe', { endpoint: endpoint(1), keys, hour: 20, tz: TW });
+    await post('/v1/push/subscribe', { endpoint: endpoint(2), keys, hour: 20, tz: TW });
+    // 舊版沒檢查金鑰時收進來的
+    env.DB.raw
+      .prepare(`INSERT INTO push_subs (endpoint, p256dh, auth, hour, tz, created_at, updated_at) VALUES (?, ?, ?, 20, ${TW}, ?, ?)`)
+      .run(endpoint(3), 'A'.repeat(87), 'A'.repeat(22), Date.now(), Date.now());
+    const fetchImpl = async (url) => new Response(null, { status: url.endsWith('-2') ? 500 : 201 });
+    expect(await sendReminders(env, AT_8PM, fetchImpl)).toEqual({ sent: 1, gone: 1, failed: 1 });
+    expect(env.DB.raw.prepare('SELECT endpoint, fails FROM push_subs ORDER BY endpoint').all()).toEqual([
+      { endpoint: endpoint(1), fails: 0 },
+      { endpoint: endpoint(2), fails: 1 },
+    ]);
+    // 同一天不會每個整點重打
+    expect(await sendReminders(env, AT_8PM + 3_600_000, fetchImpl)).toEqual({ sent: 0, gone: 0, failed: 0 });
+  });
+
+  it('提醒時刻過了還沒輪到的，下一個整點補送', async () => {
+    await post('/v1/push/subscribe', { endpoint: endpoint(1), keys, hour: 19, tz: TW });
+    expect(await sendReminders(env, AT_8PM, async () => new Response(null, { status: 201 }))).toMatchObject({ sent: 1 });
+  });
+
+  it('例行回報進度時帶上提醒時刻：離線時改的時間，連上線後補上', async () => {
+    await post('/v1/push/subscribe', { endpoint: endpoint(1), keys, hour: 20, tz: TW });
+    await post('/v1/push/progress', { endpoint: endpoint(1), tz: TW, hour: 21, progress: { day: '2026-10-29', answered: 1, goal: 30 } });
+    expect(env.DB.raw.prepare('SELECT hour FROM push_subs').get().hour).toBe(21);
+    expect(await sendReminders(env, AT_8PM, async () => new Response(null, { status: 201 }))).toMatchObject({ sent: 0 });
+  });
+
   it('回報達標後當天就不再提醒', async () => {
     await post('/v1/push/subscribe', { endpoint: endpoint(1), keys, hour: 20, tz: TW, progress: { day: '2026-10-29', answered: 5, goal: 30 } });
     expect((await post('/v1/push/progress', { endpoint: endpoint(1), tz: TW, progress: { day: '2026-10-29', answered: 31, goal: 30, streak: 6 } })).data).toEqual({ ok: true });

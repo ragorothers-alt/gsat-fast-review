@@ -1,11 +1,12 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import worker, { SUBJECT_IDS } from '../worker/src/index.js';
 import { CHUNK, CloudError, createCode, deleteCloud, makeRequest, normalizeCode, startCloud, stopCloud, syncCloud } from '../src/cloud.js';
-import { schedule } from '../src/srs.js';
-import { dayKey, recordAnswer } from '../src/stats.js';
+import { foldLegacy } from '../src/cloud.js';
+import { neverMissed, schedule } from '../src/srs.js';
+import { adjustRight, dayKey, recordAnswer } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 import { SUBJECTS } from '../src/subjects.js';
-import { setFlag, setStar } from '../src/sync.js';
+import { mergeState, setFlag, setStar } from '../src/sync.js';
 import { statusText } from '../src/ui/cloud.js';
 import { createD1 } from './helpers/d1.js';
 
@@ -113,7 +114,92 @@ describe('合併', () => {
     await sync(b);
     await sync(a);
     expect(a.cards['math-001']).toEqual(b.cards['math-001']);
-    expect(a.cards['math-001']).toMatchObject({ box: 3, wrong: 2, seen: 3, last: clock });
+    // B 那次答對還沒到期（隔天才到期），所以不升盒；A 答錯過，合併後也記得失手過
+    expect(a.cards['math-001']).toMatchObject({ box: 2, wrong: 2, seen: 3, last: clock, missed: 1 });
+  });
+
+  it('一台看過解答、另一台答對：合併後還是算失手過，照樣複習', async () => {
+    const { a, b } = await pair();
+    answer(a, 'math-001', 'right');
+    answer(b, 'math-001', 'skip');
+    await sync(a);
+    await sync(b);
+    await sync(a);
+    for (const s of [a, b]) {
+      expect(s.cards['math-001']).toMatchObject({ seen: 1, right: 1, missed: 1 });
+      expect(neverMissed(s.cards['math-001'])).toBe(false);
+    }
+  });
+
+  it('答對、同步之後才標成猜的：雲端拉回來也不會又變成從沒失手；每日答對數也扣得回來', async () => {
+    const { a } = await pair();
+    answer(a, 'math-001', 'right');
+    await sync(a);
+    clock += 1000;
+    a.cards['math-001'] = schedule(undefined, 'guess', clock);
+    adjustRight(a, -1, clock);
+    await sync(a);
+    await sync(a);
+    expect(neverMissed(a.cards['math-001'])).toBe(false);
+    expect(a.daily[TODAY]).toEqual({ answered: 1, right: 0 });
+    const row = env.DB.raw.prepare("SELECT rights FROM daily WHERE device <> ''").get();
+    expect(row.rights).toBe(0);
+  });
+
+  it('舊版 App 只送 7 欄：後端從次數與盒子推回失手過', async () => {
+    const { a, code } = await pair();
+    const old = { box: 0, due: clock, seen: 1, right: 0, wrong: 0, parked: 1, last: clock };
+    await request('/v1/sync', { code, device: a.cloud.device, since: 0, cards: { 'math-002': Object.values(old) } });
+    expect(env.DB.raw.prepare("SELECT missed FROM cards WHERE id = 'math-002'").get().missed).toBe(1);
+  });
+
+  it('時間在未來的作答與標記，後端不收', async () => {
+    const { a, code } = await pair();
+    const future = Date.now() + 10 * 86_400_000;
+    await request('/v1/sync', {
+      code,
+      device: a.cloud.device,
+      since: 0,
+      cards: { 'math-003': [2, future + 1, 1, 1, 0, 0, future, 0] },
+      stars: { 'math-003': [future, 1] },
+    });
+    expect(env.DB.raw.prepare('SELECT count(*) AS n FROM cards').get().n).toBe(0);
+    expect(env.DB.raw.prepare('SELECT count(*) AS n FROM stars').get().n).toBe(0);
+  });
+
+  it('匯入備份帶進來的舊紀錄也會上傳；匯回自己的備份，當天題數不會變兩倍', async () => {
+    const { a, b } = await pair();
+    answer(a, 'math-001', 'right');
+    await sync(a);
+    // 匯入一份作答時間比上次上傳還早的紀錄
+    const backup = { cards: { 'math-004': schedule(undefined, 'wrong', T0 - 86_400_000) }, daily: { ...a.daily } };
+    Object.assign(a, mergeState(a, backup).state);
+    foldLegacy(a, backup.daily, clock);
+    expect(a.daily[TODAY].answered).toBe(1);
+    await sync(a);
+    await sync(b);
+    expect(b.cards['math-004']).toBeTruthy();
+    expect(b.daily[TODAY].answered).toBe(1);
+  });
+
+  it('裝置時間往回調：之後的作答照樣上傳', async () => {
+    const { a, b } = await pair();
+    answer(a, 'math-001', 'right');
+    await sync(a);
+    clock -= 3_600_000;
+    answer(a, 'math-002', 'wrong');
+    await sync(a);
+    await sync(b);
+    expect(b.cards['math-002']).toBeTruthy();
+  });
+
+  it('收藏超過一批的上限也能分批上傳', async () => {
+    const { a, b } = await pair();
+    clock += 1000;
+    for (let i = 0; i < 2500; i++) setStar(a, `math-${String(1000 + i)}`, true, clock);
+    await sync(a);
+    await sync(b);
+    expect(Object.keys(b.stars)).toHaveLength(2500);
   });
 
   it('一台取消回報，另一台同步後也取消', async () => {

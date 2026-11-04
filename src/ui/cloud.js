@@ -9,7 +9,8 @@ const STALE_MS = 30_000;
 const RETRY_MS = 60_000;
 
 const offline = (e) => e instanceof CloudError && e.status === 0;
-const missing = (e) => e instanceof CloudError && e.status === 404;
+// 只有後端明確回「沒有這組同步碼」才算雲端資料被刪除；Worker 改名、暫時的 404 都不該讓各台停止同步
+const missing = (e) => e instanceof CloudError && e.status === 404 && e.message === 'unknown code';
 
 export function initCloud(ctx) {
   const $ = (sel) => document.querySelector(sel);

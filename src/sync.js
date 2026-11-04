@@ -1,4 +1,5 @@
 // 進度備份：在一台裝置匯出成 JSON 檔，到另一台匯入後合併。純邏輯，不碰 DOM，方便測試。
+import { MAX_BOX, everMissed } from './srs.js';
 import { shiftDay } from './stats.js';
 
 const APP = 'gsat-quiz';
@@ -20,12 +21,30 @@ export function parseBackup(text) {
   return data.state;
 }
 
-const obj = (x) => (x && typeof x === 'object' ? x : {});
+const obj = (x) => (x && typeof x === 'object' && !Array.isArray(x) ? x : {});
 const num = (x) => (Number.isFinite(x) ? x : 0);
+const int = (x, max = Number.MAX_SAFE_INTEGER) => Number.isSafeInteger(x) && x >= 0 && x <= max;
+
+/** 題目 id 的格式（科目-數字），和同步後端的檢查一致 */
+export const CARD_ID = /^[a-z]+-\d{3,5}$/;
+export const DAY_KEY = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * 從檔案、雲端或舊存檔讀進來的一張卡片：每個欄位都要是合理範圍內的整數，否則整張略過（回傳 null）。
+ * 這些數字會顯示在畫面上，也決定排程，不能讓壞掉或特製的資料混進來。
+ */
+export function cleanCard(c) {
+  if (!c || typeof c !== 'object') return null;
+  const { box, due, seen, right, wrong, last } = c;
+  // 不檢查 right + wrong <= seen：兩台合併時次數各取較大值，加起來可能超過作答次數
+  if (!int(box, MAX_BOX) || !int(due) || !int(seen, 1e6) || !int(right, 1e6) || !int(wrong, 1e6) || !int(last)) return null;
+  return { box, due, seen, right, wrong, parked: c.parked === true || c.parked === 1, missed: everMissed(c) ? 1 : 0, last };
+}
 
 /**
  * 同一題在兩邊都有紀錄時：排程（盒子、到期日）以較晚作答的那份為準；
  * 累計次數取較大值而不相加，這樣來回匯入或重複匯入同一份檔案，結果都不會變。
+ * 失手過（missed）只要任一邊有就算：次數取較大值會蓋掉「這邊看過解答」的痕跡，所以另外記。
  */
 export function mergeCard(a, b) {
   if (!a) return b;
@@ -36,6 +55,7 @@ export function mergeCard(a, b) {
     seen: Math.max(num(a.seen), num(b.seen)),
     right: Math.max(num(a.right), num(b.right)),
     wrong: Math.max(num(a.wrong), num(b.wrong)),
+    missed: everMissed(a) || everMissed(b) ? 1 : 0,
   };
 }
 
@@ -96,30 +116,34 @@ export function mergeState(local, incoming) {
   const cards = { ...local.cards };
   let added = 0;
   let updated = 0;
-  for (const [id, card] of Object.entries(inCards)) {
-    if (!card || typeof card !== 'object') continue;
+  for (const [id, raw] of Object.entries(inCards)) {
+    const card = CARD_ID.test(id) && cleanCard(raw);
+    if (!card) continue;
     const mine = cards[id];
     if (!mine) added++;
-    else if (num(card.last) > num(mine.last)) updated++;
+    else if (card.last > num(mine.last)) updated++;
     cards[id] = mergeCard(mine, card);
   }
 
   const daily = { ...local.daily };
   for (const [k, d] of Object.entries(obj(incoming.daily))) {
+    if (!DAY_KEY.test(k) || !int(d?.answered, 1e5) || !int(d?.right, d.answered)) continue;
     const mine = daily[k] ?? { answered: 0, right: 0 };
-    daily[k] = { answered: Math.max(mine.answered, num(d?.answered)), right: Math.max(mine.right, num(d?.right)) };
+    daily[k] = { answered: Math.max(mine.answered, d.answered), right: Math.max(mine.right, d.right) };
   }
 
   const marks = {};
   for (const kind of MARKS) {
     const on = { ...local[kind] };
     const off = { ...local[`${kind}Off`] };
-    for (const [id, at] of Object.entries(obj(incoming[kind]))) applyMark(on, off, id, num(at), true);
-    for (const [id, at] of Object.entries(obj(incoming[`${kind}Off`]))) applyMark(on, off, id, num(at), false);
+    for (const [list, flag] of [[incoming[kind], true], [incoming[`${kind}Off`], false]]) {
+      for (const [id, at] of Object.entries(obj(list))) if (CARD_ID.test(id) && int(at)) applyMark(on, off, id, at, flag);
+    }
     Object.assign(marks, { [kind]: on, [`${kind}Off`]: off });
   }
 
-  const inStreak = { count: num(incoming.streak?.count), last: incoming.streak?.last ?? null };
+  const inLast = incoming.streak?.last;
+  const inStreak = { count: int(incoming.streak?.count, 1e5) ? incoming.streak.count : 0, last: DAY_KEY.test(inLast ?? '') ? inLast : null };
   return {
     state: {
       ...local,
@@ -127,7 +151,7 @@ export function mergeState(local, incoming) {
       daily,
       ...marks,
       streak: mergeStreak(daily, local.streak, inStreak),
-      best: { ...local.best, blitz: Math.max(num(local.best?.blitz), num(incoming.best?.blitz)) },
+      best: { ...local.best, blitz: Math.max(num(local.best?.blitz), int(incoming.best?.blitz, 1e6) ? incoming.best.blitz : 0) },
     },
     added,
     updated,

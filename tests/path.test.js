@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { currentUnit, followUp, pathProgress, pathUnits, settleRuns, unitStatus } from '../src/path.js';
+import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns, unitStatus } from '../src/path.js';
 import { UNITS, unitKey } from '../src/units.js';
 
 const units = ['A', 'B', 'C'];
@@ -52,6 +52,23 @@ describe('闖關進度', () => {
 
   it('全部過關回傳 null', () => {
     expect(currentUnit(units, { cleared: ['C', 'A', 'B'], runs: {} })).toBeNull();
+  });
+});
+
+describe('resumeRun', () => {
+  const run = { ids: ['a', 'b', 'c', 'd', 'e'], index: 3 };
+
+  it('下一題前面少了一題，位置跟著往前，不會跳過還沒答的題', () => {
+    expect(resumeRun(run, (id) => id !== 'b')).toEqual({ ids: ['a', 'c', 'd', 'e'], index: 2 });
+  });
+
+  it('還沒答的題被略過，接著做下一題', () => {
+    expect(resumeRun(run, (id) => id !== 'd')).toEqual({ ids: ['a', 'b', 'c', 'e'], index: 3 });
+  });
+
+  it('剩下的題都被略過：位置到底', () => {
+    const { ids, index } = resumeRun(run, (id) => id !== 'd' && id !== 'e');
+    expect(index).toBe(ids.length);
   });
 });
 

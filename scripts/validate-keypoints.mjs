@@ -24,6 +24,17 @@ const files = named.length ? named : existsSync(DIR) ? readdirSync(DIR).filter((
 
 let totalErrors = 0;
 let totalWarnings = 0;
+
+// 少了一科的重點卡檔：打開那科的重點卡會一片空白，要擋下來
+if (!named.length) {
+  const present = new Set(files.map((f) => basename(f, '.json')));
+  for (const id of Object.keys(SUBJECT_BY_ID)) {
+    if (present.has(id)) continue;
+    console.error(`✗ 缺少重點卡檔 ${id}.json`);
+    totalErrors++;
+  }
+}
+
 for (const file of files) {
   const errors = [];
   const warnings = [];

@@ -31,6 +31,23 @@ export function settleRuns(progress) {
   }
 }
 
+/**
+ * 接著做到一半的關：被回報（或題庫拿掉）的題目略過。下一題的位置只算它前面還留著的題數，
+ * 前面少了一題也不會跳過還沒答的題。回傳 { ids, index }；index 到底表示剩下的題都被略過了。
+ * @param {{ ids: string[], index: number }} run
+ * @param {(id: string) => boolean} keep
+ */
+export function resumeRun(run, keep) {
+  const ids = [];
+  let index = 0;
+  run.ids.forEach((id, i) => {
+    if (!keep(id)) return;
+    ids.push(id);
+    if (i < run.index) index++;
+  });
+  return { ids, index };
+}
+
 /** 現在該闖的關：第一個還沒過關的單元；全部過關回傳 null */
 export function currentUnit(units, progress) {
   return units.find((u) => !progress.cleared.includes(u)) ?? null;
