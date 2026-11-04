@@ -29,6 +29,16 @@ describe('讀檔', () => {
     expect(s.settings.reminder).toEqual({ on: false, hour: 20 });
   });
 
+  it('模擬考：考到一半的卷照存；成績紀錄壞掉的筆數丟掉', async () => {
+    const { KEY, loadState } = await tab();
+    const exam = { paper: 'math', ids: ['math-001'] };
+    const ok = { paper: 'math', at: NOW, right: 3, total: 25, blank: 0, secs: 900 };
+    store.set(KEY, JSON.stringify({ cards: {}, exam, examLog: [ok, null, { paper: 'math', right: 'x', total: 25, at: NOW }, { ...ok, total: 0 }] }));
+    expect(loadState()).toMatchObject({ exam, examLog: [ok] });
+    store.set(KEY, JSON.stringify({ cards: {}, exam: [1], examLog: 'oops' }));
+    expect(loadState()).toMatchObject({ exam: null, examLog: [] });
+  });
+
   it('整份讀不懂：先把原始內容搬到備份，再從頭開始，下次存檔不會蓋掉它', async () => {
     const { BROKEN_KEY, KEY, loadState, saveState } = await tab();
     store.set(KEY, '{"cards": {');

@@ -142,6 +142,15 @@
         <path d="M7 14.6Q11.1 14.1 15.2 14" stroke="#f2b632" stroke-width="3.6" opacity="0.7"/>
         <path d="M6.6 11.5Q11.9 11 17.3 10.7M7 14.6Q11.1 14.1 15.2 14M7.2 17.8Q10.2 17.5 13.1 17.4" stroke="#3b2f2a" stroke-width="1.6"/>
       </symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12.2 3.1C17.3 3 21 6.9 20.9 12.1C20.8 17.2 16.9 21 11.8 20.9C6.8 20.8 3 16.9 3.1 11.9C3.2 6.9 7.1 3.2 12.2 3.1Z" fill="#fffdf8"/>
+        <path d="M12 7.1Q12.1 9.7 12 12.2L15.4 14.3"/>
+        <path d="M12.1 4.6L12 5.6M19.4 12L18.4 12.1M12 19.4L11.9 18.4M4.6 12L5.6 11.9" stroke-width="1.6"/>
+      </symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.3 4.2L9.7 4.3L9.6 9.7L4.2 9.6ZM14.3 4.3L19.8 4.2L19.9 9.6L14.4 9.7ZM4.2 14.4L9.6 14.3L9.7 19.8L4.3 19.9ZM14.4 14.3L19.9 14.4L19.8 19.9L14.3 19.8Z"/>
+        <path d="M15.4 17L16.7 18.2L18.8 15.8" stroke-width="1.6"/>
+      </symbol>
     </svg>
 
     <canvas id="world" aria-hidden="true"></canvas>
@@ -225,6 +234,10 @@
               <span class="mode-sub" id="weak-units-sub">最弱的單元</span>
             </button>
           </div>
+          <button id="open-exam" class="mode exam" type="button">
+            <span class="mode-title"><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>模擬考</span>
+            <span class="mode-sub" id="exam-sub">照學測配分出一份卷・整卷計時</span>
+          </button>
         </nav>
         <p class="foot"><span id="bank-info"></span><button id="open-stock" class="foot-link" type="button" hidden>看存量 ›</button></p>
       </section>
@@ -233,9 +246,13 @@
       <section id="play" class="screen play" hidden>
         <header class="play-bar">
           <button id="quit" class="icon-btn" type="button" aria-label="結束這一輪">✕</button>
+          <!-- 模擬考時換成這組：先離開（之後接著考）、剩餘時間、題號一覽與交卷 -->
+          <button id="exam-quit" class="icon-btn exam-only" type="button" aria-label="先離開，之後接著考">✕</button>
           <span id="play-progress" class="play-progress"></span>
           <span id="combo" class="combo" hidden></span>
           <span class="score"><span id="score">0</span><span id="score-pop" class="score-pop"></span></span>
+          <span id="exam-clock" class="exam-clock exam-only" role="timer" aria-label="剩餘時間"></span>
+          <button id="exam-index-btn" class="icon-btn exam-only" type="button" aria-label="題號一覽與交卷" title="題號一覽與交卷"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-grid"/></svg></button>
           <button id="scratch-toggle" class="icon-btn" type="button" aria-label="草稿區" aria-pressed="false"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-pencil"/></svg></button>
         </header>
         <div class="timer" id="timer" role="progressbar" aria-label="剩餘時間" aria-valuemin="0" aria-valuemax="60" hidden><i id="timer-fill"></i></div>
@@ -276,6 +293,12 @@
           </div>
           <button id="related" class="related-btn" type="button" hidden title="接著練 3 題同單元的類似題"><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg>練 3 題類似題</button>
           <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
+          <!-- 模擬考：上一題、標記稍後回看、下一題（最後一題換成「檢查並交卷」） -->
+          <div class="exam-nav exam-only">
+            <button id="exam-prev" class="ghost-btn" type="button">‹ 上一題</button>
+            <button id="exam-mark" class="certain-btn" type="button" aria-pressed="false" title="沒把握、等一下想回來看">標記</button>
+            <button id="exam-next" class="next-btn" type="button">下一題 ›</button>
+          </div>
         </footer>
 
         <!-- 草稿區：平板上常駐，手機上按鉛筆拉出來 -->
@@ -321,6 +344,37 @@
         </nav>
       </section>
 
+      <!-- 模擬考成績 -->
+      <section id="exam-report" class="screen result exam-report" hidden>
+        <div class="result-scroll">
+          <header class="result-head">
+            <p id="x-paper" class="r-mode"></p>
+            <p id="x-big" class="r-big"></p>
+            <p id="x-cheer" class="r-cheer"></p>
+            <div class="r-stats">
+              <div><b id="x-acc"></b><span>答對率</span></div>
+              <div><b id="x-time"></b><span id="x-time-label">用時</span></div>
+              <div><b id="x-blank"></b><span>沒作答</span></div>
+            </div>
+          </header>
+          <section class="stats-block paper">
+            <h3>各單元<small>答對／題數・平均每題秒數</small></h3>
+            <ul id="x-units" class="x-units"></ul>
+          </section>
+          <section class="stats-block paper">
+            <h3><svg class="ico" aria-hidden="true"><use href="#i-clock"/></svg>時間分配</h3>
+            <p id="x-pace" class="plan-text"></p>
+            <ol id="x-slow" class="x-slow"></ol>
+          </section>
+          <h2 id="x-review-title" class="r-title"></h2>
+          <ol id="x-list" class="r-list"></ol>
+        </div>
+        <nav class="result-actions">
+          <button id="x-home" class="secondary-btn" type="button">回首頁</button>
+          <button id="x-train" class="primary-btn" type="button">練這份的錯題</button>
+        </nav>
+      </section>
+
       <!-- 學習分析 -->
       <section id="stats" class="screen stats" hidden>
         <header class="stats-bar">
@@ -336,6 +390,14 @@
             <div class="plan-meter" aria-hidden="true"><i id="plan-done"></i><i id="plan-proj"></i></div>
             <p id="plan-legend" class="plan-legend"></p>
             <button id="plan-goal" class="secondary-btn" type="button" hidden></button>
+          </section>
+
+          <section id="stats-forecast" class="stats-block paper">
+            <h3><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg>複習預報<small>未來 14 天的估計・依首頁選的科目與每日目標</small></h3>
+            <p id="forecast-text" class="plan-text"></p>
+            <div id="forecast-chart" class="bars forecast" role="img"></div>
+            <p class="forecast-legend" aria-hidden="true"><span class="swatch due"></span>到期要複習<span class="swatch over"></span>做不完、留到隔天</p>
+            <button id="forecast-goal" class="secondary-btn" type="button" hidden></button>
           </section>
 
           <section id="stats-stock" class="stats-block paper">
@@ -426,6 +488,42 @@
         <nav class="sheet-foot">
           <button id="path-reset" class="secondary-btn" type="button">從頭重來</button>
           <button id="path-go" class="primary-btn" type="button">開始</button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 模擬考：選考卷、接著考到一半的那份 -->
+    <div id="exam-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="exam-title">
+        <header class="sheet-head">
+          <h2 id="exam-title">模擬考</h2>
+          <button id="exam-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <p class="sheet-tip">照 111–115 學測各單元的出題比例抽一份卷（只有單選），整卷計時。作答時不對答案，可以跳題、標記、回頭改；交卷後才看成績、各單元得分與時間分配，答錯的題目加入錯題複習。</p>
+        <div id="exam-resume" class="exam-resume" hidden>
+          <p id="exam-resume-text"></p>
+          <div class="exam-resume-actions">
+            <button id="exam-drop" class="secondary-btn" type="button">放棄這份</button>
+            <button id="exam-continue" class="primary-btn" type="button">接著考</button>
+          </div>
+        </div>
+        <ul id="exam-papers" class="exam-papers"></ul>
+      </div>
+    </div>
+
+    <!-- 模擬考：題號一覽、交卷 -->
+    <div id="exam-index" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="exam-index-title">
+        <header class="sheet-head">
+          <h2 id="exam-index-title">題號一覽</h2>
+          <button id="exam-index-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <p id="exam-index-sum" class="sheet-tip"></p>
+        <ol id="exam-grid" class="exam-grid"></ol>
+        <p class="exam-grid-legend" aria-hidden="true"><span class="cell done"></span>已作答<span class="cell marked"></span>標記<span class="cell"></span>沒作答</p>
+        <nav class="sheet-foot">
+          <button id="exam-pause" class="secondary-btn" type="button">先離開</button>
+          <button id="exam-submit" class="primary-btn" type="button">交卷</button>
         </nav>
       </div>
     </div>

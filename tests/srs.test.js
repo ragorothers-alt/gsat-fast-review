@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DAY, INTERVALS, MAX_BOX, buildQueue, everMissed, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
+import { DAY, INTERVALS, MAX_BOX, NEW_EVERY, buildQueue, everMissed, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
 
 const NOW = 1_700_000_000_000;
 
@@ -175,7 +175,7 @@ describe('buildQueue', () => {
     expect(out.map((x) => x.id).sort()).toEqual(['m4', 'p1']);
   });
 
-  it('到期的複習題與新題交錯，未到期的排最後', () => {
+  it('到期的複習題先出，新題接著出，未到期的排最後', () => {
     const cards = {
       m1: { box: 0, due: NOW - 1 }, // 到期
       m2: { box: 3, due: NOW + DAY }, // 未到期
@@ -184,6 +184,16 @@ describe('buildQueue', () => {
     expect(out[0].id).toBe('m1');
     expect(['m3', 'm4']).toContain(out[1].id);
     expect(out[3].id).toBe('m2');
+  });
+
+  it('到期的複習多時：每 4 題留 1 題給新題；複習出完了就全出新題', () => {
+    const many = [...Array(12)].map((_, i) => q(`d${i}`));
+    const fresh = [...Array(12)].map((_, i) => q(`n${i}`));
+    const cards = Object.fromEntries(many.map((x) => [x.id, { box: 2, due: NOW - 1, seen: 2, right: 1, wrong: 1 }]));
+    const kinds = (n, list) => buildQueue(list, cards, { subjects: ['math'], size: n, now: NOW, rng: seeded() }).map((x) => x.id[0]).join('');
+    expect(kinds(8, [...many, ...fresh])).toBe('dddndddn');
+    expect(kinds(8, [...many.slice(0, 3), ...fresh])).toBe('dddnnnnn');
+    expect(NEW_EVERY).toBe(4);
   });
 
   it('答對過、從沒失手的題目不再出，到期了也不出；答錯過的照常複習', () => {

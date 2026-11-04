@@ -1,13 +1,16 @@
-// 學習分析：整體概況、考前規劃、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
-import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, studyPlan, subjectStats, weakUnits } from '../analysis.js';
+// 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
+import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, weakUnits } from '../analysis.js';
+import { dueBuckets, estimateRates, keepUpGoal, keepsUp, reviewForecast, studyPlan } from '../forecast.js';
 import { DAY, mastery } from '../srs.js';
-import { GOALS } from '../stats.js';
+import { GOALS, dayKey, shiftDay, today } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { isUnitOff } from '../units.js';
 import { icon } from './icons.js';
 
 const pct = (x) => (x === null ? '—' : `${Math.round(x * 100)}%`);
 const TRAIN_UNITS = 3;
+/** 複習預報看幾天（含今天） */
+const FORECAST_DAYS = 14;
 /** 題庫存量上方最多列幾個新題快用完的單元，其餘展開各科看 */
 const LOW_SHOWN = 6;
 
@@ -45,7 +48,9 @@ export function initStats(ctx) {
     ];
     $('#stats-tiles').innerHTML = tiles.map(([v, k]) => `<div class="tile"><b>${v}</b><span>${k}</span></div>`).join('');
 
-    renderPlan(now, week);
+    const scope = forecastScope(now);
+    renderPlan(now, week, scope);
+    renderForecast(now, scope);
     renderStock();
     weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, limit: 5 });
     renderWeak();
@@ -65,34 +70,50 @@ export function initStats(ctx) {
       .join('');
   }
 
-  /** 考前規劃：照目前步調考前能練到多少、全部練過一輪每天要做幾題 */
-  function renderPlan(now, week) {
-    const { cards, flags, settings } = ctx.state;
-    const left = daysUntil(settings.examDate, now);
-    $('#stats-plan').hidden = left <= 0;
-    if (left <= 0) return;
+  /**
+   * 考前規劃與複習預報共用：選的範圍（被回報的不算）、範圍內練過的卡片依到期日分組、推估用的答對比例
+   * @returns {{ total: number, fresh: number, buckets: Map<number, number[]>, rates: { recall: number, first: number } }}
+   */
+  function forecastScope(now) {
+    const { cards, flags, settings, daily } = ctx.state;
     const selected = new Set(settings.subjects);
     const off = new Set(settings.excludedUnits);
     const pool = ctx.bank.filter((q) => selected.has(q.subject) && !isUnitOff(q, off) && !flags[q.id]);
-    const practiced = pool.filter((q) => cards[q.id]).length;
+    const seen = pool.map((q) => cards[q.id]).filter(Boolean);
+    return {
+      total: pool.length,
+      fresh: pool.length - seen.length,
+      buckets: dueBuckets(seen, now),
+      rates: estimateRates(seen, accuracyOf(dailySeries(daily, now, 14))),
+    };
+  }
+
+  /** 考前規劃：照目前步調考前能練到多少、全部練過一輪每天要做幾題（扣掉之後每天的複習量） */
+  function renderPlan(now, week, { total, fresh, buckets, rates }) {
+    const { settings } = ctx.state;
+    const left = daysUntil(settings.examDate, now);
+    $('#stats-plan').hidden = left <= 0;
+    if (left <= 0) return;
     // 這 7 天幾乎沒練的話，改用每日目標推估
     const recent = week.reduce((a, d) => a + d.answered, 0) / 7;
     const byGoal = recent < 1;
-    const p = studyPlan({ total: pool.length, practiced, daysLeft: left, pace: byGoal ? settings.goal : recent, goals: GOALS });
+    const p = studyPlan({ buckets, total, fresh, daysLeft: left, pace: byGoal ? settings.goal : recent, goals: GOALS, ...rates });
     const n = (x) => x.toLocaleString('zh-TW');
     const goalBtn = $('#plan-goal');
     goalBtn.hidden = true;
 
-    if (!pool.length) {
+    if (!total) {
       $('#plan-text').textContent = '先在首頁選要練的科目。';
     } else if (!p.remaining) {
-      $('#plan-text').textContent = `距學測 ${left} 天。選的範圍 ${n(pool.length)} 題已經全部練過了！接下來靠錯題複習和弱點加強，把還不熟的練到熟。`;
+      $('#plan-text').textContent = `距學測 ${left} 天。選的範圍 ${n(total)} 題已經全部練過了！接下來靠錯題複習和弱點加強，把還不熟的練到熟。`;
     } else {
       const pace = byGoal ? `照每日目標 ${settings.goal} 題` : `照近 7 天每天約 ${Math.round(recent)} 題`;
       $('#plan-text').textContent =
-        `距學測 ${left} 天，選的範圍有 ${n(pool.length)} 題，已練過 ${n(practiced)} 題。${pace}的步調，考前大約能再練到 ${n(p.projected)} 題新題。` +
-        `想在考前全部練過一輪，每天要做約 ${n(p.needDaily)} 題（新題、複習大約各半）。` +
-        (p.suggest === null ? '題目太多的話，先在首頁的「單元」挑重點，或用弱點加強集中火力。' : '');
+        `距學測 ${left} 天，選的範圍有 ${n(total)} 題，已練過 ${n(total - fresh)} 題。${pace}的步調，扣掉該複習的，考前大約能再練到 ${n(p.projected)} 題新題。` +
+        (p.needDaily === null
+          ? '選的範圍考前做不完一輪，先在首頁的「單元」挑重點，或用弱點加強集中火力。'
+          : `想在考前全部練過一輪，每天要做約 ${n(p.needDaily)} 題（其中複習約 ${n(p.needReview)} 題）。` +
+            (p.suggest === null ? '題目太多的話，先在首頁的「單元」挑重點，或用弱點加強集中火力。' : ''));
       if (p.suggest !== null && p.suggest > settings.goal) {
         goalBtn.hidden = false;
         goalBtn.textContent = `把每日目標改成 ${p.suggest} 題`;
@@ -105,6 +126,68 @@ export function initStats(ctx) {
     $('#plan-proj').style.width = `${(p.projectedCoverage - p.coverage) * 100}%`;
     $('#plan-legend').textContent = p.remaining ? `已練過 ${done}%・照這個步調考前約 ${proj}%` : '';
   }
+
+  /**
+   * 複習預報：照每日目標，未來 14 天每天有幾題到期要複習、還能做幾題新題。
+   * 出題時到期的複習先出、每 4 題留 1 題給新題；到期的比做得完的多就會越積越多：算出跟得上的每日目標，一鍵調整
+   */
+  function renderForecast(now, { total, fresh, buckets, rates }) {
+    const goal = ctx.state.settings.goal;
+    const opts = { days: FORECAST_DAYS, fresh, today: today(ctx.state, now).answered, ...rates };
+    const rows = reviewForecast(buckets, { ...opts, goal });
+    const r = (x) => Math.round(x);
+    const key0 = dayKey(now);
+    const label = (i) => {
+      const [, m, d] = shiftDay(key0, i).split('-').map(Number);
+      return `${m}/${d}`;
+    };
+    const ahead = rows.slice(1, 8);
+    const avgDue = r(ahead.reduce((a, x) => a + x.due, 0) / ahead.length);
+    const avgFresh = r(ahead.reduce((a, x) => a + x.fresh, 0) / ahead.length);
+    const piling = !keepsUp(rows);
+    const keepUp = piling ? keepUpGoal(buckets, { ...opts, goals: GOALS }) : null;
+    const goalBtn = $('#forecast-goal');
+    goalBtn.hidden = !keepUp;
+    if (keepUp) {
+      goalBtn.textContent = `把每日目標改成 ${keepUp} 題`;
+      goalBtn.dataset.goal = String(keepUp);
+    }
+
+    $('#forecast-text').textContent = !total
+      ? '先在首頁選要練的科目。'
+      : `已經練過的題目裡，今天到期 ${r(rows[0].due)} 題，明天約 ${r(rows[1].due)} 題，接下來 7 天平均每天約 ${avgDue} 題要複習（之後新做的題目答錯了也會加進來）。` +
+        (piling
+          ? `出題時到期的複習先出（每 4 題留 1 題給新題），照每日目標 ${goal} 題還是做不完，會越積越多。` +
+            (keepUp ? `每日目標調到 ${keepUp} 題就跟得上。` : '先用「錯題複習」把到期的錯題做完，或把練的單元收少一點。')
+          : fresh
+            ? `照每日目標 ${goal} 題，複習做得完，每天還能做約 ${avgFresh} 題新題。`
+            : '選的範圍都練過了，接下來每天都是複習。');
+
+    const max = Math.max(1, ...rows.map((x) => x.due));
+    const chart = $('#forecast-chart');
+    chart.innerHTML = rows
+      .map((x, i) => {
+        const n = r(x.due);
+        const h = n ? Math.max(2, Math.round((x.due / max) * 96)) : 0;
+        const day = i === 0 ? '今天' : i === 1 ? '明天' : i === 7 || i === FORECAST_DAYS - 1 ? label(i) : '';
+        const left = r(x.carry);
+        const tip = `${label(i)}：到期約 ${n} 題${left ? `，照每日目標會剩 ${left} 題留到隔天` : ''}，新題約 ${r(x.fresh)} 題`;
+        return `<div class="bar${left ? ' over' : ''}" title="${tip}">
+          <span class="bar-n">${n || ''}</span>
+          <i class="${h ? '' : 'zero'}" style="height:${h}px"></i>
+          <span class="bar-day">${day}</span>
+        </div>`;
+      })
+      .join('');
+    chart.setAttribute('aria-label', `未來 14 天每天到期要複習的題數：明天約 ${r(rows[1].due)} 題，平均每天約 ${avgDue} 題`);
+  }
+
+  $('#forecast-goal').addEventListener('click', (e) => {
+    ctx.state.settings.goal = Number(e.currentTarget.dataset.goal);
+    ctx.save();
+    render();
+    ctx.toast(`每日目標改成 ${ctx.state.settings.goal} 題`);
+  });
 
   /** 題庫存量：選的範圍還有幾題沒做過；新題快用完的單元列在上面，各科可以展開看每個單元 */
   function renderStock() {

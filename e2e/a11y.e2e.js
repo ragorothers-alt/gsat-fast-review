@@ -49,6 +49,19 @@ for (const scheme of ['light', 'dark']) {
     await page.locator('#open-stock').click();
     await page.locator('#stock-subjects summary').first().click();
     await audit(page, '學習分析');
+    await page.locator('#stats-back').click();
+
+    await page.locator('#open-exam').click();
+    await audit(page, '模擬考選卷');
+    await page.locator('[data-paper="chinese"]').click();
+    await page.locator('#answers .answer').first().click();
+    await audit(page, '模擬考作答');
+    await page.locator('#exam-index-btn').click();
+    await audit(page, '模擬考題號一覽');
+    await page.locator('#exam-submit').click();
+    await page.locator('#exam-submit').click();
+    await expect(page.locator('#exam-report')).toBeVisible();
+    await audit(page, '模擬考成績單');
   });
 }
 

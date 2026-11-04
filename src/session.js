@@ -18,6 +18,8 @@ export const MODES = {
   picked: { name: '搜尋到的題目', size: 20, explainAlways: true },
   // 一科一個單元一個單元過關：每關先出 30 題，答錯就在這關後面補類似題（見 path.js）
   path: { name: '單元闖關', size: 30 },
+  // 模擬考成績單的「練這份的錯題」（opts.ids）；模擬考本身見 ui/exam.js
+  exam: { name: '模擬考錯題', size: 40, explainAlways: true },
 };
 
 export function createSession(mode, queue) {

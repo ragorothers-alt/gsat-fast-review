@@ -26,6 +26,9 @@ export function freshState() {
     // 單元闖關的進度：科目 → { cleared, runs }（見 path.js），pathLast 是最近闖的科目。只存在這台裝置
     path: {},
     pathLast: null,
+    // 模擬考：考到一半的卷（見 exam.js 的 newExam）與最近的成績（logExam）。只存在這台裝置
+    exam: null,
+    examLog: [],
     // scratch：平板上草稿區要不要展開（手機上一律收起）
     // theme：auto（跟著系統）／light／dark；fontScale：字體大小倍率
     // reminder：每日提醒，hour 是當地時間幾點（推播訂閱存在同步後端，見 ui/reminder.js）
@@ -63,10 +66,14 @@ export function parseState(raw) {
     if (card.parked && card.box > 0) card.box = 0;
     cards[id] = card;
   }
+  const num = (x) => Number.isFinite(x);
   return {
     ...base,
     ...saved,
     cards,
+    // 考到一半的卷開考前會再檢查一次（ui/exam.js）；成績紀錄壞掉的筆數丟掉
+    exam: saved.exam && typeof saved.exam === 'object' && !Array.isArray(saved.exam) ? saved.exam : null,
+    examLog: Array.isArray(saved.examLog) ? saved.examLog.filter((e) => e && typeof e.paper === 'string' && num(e.at) && num(e.right) && num(e.total) && e.total > 0) : [],
     streak: { ...base.streak, ...saved.streak },
     best: { ...base.best, ...saved.best },
     settings: { ...base.settings, ...saved.settings, reminder: { ...base.settings.reminder, ...saved.settings?.reminder } },

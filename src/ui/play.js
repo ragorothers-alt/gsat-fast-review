@@ -332,6 +332,8 @@ export function initPlay(ctx) {
     if (overflowing()) el.text.classList.add('compact');
     updateMore();
   }
+  // 模擬考借用同一張題目卡（ui/exam.js）
+  ctx.fitCard = fitCard;
 
   function updateMore() {
     el.more.hidden = el.card.scrollHeight - el.card.clientHeight - el.card.scrollTop <= 6;
@@ -692,8 +694,9 @@ export function initPlay(ctx) {
 
   // ── 鍵盤（桌機） ─────────────────────────────────────
   document.addEventListener('keydown', (e) => {
-    // 面板開著（重點卡、回看上一題…）時快捷鍵不穿過去；組字中、按著修飾鍵的也不算
-    if (document.querySelector('#play').hidden || !s || looking || topSheet() || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    // 面板開著（重點卡、回看上一題…）時快捷鍵不穿過去；組字中、按著修飾鍵的也不算；模擬考有自己的快捷鍵（ui/exam.js）
+    const screen = document.querySelector('#play');
+    if (screen.hidden || screen.classList.contains('exam') || !s || looking || topSheet() || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'Escape') return $('#quit').click();
     if (phase === 'feedback' && (e.key === 'Enter' || e.key === ' ')) {
       // 焦點在別的按鈕上（猜對的、練類似題、收藏…）：讓那個按鈕自己作用，不要直接換題

@@ -79,7 +79,15 @@ export function mastery(questions, cards) {
 }
 
 /**
- * 組出一輪的題目順序：到期該複習的題目與新題交錯出現，其餘依到期時間補上。
+ * 到期的複習先出，但每 NEW_EVERY 題留一題給新題：複習多的時候少排新題，免得複習越積越多；
+ * 又不會整輪都是複習、完全沒有新進度。一邊出完了就全出另一邊。
+ */
+export const NEW_EVERY = 4;
+/** 到期的複習和新題都夠時，複習占一輪的比例（forecast.js 推演用） */
+export const REVIEW_SHARE = 1 - 1 / NEW_EVERY;
+
+/**
+ * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。
  * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {object[]} bank
  * @param {Record<string, object>} cards
@@ -130,8 +138,8 @@ export function buildQueue(
 
   const out = [];
   while (out.length < size && (due.length || fresh.length)) {
-    if (due.length) out.push(due.shift());
-    if (out.length < size && fresh.length) out.push(fresh.shift());
+    const [first, other] = out.length % NEW_EVERY === NEW_EVERY - 1 ? [fresh, due] : [due, fresh];
+    out.push((first.length ? first : other).shift());
   }
   while (out.length < size && later.length) out.push(later.shift());
   return out;

@@ -1686,6 +1686,318 @@ p {
   flex: none;
 }
 
+/* ── 模擬考 ─────────────────────────────────────────── */
+/* 首頁入口：模式按鈕下面一整排 */
+.mode.exam {
+  flex-direction: row;
+  gap: 10px;
+  min-height: 46px;
+  padding: 0 12px;
+  background: color-mix(in srgb, var(--accent) 22%, var(--card));
+}
+
+.mode.exam .mode-sub {
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 作答畫面切換成模擬考：藏起對答案、計分與單題計時的東西，換上整卷計時與換題按鈕 */
+.play:not(.exam) .exam-only {
+  display: none !important;
+}
+
+.play.exam :is(#quit, .score, #combo, #timer, #q-topic, #speak, #copy-q, #flag, #star, #q-explain, .tf-hint, .swipe-hint, #back, #skip, #certain, #related, #next) {
+  display: none !important;
+}
+
+.exam-clock {
+  padding: 3px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.exam-clock.low {
+  background: var(--bad-bg);
+  color: var(--bad-ink);
+}
+
+.exam-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.exam-nav .ghost-btn {
+  flex: none;
+  padding: 10px 8px;
+}
+
+.exam-nav .ghost-btn:disabled {
+  visibility: hidden;
+}
+
+.exam-nav .certain-btn {
+  flex: none;
+}
+
+.exam-nav .next-btn {
+  flex: 1;
+}
+
+/* 選了的答案：作答時不對答案，只標出你選了哪個 */
+.play.exam .answer[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent) 30%, var(--card));
+  border-width: 3px;
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.play.exam .answer[aria-pressed='true'] .key {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--card);
+}
+
+/* 選考卷 */
+.exam-papers {
+  list-style: none;
+  margin: 0;
+  padding: 2px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.exam-papers li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px 10px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-left: 6px solid var(--c);
+  border-radius: var(--hand-sm);
+}
+
+.exam-paper-name {
+  font-weight: 900;
+  font-size: 1.05rem;
+}
+
+.exam-paper-meta,
+.exam-paper-last {
+  grid-column: 1;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.exam-papers .exam-start {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+.exam-resume {
+  margin-bottom: 10px;
+  padding: 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--hand-sm);
+  background: color-mix(in srgb, var(--accent) 22%, var(--card));
+  font-size: 0.88rem;
+}
+
+.exam-resume[hidden] {
+  display: none;
+}
+
+.exam-resume-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* 題號一覽：已作答塗滿、標記的右上角一個紅點、目前這題加粗框 */
+.exam-grid {
+  list-style: none;
+  margin: 0;
+  padding: 4px 2px;
+  overflow-y: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 8px;
+}
+
+.exam-grid .cell,
+.exam-grid-legend .cell {
+  position: relative;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px 9px 7px 10px;
+  background: var(--card);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.exam-grid .cell {
+  width: 100%;
+  min-height: 44px;
+}
+
+.exam-grid .cell.done,
+.exam-grid-legend .cell.done {
+  background: color-mix(in srgb, var(--accent) 45%, var(--card));
+}
+
+.exam-grid .cell.marked::after,
+.exam-grid-legend .cell.marked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bad);
+}
+
+.exam-grid .cell.current {
+  outline: 3px solid var(--ink);
+  outline-offset: 1px;
+}
+
+.exam-grid-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.exam-grid-legend .cell {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+}
+
+.exam-grid-legend .cell:not(:first-child) {
+  margin-left: 8px;
+}
+
+/* 成績單：各單元得分與每題秒數、花最久的幾題 */
+.x-units,
+.x-slow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.x-units li {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 0.85rem;
+}
+
+.x-unit-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.x-unit-secs {
+  min-width: 3.6em;
+  text-align: right;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.x-unit-score {
+  font-variant-numeric: tabular-nums;
+}
+
+.x-units .unit-meter {
+  grid-column: 1 / -1;
+  margin-top: 0;
+}
+
+/* 合科試卷的各科小計：上面隔一條線，字加粗 */
+.x-units .x-subject {
+  padding-top: 8px;
+  border-top: 1.5px dashed var(--line-soft);
+  font-weight: 800;
+}
+
+.x-units .x-subject:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.x-slow {
+  margin-top: 10px;
+}
+
+.x-slow-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  text-align: left;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  font-size: 0.82rem;
+}
+
+.x-slow-n {
+  font-weight: 800;
+}
+
+.x-slow-unit {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ink-soft);
+}
+
+.x-slow-secs {
+  font-variant-numeric: tabular-nums;
+}
+
+.x-slow-state {
+  font-weight: 800;
+}
+
+.x-slow-state.right {
+  color: var(--good-ink);
+}
+
+.x-slow-state.wrong {
+  color: var(--bad-ink);
+}
+
+.x-slow-state.blank {
+  color: var(--muted);
+}
+
 /* ── 發音、收藏、複製、回報題目 ─────────────────────── */
 /* 單元名稱把按鈕推到右邊（英文題才有發音鈕，所以不能靠第一顆按鈕推） */
 .card-tag .topic {
@@ -2388,6 +2700,62 @@ p {
   white-space: nowrap;
 }
 
+/* 複習預報：每天到期要複習的題數；照每日目標做不完、會留到隔天的日子畫斜線、數字標紅 */
+.forecast {
+  margin-top: 10px;
+}
+
+.forecast .bar i {
+  background: var(--accent-2);
+}
+
+.forecast .bar.over i {
+  background: repeating-linear-gradient(135deg, var(--accent-2) 0 4px, color-mix(in srgb, var(--bad) 70%, var(--card)) 4px 8px);
+}
+
+.forecast .bar.over .bar-n {
+  color: var(--bad-ink);
+  font-weight: 800;
+}
+
+.forecast .bar:first-child .bar-day {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.forecast-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.forecast-legend .swatch {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+}
+
+.forecast-legend .swatch:not(:first-child) {
+  margin-left: 8px;
+}
+
+.forecast-legend .due {
+  background: var(--accent-2);
+}
+
+.forecast-legend .over {
+  background: repeating-linear-gradient(135deg, var(--accent-2) 0 3px, color-mix(in srgb, var(--bad) 70%, var(--card)) 3px 6px);
+}
+
+#forecast-goal {
+  width: 100%;
+  margin-top: 10px;
+}
+
 .subject-stats li {
   display: grid;
   grid-template-columns: 56px 1fr;
@@ -2944,9 +3312,10 @@ p {
 /* 矮螢幕（小手機）壓縮間距 */
 @media (max-height: 680px) {
   .screen { gap: 8px; }
-  .stage { min-height: 110px; }
+  .stage { min-height: 104px; }
   .mode { min-height: 54px; }
   .mode-pair .mode { min-height: 60px; }
+  .mode.exam { min-height: 38px; }
   .answer { min-height: 48px; }
   .answers.tf .answer { min-height: 62px; }
   .card-wrap { padding-top: 30px; }

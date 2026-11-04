@@ -63,6 +63,7 @@ export function initHome(ctx) {
 
   initPathSheet(ctx);
   $('#open-path').addEventListener('click', () => ctx.openPath());
+  $('#open-exam').addEventListener('click', () => ctx.openExam());
 
   function render() {
     const now = Date.now();
@@ -117,6 +118,7 @@ export function initHome(ctx) {
     const pathName = progress && SUBJECT_BY_ID[pathSubject].name;
     $('#path-sub').textContent = progress ? `${pathName}・${unit ? `第 ${pathList.indexOf(unit) + 1} 關` : '全過關'}` : '一關一關過';
     $('#open-path').title = unit ? `${pathName}・${unit}` : '';
+    $('#exam-sub').textContent = ctx.examSummary?.() ?? '';
 
     const disabled = !inSelection.length;
     document.querySelectorAll('#home [data-mode]').forEach((b) => (b.disabled = disabled));

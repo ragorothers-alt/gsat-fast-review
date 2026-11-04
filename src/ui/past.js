@@ -10,7 +10,7 @@ import { speakItem, tfLabel, toggleMark } from './review-item.js';
 import { canSpeak, stopSpeaking } from './speech.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
-const RESULT = { right: '答對', wrong: '答錯', skip: '看了解答', guess: '答對・猜的', unsure: '答對・不太確定' };
+const RESULT = { right: '答對', wrong: '答錯', skip: '看了解答', guess: '答對・猜的', unsure: '答對・不太確定', blank: '沒作答' };
 
 /**
  * 這題當時畫面上的選項，照當時的順序：value 是原始選項索引（是非題為 false、true），
@@ -33,13 +33,14 @@ export function initPast(ctx) {
 
   /**
    * @param {{ q: object, entry: object, n: number }[]} list 這輪做過的題目（舊到新），n 是第幾題
-   * @param {{ current: number, timed: boolean, onClose: () => void }} opts current：現在這題是第幾題
+   * @param {{ current?: number, timed: boolean, onClose: () => void, start?: number, backLabel?: string }} opts
+   *   current：現在這題是第幾題；start：先看第幾筆（預設最後一筆）；backLabel：關閉按鈕的字（模擬考成績單用）
    */
-  ctx.openPast = (list, { current, timed, onClose }) => {
+  ctx.openPast = (list, { current, timed, onClose, start = list.length - 1, backLabel = `回到第 ${current} 題` }) => {
     items = list;
-    at = list.length - 1;
+    at = start;
     done = onClose;
-    $('#past-back').textContent = `回到第 ${current} 題`;
+    $('#past-back').textContent = backLabel;
     $('#past-tip').hidden = !timed;
     render();
     openSheet(sheet, { focus: $('#past-back') });

@@ -347,7 +347,7 @@ export function createWorld(canvas, anchors, { motion = 'on' } = {}) {
       mode = name;
       if (name !== 'play') api.setCombo(0);
       for (const cat of cats) cat.ducking = false;
-      if (name === 'result' || name === 'stats' || name === 'notebook') for (const id of cast) catById[id].entering = true;
+      if (name === 'result' || name === 'exam-report' || name === 'stats' || name === 'notebook') for (const id of cast) catById[id].entering = true;
     },
     setSelected(ids) {
       const next = new Set(ids);

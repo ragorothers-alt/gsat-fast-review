@@ -6,6 +6,7 @@ import { KEY, absorbState, loadState, saveState, requestPersistence } from './st
 import { initAbout } from './ui/about.js';
 import { applyAppearance, watchSystemTheme } from './ui/appearance.js';
 import { initCloud } from './ui/cloud.js';
+import { initExam } from './ui/exam.js';
 import { initHome } from './ui/home.js';
 import { initInstall } from './ui/install.js';
 import { initKeypoints } from './ui/keypoints.js';
@@ -27,11 +28,12 @@ initErrorReporting();
 
 const state = loadState();
 setErrorReporting(state.settings.reportErrors);
-// 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣、學習分析的概況卡上緣、錯題本的說明卡上緣
+// 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣（含模擬考）、學習分析的概況卡上緣、錯題本的說明卡上緣
 const world = lazyWorld(document.querySelector('#world'), {
   home: () => document.querySelector('#home .stage').getBoundingClientRect(),
   play: () => document.querySelector('#card').getBoundingClientRect(),
   result: () => document.querySelector('#result .result-head').getBoundingClientRect(),
+  'exam-report': () => document.querySelector('#exam-report .result-head').getBoundingClientRect(),
   stats: () => document.querySelector('#stats .stats-head').getBoundingClientRect(),
   notebook: () => document.querySelector('#notebook .nb-head').getBoundingClientRect(),
 });
@@ -106,6 +108,9 @@ const ctx = {
   showStats: null,
   showNotebook: null,
   openKeypoints: null,
+  openExam: null,
+  examSummary: null,
+  fitCard: null,
   scratch: null,
 };
 
@@ -156,6 +161,7 @@ function start(bank) {
   initScratch(ctx);
   initHome(ctx);
   initPlay(ctx);
+  initExam(ctx);
   initPast(ctx);
   initResult(ctx);
   initStats(ctx);
@@ -165,7 +171,7 @@ function start(bank) {
   initReminder(ctx);
   initAbout(ctx);
   initKeypoints(ctx);
-  for (const name of ['showStats', 'showNotebook', 'openKeypoints', 'openPath', 'openUnits']) needFullBank(name);
+  for (const name of ['showStats', 'showNotebook', 'openKeypoints', 'openPath', 'openUnits', 'openExam']) needFullBank(name);
   ctx.goHome();
   document.querySelector('#boot').hidden = true;
   ctx.cloudSync();
