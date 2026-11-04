@@ -47,16 +47,28 @@ export function isWeak(card) {
   return !!card && (card.parked || ((card.wrong > 0 || card.seen > card.right) && card.box < 3));
 }
 
-/** 熟練度 0–1：每題的盒子數平均，沒看過算 0 */
+/**
+ * 答對過、而且從沒答錯、按過「不會」或標成猜的、不太確定：已經會了，之後不再出。
+ * 只要失手過一次，就照間隔重複繼續複習。（同步合併時 seen、right、wrong 各取最大值，所以也看 wrong）
+ */
+export function neverMissed(card) {
+  return !!card && card.seen > 0 && card.right === card.seen && !card.wrong;
+}
+
+/** 熟練度 0–1：每題的盒子數平均，沒看過算 0；答對過、從沒失手的不再複習，算滿 */
 export function mastery(questions, cards) {
   if (!questions.length) return 0;
   let sum = 0;
-  for (const q of questions) sum += Math.min(cards[q.id]?.box ?? 0, MAX_BOX);
+  for (const q of questions) {
+    const c = cards[q.id];
+    sum += neverMissed(c) ? MAX_BOX : Math.min(c?.box ?? 0, MAX_BOX);
+  }
   return sum / (questions.length * MAX_BOX);
 }
 
 /**
  * 組出一輪的題目順序：到期該複習的題目與新題交錯出現，其餘依到期時間補上。
+ * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {object[]} bank
  * @param {Record<string, object>} cards
  * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
@@ -74,7 +86,14 @@ export function buildQueue(
   const skip = new Set(exclude);
   const pool = bank.filter((q) => {
     const key = unitKey(q.subject, q.topic);
-    return wanted.has(q.subject) && !isUnitOff(q, off) && (!only || only.has(key)) && !skip.has(q.id) && (!formulaOnly || q.formula);
+    return (
+      wanted.has(q.subject) &&
+      !isUnitOff(q, off) &&
+      (!only || only.has(key)) &&
+      !skip.has(q.id) &&
+      (!formulaOnly || q.formula) &&
+      !neverMissed(cards[q.id])
+    );
   });
 
   if (weakOnly) {

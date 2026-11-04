@@ -1,7 +1,7 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
-import { buildQueue, schedule, shuffle } from '../srs.js';
+import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, submit, tick, multiplier } from '../session.js';
 import { currentUnit, followUp, pathProgress, pathUnits, settleRuns } from '../path.js';
 import { questionPrompt } from '../prompt.js';
@@ -88,10 +88,10 @@ export function initPlay(ctx) {
     });
   }
 
-  /** 不出的題目：被回報的，以及剛答過的（找類似題時才不會又抽到剛做完的） */
+  /** 不出的題目：被回報的、答對過從沒失手的，以及剛答過的（找類似題時才不會又抽到剛做完的） */
   function avoidIds(now) {
     const ids = Object.keys(ctx.state.flags);
-    for (const [id, c] of Object.entries(ctx.state.cards)) if (c.last > now - RECENT_MS) ids.push(id);
+    for (const [id, c] of Object.entries(ctx.state.cards)) if (c.last > now - RECENT_MS || neverMissed(c)) ids.push(id);
     return ids;
   }
 
@@ -137,8 +137,8 @@ export function initPlay(ctx) {
           : mode === 'review'
             ? '目前沒有待練的錯題，太穩了！'
             : mode === 'related'
-              ? '類似的題目剛剛都練過了，晚點再來'
-              : '選到的單元沒有題目',
+              ? '類似的題目剛剛練過或答對過了'
+              : '選到的單元沒有可以出的題目（答對過的不再出）',
       );
       return;
     }
@@ -168,7 +168,15 @@ export function initPlay(ctx) {
       index = 0;
     }
     if (!queue.length) {
-      ctx.toast('這個單元沒有可以出的題目');
+      // 單元裡沒回報的題目都答對過、從沒失手：已經會了，算過關，往下一關
+      const left = ctx.bank.some((x) => x.subject === subject && x.topic === target && !ctx.state.flags[x.id]);
+      if (left && !prog.cleared.includes(target)) {
+        prog.cleared.push(target);
+        ctx.save();
+        ctx.toast(`「${target}」的題目都答對過了，直接過關`);
+        return startPath({ subject });
+      }
+      ctx.toast(left ? '這個單元的題目都答對過了' : '這個單元沒有可以出的題目');
       return;
     }
     ctx.state.pathLast = subject;
@@ -191,6 +199,7 @@ export function initPlay(ctx) {
   function addFollowUp(missed) {
     const off = new Set(ctx.state.settings.excludedUnits);
     const avoid = Object.keys(ctx.state.flags);
+    for (const [id, c] of Object.entries(ctx.state.cards)) if (neverMissed(c)) avoid.push(id);
     // 跨單元題結合了被關掉的單元時也不出
     if (missed.links) for (const x of ctx.bank) if (x.links && isUnitOff(x, off)) avoid.push(x.id);
     const pick = followUp(ctx.bank, missed, s.queue.map((x) => x.id), avoid);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DAY, INTERVALS, MAX_BOX, buildQueue, isWeak, mastery, schedule } from '../src/srs.js';
+import { DAY, INTERVALS, MAX_BOX, buildQueue, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
 
 const NOW = 1_700_000_000_000;
 
@@ -83,6 +83,23 @@ describe('schedule', () => {
   });
 });
 
+describe('neverMissed', () => {
+  it('答對過、從沒失手才算；答錯、看解答、標成猜的或不太確定過都不算', () => {
+    const right = schedule(undefined, 'right', NOW);
+    expect(neverMissed(right)).toBe(true);
+    expect(neverMissed(schedule(right, 'right', NOW + DAY))).toBe(true);
+    expect(neverMissed(schedule(right, 'wrong', NOW + DAY))).toBe(false);
+    for (const first of ['wrong', 'skip', 'guess', 'unsure']) {
+      expect(neverMissed(schedule(schedule(undefined, first, NOW), 'right', NOW + DAY))).toBe(false);
+    }
+    expect(neverMissed(undefined)).toBe(false);
+  });
+
+  it('兩台裝置合併後答錯次數還在，就不算', () => {
+    expect(neverMissed({ box: 2, seen: 1, right: 1, wrong: 1 })).toBe(false);
+  });
+});
+
 describe('mastery', () => {
   it('沒看過算 0，全部最高盒算 1', () => {
     const qs = [q('a'), q('b')];
@@ -90,6 +107,10 @@ describe('mastery', () => {
     expect(mastery(qs, { a: { box: MAX_BOX }, b: { box: MAX_BOX } })).toBe(1);
     expect(mastery(qs, { a: { box: MAX_BOX } })).toBe(0.5);
     expect(mastery([], {})).toBe(0);
+  });
+
+  it('答對過、從沒失手的不再複習，算滿', () => {
+    expect(mastery([q('a'), q('b')], { a: schedule(undefined, 'right', NOW) })).toBe(0.5);
   });
 });
 
@@ -136,6 +157,16 @@ describe('buildQueue', () => {
     expect(out[0].id).toBe('m1');
     expect(['m3', 'm4']).toContain(out[1].id);
     expect(out[3].id).toBe('m2');
+  });
+
+  it('答對過、從沒失手的題目不再出，到期了也不出；答錯過的照常複習', () => {
+    const cards = {
+      m1: { box: 2, due: NOW - 1, seen: 1, right: 1, wrong: 0 }, // 一次就答對，已到期
+      m2: { box: 4, due: NOW + DAY, seen: 3, right: 3, wrong: 0 }, // 答對三次，還沒到期
+      m3: { box: 1, due: NOW - 1, seen: 2, right: 1, wrong: 1 }, // 答錯過、後來答對
+    };
+    const out = buildQueue(bank, cards, { subjects: ['math'], size: 10, now: NOW, rng: seeded() });
+    expect(out.map((x) => x.id).sort()).toEqual(['m3', 'm4']);
   });
 
   it('錯題複習只出錯題本裡的題目，先到期的先出', () => {

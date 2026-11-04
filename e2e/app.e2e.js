@@ -176,6 +176,51 @@ test('單元闖關：每關先出 30 題，看解答就在這關最後補一題�
   await expect(page.locator('#path-list .path-unit[data-status="current"] .unit-meta').first()).toHaveText('進行中 1 / 31');
 });
 
+/**
+ * 在 localStorage 放好作答紀錄：這個單元的題目都答對過、從沒失手，只留 missed 題答錯過（已到期該複習）、fresh 題沒做過。
+ * 題庫從開機時下載的 JSON 再抓一次；回傳 { missed, fresh } 的題數
+ */
+async function seedUnitCleared(page, unit, { missed = 0, fresh = 0 } = {}) {
+  await page.evaluate(
+    async ({ unit, missed, fresh }) => {
+      const urls = performance.getEntriesByType('resource').map((e) => e.name).filter((u) => /\/[a-z]+-[\w-]+\.json$/.test(u));
+      const bank = (await Promise.all(urls.map((u) => fetch(u).then((r) => r.json())))).flat();
+      const ids = bank.filter((q) => q.topic === unit).map((q) => q.id);
+      const now = Date.now();
+      const cards = {};
+      ids.forEach((id, i) => {
+        if (i < missed) cards[id] = { box: 1, due: now - 1000, seen: 2, right: 1, wrong: 1, parked: false, last: now - 86_400_000 };
+        else if (i >= missed + fresh) cards[id] = { box: 2, due: now - 1000, seen: 1, right: 1, wrong: 0, parked: false, last: now - 86_400_000 };
+      });
+      localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards }));
+    },
+    { unit, missed, fresh },
+  );
+  await page.reload();
+  await waitForBoot(page);
+}
+
+test('答對過、從沒失手的題目不再出，答錯過的照常複習；整個單元都答對過的闖關直接過關', async ({ page }) => {
+  await openHome(page);
+  await page.locator('#open-path').click();
+  const units = await page.locator('#path-list .path-unit .unit-name').allTextContents();
+
+  // 第一關只剩一題答錯過、一題沒做過：這關只出這兩題
+  await seedUnitCleared(page, units[0], { missed: 1, fresh: 1 });
+  await page.locator('#open-path').click();
+  await page.locator('#path-go').click();
+  await expect(page.locator('#play-progress')).toHaveText('1 / 2');
+  await page.locator('#quit').click();
+
+  // 全部答對過：直接過關，接著闖第二關
+  await seedUnitCleared(page, units[0]);
+  await page.locator('#open-path').click();
+  await page.locator('#path-go').click();
+  await expect(page.locator('#toast')).toContainText(`「${units[0]}」的題目都答對過了，直接過關`);
+  await expect(page.locator('#play-progress')).toHaveText('1 / 30');
+  await expect(page.locator('#q-topic')).toContainText(units[1]);
+});
+
 test('收藏的題目出現在錯題本的「收藏」，搜尋找得到並能練一輪', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'ten');
