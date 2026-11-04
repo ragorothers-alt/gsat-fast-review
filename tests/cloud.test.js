@@ -247,8 +247,12 @@ describe('合併', () => {
     answer(a, 'math-001', 'right');
     await sync(a);
     stopCloud(a);
+    // 停止後裝置上不留同步碼本身，只留認得出它的雜湊
+    expect(JSON.stringify(a.cloud)).not.toContain(code);
+    const device = a.cloud.device;
     answer(a, 'math-002', 'right'); // 停止期間也照樣記在這台
     startCloud(a, code);
+    expect(a.cloud.device).toBe(device);
     await sync(a);
     await sync(b);
     expect(a.daily[TODAY]).toEqual({ answered: 2, right: 2 });

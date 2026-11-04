@@ -1,7 +1,7 @@
 import 'katex/dist/katex.min.css';
 import './styles.css';
 import { BANK_SUBJECTS, loadBank, sortBank } from './data/bank.js';
-import { initErrorReporting } from './errors.js';
+import { initErrorReporting, setErrorReporting } from './errors.js';
 import { KEY, absorbState, loadState, saveState, requestPersistence } from './storage.js';
 import { initAbout } from './ui/about.js';
 import { applyAppearance, watchSystemTheme } from './ui/appearance.js';
@@ -15,6 +15,7 @@ import { initPlay } from './ui/play.js';
 import { initReminder } from './ui/reminder.js';
 import { initResult } from './ui/result.js';
 import { initScratch } from './ui/scratch.js';
+import { topSheet } from './ui/sheet.js';
 import { initStats } from './ui/stats.js';
 
 const UPDATED_KEY = 'gsat-quiz:updated';
@@ -25,6 +26,7 @@ const SHORTCUT_MODES = new Set(['blitz', 'free', 'review']);
 initErrorReporting();
 
 const state = loadState();
+setErrorReporting(state.settings.reportErrors);
 // 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣、學習分析的概況卡上緣、錯題本的說明卡上緣
 const world = lazyWorld(document.querySelector('#world'), {
   home: () => document.querySelector('#home .stage').getBoundingClientRect(),
@@ -213,7 +215,7 @@ window.addEventListener('storage', (e) => {
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   // 新版 sw 下載完並接手後：在首頁（沒開面板）就直接換新版，作答中等回首頁再換
   const hadController = !!navigator.serviceWorker.controller;
-  const atRest = () => !document.querySelector('#home').hidden && [...document.querySelectorAll('.sheet')].every((s) => s.hidden);
+  const atRest = () => !document.querySelector('#home').hidden && !topSheet();
   navigator.serviceWorker.addEventListener('controllerchange', () => {
     if (!hadController) return; // 第一次安裝，不是更新
     ctx.updateReady = true;

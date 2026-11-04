@@ -238,7 +238,7 @@
           <span class="score"><span id="score">0</span><span id="score-pop" class="score-pop"></span></span>
           <button id="scratch-toggle" class="icon-btn" type="button" aria-label="草稿區" aria-pressed="false"><svg class="ico ico-lg" aria-hidden="true"><use href="#i-pencil"/></svg></button>
         </header>
-        <div class="timer" id="timer" hidden><i id="timer-fill"></i></div>
+        <div class="timer" id="timer" role="progressbar" aria-label="剩餘時間" aria-valuemin="0" aria-valuemax="60" hidden><i id="timer-fill"></i></div>
 
         <div class="card-wrap">
           <article id="card" class="card" aria-live="polite">
@@ -256,6 +256,8 @@
             <div class="swipe-hint swipe-yes" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ok"/></svg>對</div>
             <div class="swipe-hint swipe-no" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ng"/></svg>錯</div>
           </article>
+          <!-- 作答結果給螢幕閱讀器念（答對、答錯與正解）；畫面上已經有顏色和圈叉 -->
+          <p id="answer-status" class="sr-only" role="status"></p>
           <!-- 小螢幕上題目卡放不下時，提示往下捲 -->
           <div id="card-more" class="card-more" hidden>
             <button type="button" aria-label="往下還有，捲下去看完整題目"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg>往下還有</button>
@@ -382,7 +384,7 @@
             <p class="nb-count"><b id="notebook-count">0</b> <span id="notebook-count-label">題還沒學會</span></p>
             <p id="notebook-note" class="set-note"></p>
           </div>
-          <div id="notebook-tabs" class="sheet-tabs" role="tablist" aria-label="科目"></div>
+          <div id="notebook-tabs" class="sheet-tabs" role="group" aria-label="科目"></div>
           <ol id="notebook-list" class="r-list"></ol>
           <p id="notebook-empty" class="nb-empty" hidden></p>
           <button id="notebook-more" class="secondary-btn" type="button" hidden></button>
@@ -401,7 +403,7 @@
           <button id="units-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
         </header>
         <p class="sheet-tip">只練打勾的單元；全部取消等於不練這一科。</p>
-        <div id="units-tabs" class="sheet-tabs" role="tablist" aria-label="科目"></div>
+        <div id="units-tabs" class="sheet-tabs" role="group" aria-label="科目"></div>
         <p id="units-note" class="sheet-tip" hidden></p>
         <ul id="units-list" class="unit-list"></ul>
         <nav class="sheet-foot">
@@ -419,7 +421,7 @@
           <button id="path-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
         </header>
         <p class="sheet-tip">照單元順序一關一關過。每關先出 30 題；答錯、看解答或標成猜的，就在這關最後補一題類似題，最後一題也答對才過關。</p>
-        <div id="path-tabs" class="sheet-tabs" role="tablist" aria-label="科目"></div>
+        <div id="path-tabs" class="sheet-tabs" role="group" aria-label="科目"></div>
         <ul id="path-list" class="unit-list"></ul>
         <nav class="sheet-foot">
           <button id="path-reset" class="secondary-btn" type="button">從頭重來</button>
@@ -536,7 +538,10 @@
               <h4>最近的錯誤</h4>
               <ul></ul>
             </div>
-            <p class="set-note">程式出錯時，會自動把錯誤訊息、版本和瀏覽器型號送給開發者（不含作答紀錄與同步碼）。遇到問題時，按下面的按鈕複製這些資訊，貼給開發者就好。</p>
+            <button id="report-toggle" class="switch" type="button" role="switch" aria-checked="true">
+              <span>自動回報程式錯誤</span><i aria-hidden="true"></i>
+            </button>
+            <p class="set-note">開著時，程式出錯會自動把錯誤訊息、版本和瀏覽器型號送給開發者（不含作答紀錄與同步碼）。遇到問題時，按下面的按鈕複製這些資訊，貼給開發者就好。</p>
             <button id="about-copy" class="secondary-btn" type="button">複製診斷資訊</button>
           </section>
         </div>

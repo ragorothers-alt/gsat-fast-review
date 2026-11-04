@@ -2,7 +2,7 @@
 // 這裡是資料邏輯與網路請求，不碰 DOM；畫面和同步時機在 ui/cloud.js。
 //
 // state.cloud：
-//   code      同步碼；停止同步後為 null（lastCode 記住上一組，重新加入同一組時沿用這台的裝置代號）
+//   code      同步碼；停止同步後為 null（lastCodeHash 記住上一組的雜湊，重新加入同一組時沿用這台的裝置代號）
 //   device    這台裝置的代號
 //   cursor    已經拉到雲端的哪個版本（rev）
 //   pushedAt  上次成功上傳時的本機時間：作答時間比它晚的題目下次要上傳
@@ -43,11 +43,31 @@ function newDeviceId() {
 
 const copyDays = (daily) => Object.fromEntries(Object.entries(daily).map(([k, d]) => [k, { answered: d.answered, right: d.right }]));
 
+/**
+ * 同步碼的雜湊（不可逆）：停止同步後只留這個，用來認出「重新加入同一組」；
+ * 共用電腦上停止同步之後，裝置上就不會留著能讀寫雲端資料的同步碼
+ */
+export function codeHash(code) {
+  let h1 = 0xdeadbeef;
+  let h2 = 0x41c6ce57;
+  for (const ch of String(code)) {
+    const c = ch.charCodeAt(0);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
 /** 開始同步（剛建立同步碼或加入別台的）。重新加入同一組時沿用原本的裝置代號，作答量才不會重複計算 */
 export function startCloud(state, code) {
   const prev = state.cloud;
-  if (prev && prev.lastCode === code) {
+  // lastCode 是舊版存的明碼
+  if (prev && (prev.lastCodeHash === codeHash(code) || prev.lastCode === code)) {
     Object.assign(prev, { code, cursor: 0, pushedAt: 0, legacyDirty: true });
+    delete prev.lastCode;
+    delete prev.lastCodeHash;
     return;
   }
   state.cloud = {
@@ -64,7 +84,10 @@ export function startCloud(state, code) {
 
 /** 這台停止同步；本機進度和雲端資料都保留 */
 export function stopCloud(state) {
-  if (state.cloud?.code) Object.assign(state.cloud, { lastCode: state.cloud.code, code: null });
+  if (!state.cloud?.code) return;
+  state.cloud.lastCodeHash = codeHash(state.cloud.code);
+  state.cloud.code = null;
+  delete state.cloud.lastCode;
 }
 
 export const cloudOn = (state) => !!state.cloud?.code;

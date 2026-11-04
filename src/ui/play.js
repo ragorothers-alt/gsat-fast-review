@@ -14,6 +14,7 @@ import { icon } from './icons.js';
 import { plainText, richHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
 import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
+import { topSheet } from './sheet.js';
 
 /** 答對後多久自動換題：留一點時間給玩家按「猜對的」「不太確定」 */
 const RIGHT_DELAY = 1400;
@@ -55,8 +56,13 @@ export function initPlay(ctx) {
     certain: $('#certain'),
     guess: $('#guess'),
     unsure: $('#unsure'),
+    status: $('#answer-status'),
   };
   const byId = ctx.byId;
+  // 最近是用鍵盤操作（不是點螢幕）：換題後把焦點放回選項上，不會掉回頁首
+  let keyboard = false;
+  window.addEventListener('keydown', (e) => (keyboard ||= e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || /^[1-4]$|^Arrow/.test(e.key)), true);
+  window.addEventListener('pointerdown', () => (keyboard = false), true);
 
   let s = null;
   let q = null;
@@ -259,6 +265,12 @@ export function initPlay(ctx) {
     const ratio = s.timeLeft / MODES[s.mode].timeLimit;
     el.timerFill.style.transform = `scaleX(${ratio})`;
     el.timer.classList.toggle('low', s.timeLeft <= 10);
+    // 剩餘秒數也給螢幕閱讀器：進度條的數值，以及剩 30、10 秒時念一次
+    const secs = Math.max(0, Math.ceil(s.timeLeft));
+    if (secs === Number(el.timer.getAttribute('aria-valuenow'))) return;
+    el.timer.setAttribute('aria-valuenow', String(secs));
+    el.timer.setAttribute('aria-valuetext', `剩 ${secs} 秒`);
+    if ((secs === 30 || secs === 10) && phase === 'answering') el.status.textContent = `剩 ${secs} 秒`;
   }
 
   function showQuestion() {
@@ -286,6 +298,8 @@ export function initPlay(ctx) {
     resetCardDrag();
     restartAnimation(el.card, 'enter');
     renderAnswers();
+    el.status.textContent = '';
+    if (keyboard && !looking) el.answers.querySelector('.answer')?.focus({ preventScroll: true });
     fitCard();
     ctx.scratch.newPage();
     ctx.world.setFocusSubject(q.subject);
@@ -387,17 +401,19 @@ export function initPlay(ctx) {
     if (before < goal && today(ctx.state, now).answered >= goal) ctx.toast(`今日 ${goal} 題目標達成！`);
 
     const correctValue = q.type === 'mc' ? order.indexOf(q.answer) : q.answer;
-    // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯
+    // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯；螢幕閱讀器另外念「（正解）」「（你選的）」
     for (const b of el.answers.children) {
       b.disabled = true;
       if (b._value === correctValue) {
         b.classList.add('correct');
-        b.insertAdjacentHTML('beforeend', icon('ok', 'mark'));
+        b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（正解）</span>`);
       } else if (b._value === displayValue) {
         b.classList.add('wrong');
-        b.insertAdjacentHTML('beforeend', icon('ng', 'mark'));
+        b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（你選的）</span>`);
       } else b.classList.add('dim');
     }
+    const said = plainText(buttonFor(correctValue)).replace(/（正解）$/, '');
+    el.status.textContent = outcome === 'right' ? '答對！' : `${outcome === 'wrong' ? '答錯。' : ''}正解是：${said}`;
     el.score.textContent = s.score;
     renderCombo();
     ctx.world.setCombo(s.combo);
@@ -414,6 +430,8 @@ export function initPlay(ctx) {
       if (!MODES[s.mode].explainAlways) {
         el.skip.hidden = true;
         el.next.hidden = false;
+        // 用鍵盤作答時焦點移到「繼續」（作答按鈕都停用了，焦點不能留在上面）
+        if (keyboard) el.next.focus({ preventScroll: true });
         autoNext = setTimeout(next, RIGHT_DELAY);
         return;
       }
@@ -674,9 +692,12 @@ export function initPlay(ctx) {
 
   // ── 鍵盤（桌機） ─────────────────────────────────────
   document.addEventListener('keydown', (e) => {
-    if (document.querySelector('#play').hidden || !s || looking) return;
+    // 面板開著（重點卡、回看上一題…）時快捷鍵不穿過去；組字中、按著修飾鍵的也不算
+    if (document.querySelector('#play').hidden || !s || looking || topSheet() || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
     if (e.key === 'Escape') return $('#quit').click();
     if (phase === 'feedback' && (e.key === 'Enter' || e.key === ' ')) {
+      // 焦點在別的按鈕上（猜對的、練類似題、收藏…）：讓那個按鈕自己作用，不要直接換題
+      if (e.target.closest?.('button, a, input, select, textarea') && e.target !== el.next) return;
       e.preventDefault();
       return next();
     }

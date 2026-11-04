@@ -296,6 +296,14 @@ test('背景動畫關閉：不載入背景場景的程式', async ({ page }) => 
   await expect.poll(() => scene.length).toBeGreaterThan(0);
 });
 
+test('320px 寬的小手機：首頁不會左右捲動，設定齒輪在畫面內', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 640 });
+  await openHome(page);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(320);
+  const gear = await page.locator('#open-settings').boundingBox();
+  expect(gear.x + gear.width).toBeLessThanOrEqual(320);
+});
+
 test('手機橫放：首頁不用捲動，作答時題目在左、選項在右', async ({ page }, info) => {
   test.skip(info.project.name !== 'phone', '只看手機');
   await page.setViewportSize({ width: 844, height: 390 });

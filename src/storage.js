@@ -40,6 +40,8 @@ export function freshState() {
       fontScale: 1,
       // motion：背景動畫 auto／on／lite／off（見 ui/appearance.js）
       motion: 'auto',
+      // reportErrors：程式出錯時自動回報給開發者（見 errors.js）
+      reportErrors: true,
       reminder: { on: false, hour: 20 },
     },
   };

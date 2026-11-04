@@ -120,7 +120,7 @@ button:disabled {
 }
 
 button:focus-visible {
-  outline: 2.5px dashed var(--accent-2);
+  outline: 2.5px dashed var(--accent-2-ink);
   outline-offset: 3px;
 }
 
@@ -219,6 +219,30 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+@media (max-width: 340px) {
+  .topbar {
+    gap: 6px;
+  }
+
+  .brand {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .top-actions {
+    gap: 4px;
+  }
 }
 
 .pill {
@@ -633,6 +657,10 @@ p {
   display: none;
 }
 
+.sheet-body:focus {
+  outline: none;
+}
+
 .sheet-body {
   width: 100%;
   max-width: 560px;
@@ -691,7 +719,7 @@ p {
   color: var(--ink);
 }
 
-.sheet-tab[aria-selected='true'] {
+.sheet-tab[aria-pressed='true'] {
   background: color-mix(in srgb, var(--c) 30%, var(--card));
   box-shadow: 2px 2px 0 var(--shadow);
   color: var(--ink);
@@ -1668,6 +1696,7 @@ p {
 .star-btn,
 .copy-btn,
 .flag-btn {
+  position: relative;
   width: 36px;
   height: 30px;
   flex: none;
@@ -1678,6 +1707,15 @@ p {
   font-size: 1rem;
   color: var(--muted);
   transition: color 0.2s, background 0.2s;
+}
+
+.speak-btn::before,
+.star-btn::before,
+.copy-btn::before,
+.flag-btn::before {
+  content: '';
+  position: absolute;
+  inset: -5px -2px;
 }
 
 .speak-btn:hover,
@@ -2555,7 +2593,8 @@ p {
   grid-template-columns: repeat(3, 1fr);
 }
 
-#font-options {
+#font-options,
+#motion-options {
   grid-template-columns: repeat(4, 1fr);
 }
 

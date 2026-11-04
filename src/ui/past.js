@@ -8,6 +8,7 @@ import { icon } from './icons.js';
 import { richHTML } from './rich.js';
 import { speakItem, tfLabel, toggleMark } from './review-item.js';
 import { canSpeak, stopSpeaking } from './speech.js';
+import { closeSheet, openSheet, topSheet } from './sheet.js';
 
 const RESULT = { right: '答對', wrong: '答錯', skip: '看了解答', guess: '答對・猜的', unsure: '答對・不太確定' };
 
@@ -29,7 +30,6 @@ export function initPast(ctx) {
   let items = []; // [{ q, entry, n }]，舊到新
   let at = 0;
   let done = null;
-  let opener = null;
 
   /**
    * @param {{ q: object, entry: object, n: number }[]} list 這輪做過的題目（舊到新），n 是第幾題
@@ -39,12 +39,10 @@ export function initPast(ctx) {
     items = list;
     at = list.length - 1;
     done = onClose;
-    opener = document.activeElement;
     $('#past-back').textContent = `回到第 ${current} 題`;
     $('#past-tip').hidden = !timed;
-    sheet.hidden = false;
     render();
-    $('#past-back').focus({ preventScroll: true });
+    openSheet(sheet, { focus: $('#past-back') });
   };
 
   function render() {
@@ -84,10 +82,9 @@ export function initPast(ctx) {
 
   function close() {
     if (sheet.hidden) return;
-    sheet.hidden = true;
+    closeSheet(sheet);
     stopSpeaking();
     done?.();
-    opener?.focus?.({ preventScroll: true });
   }
 
   $('#past-prev').addEventListener('click', () => step(-1));
@@ -109,17 +106,11 @@ export function initPast(ctx) {
     toggleMark(ctx, e.target);
   });
 
-  // 打開時鍵盤只給這個面板：Esc 關掉（不是結束這一輪）、左右鍵往前往後翻
-  window.addEventListener(
-    'keydown',
-    (e) => {
-      if (sheet.hidden) return;
-      if (e.key === 'Escape') {
-        e.stopImmediatePropagation();
-        close();
-      } else if (e.key === 'ArrowLeft') step(-1);
-      else if (e.key === 'ArrowRight') step(1);
-    },
-    { capture: true },
-  );
+  // Esc 關掉（不是結束這一輪，見 sheet.js）、左右鍵往前往後翻
+  sheet.addEventListener('sheet-close', close);
+  window.addEventListener('keydown', (e) => {
+    if (topSheet() !== sheet) return;
+    if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
 }

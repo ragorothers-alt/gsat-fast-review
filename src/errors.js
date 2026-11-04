@@ -40,6 +40,12 @@ export function recentErrors() {
 }
 
 const sent = new Set();
+/** 設定裡可以關掉自動回報（本機紀錄照樣留著，「複製診斷資訊」用得到） */
+let reporting = true;
+
+export function setErrorReporting(on) {
+  reporting = on;
+}
 
 function record(message, stack) {
   const entry = errorEntry(message, stack, Date.now());
@@ -50,7 +56,7 @@ function record(message, stack) {
     // 存不了就只回報
   }
   const key = `${entry.message}|${entry.source}`;
-  if (!import.meta.env?.PROD || sent.has(key) || sent.size >= MAX_SEND) return;
+  if (!reporting || !import.meta.env?.PROD || sent.has(key) || sent.size >= MAX_SEND) return;
   sent.add(key);
   const body = JSON.stringify({ version: VERSION, message: entry.message, source: entry.source, ua: navigator.userAgent.slice(0, 200) });
   fetch(`${SYNC_API}/v1/log`, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body, keepalive: true }).catch(() => {});

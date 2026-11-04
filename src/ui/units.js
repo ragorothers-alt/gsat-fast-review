@@ -3,6 +3,7 @@ import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { mastery } from '../srs.js';
 import { icon } from './icons.js';
 import { UNITS, unitKey } from '../units.js';
+import { closeSheet, openSheet } from './sheet.js';
 
 /** 分頁上方的提醒：數學 A、B 的範圍不同 */
 const NOTES = {
@@ -30,7 +31,6 @@ export function initUnitSheet(ctx, onChange) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'sheet-tab';
-    btn.setAttribute('role', 'tab');
     btn.style.setProperty('--c', s.color);
     btn.textContent = s.name;
     btn.addEventListener('click', () => {
@@ -89,7 +89,7 @@ export function initUnitSheet(ctx, onChange) {
   function render() {
     tabs.forEach((t, i) => {
       const id = SUBJECTS[i].id;
-      t.setAttribute('aria-selected', String(id === current));
+      t.setAttribute('aria-pressed', String(id === current));
       t.classList.toggle('on', settings.subjects.includes(id));
     });
     const subj = SUBJECT_BY_ID[current];
@@ -118,25 +118,21 @@ export function initUnitSheet(ctx, onChange) {
     allBtn.textContent = UNITS[current].every((u) => isOn(current, u)) ? '這科全不選' : '這科全選';
   }
 
-  function close() {
-    sheet.hidden = true;
-  }
+  const close = () => closeSheet(sheet);
 
   $('#units-close').addEventListener('click', close);
   $('#units-done').addEventListener('click', close);
   sheet.addEventListener('click', (e) => {
     if (e.target === sheet) close();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !sheet.hidden) close();
-  });
+  sheet.addEventListener('sheet-close', close);
 
   return {
     /** @param {string} [subject] 預設開第一個有選的科目 */
     open(subject) {
       current = subject || settings.subjects[0] || SUBJECTS[0].id;
       render();
-      sheet.hidden = false;
+      openSheet(sheet);
       tabs[SUBJECTS.findIndex((s) => s.id === current)].scrollIntoView({ block: 'nearest', inline: 'center' });
     },
   };

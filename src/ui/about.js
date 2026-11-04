@@ -1,7 +1,7 @@
 // 設定裡的「關於與診斷」：版本、離線快取、進度保護、通知權限、最近的錯誤。
 // 出問題時按「複製診斷資訊」貼給開發者，不用描述手機的狀況也看得出原因。
 import { cloudOn } from '../cloud.js';
-import { recentErrors } from '../errors.js';
+import { recentErrors, setErrorReporting } from '../errors.js';
 import { BUILT_AT, VERSION } from '../version.js';
 import { copyText } from './clipboard.js';
 import { isIOS, isStandalone } from './install.js';
@@ -57,8 +57,18 @@ export function initAbout(ctx) {
   const $ = (sel) => document.querySelector(sel);
   const list = $('#about-list');
   const errors = $('#about-errors');
+  const reportBtn = $('#report-toggle');
+  const settings = ctx.state.settings;
+
+  reportBtn.addEventListener('click', () => {
+    settings.reportErrors = !settings.reportErrors;
+    setErrorReporting(settings.reportErrors);
+    reportBtn.setAttribute('aria-checked', String(settings.reportErrors));
+    ctx.save();
+  });
 
   ctx.renderAbout = async () => {
+    reportBtn.setAttribute('aria-checked', String(settings.reportErrors));
     const rows = await collect(ctx);
     // 瀏覽器那一行太長，畫面上不列，複製時才附上
     const el = (tag, text) => Object.assign(document.createElement(tag), { textContent: text });

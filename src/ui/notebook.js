@@ -159,7 +159,7 @@ export function initNotebook(ctx) {
     $('#notebook-tabs').innerHTML = tabs
       .map(
         ([id, name, n]) =>
-          `<button type="button" class="sheet-tab on" role="tab" data-filter="${id}" aria-selected="${id === filter}" style="--c:${SUBJECT_BY_ID[id]?.color ?? 'var(--accent)'}">${name} ${n}</button>`,
+          `<button type="button" class="sheet-tab on" data-filter="${id}" aria-pressed="${id === filter}" style="--c:${SUBJECT_BY_ID[id]?.color ?? 'var(--accent)'}">${name} ${n}</button>`,
       )
       .join('');
     $('#notebook-tabs').hidden = all.length === 0;

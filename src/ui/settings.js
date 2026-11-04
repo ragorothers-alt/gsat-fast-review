@@ -10,6 +10,7 @@ import { FONT_SCALES, MOTIONS, THEMES, applyAppearance } from './appearance.js';
 import { copyText } from './clipboard.js';
 import { setSoundEnabled } from './feedback.js';
 import { richHTML } from './rich.js';
+import { closeSheet, openSheet } from './sheet.js';
 
 /**
  * @param {object} ctx
@@ -205,23 +206,19 @@ export function initSettings(ctx, onChange) {
     if (!sheet.hidden) render();
   };
 
-  function close() {
-    sheet.hidden = true;
-  }
+  const close = () => closeSheet(sheet);
 
   $('#settings-close').addEventListener('click', close);
   sheet.addEventListener('click', (e) => {
     if (e.target === sheet) close();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !sheet.hidden) close();
-  });
+  sheet.addEventListener('sheet-close', close);
 
   return {
     /** @param {string} [section] 打開後捲到哪個區塊（CSS 選擇器） */
     open(section) {
       render();
-      sheet.hidden = false;
+      openSheet(sheet);
       if (section) $(section)?.scrollIntoView({ block: 'start' });
       else $('#settings-sheet .settings-scroll').scrollTop = 0;
     },

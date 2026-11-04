@@ -1,6 +1,7 @@
 // 安裝成 App。iPhone 用 Safari 直接開網頁的話，7 天沒打開就可能被清掉作答紀錄，
 // 加入主畫面後才會保留，所以練過一輪回到首頁時提醒一次；Android、電腦的 Chrome 則可以直接跳出安裝視窗。
 import { DAY } from '../srs.js';
+import { closeSheet, openSheet } from './sheet.js';
 
 const KEY = 'gsat-quiz:install-hint';
 /** 按「知道了」之後多久再提醒一次 */
@@ -32,11 +33,11 @@ export function initInstall(ctx) {
   });
 
   function open() {
-    sheet.hidden = false;
+    openSheet(sheet);
   }
 
   function close() {
-    sheet.hidden = true;
+    closeSheet(sheet);
     try {
       localStorage.setItem(KEY, String(Date.now()));
     } catch {
@@ -53,9 +54,7 @@ export function initInstall(ctx) {
   sheet.addEventListener('click', (e) => {
     if (e.target === sheet) close();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !sheet.hidden) close();
-  });
+  sheet.addEventListener('sheet-close', close);
 
   // 設定裡的「安裝成 App」：iPhone 看步驟，Chrome 直接安裝；已經裝好就不顯示
   $('#install-open').addEventListener('click', async () => {

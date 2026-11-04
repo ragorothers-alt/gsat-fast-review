@@ -6,6 +6,7 @@ import { mastery } from '../srs.js';
 import { MODES } from '../session.js';
 import { UNITS, unitKey } from '../units.js';
 import { richHTML } from './rich.js';
+import { closeAllSheets, closeSheet, openSheet, topSheet } from './sheet.js';
 
 export function initKeypoints(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -62,8 +63,8 @@ export function initKeypoints(ctx) {
     if (!UNITS[s]?.includes(u)) return;
     subject = s;
     unit = u;
-    sheet.hidden = false;
     render();
+    openSheet(sheet);
   };
 
   function step(d) {
@@ -74,34 +75,27 @@ export function initKeypoints(ctx) {
     render();
   }
 
-  function close() {
-    sheet.hidden = true;
-  }
+  const close = () => closeSheet(sheet);
 
   $('#kp-prev').addEventListener('click', () => step(-1));
   $('#kp-next').addEventListener('click', () => step(1));
   $('#kp-train').addEventListener('click', () => {
     // 從單元面板打開的話，底下那層面板也一起收起來
-    for (const s of document.querySelectorAll('.sheet')) s.hidden = true;
-    ctx.startRound('weak', { units: [unitKey(subject, unit)] });
+    closeAllSheets();
+    // 重點卡可能是沒選的科目、或首頁關掉的單元（從錯題本、闖關面板打開）：照樣出這個單元的題
+    ctx.startRound('weak', { units: [unitKey(subject, unit)], subjects: [subject] });
   });
   $('#kp-close').addEventListener('click', close);
   sheet.addEventListener('click', (e) => {
     if (e.target === sheet) close();
   });
-  // 疊在單元面板上面時，Esc 只關這一層；左右鍵翻單元
-  window.addEventListener(
-    'keydown',
-    (e) => {
-      if (sheet.hidden) return;
-      if (e.key === 'Escape') {
-        e.stopImmediatePropagation();
-        close();
-      } else if (e.key === 'ArrowLeft') step(-1);
-      else if (e.key === 'ArrowRight') step(1);
-    },
-    { capture: true },
-  );
+  sheet.addEventListener('sheet-close', close);
+  // 左右鍵翻單元（面板在最上層時）
+  window.addEventListener('keydown', (e) => {
+    if (topSheet() !== sheet) return;
+    if (e.key === 'ArrowLeft') step(-1);
+    else if (e.key === 'ArrowRight') step(1);
+  });
 }
 
 /** 單元名稱上的「重點卡」按鈕：data-kp="科目/單元"；點到的不是這種按鈕就回傳 false */

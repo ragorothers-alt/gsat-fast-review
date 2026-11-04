@@ -122,4 +122,12 @@ describe('stats', () => {
     recordAnswer(st, 'right', day4);
     expect(st.streak.count).toBe(1);
   });
+
+  it('時鐘往回調（或往西跨過換日線）：最後練習日比今天晚，連續天數不歸零', () => {
+    const st = freshState();
+    recordAnswer(st, 'right', day1);
+    recordAnswer(st, 'right', day2);
+    recordAnswer(st, 'right', day1);
+    expect(st.streak).toEqual({ count: 2, last: dayKey(day2) });
+  });
 });

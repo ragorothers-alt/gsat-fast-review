@@ -35,7 +35,8 @@ export function recordAnswer(state, outcome, now) {
     if (outcome === 'right') own.right++;
   }
 
-  if (state.streak.last !== key) {
+  // 最後練習日比今天還晚（時鐘往回調、搭機往西跨過換日線）：不算斷掉，連續天數維持原樣
+  if (state.streak.last !== key && !(state.streak.last > key)) {
     state.streak.count = state.streak.last === previousDayKey(now) ? state.streak.count + 1 : 1;
     state.streak.last = key;
   }

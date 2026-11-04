@@ -3,6 +3,7 @@ import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { PATH_SIZE, currentUnit, pathProgress, pathUnits, settleRuns, unitStatus } from '../path.js';
 import { UNITS } from '../units.js';
 import { icon } from './icons.js';
+import { closeSheet, openSheet } from './sheet.js';
 
 export function initPathSheet(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -17,7 +18,6 @@ export function initPathSheet(ctx) {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'sheet-tab';
-    btn.setAttribute('role', 'tab');
     btn.style.setProperty('--c', s.color);
     btn.textContent = s.name;
     btn.addEventListener('click', () => {
@@ -35,7 +35,7 @@ export function initPathSheet(ctx) {
   function render() {
     tabs.forEach((t, i) => {
       const id = SUBJECTS[i].id;
-      t.setAttribute('aria-selected', String(id === current));
+      t.setAttribute('aria-pressed', String(id === current));
       // 有闖過的科目標成實心
       t.classList.toggle('on', started(ctx.state.path?.[id]));
     });
@@ -93,23 +93,19 @@ export function initPathSheet(ctx) {
     ctx.refreshHome?.();
   });
 
-  function close() {
-    sheet.hidden = true;
-  }
+  const close = () => closeSheet(sheet);
 
   $('#path-close').addEventListener('click', close);
   sheet.addEventListener('click', (e) => {
     if (e.target === sheet) close();
   });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !sheet.hidden) close();
-  });
+  sheet.addEventListener('sheet-close', close);
 
   /** @param {string} [subject] 預設開最近闖的科目，沒有就開第一個有選的科目 */
   ctx.openPath = (subject) => {
     current = subject || ctx.state.pathLast || settings.subjects[0] || SUBJECTS[0].id;
     render();
-    sheet.hidden = false;
+    openSheet(sheet);
     tabs[SUBJECTS.findIndex((s) => s.id === current)].scrollIntoView({ block: 'nearest', inline: 'center' });
   };
 }
