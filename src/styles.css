@@ -1355,6 +1355,17 @@ p {
   background: var(--accent);
 }
 
+/* 演算題：草稿區收著時，鉛筆按鈕加一圈黃框、晃兩下，提示這題要動筆算 */
+.icon-btn.nudge[aria-pressed='false'] {
+  box-shadow: 0 0 0 3px var(--accent);
+  animation: pencil-nudge 0.6s ease-in-out 2;
+}
+
+@keyframes pencil-nudge {
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
 .scratch {
   display: none;
   flex-direction: column;

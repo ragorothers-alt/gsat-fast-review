@@ -18537,5 +18537,949 @@
       "子句與連接詞",
       "轉折語與篇章"
     ]
+  },
+  {
+    "id": "english-1172",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The shelter's first beds are ready at a factory. A truck will ____ them to the shelter.",
+    "choices": [
+      "unpack",
+      "repair",
+      "deliver",
+      "store"
+    ],
+    "answer": 2,
+    "explain": "工廠備妥床鋪，卡車要把它們運到收容所，因此用 deliver（運送）；store 是存放，unpack 是拆開包裝。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1173",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "During the magic act, Nia hands the magician each prop. She is his ____.",
+    "choices": [
+      "opponent",
+      "sponsor",
+      "assistant",
+      "spectator"
+    ],
+    "answer": 2,
+    "explain": "Nia 在表演中遞道具，扮演 assistant（助手）；spectator 是觀眾，sponsor 是贊助者，都不是協助演出的角色。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1174",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "To find songs by mood, Lian is ____ each recording with words such as 'calm' or 'lively'.",
+    "choices": [
+      "tagging",
+      "timing",
+      "rating",
+      "playing"
+    ],
+    "answer": 0,
+    "explain": "用情緒關鍵字標記錄音，方便日後搜尋，應用 tagging（加標籤）；rating 是評分，timing 是計時。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1175",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The stage was dark, but a spotlight made the dancer's face clearly ____.",
+    "choices": [
+      "visible",
+      "familiar",
+      "vacant",
+      "private"
+    ],
+    "answer": 0,
+    "explain": "聚光燈讓原本黑暗中的臉看得見，visible 意為「可見的」；familiar 是熟悉的，vacant 是空著的。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1176",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "After the syrup spilled, the counter felt ____, and paper scraps clung to it.",
+    "choices": [
+      "greasy",
+      "sticky",
+      "slippery",
+      "dusty"
+    ],
+    "answer": 1,
+    "explain": "紙屑黏在灑過糖漿的檯面上，對應 sticky（黏的）；slippery 是滑的，不能解釋紙屑黏住的線索。",
+    "formula": false,
+    "level": 1
+  },
+  {
+    "id": "english-1177",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The diary was written by one of Inez's ____, who lived six generations before her.",
+    "choices": [
+      "colleagues",
+      "descendants",
+      "siblings",
+      "ancestors"
+    ],
+    "answer": 3,
+    "explain": "比 Inez 早六代的家人是 ancestors（祖先）；descendants 是後代，siblings 是兄弟姊妹，世代方向不同。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1178",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "The council posts a housing plan for public comment before approval. Calling the plan a 'draft' fits.",
+    "answer": true,
+    "explain": "尚未核定、供公眾提供意見的計畫可稱 draft（草案），並非已正式通過的版本；approval 是核准。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1179",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "tf",
+    "q": "The market began outdoors, then moved into a hall. Describing it as 'initially indoors' fits.",
+    "answer": false,
+    "explain": "initially 是「起初」。市場起初在戶外，後來才搬入室內，因此 initially indoors（起初在室內）把時間先後弄反。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1180",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "Cracks make a cliff potentially dangerous. The warning describes a risk even though a collapse has not occurred.",
+    "answer": true,
+    "explain": "potentially 是「可能地、潛在地」；裂縫帶來崩塌風險，即使尚未崩塌，也可稱 potentially dangerous（有潛在危險的）。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1181",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The tenant keeps shared areas tidy and handles disputes calmly. Neighbors find her ____.",
+    "choices": [
+      "agreeable",
+      "intimate",
+      "identical",
+      "obedient"
+    ],
+    "answer": 0,
+    "explain": "她維持公共區域整潔，平和處理爭執，顯示 agreeable（好相處的）；obedient 是服從命令，題文沒有上下級要求。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1182",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The tent's ____ cost included its purchase price and every repair over its ten-year life.",
+    "choices": [
+      "eventual",
+      "initial",
+      "partial",
+      "monthly"
+    ],
+    "answer": 0,
+    "explain": "eventual 是「最終的」，此處費用合計購買與十年間的全部維修；initial（最初的）、partial（部分的）、monthly（每月的）都不符總支出的範圍。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1183",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "No such program existed until a student ____ one, inviting others to a weekly silent lunch.",
+    "choices": [
+      "initiated",
+      "inherited",
+      "suspended",
+      "abolished"
+    ],
+    "answer": 0,
+    "explain": "原先沒有這項活動，學生首次發起它，應用 initiated（發起）；inherited 是繼承，abolished 是廢除，皆預設已有事物。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1184",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "After a second bakery opened, competition ____, forcing both shops to cut prices.",
+    "choices": [
+      "faded",
+      "paused",
+      "intensified",
+      "settled"
+    ],
+    "answer": 2,
+    "explain": "新店加入迫使兩店降價，顯示競爭 intensified（加劇）；faded 是減弱，settled 是平息，與後文的壓力不合。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1185",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "This case protects a lens in extreme cold; it can ____ temperatures that crack ordinary plastic.",
+    "choices": [
+      "generate",
+      "tolerate",
+      "restore",
+      "measure"
+    ],
+    "answer": 1,
+    "explain": "保護盒能耐受會使普通塑膠裂開的低溫，tolerate 指「承受、耐受」；measure 是測量，generate 是產生。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1186",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Mara offered help only while cameras were on. Her sudden departure made us doubt her ____.",
+    "choices": [
+      "sincerity",
+      "identity",
+      "authority",
+      "curiosity"
+    ],
+    "answer": 0,
+    "explain": "只在鏡頭前幫忙，令人懷疑她是否真心，故為 sincerity（真誠）；authority 是權威，identity 是身分。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1187",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "A report says the tunnel is dry, but fresh photographs ____ that claim by showing water inside.",
+    "choices": [
+      "counter",
+      "echo",
+      "confirm",
+      "illustrate"
+    ],
+    "answer": 0,
+    "explain": "照片拍到積水，與「隧道乾燥」相反，counter 作動詞意為「反駁」；confirm（證實）及 echo（附和）會弄反證據方向。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1188",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "A cargo list groups plums and onions under 'produce'. Here, 'produce' names ____.",
+    "choices": [
+      "breeding animals",
+      "farm machinery",
+      "packaged meals",
+      "harvested crops"
+    ],
+    "answer": 3,
+    "explain": "plums（李子）與 onions（洋蔥）屬農產品；produce 在清單中是名詞「農產品」，不是動詞「生產」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1189",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A 'supposedly silent' motor turns out to roar. 'Supposedly' reports the writer's verified finding.",
+    "answer": false,
+    "explain": "supposedly 是「據稱、按理說」，轉述尚未獲確認的說法；馬達實際很吵，不能把原先的安靜宣稱當作作者查證的結論。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1190",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Each trainee must attend the safety drill to pass the course. Attendance is ____.",
+    "choices": [
+      "occasional",
+      "compulsory",
+      "voluntary",
+      "selective"
+    ],
+    "answer": 1,
+    "explain": "必須參加安全演練才能通過課程，故 compulsory 是「強制的」；voluntary（自願的）與 must 的義務要求相反，drill 指演練。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1191",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "tf",
+    "q": "A leak creates a grave risk to the archive. Here, 'grave' is an adjective meaning serious.",
+    "answer": true,
+    "explain": "grave 作形容詞可指「嚴重的」，不只作名詞「墳墓」；漏水可能毀掉檔案，符合嚴重危機的語境。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1192",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The missing final chord sent the composer on a ____ to find the song's original ending.",
+    "choices": [
+      "trial",
+      "charge",
+      "quest",
+      "strike"
+    ],
+    "answer": 2,
+    "explain": "go on a quest for／to find 表示「展開尋找」；quest 是探索、尋求，適合為了補回歌曲結尾而追查的情境。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1193",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Nora joined a debate to build confidence, not to win. She took part for reasons ____ victory.",
+    "choices": [
+      "associated with",
+      "in favor of",
+      "related to",
+      "other than"
+    ],
+    "answer": 3,
+    "explain": "Nora 參賽是為了建立信心，並非追求 victory（勝利），故用 other than（除了……以外）；related to 則是「與……有關」，不符語意。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1194",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "One missed booking could spell disaster for the tiny touring band. This means it could cause serious trouble.",
+    "answer": true,
+    "explain": "spell disaster 是「招致災難、造成嚴重後果」；此處 spell 不是拼字，指漏掉預約可能重創小型巡演樂團。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1195",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "By noon, spam had filled the inbox and blocked new messages. The inbox was ____ spam.",
+    "choices": [
+      "charged with",
+      "concerned with",
+      "credited with",
+      "choked with"
+    ],
+    "answer": 3,
+    "explain": "be choked with 表示「被……塞滿、堵住」；垃圾郵件阻擋新信，符合此義，credited with 則是被歸功於。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1196",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "tf",
+    "q": "The runner came close to the record, but not quite. This says the runner matched the record.",
+    "answer": false,
+    "explain": "but not quite 是「但還差一點」，表示接近卻未達成；matched the record（追平紀錄）則表示已達成。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1197",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Decades later, the rule still works in every trial. It has ____ the test of time.",
+    "choices": [
+      "stood",
+      "taken",
+      "kept",
+      "held"
+    ],
+    "answer": 0,
+    "explain": "stand the test of time 是「經得起時間考驗」；數十年後仍有效正是此義，完成式用 stood，不能套用 take a test（應試）。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1198",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "Dan falsely said he composed Mei's winning tune, taking ____ for her work.",
+    "choices": [
+      "blame",
+      "revenge",
+      "credit",
+      "risks"
+    ],
+    "answer": 2,
+    "explain": "take credit for 是「把功勞歸給自己」；Dan 冒稱是得獎曲作者，正是攬功，blame 則指應受責備的責任。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1199",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "With its roof damaged, a theater made an ____ for carpenters to volunteer.",
+    "choices": [
+      "appeal",
+      "excuse",
+      "occasion",
+      "estimate"
+    ],
+    "answer": 0,
+    "explain": "make an appeal for 表示「呼籲、請求」；劇院屋頂損壞而徵求木工志工，並非提出 excuse（藉口）或 estimate（估價）。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1200",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "The robot turns toward even a faint clap, showing that it is highly ____ sound.",
+    "choices": [
+      "independent of",
+      "responsive to",
+      "isolated from",
+      "indifferent to"
+    ],
+    "answer": 1,
+    "explain": "responsive to 是「對……有反應的」；連輕微拍手也會引起轉向，不能用 indifferent to（對……漠不關心的）。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1201",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "In batches of 100 parcels each, labeling errors fell from six to one, an ____ in accuracy.",
+    "choices": [
+      "improving",
+      "improvement",
+      "impaired",
+      "impairment"
+    ],
+    "answer": 1,
+    "explain": "每批皆有100件，貼錯由六降為一，表示 accuracy（準確性）提升；an 後接名詞 improvement（改善），不是 impairment（損害），也不能接 improving。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1202",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "Two bakers improved one recipe: one reduced salt, the other changed flour. Their achievement was ____.",
+    "choices": [
+      "individual",
+      "collectively",
+      "individually",
+      "collective"
+    ],
+    "answer": 3,
+    "explain": "兩人共同改良同一配方，成就是 collective（集體的），不是 individual（個人的）；兩個 -ly 形式是副詞，不能作此處的形容詞補語。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1203",
+    "subject": "english",
+    "topic": "跨單元綜合",
+    "type": "mc",
+    "q": "A lab uses new scanners but keeps its founder's old measuring methods. It blends innovation with ____.",
+    "choices": [
+      "traditional",
+      "replacement",
+      "tradition",
+      "replace"
+    ],
+    "answer": 2,
+    "explain": "新儀器與創辦人的舊方法共存，對應 innovation（創新）與 tradition（傳統）；with 後須接名詞，replacement（取代）也不符保留舊法。",
+    "formula": false,
+    "level": 3,
+    "links": [
+      "詞性與構詞",
+      "轉折語與篇章"
+    ]
+  },
+  {
+    "id": "english-1204",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "Since last winter, neighbors ____ night skies weekly, and the project is still growing.",
+    "choices": [
+      "were recording",
+      "have been recording",
+      "had been recording",
+      "will be recording"
+    ],
+    "answer": 1,
+    "explain": "since last winter 連結過去起點與現在持續的觀測，使用現在完成進行式 have been recording（一直在記錄）；過去完成式需另有過去基準。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1205",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "tf",
+    "q": "In 1998, an inventor predicted her tool would become common. The expected popularity comes before her prediction.",
+    "answer": false,
+    "explain": "would become 表示「從過去看未來」，預測的普及時間在 1998 年之後；此時態不保證工具後來真的普及。common 是普遍的。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1206",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The rescue team found the address to ____ the supplies had been sent.",
+    "choices": [
+      "what",
+      "where",
+      "which",
+      "that"
+    ],
+    "answer": 2,
+    "explain": "send supplies to an address（把物資送到某地址）的 to 被移到關係代名詞前，形成 to which；where 不能在此與 to 疊用。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1207",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "____ with thick gloves, the volunteers handled the rough wood safely.",
+    "choices": [
+      "Equipping",
+      "Equipped",
+      "To equip",
+      "Having equipped"
+    ],
+    "answer": 1,
+    "explain": "volunteers（志工）是被提供手套的人，與 equip（配備）為被動關係，故用 Equipped；主動分詞 equipping 需要說明配備誰。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1208",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "tf",
+    "q": "A robot repairs bikes damaged in transit. 'Damaged' describes something that happened to the bikes.",
+    "answer": true,
+    "explain": "damaged（受損的）是過去分詞，修飾接受損壞結果的 bikes（自行車），不是說自行車主動損壞其他東西；in transit 指運送途中。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1209",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Ada had time for a free tour but stayed home. Which phrase describes her missed opportunity?",
+    "choices": [
+      "could have joined it",
+      "cannot have joined it",
+      "would often join it",
+      "must have joined it"
+    ],
+    "answer": 0,
+    "explain": "could have joined it 表示「當時本可參加」；stayed home（待在家）才交代她沒參加。must have joined it 則是推測她已參加。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1210",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A courier route once linked remote clinics. ____. Walkers now follow it to learn local history.",
+    "choices": [
+      "It was built to host modern art shows.",
+      "It now takes medicine across the sea.",
+      "It has since become a heritage trail.",
+      "It has remained a private medical route."
+    ],
+    "answer": 2,
+    "explain": "原先連接診所，如今供人步行了解歷史，中間須交代路線用途的轉變；heritage trail 是「文化歷史步道」，不是繼續作私人醫療路線。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1211",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "At a repair fair, volunteers fix lamps. ____ These services keep useful items out of landfills.",
+    "choices": [
+      "Others sell replacement lamps.",
+      "Others mend torn schoolbags.",
+      "Others order new appliances.",
+      "Others display next year's models."
+    ],
+    "answer": 1,
+    "explain": "These services（這些服務）承接修燈與 mend（修補）書包，兩者都延長物品壽命、減少送入 landfills（掩埋場）的廢棄物；添購新品不屬修繕。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1212",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "A guide calls a dancer's shoes 'a second skin.' The phrase mainly explains how the shoes are manufactured.",
+    "answer": false,
+    "explain": "a second skin（第二層皮膚）比喻鞋與舞者密不可分、貼合自然；它強調關係，不是在說明鞋子的製造流程。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1213",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A seed packet says 'Bury 1 cm deep; water twice weekly; harvest in June.' Which detail is missing?",
+    "choices": [
+      "How deep to sow the seeds.",
+      "When to gather the crop.",
+      "How often to water the seeds.",
+      "How much sunlight the plants need."
+    ],
+    "answer": 3,
+    "explain": "包裝提供播種深度、每週澆水兩次及六月收成，沒有 sunlight（日照）需求。sow 是播種，harvest 是收成；不可把未寫的資訊當成已提供。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1214",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "A stone arch marks the harbor. Ships sail past the monument daily. 'The monument' refers to the arch.",
+    "answer": true,
+    "explain": "文中的 stone arch（石拱門）被接著稱為 the monument（紀念建物）；這是同一物件的替代稱呼，並非指來往的 ships（船隻）。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1215",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "An umbrella kept its user dry in one windy shower. Its maker expects ten years of use. Which claim lacks test support?",
+    "choices": [
+      "It kept its user dry.",
+      "It faced windy conditions.",
+      "It was exposed to rain.",
+      "It will last a decade."
+    ],
+    "answer": 3,
+    "explain": "一次有風陣雨已測到風吹、淋雨及當次遮雨效果，卻不足以證明能用 a decade（十年）；expects（預期）不是十年耐用性的測試證據。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1216",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Sana wove and sold bags before emigrating; Hugo emigrated, then learned weaving and sold his work. Both ____.",
+    "choices": [
+      "earned money from weaving.",
+      "learned weaving before emigrating.",
+      "began selling before emigrating.",
+      "received training in the same country."
+    ],
+    "answer": 0,
+    "explain": "兩人都販售自己的編織品，因此都由 weaving（編織）獲得收入；Hugo 在 abroad（國外）才學習，不能推成兩人都在移居前學習或開賣。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1217",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Critics said the bell had never rung. ____, recordings later revealed its sound during past festivals.",
+    "choices": [
+      "For example",
+      "Therefore",
+      "However",
+      "Similarly"
+    ],
+    "answer": 2,
+    "explain": "never rung（從未響過）的說法與後來錄音中的鐘聲相反，須用 However（然而）表示轉折；不是例證、因果或相同情況。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1218",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A coach credits talent to heredity but says lessons build skill too. Which sentence links these ideas?",
+    "choices": [
+      "Family traits influence skill through lessons.",
+      "Both inheritance and experience shape skill.",
+      "Talent grows as relatives attend more lessons.",
+      "Musical skill determines inherited traits."
+    ],
+    "answer": 1,
+    "explain": "教練同時談 heredity（遺傳）與 lessons（課程），摘要須納入 inheritance（遺傳）及 experience（後天經驗）；不是說技能決定遺傳特徵。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1219",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Shade screens protect museum fabrics from fading. The text gives keeping visitors cool as the reason for the screens.",
+    "answer": false,
+    "explain": "題文說遮光幕用來防止 fabrics（布料）fading（褪色）；敘述把保護藏品的目的換成讓遊客涼快，並無文字依據。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1220",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "The troupe delays rehearsal until its translator returns. It waits for the translator before rehearsing.",
+    "answer": true,
+    "explain": "劇團延後排練，直到翻譯人員回來，表示等她回來才開始；troupe 是劇團，rehearsal 是排練，不能把等待誤讀成照常先開始。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1221",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The theater club opened in 1990; the film club began thirty years earlier. Which is older?",
+    "choices": [
+      "The theater club.",
+      "Their order is unstated.",
+      "Both are the same age.",
+      "The film club."
+    ],
+    "answer": 3,
+    "explain": "thirty years earlier（早三十年）以戲劇社成立為基準，故電影社較早成立；只須掌握 earlier 的方向，不必算出年份。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1222",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "tf",
+    "q": "Kai: 'The shoes rub.' Lin: 'The soles wear out fast.' Both comments mainly concern the shoes' appearance.",
+    "answer": false,
+    "explain": "rub 指鞋子磨腳，談舒適度；wear out fast 指鞋底很快磨損，談耐用度。兩則評論並非主要談 appearance（外觀）。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1223",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Nia: 'I'd rent it if insurance is included.' Omar: 'I won't rent it, even with cover.' Who accepts conditionally?",
+    "choices": [
+      "Both renters",
+      "Nia",
+      "Neither renter",
+      "Omar"
+    ],
+    "answer": 1,
+    "explain": "Nia 願在附 insurance（保險）的條件下承租，屬有條件接受；Omar 連有保障也拒租。conditionally 是「有條件地」。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1224",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Workers freeze berries, then dry them under low pressure. This process preserves their shape. What is 'this process'?",
+    "choices": [
+      "Freezing the berries without drying them.",
+      "Drying the berries before freezing them.",
+      "Drying the berries at high pressure.",
+      "Freezing followed by low-pressure drying."
+    ],
+    "answer": 3,
+    "explain": "this process（這個過程）回指先冷凍、再低壓乾燥的整套步驟；不能只取冷凍，或把順序與壓力條件倒置。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1225",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "P: Fossils arrive. Q: Talks and films teach. R: Fees rise. S: Doors close. 'Learning takes many forms' summarizes ____.",
+    "choices": [
+      "paragraph P",
+      "paragraph R",
+      "paragraph Q",
+      "paragraph S"
+    ],
+    "answer": 2,
+    "explain": "Q 列出 talks（講座）與 films（影片）兩種學習方式，適合用 Learning takes many forms（學習有多種形式）統整；其他段落談標本、費用或關門。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1226",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A buoy shows two white bands above one black band. Which description matches it from top to bottom?",
+    "choices": [
+      "Black, white, white.",
+      "White, white, black.",
+      "Black, black, white.",
+      "White, black, white."
+    ],
+    "answer": 1,
+    "explain": "above 是「在……上方」，故由上到下先兩條白帶、再一條黑帶；buoy 指浮標，應依文字順序配對，不靠圖片。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1227",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "P: Bags tore. Q: A stronger weave emerged. R: Shops abroad adopted it. S: Sales fell. 'The design spread' sums up ____.",
+    "choices": [
+      "paragraph P",
+      "paragraph S",
+      "paragraph R",
+      "paragraph Q"
+    ],
+    "answer": 2,
+    "explain": "R 的海外店家 adopted（採用）新織法，可歸納為 The design spread（這項設計傳播開來）；Q 只介紹更強韌的織法，abroad 是在國外。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1228",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Solar lamps cut fuel use. However, cloudy weeks can leave paths dark. The writer organizes ideas by ____.",
+    "choices": [
+      "contrasting two historical accounts",
+      "explaining the steps of a repair",
+      "placing inventions in time order",
+      "comparing a benefit with a drawback"
+    ],
+    "answer": 3,
+    "explain": "先說省燃料的 benefit（優點），再以 However 引入陰天照明不足的 drawback（缺點）；不是年代排序或維修程序。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1229",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Ari: 'A tool library deserves funding.' Bea: 'Its value does not justify its cost.' Who supports the library?",
+    "choices": [
+      "Bea",
+      "Ari",
+      "Both speakers",
+      "Neither speaker"
+    ],
+    "answer": 1,
+    "explain": "Ari 主張值得撥款，表達支持；Bea 認為效益不足以 justify（使合理化）成本，表達反對，不能因提到 value 就判為贊同。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1230",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A tailor puts buttons beside coats, then uses needles to sew them onto the cuffs. 'Them' refers to ____.",
+    "choices": [
+      "the cuffs",
+      "the coats",
+      "the needles",
+      "the buttons"
+    ],
+    "answer": 3,
+    "explain": "縫到 cuffs（袖口）上的物件是 buttons（鈕扣）；needles（針）是工具，coats（外套）是衣物，不能只選離 them 最近的複數名詞。",
+    "formula": false,
+    "level": 2
+  },
+  {
+    "id": "english-1231",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Club A lends tents; B fixes boots; C rents cameras; D sells shoes. Jo needs boots repaired and a tent loan. Which pair?",
+    "choices": [
+      "Clubs A and D.",
+      "Clubs C and D.",
+      "Clubs A and B.",
+      "Clubs B and C."
+    ],
+    "answer": 2,
+    "explain": "boots（靴子）要修理，對應 B；tent loan（借用帳篷）對應 A。須同時滿足需求，D 只賣鞋，不能把購買誤當成修理服務。",
+    "formula": false,
+    "level": 2
   }
 ]

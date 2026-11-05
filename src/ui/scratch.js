@@ -197,9 +197,16 @@ export function initScratch(ctx) {
   bottom.addEventListener('change', applyDock);
   applyDock();
 
+  /** 演算題：草稿區收著時讓鉛筆按鈕顯眼一點，提示這題要動筆算 */
+  function nudge(on) {
+    toggleBtn.classList.toggle('nudge', on);
+    toggleBtn.setAttribute('aria-label', on ? '草稿區（這題要動筆算）' : '草稿區');
+  }
+
   ctx.scratch = {
     /** 換題：這頁有寫東西才翻新頁；只留上一頁給復原，避免越積越多 */
-    newPage() {
+    newPage(q) {
+      nudge(Boolean(q?.scratch));
       if (!page().length) return;
       entries = [...page(), { clear: true }];
       redraw();

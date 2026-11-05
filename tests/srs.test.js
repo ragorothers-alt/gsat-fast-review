@@ -175,6 +175,13 @@ describe('buildQueue', () => {
     expect(out.map((x) => x.id).sort()).toEqual(['m4', 'p1']);
   });
 
+  it('快閃不出要動筆的演算題，其他模式照出', () => {
+    const withScratch = [...bank, q('m9', 'math', { scratch: true })];
+    const opts = { subjects: ['math'], size: 10, now: NOW, rng: seeded() };
+    expect(buildQueue(withScratch, {}, { ...opts, noScratch: true }).map((x) => x.id)).not.toContain('m9');
+    expect(buildQueue(withScratch, {}, opts).map((x) => x.id)).toContain('m9');
+  });
+
   it('到期的複習題先出，新題接著出，未到期的排最後', () => {
     const cards = {
       m1: { box: 0, due: NOW - 1 }, // 到期

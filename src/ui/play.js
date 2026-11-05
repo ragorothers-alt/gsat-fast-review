@@ -88,6 +88,7 @@ export function initPlay(ctx) {
       onlyUnits: units,
       exclude: [...exclude, ...Object.keys(ctx.state.flags)],
       formulaOnly: cfg.formulaOnly,
+      noScratch: cfg.noScratch,
       weakOnly: cfg.weakOnly,
       size: cfg.size,
       now: Date.now(),
@@ -279,7 +280,7 @@ export function initPlay(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    el.topic.innerHTML = s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q);
+    el.topic.innerHTML = (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) + (q.scratch ? '・演算題' : '');
     el.text.innerHTML = richHTML(q.q);
     el.explain.hidden = true;
     el.next.hidden = true;
@@ -301,7 +302,7 @@ export function initPlay(ctx) {
     el.status.textContent = '';
     if (keyboard && !looking) el.answers.querySelector('.answer')?.focus({ preventScroll: true });
     fitCard();
-    ctx.scratch.newPage();
+    ctx.scratch.newPage(q);
     ctx.world.setFocusSubject(q.subject);
     if (s.timeLeft !== null) renderTimer();
   }

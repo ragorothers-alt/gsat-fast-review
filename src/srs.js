@@ -91,14 +91,14 @@ export const REVIEW_SHARE = 1 - 1 / NEW_EVERY;
  * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {object[]} bank
  * @param {Record<string, object>} cards
- * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
+ * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, noScratch?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
- *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）
+ *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；noScratch：不出要動筆的演算題（q.scratch）
  */
 export function buildQueue(
   bank,
   cards,
-  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, weakOnly = false, size, now, rng = Math.random },
+  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, noScratch = false, weakOnly = false, size, now, rng = Math.random },
 ) {
   const wanted = new Set(subjects);
   const off = new Set(excludedUnits);
@@ -112,6 +112,7 @@ export function buildQueue(
       (!only || only.has(key)) &&
       !skip.has(q.id) &&
       (!formulaOnly || q.formula) &&
+      !(noScratch && q.scratch) &&
       !neverMissed(cards[q.id])
     );
   });

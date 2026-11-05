@@ -182,7 +182,7 @@ export function initExam(ctx) {
     el.card.classList.add('enter');
     el.status.textContent = '';
     ctx.fitCard();
-    ctx.scratch.newPage();
+    ctx.scratch.newPage(q);
     ctx.world.setFocusSubject(q.subject);
   }
 

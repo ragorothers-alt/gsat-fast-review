@@ -16,8 +16,10 @@ const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
 
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
+// 演算題（scratch: true）的解析要寫出完整的演算過程，放寬一些
+const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch']);
 
 const args = process.argv.slice(2);
 const partial = args.includes('--partial');
@@ -60,7 +62,7 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
-  const stats = { mc: 0, tf: 0, formula: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
+  const stats = { mc: 0, tf: 0, formula: 0, scratch: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
 
   items.forEach((it, idx) => {
     const tag = it && typeof it.id === 'string' ? it.id : `#${idx}`;
@@ -90,9 +92,17 @@ for (const file of files) {
     else if (it.formula) stats.formula++;
     if (![1, 2, 3].includes(it.level)) err('level 必須是 1、2 或 3');
     else stats.level[it.level]++;
+    if (it.scratch !== undefined) {
+      if (it.scratch !== true) err('scratch 只能是 true（不是演算題就不要寫這個欄位）');
+      else {
+        stats.scratch++;
+        if (it.type !== 'mc' || it.level !== 3) err('演算題（scratch）必須是 level 3 的單選題');
+      }
+    }
 
     checkText(it.q, 'q', LIMITS.q, WARN.q, err, warn);
-    checkText(it.explain, 'explain', LIMITS.explain, WARN.explain, err, warn);
+    if (it.scratch) checkText(it.explain, 'explain', SCRATCH_EXPLAIN.max, SCRATCH_EXPLAIN.warn, err, warn);
+    else checkText(it.explain, 'explain', LIMITS.explain, WARN.explain, err, warn);
 
     if (typeof it.q === 'string') {
       const norm = it.q.replace(/\s+/g, '');
@@ -128,7 +138,7 @@ for (const file of files) {
   }
 
   const n = items.length;
-  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、公式 ${stats.formula}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
+  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、公式 ${stats.formula}、演算 ${stats.scratch}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
   const topics = [...stats.topics].map(([t, c]) => `${t} ${c}`).join('、');
   if (topics) console.log(`  單元：${topics}`);
   if (warnings.length) {
