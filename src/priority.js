@@ -5,6 +5,7 @@
 //   探索加成：練得少的單元先多試幾題，才知道熟不熟。
 // 單元裡再依熟練度挑難度：還不熟先出基礎題，熟了改出難題與演算題。純邏輯，不碰 DOM。
 import { UNIT_SHARE, subjectWeights } from './blueprint.js';
+import { bundles } from './groups.js';
 import { UNITS, unitKey } from './units.js';
 
 /** 學測很少考的單元也保留一點分量：科內占比（%）的下限 */
@@ -66,24 +67,38 @@ export function levelWeight(level, p) {
   return 0.6;
 }
 
+/** 題組算在哪個單元：組裡最多題的單元（一樣多就取前面那題的） */
+function packUnit(pack) {
+  const count = new Map();
+  for (const q of pack) {
+    const key = unitKey(q.subject, q.topic);
+    count.set(key, (count.get(key) ?? 0) + 1);
+  }
+  let best = null;
+  for (const [key, n] of count) if (!best || n > count.get(best)) best = key;
+  return best;
+}
+
 /**
  * 新題的出題順序：每個位置先依單元優先度抽一個單元，再出這個單元排在最前面的題目；
  * 單元裡的題目事先依難度權重做加權隨機排序（每題的鍵是 u^(1/權重)，大的先出）。
+ * 閱讀題組整組一起出：一組算一個候選，歸到組裡最多題的單元，難度權重取各題的平均。
  * @param {object[]} fresh 還沒做過的題目（已依模式篩好）
  * @param {{ shares: Map<string, number>, skill: Map<string, { n: number, p: number }>, size: number, rng?: () => number }} opts
- * @returns {object[]} 最多 size 題
+ * @returns {object[]} 最多 size 題（最後一個題組放不下時整組照出）；同組的題目排在一起
  */
 export function orderFresh(fresh, { shares, skill, size, rng = Math.random }) {
   const groups = new Map();
-  for (const q of fresh) {
-    const key = unitKey(q.subject, q.topic);
-    (groups.get(key) ?? groups.set(key, []).get(key)).push(q);
+  for (const pack of bundles(fresh)) {
+    const key = packUnit(pack);
+    (groups.get(key) ?? groups.set(key, []).get(key)).push(pack);
   }
-  const pools = [...groups].map(([key, qs]) => {
+  const pools = [...groups].map(([key, packs]) => {
     const p = skill.get(key)?.p ?? 0.5;
-    const ranked = qs.map((q) => [rng() ** (1 / levelWeight(q.level, p)), q]).sort((a, b) => b[0] - a[0]);
+    const weight = (pack) => pack.reduce((a, q) => a + levelWeight(q.level, p), 0) / pack.length;
+    const ranked = packs.map((pack) => [rng() ** (1 / weight(pack)), pack]).sort((a, b) => b[0] - a[0]);
     // 不在學測藍圖裡的單元（理論上不會有）給極小的權重：別的單元都出完了才出
-    return { w: unitPriority(shares.get(key) ?? 0, skill.get(key)) || 1e-9, qs: ranked.map(([, q]) => q) };
+    return { w: unitPriority(shares.get(key) ?? 0, skill.get(key)) || 1e-9, packs: ranked.map(([, pack]) => pack) };
   });
   const out = [];
   let total = pools.reduce((a, u) => a + u.w, 0);
@@ -92,8 +107,8 @@ export function orderFresh(fresh, { shares, skill, size, rng = Math.random }) {
     let i = 0;
     while (i < pools.length - 1 && (r -= pools[i].w) > 0) i++;
     const pool = pools[i];
-    out.push(pool.qs.shift());
-    if (!pool.qs.length) {
+    out.push(...pool.packs.shift());
+    if (!pool.packs.length) {
       pools.splice(i, 1);
       total -= pool.w;
     }

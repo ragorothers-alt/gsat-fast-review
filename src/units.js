@@ -117,8 +117,8 @@ export const UNITS = {
 /** 單元的唯一鍵，存檔裡用它記住哪些單元被關掉 */
 export const unitKey = (subject, unit) => `${subject}/${unit}`;
 
-/** 畫面上的單元名稱：跨單元題列出結合了哪幾個單元 */
-export const topicLabel = (q) => (q.links?.length ? `跨單元：${q.links.join('＋')}` : q.topic);
+/** 畫面上的單元名稱：跨單元題列出結合了哪幾個單元；閱讀題組裡沒寫 links 的跨單元題考的是整篇的閱讀理解 */
+export const topicLabel = (q) => (q.links?.length ? `跨單元：${q.links.join('＋')}` : q.group && q.topic === CROSS_UNIT ? '閱讀理解' : q.topic);
 
 /**
  * 這題是不是因為單元被關掉而不出（off 是 unitKey 的 Set）。

@@ -83,7 +83,11 @@ export function initNotebook(ctx) {
     return SUBJECTS.flatMap((s) => (UNITS[s.id] ?? []).map((unit) => ({ subject: s.id, unit })));
   }
 
-  const indexEntry = (q) => [q.id, [norm([q.id, SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? [])].join('\n')), norm(q.explain)]];
+  // 閱讀題組：題組代號算在題目裡，文章和解析一樣排在後面（搜文章裡的字找得到整組）
+const indexEntry = (q) => [
+  q.id,
+  [norm([q.id, q.group ?? '', SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? [])].join('\n')), norm(q.passage ? `${q.explain}\n${q.passage}` : q.explain)],
+];
 
   /**
    * 搜尋索引（每題正規化過的文字）：一打開搜尋分頁就趁空檔分段建立，第一次打字不會卡住畫面；

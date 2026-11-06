@@ -267,6 +267,8 @@
               <button id="copy-q" class="copy-btn" type="button" aria-label="複製題目（可以貼給 ChatGPT 問）" title="複製題目，貼給 ChatGPT 問"><svg class="ico" aria-hidden="true"><use href="#i-copy"/></svg></button>
               <button id="flag" class="flag-btn" type="button" aria-pressed="false" aria-label="回報這題有問題" title="這題怪怪的？"><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg></button>
             </div>
+            <!-- 閱讀題組的文章：可以自己捲動；換題時不念整篇（aria-live off），要讀時移到這個區塊 -->
+            <div id="q-passage" class="passage" role="region" tabindex="0" aria-live="off" aria-label="文章" hidden></div>
             <div id="q-text" class="q-text"></div>
             <div id="q-explain" class="explain" hidden></div>
             <p class="tf-hint" aria-hidden="true">← 左滑錯　・　右滑對 →</p>
@@ -285,6 +287,8 @@
         <footer class="play-foot">
           <!-- 回看這輪剛做過的題目（作答時才有） -->
           <button id="back" class="ghost-btn" type="button" hidden>‹ 上一題</button>
+          <!-- 閱讀題組：先收起選項，讓文章占滿題目卡（小手機讀長文用）；換題時自動收回 -->
+          <button id="read-full" class="ghost-btn" type="button" aria-pressed="false" aria-controls="q-passage" hidden>展開文章</button>
           <button id="skip" class="ghost-btn" type="button">不會？看解答</button>
           <!-- 答對了但其實是猜的、沒把握：不算答對，之後會再出 -->
           <div id="certain" class="certain" role="group" aria-label="答對了，但是" hidden>

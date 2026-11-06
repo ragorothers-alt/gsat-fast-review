@@ -10,7 +10,8 @@ import { SUBJECT_BY_ID } from '../subjects.js';
 import { copyQuestion } from './clipboard.js';
 import { sfx } from './feedback.js';
 import { openKeypointsFrom } from './keypoints.js';
-import { plainText, richHTML, visibleLength } from './rich.js';
+import { groupPosition, showPassage } from './passage.js';
+import { plainText, richHTML, stemHTML, visibleLength } from './rich.js';
 import { mineHTML, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
@@ -47,6 +48,7 @@ export function initExam(ctx) {
     subject: $('#q-subject'),
     topic: $('#q-topic'),
     text: $('#q-text'),
+    passage: $('#q-passage'),
     answers: $('#answers'),
     progress: $('#play-progress'),
     clock: $('#exam-clock'),
@@ -95,7 +97,7 @@ export function initExam(ctx) {
       const subjects = p.subjects.map((s) => SUBJECT_BY_ID[s]);
       return `<li style="--c:${subjects[0].color}">
         <span class="exam-paper-name">${p.name}</span>
-        <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}</span>
+        <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}${p.groups ? `・含 ${p.groups} 組閱讀題組` : ''}</span>
         <span class="exam-paper-last">${last ? `上次 ${pct(examPoints(last), last.total)}%（${md(last.at)}）` : '還沒考過'}</span>
         <button type="button" class="secondary-btn exam-start" data-paper="${p.id}"${saved ? ' disabled' : ''} aria-label="開始${p.name}模擬考">開始</button>
       </li>`;
@@ -172,9 +174,15 @@ export function initExam(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    // 學測不會告訴你考哪個單元：不顯示單元名稱，只標出多選題（試卷上單選、多選分開標）
-    el.topic.textContent = q.type === 'ms' ? '多選題' : '';
-    el.text.innerHTML = richHTML(q.q);
+    // 學測不會告訴你考哪個單元：不顯示單元名稱，只標出多選題（試卷上單選、多選分開標）與題組
+    const pos = groupPosition(
+      exam.ids.map((id) => byId.get(id)),
+      i,
+    );
+    const where = pos ? `題組 ${pos.k}／${pos.n}` : '';
+    el.topic.innerHTML = [q.type === 'ms' ? '多選題' : '', where && `<span class="nowrap">${where}</span>`].filter(Boolean).join('・');
+    showPassage(el.passage, q, where);
+    el.text.innerHTML = stemHTML(q);
     el.progress.textContent = `${i + 1} / ${n}`;
     el.prev.disabled = i === 0;
     el.next.textContent = i === n - 1 ? '檢查並交卷' : '下一題 ›';

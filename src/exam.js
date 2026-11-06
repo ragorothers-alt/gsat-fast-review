@@ -1,5 +1,6 @@
 // 模擬考：依 111–115 學測各單元的出題占比抽一份卷，整卷計時，交卷後才對答案。純邏輯，不碰 DOM。
 import { SUBJECT_ITEMS, UNIT_SHARE } from './blueprint.js';
+import { bundles, isCloze } from './groups.js';
 import { isCorrect, msScore } from './session.js';
 import { shuffle } from './srs.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
@@ -8,11 +9,12 @@ export { UNIT_SHARE };
 
 /**
  * 學測的五張考卷。題庫的題目比學測短（免紙筆、單題），題數和時間也照比例縮小：
- * 平均每題國文 50 秒、英文 40 秒、數學 72 秒、自然 60 秒、社會 45 秒。出單選與多選題（學測沒有是非題）
+ * 平均每題國文 50 秒、英文 40 秒、數學 72 秒、自然 60 秒、社會 45 秒。出單選與多選題（學測沒有是非題）。
+ * 國文、英文另外抽幾組閱讀題組（groups 組，算在 size 裡），每組多給約 2 分鐘讀文章
  */
 export const PAPERS = [
-  { id: 'chinese', name: '國文', subjects: ['chinese'], size: 30, minutes: 25 },
-  { id: 'english', name: '英文', subjects: ['english'], size: 30, minutes: 20 },
+  { id: 'chinese', name: '國文', subjects: ['chinese'], size: 30, minutes: 31, groups: 3 },
+  { id: 'english', name: '英文', subjects: ['english'], size: 30, minutes: 24, groups: 2 },
   { id: 'math', name: '數學', subjects: ['math'], size: 25, minutes: 30 },
   { id: 'science', name: '自然', subjects: ['physics', 'chemistry', 'biology', 'earth'], size: 40, minutes: 40 },
   { id: 'social', name: '社會', subjects: ['history', 'geography', 'civics'], size: 40, minutes: 30 },
@@ -57,20 +59,43 @@ export function paperWeights(paper, excludedUnits = []) {
 }
 
 /**
- * 抽一份考卷：各單元依占比分配題數，每個單元的配額裡約 MS_SHARE 出多選題、其餘出單選題；
- * 單元題目不夠時從同一張卷的其他單元補。
- * 題目照科目排（合科試卷先物理再化學…），同一科裡打亂；每題的選項順序也先打亂、整場固定。
+ * 抽 count 組閱讀題組：有克漏字也有閱讀測驗時輪流抽，克漏字排前面（學測英文先考綜合測驗、最後才是閱讀測驗）。
+ * 組裡有題目被回報或單元被關掉時只出剩下的，剩不到 2 題的整組不出。
+ */
+function pickGroups(questions, count, rng) {
+  if (!count) return [];
+  const packs = shuffle(bundles(questions).filter((p) => p.length >= 2), rng);
+  const lists = [packs.filter((p) => isCloze(p[0].passage)), packs.filter((p) => !isCloze(p[0].passage))].filter((l) => l.length);
+  const out = [];
+  for (let i = 0; out.length < count && lists.some((l) => l.length); i++) {
+    const list = lists[i % lists.length];
+    if (list.length) out.push(list.shift());
+  }
+  return out.sort((a, b) => isCloze(b[0].passage) - isCloze(a[0].passage));
+}
+
+/**
+ * 抽一份考卷：國文、英文先抽 paper.groups 組閱讀題組；其餘題數依各單元占比分配，
+ * 每個單元的配額裡約 MS_SHARE 出多選題、其餘出單選題；單元題目不夠時從同一張卷的其他單元補。
+ * 題目照科目排（合科試卷先物理再化學…），同一科裡單題打亂、題組整組排在單題後面；每題的選項順序也先打亂、整場固定。
  * @param {object[]} bank
  * @param {{ excludedUnits?: string[], flags?: Record<string, unknown>, rng?: () => number }} [opts] 被回報的題目不出
  * @returns {{ ids: string[], orders: number[][] }}
  */
 export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = Math.random } = {}) {
   const off = new Set(excludedUnits);
-  const counts = allocate(paperWeights(paper, excludedUnits), paper.size);
+  const usable = (q) => (q.type === 'mc' || q.type === 'ms') && !flags[q.id] && !isUnitOff(q, off);
+  const groups = pickGroups(
+    bank.filter((q) => q.group && paper.subjects.includes(q.subject) && usable(q)),
+    paper.groups ?? 0,
+    rng,
+  );
+  const grouped = groups.reduce((a, p) => a + p.length, 0);
+  const counts = allocate(paperWeights(paper, excludedUnits), Math.max(0, paper.size - grouped));
   const share = MS_SHARE[paper.id] ?? 0;
   const pools = new Map(Object.keys(counts).map((k) => [k, { mc: [], ms: [] }]));
   for (const q of bank) {
-    if ((q.type !== 'mc' && q.type !== 'ms') || flags[q.id] || isUnitOff(q, off)) continue;
+    if (q.group || !usable(q)) continue;
     pools.get(unitKey(q.subject, q.topic))?.[q.type].push(q);
   }
   const picked = [];
@@ -87,8 +112,8 @@ export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = 
     picked.push(...ms, ...mc);
     spare.push(...pool.mc, ...(share ? pool.ms : []));
   }
-  picked.push(...shuffle(spare, rng).slice(0, Math.max(0, paper.size - picked.length)));
-  const ordered = paper.subjects.flatMap((s) => shuffle(picked.filter((q) => q.subject === s), rng));
+  picked.push(...shuffle(spare, rng).slice(0, Math.max(0, paper.size - grouped - picked.length)));
+  const ordered = paper.subjects.flatMap((s) => [...shuffle(picked.filter((q) => q.subject === s), rng), ...groups.filter((p) => p[0].subject === s).flat()]);
   return { ids: ordered.map((q) => q.id), orders: ordered.map((q) => shuffle(q.choices.map((_, i) => i), rng)) };
 }
 

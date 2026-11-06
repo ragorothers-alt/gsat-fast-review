@@ -15,6 +15,20 @@ export function richHTML(text) {
     .join('');
 }
 
+/** 題幹或文章裡克漏字的空格 __n__ 換成有編號的空格（輸入是 richHTML 的結果） */
+export const blanksHTML = (html) => html.replace(/__(\d+)__/g, '<span class="blank" data-blank="$1"><span class="sr-only">空格</span>$1</span>');
+
+/** 閱讀題組的文章：照 \n 分段，克漏字的空格加上編號 */
+export const passageHTML = (text) =>
+  String(text)
+    .split('\n')
+    .filter((p) => p.trim())
+    .map((p) => `<p>${blanksHTML(richHTML(p))}</p>`)
+    .join('');
+
+/** 題幹：題組的題目把 __n__ 換成空格 */
+export const stemHTML = (q) => (q.group ? blanksHTML(richHTML(q.q)) : richHTML(q.q));
+
 // ── 公式的純文字念法 ─────────────────────────────
 // Chrome 算按鈕名稱時不讀 <math> 裡的字，只有公式的選項按鈕會變成沒有名字，
 // 所以從 KaTeX 產生的 MathML 轉回一行念得出來的文字（x²、H₂O、(√3+1)/2）

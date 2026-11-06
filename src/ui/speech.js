@@ -15,7 +15,8 @@ if (supported) {
   speechSynthesis.addEventListener?.('voiceschanged', pickVoice);
 }
 
-export const canSpeak = (q) => supported && q.subject === 'english';
+/** 英文單題才念；閱讀題組的文章太長，不念 */
+export const canSpeak = (q) => supported && q.subject === 'english' && !q.group;
 
 /**
  * 要念的英文。filled：把正解填進唯一的空格（單選題、作答後）。

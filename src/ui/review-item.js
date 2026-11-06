@@ -3,7 +3,8 @@ import { SUBJECT_BY_ID } from '../subjects.js';
 import { setFlag, setStar } from '../sync.js';
 import { topicLabel } from '../units.js';
 import { icon } from './icons.js';
-import { richHTML } from './rich.js';
+import { passageDetails } from './passage.js';
+import { richHTML, stemHTML } from './rich.js';
 import { canSpeak, speak, speechText } from './speech.js';
 
 /** 是非題的答案：手繪圈叉加字 */
@@ -35,7 +36,7 @@ export function reviewItem(q, { index, flagged, starred, note }) {
   const answer = answerHTML(q, q.answer);
   return `<li class="r-item" style="--c:${subj.color}">
     <div class="card-tag"><span class="tag">${subj.name}</span><button type="button" class="topic topic-link" data-kp="${q.subject}/${q.topic}" title="看這個單元的考前重點">${topicLabel(q)}</button>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="${index}" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${starred}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
-    <div class="r-q">${richHTML(q.q)}</div>
+    ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
     <div class="r-ans">${note}<span class="r-right">正解：${answer}</span></div>
     <div class="r-explain">${richHTML(q.explain)}</div>
   </li>`;

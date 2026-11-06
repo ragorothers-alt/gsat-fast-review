@@ -1,4 +1,5 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
+import { bundles, takeBundles } from './groups.js';
 import { orderFresh, unitShares, unitSkill } from './priority.js';
 import { isUnitOff, unitKey } from './units.js';
 
@@ -98,7 +99,8 @@ export const REVIEW_SHARE = 1 - 1 / NEW_EVERY;
  * @param {Record<string, object>} cards
  * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
- *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）和多選題
+ *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題和閱讀題組
+ * 閱讀題組（q.group）的題目排在一起出；一輪的最後一組放不下時整組照出，所以最多會比 size 多出一組的題數。
  */
 export function buildQueue(
   bank,
@@ -117,37 +119,45 @@ export function buildQueue(
       (!only || only.has(key)) &&
       !skip.has(q.id) &&
       (!formulaOnly || q.formula) &&
-      !(quickOnly && (q.scratch || q.type === 'ms')) &&
+      !(quickOnly && (q.scratch || q.type === 'ms' || q.group)) &&
       !neverMissed(cards[q.id])
     );
   });
 
   if (weakOnly) {
     const weak = pool.filter((q) => isWeak(cards[q.id]));
-    return shuffle(weak, rng)
-      .sort((a, b) => cards[a.id].due - cards[b.id].due)
-      .slice(0, size);
+    return takeBundles(bundles(shuffle(weak, rng).sort((a, b) => cards[a.id].due - cards[b.id].due)), size);
   }
 
-  const due = [];
+  const dueList = [];
   const unseen = [];
-  const later = [];
+  const laterList = [];
   for (const q of pool) {
     const c = cards[q.id];
     if (!c) unseen.push(q);
-    else if (c.due <= now) due.push(q);
-    else later.push(q);
+    else if (c.due <= now) dueList.push(q);
+    else laterList.push(q);
   }
-  shuffle(due, rng).sort((a, b) => cards[a.id].box - cards[b.id].box);
-  const fresh = orderFresh(unseen, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng });
-  shuffle(later, rng).sort((a, b) => cards[a.id].due - cards[b.id].due);
+  // 閱讀題組：同組、同一類（到期／新題／還沒到期）的題目併成一包，一起出、文章只讀一次；
+  // 組裡有題目到期要複習時，同組還沒做過的題目也接在後面一起出，不必之後再讀一次同一篇
+  const dueGroups = new Set(dueList.filter((q) => q.group).map((q) => q.group));
+  const joining = unseen.filter((q) => dueGroups.has(q.group));
+  const rest = joining.length ? unseen.filter((q) => !dueGroups.has(q.group)) : unseen;
+  // bundles 把同組的題目併到這組第一次出現的位置，也就是到期那題的位置
+  const due = bundles([...shuffle(dueList, rng).sort((a, b) => cards[a.id].box - cards[b.id].box), ...joining]);
+  const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng }));
+  const later = bundles(shuffle(laterList, rng).sort((a, b) => cards[a.id].due - cards[b.id].due));
 
+  // 第 NEW_EVERY、2×NEW_EVERY…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰
   const out = [];
+  let freshCount = 0;
   while (out.length < size && (due.length || fresh.length)) {
-    const [first, other] = out.length % NEW_EVERY === NEW_EVERY - 1 ? [fresh, due] : [due, fresh];
-    out.push((first.length ? first : other).shift());
+    const wantFresh = out.length - freshCount >= (NEW_EVERY - 1) * (freshCount + 1);
+    const pack = (wantFresh ? fresh.length > 0 : !due.length) ? fresh.shift() : due.shift();
+    freshCount += pack.filter((q) => !cards[q.id]).length;
+    out.push(...pack);
   }
-  while (out.length < size && later.length) out.push(later.shift());
+  out.push(...takeBundles(later, size - out.length));
   return out;
 }
 

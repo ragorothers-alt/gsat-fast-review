@@ -2,7 +2,8 @@
 // 題庫格式驗證：node scripts/validate-questions.mjs [--partial] [檔案...]
 // 不帶檔案時檢查 src/data/questions/ 底下全部 JSON。有錯誤時 exit code 1。
 // topic 必須是 src/units.js 列出的單元，且每個單元至少 MIN_PER_UNIT 題。
-// 跨單元綜合的題目必須有 links（結合的 2–3 個同科單元），其他題目不可有。
+// 跨單元綜合的題目必須有 links（結合的 2–3 個同科單元），其他題目不可有；閱讀題組裡的跨單元題可以不寫。
+// 閱讀題組（group + passage）：2–5 題連續排、文章逐字相同，克漏字的空格 __n__ 每格剛好一題。
 // --partial：只檢查格式，不檢查單元題數（用來驗證還沒併入題庫的新題檔，檔名仍須是 <科目>.json）。
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
@@ -21,7 +22,13 @@ const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 // 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
 const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage']);
+// 閱讀題組的文章長度（字元；國文是字數，英文約 6 個字元一個字）與題數
+const PASSAGE = { chinese: { min: 100, max: 800, warn: 650 }, english: { min: 400, max: 2000, warn: 1700 } };
+const PASSAGE_DEFAULT = { min: 80, max: 600, warn: 450 };
+const GROUP_SIZE = { min: 2, max: 5 };
+/** 克漏字的空格：__1__、__2__…，回傳編號 */
+const blanksIn = (text) => [...text.matchAll(/__(\d+)__/g)].map((m) => Number(m[1]));
 
 const args = process.argv.slice(2);
 const partial = args.includes('--partial');
@@ -64,7 +71,9 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
-  const stats = { mc: 0, tf: 0, ms: 0, formula: 0, scratch: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
+  const stats = { mc: 0, tf: 0, ms: 0, formula: 0, scratch: 0, grouped: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
+  /** 題組代號 → 這組的題目（檔案裡的順序） */
+  const groups = new Map();
 
   items.forEach((it, idx) => {
     const tag = it && typeof it.id === 'string' ? it.id : `#${idx}`;
@@ -84,7 +93,10 @@ for (const file of files) {
     else stats.topics.set(it.topic, stats.topics.get(it.topic) + 1);
     if (it.topic === CROSS_UNIT) {
       const links = it.links;
-      if (!Array.isArray(links) || links.length < 2 || links.length > 3) err(`${CROSS_UNIT}的題目要有 links：結合的 2–3 個單元`);
+      // 題組裡的跨單元題考的是整篇的閱讀理解，可以不寫 links
+      if (links === undefined && it.group !== undefined) {
+        // 不寫也可以
+      } else if (!Array.isArray(links) || links.length < 2 || links.length > 3) err(`${CROSS_UNIT}的題目要有 links：結合的 2–3 個單元`);
       else {
         for (const u of links) if (u === CROSS_UNIT || !units.includes(u)) err(`links 的「${u}」不是 ${subject} 的一般單元`);
         if (new Set(links).size !== links.length) err('links 有重複的單元');
@@ -107,8 +119,23 @@ for (const file of files) {
     else checkText(it.explain, 'explain', LIMITS.explain, WARN.explain, err, warn);
     if (it.type === 'ms' && [it.q, it.explain].some((t) => typeof t === 'string' && LETTER_REF.test(t))) err('多選題的選項會被打亂，題幹與解析不可用 (A)(B) 指稱選項');
 
+    if (it.group !== undefined || it.passage !== undefined) {
+      stats.grouped++;
+      if (typeof it.group !== 'string' || !new RegExp(`^${subject}-g\\d{3,4}$`).test(it.group)) err(`group 必須是 "${subject}-g001" 格式`);
+      const lim = PASSAGE[subject] ?? PASSAGE_DEFAULT;
+      checkText(it.passage, 'passage', lim.max, lim.warn, err, warn);
+      if (typeof it.passage === 'string' && it.passage.length < lim.min) err(`passage 太短（${it.passage.length} 字，至少 ${lim.min}）`);
+      if (it.type === 'tf') err('題組的題目不可是是非題');
+      if (it.scratch) err('題組的題目不可標 scratch');
+      if (typeof it.group === 'string') (groups.get(it.group) ?? groups.set(it.group, []).get(it.group)).push(it);
+    }
+    if (it.group === undefined && [it.q, ...(Array.isArray(it.choices) ? it.choices : [])].some((t) => typeof t === 'string' && blanksIn(t).length)) {
+      err('只有題組的題目可以用 __1__ 這種空格代號');
+    }
+
     if (typeof it.q === 'string') {
-      const norm = it.q.replace(/\s+/g, '');
+      // 題組裡的克漏字題幹（「__3__ 處應填入…」）各組都一樣，只在同一組裡比
+      const norm = (it.group ? `${it.group}|` : '') + it.q.replace(/\s+/g, '');
       if (seenQ.has(norm)) err(`題目文字與 ${seenQ.get(norm)} 重複`);
       else seenQ.set(norm, tag);
     }
@@ -148,6 +175,29 @@ for (const file of files) {
     }
   });
 
+  // 題組：題數、文章逐字相同、克漏字的空格依序編號，每格剛好一題、題目照空格順序排
+  for (const [g, members] of groups) {
+    const err = (m) => errors.push(`${g}: ${m}`);
+    if (members.length < GROUP_SIZE.min || members.length > GROUP_SIZE.max) err(`一個題組要有 ${GROUP_SIZE.min}–${GROUP_SIZE.max} 題（現在 ${members.length} 題）`);
+    const passage = members[0].passage;
+    if (typeof passage !== 'string') continue;
+    const differ = members.filter((m) => m.passage !== passage).map((m) => m.id);
+    if (differ.length) err(`同組的 passage 必須逐字相同（${differ.join('、')} 不同）`);
+    const blanks = blanksIn(passage);
+    if (blanks.some((n, i) => n !== i + 1)) err(`文章的空格要從 __1__ 起依序編號（現在是 ${blanks.join('、')}）`);
+    const asked = [];
+    for (const m of members) {
+      const inQ = typeof m.q === 'string' ? blanksIn(m.q) : [];
+      if (inQ.length > 1) err(`${m.id} 的題幹只能有一個空格代號`);
+      if (inQ.length && !blanks.includes(inQ[0])) err(`${m.id} 問的 __${inQ[0]}__ 不在文章裡`);
+      if (inQ.length) asked.push(inQ[0]);
+    }
+    for (const n of blanks) if (asked.filter((x) => x === n).length !== 1) err(`空格 __${n}__ 要剛好有一題（現在 ${asked.filter((x) => x === n).length} 題）`);
+    if (asked.some((n, i) => i && n < asked[i - 1])) err('克漏字的題目要照空格順序排');
+    const pos = members.map((m) => items.indexOf(m));
+    if (pos.some((p, i) => i && p !== pos[i - 1] + 1)) err('同組的題目要連續排在一起');
+  }
+
   if (!partial) {
     for (const [unit, count] of stats.topics) {
       if (count < MIN_PER_UNIT) errors.push(`單元「${unit}」只有 ${count} 題，至少要 ${MIN_PER_UNIT} 題`);
@@ -155,7 +205,7 @@ for (const file of files) {
   }
 
   const n = items.length;
-  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}、公式 ${stats.formula}、演算 ${stats.scratch}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
+  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}、公式 ${stats.formula}、演算 ${stats.scratch}${stats.grouped ? `、題組 ${groups.size} 組 ${stats.grouped} 題` : ''}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
   const topics = [...stats.topics].map(([t, c]) => `${t} ${c}`).join('、');
   if (topics) console.log(`  單元：${topics}`);
   if (warnings.length) {

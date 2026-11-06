@@ -26,7 +26,8 @@ function grams(q) {
 export function relatedQuestions(bank, q, { count = 3, exclude = [] } = {}) {
   const skip = new Set(exclude);
   skip.add(q.id);
-  const unit = bank.filter((c) => c.subject === q.subject && c.topic === q.topic);
+  // 閱讀題組的題目要先讀整篇文章，不拿來當「類似題」（題組的題目答錯時，找的是同單元的單題）
+  const unit = bank.filter((c) => c.subject === q.subject && c.topic === q.topic && (!c.group || c === q));
   const df = new Map();
   for (const c of unit) for (const g of grams(c)) df.set(g, (df.get(g) || 0) + 1);
   const weight = (g) => Math.log((unit.length + 1) / (df.get(g) || 1));

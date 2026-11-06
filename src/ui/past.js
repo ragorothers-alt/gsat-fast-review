@@ -5,7 +5,8 @@ import { SUBJECT_BY_ID } from '../subjects.js';
 import { topicLabel } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
-import { richHTML } from './rich.js';
+import { passageDetails } from './passage.js';
+import { richHTML, stemHTML } from './rich.js';
 import { speakItem, tfLabel, toggleMark } from './review-item.js';
 import { canSpeak, stopSpeaking } from './speech.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
@@ -88,7 +89,7 @@ export function initPast(ctx) {
     // 演算題自己填的答案不是任何一個選項時，選項上標不出來，另外寫一行
     const typed = entry.typed !== undefined && (entry.chosen === null || entry.chosen === undefined) ? `<p class="past-typed">你填的答案：${entry.typed}（不是任何一個選項）</p>` : '';
     card.innerHTML = `<div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${topicLabel(q)}</span>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="0" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${!!stars[q.id]}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${!!flags[q.id]}" aria-label="回報這題有問題">${icon('flag')}</button></div>
-      <div class="r-q">${richHTML(q.q)}</div>
+      ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
       ${typed}<ol class="past-choices ${q.type}">${choices}</ol>
       <div class="explain"><b>${icon('bulb')}解析</b>${richHTML(q.explain)}</div>`;
     $('#past-scroll').scrollTop = 0;

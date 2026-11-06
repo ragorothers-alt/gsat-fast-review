@@ -231,7 +231,7 @@ function flagReport(qs) {
   qs.forEach((q, i) => {
     const subj = SUBJECT_BY_ID[q.subject];
     const answer = q.type === 'tf' ? (q.answer ? '對' : '錯') : q.type === 'ms' ? q.answer.map((k) => q.choices[k]).join('；') : q.choices[q.answer];
-    lines.push('', `${i + 1}. ${q.id}｜${subj.name}・${topicLabel(q)}`, `題目：${q.q}`);
+    lines.push('', `${i + 1}. ${q.id}｜${subj.name}・${topicLabel(q)}${q.group ? `｜題組 ${q.group}` : ''}`, `題目：${q.q}`);
     if (q.type !== 'tf') lines.push(`選項：${q.choices.join(' ／ ')}`);
     lines.push(`目前答案：${answer}`, `解析：${q.explain}`);
   });

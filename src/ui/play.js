@@ -5,6 +5,7 @@ import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
+import { bundles, takeBundles } from '../groups.js';
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
 import { adjustRight, recordAnswer, today } from '../stats.js';
@@ -12,8 +13,9 @@ import { setFlag, setStar } from '../sync.js';
 import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
-import { plainText, richHTML, visibleLength } from './rich.js';
+import { plainText, richHTML, stemHTML, visibleLength } from './rich.js';
 import { sfx } from './feedback.js';
+import { groupPosition, initReadFull, showPassage } from './passage.js';
 import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
 import { topSheet } from './sheet.js';
 
@@ -45,6 +47,7 @@ export function initPlay(ctx) {
     subject: $('#q-subject'),
     topic: $('#q-topic'),
     text: $('#q-text'),
+    passage: $('#q-passage'),
     explain: $('#q-explain'),
     answers: $('#answers'),
     back: $('#back'),
@@ -70,6 +73,7 @@ export function initPlay(ctx) {
     status: $('#answer-status'),
   };
   const byId = ctx.byId;
+  initReadFull();
   // 最近是用鍵盤操作（不是點螢幕）：換題後把焦點放回選項上，不會掉回頁首
   let keyboard = false;
   window.addEventListener('keydown', (e) => (keyboard ||= e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || /^[1-5]$|^Arrow/.test(e.key)), true);
@@ -116,10 +120,10 @@ export function initPlay(ctx) {
     return ids;
   }
 
-  /** 指定的題目（收藏、搜尋結果）：打亂後取一輪的量，被回報的不出 */
+  /** 指定的題目（收藏、搜尋結果）：打亂後取一輪的量，被回報的不出；同一個閱讀題組的排在一起 */
   function pickedQueue(mode, ids) {
     const qs = ids.map((id) => byId.get(id)).filter((x) => x && !ctx.state.flags[x.id]);
-    return shuffle(qs).slice(0, MODES[mode].size);
+    return takeBundles(bundles(shuffle(qs)), MODES[mode].size);
   }
 
   /**
@@ -294,9 +298,16 @@ export function initPlay(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    el.topic.innerHTML = (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) + (q.scratch ? '・演算題' : q.type === 'ms' ? '・多選' : '');
+    const pos = groupPosition(s.queue, s.index);
+    const where = pos ? `題組 ${pos.k}／${pos.n}` : '';
+    // 題組：「題組 2／4」放最前面，單元名稱太長時在後面截斷（卡片一行放得下，留高度給文章）
+    el.topic.innerHTML =
+      (where ? `${where}・` : '') +
+      (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) +
+      (q.scratch ? '・演算題' : q.type === 'ms' ? '・多選' : '');
     useChoices = false;
-    el.text.innerHTML = richHTML(q.q);
+    showPassage(el.passage, q, where);
+    el.text.innerHTML = stemHTML(q);
     el.explain.hidden = true;
     el.next.hidden = true;
     el.msSend.hidden = true;
@@ -479,7 +490,10 @@ export function initPlay(ctx) {
   function fitCard() {
     el.card.scrollTop = 0;
     el.text.classList.remove('compact');
+    el.card.classList.remove('tight');
     if (overflowing()) el.text.classList.add('compact');
+    // 閱讀題組還是放不下：文章框再壓矮（剩兩三行，可以按「展開文章」看全文），題目一定要看得到
+    if (overflowing() && el.card.classList.contains('grouped')) el.card.classList.add('tight');
     updateMore();
   }
   // 模擬考借用同一張題目卡（ui/exam.js）
