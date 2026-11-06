@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PAPER_BY_ID, buildPaper } from '../src/exam.js';
-import { blankOf, bundles, isCloze, keepTogether, takeBundles } from '../src/groups.js';
+import { blankOf, bundles, groupKind, isBank, isCloze, keepTogether, takeBundles, usedOptions } from '../src/groups.js';
 import { orderFresh, unitShares } from '../src/priority.js';
 import { questionPrompt } from '../src/prompt.js';
 import { buildQueue, schedule } from '../src/srs.js';
@@ -26,6 +26,21 @@ function group(subject, g, first, n, { cloze = false, topic = UNITS[subject][0] 
     group: `${subject}-g${g}`,
     passage,
     q: cloze ? `__${i + 1}__ 處最適合填入哪一個選項？` : `第 ${i + 1} 題`,
+  }));
+}
+
+/** 共用選項的題組（文意選填）：4 格共用 6 個字詞 */
+function bankGroup(g, first) {
+  const words = ['retain', 'depend on', 'atmosphere', 'delay', 'minimal', 'risk'];
+  const passage = 'Naps __1__ memory. They __2__ decline. Choose a quiet __3__ with __4__ light.';
+  const answers = [0, 3, 2, 4];
+  return answers.map((answer, i) => ({
+    ...single(`english-${first + i}`, 'english', '核心單字'),
+    group: `english-g${g}`,
+    passage,
+    q: `__${i + 1}__ 處最適合填入哪一個選項？`,
+    choices: words,
+    answer,
   }));
 }
 
@@ -65,6 +80,23 @@ describe('分包', () => {
     expect(blankOf({ ...s1, q: '__1__' })).toBeNull();
     expect(isCloze(cloze[0].passage)).toBe(true);
     expect(isCloze(a.passage)).toBe(false);
+  });
+
+  it('共用選項（文意選填、篇章結構）：題組種類，以及別格已經填掉的選項', () => {
+    const [b1, b2, b3] = bankGroup(821, 8201);
+    expect(isBank(b1)).toBe(true);
+    expect(isBank(a)).toBe(false);
+    expect(isBank({ ...single('math-1', 'math'), choices: ['1', '2', '3', '4', '5'], type: 'ms' })).toBe(false);
+    expect([groupKind(b1), groupKind(a), groupKind(group('english', 802, 8101, 2, { cloze: true })[0])]).toEqual(['bank', 'reading', 'cloze']);
+    // 作答畫面：前面做過的空格（正解已公布）；同組、不是這一格自己、沒作答的不算
+    const filled = [
+      { q: b1, value: b1.answer },
+      { q: b3, value: null },
+      { q: s1, value: 2 },
+    ];
+    expect([...usedOptions(b2, filled)]).toEqual([0]);
+    expect([...usedOptions(b1, filled)]).toEqual([]);
+    expect([...usedOptions(a, filled)]).toEqual([]);
   });
 
   it('題組裡沒寫 links 的跨單元題，單元名稱顯示「閱讀理解」', () => {
@@ -157,12 +189,19 @@ describe('模擬考的題組', () => {
     }
   });
 
-  it('英文卷克漏字與閱讀測驗各一組，克漏字在前', () => {
+  it('英文卷克漏字、共用選項、閱讀測驗各一組，照學測的順序排；共用選項整組固定順序', () => {
+    const banks = Array.from({ length: 2 }, (_, k) => bankGroup(821 + k, 8201 + k * 10));
+    const all = [...bank, ...banks.flat()];
+    const byAll = new Map(all.map((q) => [q.id, q]));
     for (let seed = 1; seed <= 10; seed++) {
-      const { ids } = buildPaper(bank, PAPER_BY_ID.english, { rng: seeded(seed) });
-      const packs = bundles(ids.map((id) => byId.get(id)).filter((q) => q.group));
-      expect(packs.map((p) => isCloze(p[0].passage))).toEqual([true, false]);
+      const { ids, orders } = buildPaper(all, PAPER_BY_ID.english, { rng: seeded(seed) });
+      const qs = ids.map((id) => byAll.get(id));
+      const packs = bundles(qs.filter((q) => q.group));
+      expect(packs.map((p) => groupKind(p[0]))).toEqual(['cloze', 'bank', 'reading']);
       expect(ids).toHaveLength(30);
+      qs.forEach((q, i) => {
+        if (isBank(q)) expect(orders[i]).toEqual(q.choices.map((_, k) => k));
+      });
     }
   });
 
@@ -186,5 +225,12 @@ describe('複製題目給 AI', () => {
     expect(text).toContain('Sentence (1) here. Sentence (2) here. Sentence (3) here.');
     expect(text).toContain('(2) 處最適合填入哪一個選項？');
     expect(text).not.toContain('__');
+  });
+
+  it('共用選項：選項標到 (F)，並說明選項是整組共用的', () => {
+    const [, second] = bankGroup(821, 8201);
+    const text = questionPrompt(second);
+    expect(text).toContain('（這組的 6 個選項是每一格共用的，每個選項最多填一格，有的選項用不到。）');
+    expect(text).toContain('(F) risk');
   });
 });

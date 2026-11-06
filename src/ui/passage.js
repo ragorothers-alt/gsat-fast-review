@@ -1,7 +1,31 @@
 // 閱讀題組的文章框（作答畫面與模擬考共用）：放在題目卡上方、可以自己捲動。
 // 換到新的題組才重畫（同組的下一題保留捲動位置）；克漏字標出這題問的空格，捲到看得見的地方。
-import { blankOf } from '../groups.js';
-import { passageHTML } from './rich.js';
+import { blankOf, isBank } from '../groups.js';
+import { passageHTML, visibleLength } from './rich.js';
+
+/**
+ * 單選題選項區的 class：短選項排兩欄；共用選項（文意選填、篇章結構）的字詞排兩欄、句子排一欄並縮小字級
+ */
+export function choicesClass(q) {
+  if (isBank(q)) return q.choices.every((c) => visibleLength(c) <= 16) ? 'answers mc bank grid-2' : 'answers mc bank sentences';
+  return `answers mc${q.choices.every((c) => visibleLength(c) <= 10) ? ' grid-2' : ''}`;
+}
+
+/**
+ * 共用選項：別的空格已經填掉的選項加上標籤（還是可以選，像在考卷上自己刪去）
+ * @param {HTMLElement} answers 選項區
+ * @param {Set<number>} used 已填的原始選項索引
+ * @param {(button: HTMLElement) => number} origOf 按鈕 → 原始選項索引
+ * @param {'used' | 'picked'} how used：作答畫面，前面的空格（正解已公布）用掉的；picked：模擬考，自己在別格選了的
+ */
+export function markUsed(answers, used, origOf, how = 'used') {
+  const [tag, said] = how === 'used' ? ['已用', '前面的空格已經用了這個'] : ['別格已選', '另一格選了這個'];
+  for (const b of answers.children) {
+    if (!used.has(origOf(b))) continue;
+    b.classList.add('used');
+    b.insertAdjacentHTML('beforeend', `<span class="used-tag" aria-hidden="true">${tag}</span><span class="sr-only">（${said}）</span>`);
+  }
+}
 
 /**
  * @param {HTMLElement} box 文章框（#q-passage）

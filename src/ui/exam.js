@@ -2,6 +2,7 @@
 // 作答時借用作答畫面（#play 加上 .exam）：題目卡、選項、草稿區與橫放版面都一樣，只是不對答案，
 // 可以跳題、標記、回頭改，整卷計時。考到一半的卷存在 state.exam，離開後可以接著考。
 import { PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, logExam, newExam, validExam } from '../exam.js';
+import { usedOptions } from '../groups.js';
 import { questionPrompt } from '../prompt.js';
 import { msNote } from '../session.js';
 import { schedule } from '../srs.js';
@@ -10,8 +11,8 @@ import { SUBJECT_BY_ID } from '../subjects.js';
 import { copyQuestion } from './clipboard.js';
 import { sfx } from './feedback.js';
 import { openKeypointsFrom } from './keypoints.js';
-import { groupPosition, showPassage } from './passage.js';
-import { plainText, richHTML, stemHTML, visibleLength } from './rich.js';
+import { choicesClass, groupPosition, markUsed, showPassage } from './passage.js';
+import { plainText, richHTML, stemHTML } from './rich.js';
 import { mineHTML, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
@@ -203,8 +204,7 @@ export function initExam(ctx) {
   function renderAnswers(q) {
     const order = exam.orders[exam.index];
     const chosen = exam.answers[exam.index];
-    const short = q.type === 'mc' && q.choices.every((c) => visibleLength(c) <= 10);
-    el.answers.className = `answers ${q.type}${short ? ' grid-2' : ''}`;
+    el.answers.className = q.type === 'mc' ? choicesClass(q) : `answers ${q.type}`;
     el.answers.innerHTML = '';
     order.forEach((orig, i) => {
       const btn = document.createElement('button');
@@ -225,6 +225,9 @@ export function initExam(ctx) {
       btn._orig = orig;
       el.answers.append(btn);
     });
+    // 共用選項：同組別的空格自己已經選了的選項標出來（像在考卷上刪去）
+    const filled = exam.ids.map((id, k) => ({ q: byId.get(id), value: exam.answers[k] }));
+    markUsed(el.answers, usedOptions(q, filled), (b) => b._orig, 'picked');
   }
 
   /**

@@ -1,5 +1,5 @@
 // 主要流程：首頁、作答到結算、收藏與搜尋、設定、手機橫放、離線開啟
-import { answerToResult, expect, openHome, skipToResult, startMode, test, waitForBoot } from './fixtures.js';
+import { answerFirst, answerToResult, expect, openHome, roundSize, skipToResult, startMode, test, waitForBoot } from './fixtures.js';
 
 test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await openHome(page);
@@ -12,13 +12,14 @@ test('首頁的「還沒做過」題數作答後減少；「看存量」打開�
   const fresh = async () => Number((await page.locator('#bank-info').textContent()).match(/還沒做過 (\d+)／/)[1]);
   const before = await fresh();
   await startMode(page, 'ten');
+  const size = await roundSize(page);
   await skipToResult(page);
   await page.locator('#r-home').click();
-  expect(await fresh()).toBe(before - 10);
+  expect(await fresh()).toBe(before - size);
 
   await page.locator('#open-stock').click();
   await expect(page.locator('#stats-stock')).toBeInViewport();
-  await expect(page.locator('#stock-text')).toContainText(`還有 ${(before - 10).toLocaleString('zh-TW')} 題沒做過`);
+  await expect(page.locator('#stock-text')).toContainText(`還有 ${(before - size).toLocaleString('zh-TW')} 題沒做過`);
   // 展開一科看各單元還剩幾題
   await page.locator('#stock-subjects summary').first().click();
   await expect(page.locator('#stock-subjects details[open] .stock-unit').first()).toContainText(/剩 \d+／\d+/);
@@ -27,18 +28,23 @@ test('首頁的「還沒做過」題數作答後減少；「看存量」打開�
 test('10 題一輪：作答到結算，算進今日進度', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'ten');
-  await expect(page.locator('#play-progress')).toHaveText('1 / 10');
+  // 最後一包是題組時整組出完，一輪最多多出一組（共用選項的題組 7 題以內）
+  const size = await roundSize(page);
+  expect(size).toBeGreaterThanOrEqual(10);
+  expect(size).toBeLessThanOrEqual(16);
+  await expect(page.locator('#play-progress')).toHaveText(`1 / ${size}`);
   await answerToResult(page);
   await expect(page.locator('#r-mode')).toHaveText('10 題一輪');
   await page.locator('#r-home').click();
-  await expect(page.locator('#daily-count')).toHaveText('10');
+  await expect(page.locator('#daily-count')).toHaveText(String(size));
 });
 
 test('只看解答不作答：結算列出全部題目，但不算進今日題數', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'ten');
+  const size = await roundSize(page);
   await skipToResult(page);
-  await expect(page.locator('#r-list .r-item')).toHaveCount(10);
+  await expect(page.locator('#r-list .r-item')).toHaveCount(size);
   await page.locator('#r-home').click();
   await expect(page.locator('#daily-count')).toHaveText('0');
 });
@@ -64,11 +70,12 @@ test('作答時回看上一題：當時的選項順序、正解與解析，看�
   await page.locator('#next').click();
 
   const q2 = await page.locator('#q-text').textContent();
-  await page.locator('#answers .answer').first().click();
-  await expect(page.locator('#next')).toBeVisible();
+  const size = await roundSize(page);
+  await answerFirst(page);
   // 答對會自己換題，按「繼續」時可能已經換過了，所以不用 locator.click 等按鈕
-  await page.evaluate(() => document.querySelector('#next').click());
-  await expect(page.locator('#play-progress')).toHaveText('3 / 10');
+  await page.waitForFunction(() => !document.querySelector('#next').hidden || document.querySelector('#play-progress').textContent.startsWith('3 '));
+  await page.evaluate(() => document.querySelector('#next').hidden || document.querySelector('#next').click());
+  await expect(page.locator('#play-progress')).toHaveText(`3 / ${size}`);
   const q3 = await page.locator('#q-text').textContent();
 
   await page.locator('#back').click();

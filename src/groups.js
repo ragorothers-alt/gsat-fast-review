@@ -54,3 +54,27 @@ export function blankOf(q) {
 
 /** 文章裡有沒有克漏字的空格 */
 export const isCloze = (passage) => /__\d+__/.test(passage);
+
+/**
+ * 共用選項的題組（英文文意選填、篇章結構）：同組每一格的選項都是同一組 5–8 個字詞或句子，
+ * 每個選項最多填一格。選項不打亂（整組固定順序，像試卷上的 (A)–(H)），已經填過的選項會標出來。
+ */
+export const isBank = (q) => !!q.group && q.type === 'mc' && Array.isArray(q.choices) && q.choices.length > 4;
+
+/** 題組的種類：克漏字（每格各自四個選項）、共用選項（文意選填、篇章結構）、閱讀（沒有空格） */
+export function groupKind(q) {
+  if (isBank(q)) return 'bank';
+  return isCloze(q.passage) ? 'cloze' : 'reading';
+}
+
+/**
+ * 共用選項的題組裡，這一格以外已經填掉的選項（原始選項索引）
+ * @param {object} q 這一格
+ * @param {{ q: object, value: number | null }[]} filled 同一輪做過的題目與填的選項（作答畫面是正解，模擬考是自己選的）
+ */
+export function usedOptions(q, filled) {
+  const used = new Set();
+  if (!isBank(q)) return used;
+  for (const { q: other, value } of filled) if (other.group === q.group && other.id !== q.id && Number.isInteger(value)) used.add(value);
+  return used;
+}

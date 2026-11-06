@@ -26,7 +26,9 @@ const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer'
 // 閱讀題組的文章長度（字元；國文是字數，英文約 6 個字元一個字）與題數
 const PASSAGE = { chinese: { min: 100, max: 800, warn: 650 }, english: { min: 400, max: 2000, warn: 1700 } };
 const PASSAGE_DEFAULT = { min: 80, max: 600, warn: 450 };
-const GROUP_SIZE = { min: 2, max: 5 };
+const GROUP_SIZE = { min: 2, max: 5, bank: 7 };
+/** 共用選項的題組（文意選填、篇章結構）：最多 8 個選項（數字鍵 1–8），篇章結構的句子選項可以長一點 */
+const BANK = { max: 8, choice: 120 };
 /** 克漏字的空格：__1__、__2__…，回傳編號 */
 const blanksIn = (text) => [...text.matchAll(/__(\d+)__/g)].map((m) => Number(m[1]));
 
@@ -142,16 +144,20 @@ for (const file of files) {
 
     if (it.type === 'mc') {
       stats.mc++;
-      if (!Array.isArray(it.choices) || it.choices.length !== 4) err('mc 題必須剛好 4 個選項');
+      // 共用選項的題組（文意選填、篇章結構）：5–8 個選項，整組共用
+      const bank = it.group !== undefined && Array.isArray(it.choices) && it.choices.length > 4;
+      const n = bank ? it.choices.length : 4;
+      if (bank && n > BANK.max) err(`共用選項最多 ${BANK.max} 個`);
+      if (!Array.isArray(it.choices) || (!bank && it.choices.length !== 4)) err('mc 題必須剛好 4 個選項（題組共用選項時 5–8 個）');
       else {
         it.choices.forEach((c, i) => {
-          checkText(c, `choices[${i}]`, LIMITS.choice, Infinity, err, warn);
+          checkText(c, `choices[${i}]`, bank ? BANK.choice : LIMITS.choice, Infinity, err, warn);
           if (typeof c === 'string' && BANNED_CHOICES.test(c)) err(`choices[${i}] 不可用「以上皆是／皆非」類選項（選項會被打亂）`);
         });
         const norm = it.choices.map((c) => String(c).replace(/\s+/g, ''));
         if (new Set(norm).size !== norm.length) err('選項有重複');
       }
-      if (!Number.isInteger(it.answer) || it.answer < 0 || it.answer > 3) err('mc 題 answer 必須是 0–3 的整數');
+      if (!Number.isInteger(it.answer) || it.answer < 0 || it.answer >= n) err(`mc 題 answer 必須是 0–${n - 1} 的整數`);
     } else if (it.type === 'ms') {
       stats.ms++;
       if (!Array.isArray(it.choices) || it.choices.length !== 5) err('ms 題必須剛好 5 個選項');
@@ -178,7 +184,8 @@ for (const file of files) {
   // 題組：題數、文章逐字相同、克漏字的空格依序編號，每格剛好一題、題目照空格順序排
   for (const [g, members] of groups) {
     const err = (m) => errors.push(`${g}: ${m}`);
-    if (members.length < GROUP_SIZE.min || members.length > GROUP_SIZE.max) err(`一個題組要有 ${GROUP_SIZE.min}–${GROUP_SIZE.max} 題（現在 ${members.length} 題）`);
+    const max = members.some((m) => Array.isArray(m.choices) && m.choices.length > 4 && m.type === 'mc') ? GROUP_SIZE.bank : GROUP_SIZE.max;
+    if (members.length < GROUP_SIZE.min || members.length > max) err(`一個題組要有 ${GROUP_SIZE.min}–${max} 題（現在 ${members.length} 題）`);
     const passage = members[0].passage;
     if (typeof passage !== 'string') continue;
     const differ = members.filter((m) => m.passage !== passage).map((m) => m.id);
@@ -190,10 +197,24 @@ for (const file of files) {
       const inQ = typeof m.q === 'string' ? blanksIn(m.q) : [];
       if (inQ.length > 1) err(`${m.id} 的題幹只能有一個空格代號`);
       if (inQ.length && !blanks.includes(inQ[0])) err(`${m.id} 問的 __${inQ[0]}__ 不在文章裡`);
+      // 空格題的題幹固定一句中文（英文題組也一樣），不同出題輪次才不會中英混雜
+      if (inQ.length === 1 && !/^__\d+__ 處最適合填入哪一個(選項|句子)？$/.test(m.q)) err(`${m.id} 的題幹要寫成「__${inQ[0]}__ 處最適合填入哪一個選項？」（篇章結構寫「句子」）`);
       if (inQ.length) asked.push(inQ[0]);
     }
     for (const n of blanks) if (asked.filter((x) => x === n).length !== 1) err(`空格 __${n}__ 要剛好有一題（現在 ${asked.filter((x) => x === n).length} 題）`);
     if (asked.some((n, i) => i && n < asked[i - 1])) err('克漏字的題目要照空格順序排');
+    // 共用選項：每一題的選項逐字相同、每題都問一個空格、每個選項最多是一格的答案，而且至少多一個用不到的選項（最後一格才不會用刪去法直接得分）
+    const banks = members.filter((m) => m.type === 'mc' && Array.isArray(m.choices) && m.choices.length > 4);
+    if (banks.length) {
+      const shared = JSON.stringify(members[0].choices);
+      if (banks.length !== members.length || members.some((m) => JSON.stringify(m.choices) !== shared)) err('共用選項的題組，每一題的 choices 都要逐字相同');
+      if (members.some((m) => !blanksIn(m.q ?? '').length)) err('共用選項的題組，每一題都要問一個空格');
+      const answers = members.map((m) => m.answer);
+      if (new Set(answers).size !== answers.length) err('共用選項的題組，每個選項最多是一格的答案');
+      if (members[0].choices.length - members.length < 1) err(`共用選項要比空格多至少 1 個（現在 ${members[0].choices.length} 個選項、${members.length} 格）`);
+      // 選項照空格順序排（第 1 格答 A、第 2 格答 B…）就猜得到
+      if (answers.every((a, i) => !i || a > answers[i - 1])) err('共用選項的答案不可以照空格順序遞增，選項要打散');
+    }
     const pos = members.map((m) => items.indexOf(m));
     if (pos.some((p, i) => i && p !== pos[i - 1] + 1)) err('同組的題目要連續排在一起');
   }

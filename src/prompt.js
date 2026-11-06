@@ -1,8 +1,10 @@
 // 把一題整理成可以直接貼給 ChatGPT 等 AI 家教的文字。純邏輯，方便測試。
+import { isBank } from './groups.js';
 import { SUBJECT_BY_ID } from './subjects.js';
 import { topicLabel } from './units.js';
 
-const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+// 共用選項的題組（文意選填、篇章結構）最多 8 個選項
+const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 const KIND = { tf: '是非題', mc: '單選題', ms: '多選題' };
 /** 克漏字的空格 __3__ → (3)：貼給 AI 時不會被當成 Markdown 的粗體 */
 const blanks = (text) => text.replace(/__(\d+)__/g, '($1)');
@@ -26,6 +28,7 @@ export function questionPrompt(q, { order = q.choices?.map((_, i) => i) ?? [], o
   const lines = [`這是一題台灣學測（${subject}・${topicLabel(q)}）的${KIND[q.type]}${q.type === 'ms' ? '（選出所有正確的選項）' : ''}：`, ''];
   // 閱讀題組：先附上整篇文章（克漏字的空格 __3__ 寫成 (3)），題目才看得懂
   if (q.group) lines.push(`閱讀下文，回答問題${/__\d+__/.test(q.passage) ? '（文中的 (1)、(2)… 是空格）' : ''}：`, blanks(q.passage), '');
+  if (isBank(q)) lines.push(`（這組的 ${q.choices.length} 個選項是每一格共用的，每個選項最多填一格，有的選項用不到。）`);
   if (q.type === 'tf') lines.push(`判斷下列敘述是否正確：${q.q}`);
   else if (q.group) lines.push(blanks(q.q), ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
   else lines.push(q.q, ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));

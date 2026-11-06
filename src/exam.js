@@ -1,6 +1,6 @@
 // 模擬考：依 111–115 學測各單元的出題占比抽一份卷，整卷計時，交卷後才對答案。純邏輯，不碰 DOM。
 import { SUBJECT_ITEMS, UNIT_SHARE } from './blueprint.js';
-import { bundles, isCloze } from './groups.js';
+import { bundles, groupKind, isBank } from './groups.js';
 import { isCorrect, msScore } from './session.js';
 import { shuffle } from './srs.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
@@ -14,7 +14,7 @@ export { UNIT_SHARE };
  */
 export const PAPERS = [
   { id: 'chinese', name: '國文', subjects: ['chinese'], size: 30, minutes: 31, groups: 3 },
-  { id: 'english', name: '英文', subjects: ['english'], size: 30, minutes: 24, groups: 2 },
+  { id: 'english', name: '英文', subjects: ['english'], size: 30, minutes: 27, groups: 3 },
   { id: 'math', name: '數學', subjects: ['math'], size: 25, minutes: 30 },
   { id: 'science', name: '自然', subjects: ['physics', 'chemistry', 'biology', 'earth'], size: 40, minutes: 40 },
   { id: 'social', name: '社會', subjects: ['history', 'geography', 'civics'], size: 40, minutes: 30 },
@@ -58,20 +58,23 @@ export function paperWeights(paper, excludedUnits = []) {
   return weights;
 }
 
+/** 題組在考卷上的順序：學測英文先考綜合測驗（克漏字），再文意選填、篇章結構（共用選項），最後閱讀測驗 */
+const KIND_ORDER = ['cloze', 'bank', 'reading'];
+
 /**
- * 抽 count 組閱讀題組：有克漏字也有閱讀測驗時輪流抽，克漏字排前面（學測英文先考綜合測驗、最後才是閱讀測驗）。
+ * 抽 count 組閱讀題組：克漏字、共用選項、閱讀測驗輪流抽，再照學測的順序排。
  * 組裡有題目被回報或單元被關掉時只出剩下的，剩不到 2 題的整組不出。
  */
 function pickGroups(questions, count, rng) {
   if (!count) return [];
   const packs = shuffle(bundles(questions).filter((p) => p.length >= 2), rng);
-  const lists = [packs.filter((p) => isCloze(p[0].passage)), packs.filter((p) => !isCloze(p[0].passage))].filter((l) => l.length);
+  const lists = KIND_ORDER.map((k) => packs.filter((p) => groupKind(p[0]) === k)).filter((l) => l.length);
   const out = [];
   for (let i = 0; out.length < count && lists.some((l) => l.length); i++) {
     const list = lists[i % lists.length];
     if (list.length) out.push(list.shift());
   }
-  return out.sort((a, b) => isCloze(b[0].passage) - isCloze(a[0].passage));
+  return out.sort((a, b) => KIND_ORDER.indexOf(groupKind(a[0])) - KIND_ORDER.indexOf(groupKind(b[0])));
 }
 
 /**
@@ -114,7 +117,9 @@ export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = 
   }
   picked.push(...shuffle(spare, rng).slice(0, Math.max(0, paper.size - grouped - picked.length)));
   const ordered = paper.subjects.flatMap((s) => [...shuffle(picked.filter((q) => q.subject === s), rng), ...groups.filter((p) => p[0].subject === s).flat()]);
-  return { ids: ordered.map((q) => q.id), orders: ordered.map((q) => shuffle(q.choices.map((_, i) => i), rng)) };
+  // 共用選項（文意選填、篇章結構）整組固定順序，像試卷上的 (A)–(H)
+  const orderOf = (q) => (isBank(q) ? q.choices.map((_, i) => i) : shuffle(q.choices.map((_, i) => i), rng));
+  return { ids: ordered.map((q) => q.id), orders: ordered.map(orderOf) };
 }
 
 /** 開考：作答（原始選項索引；多選題是選了的索引、由小到大；沒作答是 null）、標記稍後回看、每題花的秒數都從空白開始 */

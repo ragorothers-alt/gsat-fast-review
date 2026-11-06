@@ -5,7 +5,7 @@ import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
-import { bundles, takeBundles } from '../groups.js';
+import { bundles, isBank, takeBundles, usedOptions } from '../groups.js';
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
 import { adjustRight, recordAnswer, today } from '../stats.js';
@@ -13,9 +13,9 @@ import { setFlag, setStar } from '../sync.js';
 import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
-import { plainText, richHTML, stemHTML, visibleLength } from './rich.js';
+import { plainText, richHTML, stemHTML } from './rich.js';
 import { sfx } from './feedback.js';
-import { groupPosition, initReadFull, showPassage } from './passage.js';
+import { choicesClass, groupPosition, initReadFull, markUsed, showPassage } from './passage.js';
 import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
 import { topSheet } from './sheet.js';
 
@@ -76,7 +76,7 @@ export function initPlay(ctx) {
   initReadFull();
   // 最近是用鍵盤操作（不是點螢幕）：換題後把焦點放回選項上，不會掉回頁首
   let keyboard = false;
-  window.addEventListener('keydown', (e) => (keyboard ||= e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || /^[1-5]$|^Arrow/.test(e.key)), true);
+  window.addEventListener('keydown', (e) => (keyboard ||= e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || /^[1-9]$|^Arrow/.test(e.key)), true);
   window.addEventListener('pointerdown', () => (keyboard = false), true);
 
   let s = null;
@@ -344,7 +344,8 @@ export function initPlay(ctx) {
       el.answers.append(answerButton(`${icon('ng')}錯`, false, '←', true), answerButton(`${icon('ok')}對`, true, '→', true));
       return;
     }
-    order = shuffle(q.choices.map((_, i) => i));
+    // 共用選項（文意選填、篇章結構）整組固定順序，換格時選項不會跑位置
+    order = isBank(q) ? q.choices.map((_, i) => i) : shuffle(q.choices.map((_, i) => i));
     if (q.type === 'ms') return renderMulti();
     if (fillable(q) && !useChoices) return renderFill();
     renderChoices();
@@ -352,9 +353,11 @@ export function initPlay(ctx) {
 
   function renderChoices() {
     el.answers.innerHTML = '';
-    const short = q.choices.every((c) => visibleLength(c) <= 10);
-    el.answers.className = `answers mc${short ? ' grid-2' : ''}`;
+    el.answers.className = choicesClass(q);
     order.forEach((orig, i) => el.answers.append(answerButton(richHTML(q.choices[orig]), i, String(i + 1), true)));
+    // 共用選項：這一輪前面的空格作答後已經公布正解，那些選項標「已用」
+    const filled = s.log.map((e) => ({ q: byId.get(e.id), value: byId.get(e.id)?.answer }));
+    markUsed(el.answers, usedOptions(q, filled), (b) => order[b._value]);
   }
 
   // ── 多選題：點選項切換要不要選，選好按底下的「送出」 ───────────────
@@ -495,6 +498,24 @@ export function initPlay(ctx) {
     // 閱讀題組還是放不下：文章框再壓矮（剩兩三行，可以按「展開文章」看全文），題目一定要看得到
     if (overflowing() && el.card.classList.contains('grouped')) el.card.classList.add('tight');
     updateMore();
+    el.answers.scrollTop = 0;
+    updateAnswersMore();
+  }
+
+  // 篇章結構的長句選項在矮螢幕上自己捲動：下面還有選項時底部淡出
+  function updateAnswersMore() {
+    const a = el.answers;
+    a.classList.toggle('more-below', a.scrollHeight - a.clientHeight - a.scrollTop > 4);
+  }
+
+  /** 選項區會捲動時，把這個選項捲進看得到的地方（作答後的正解） */
+  function showAnswer(b) {
+    const a = el.answers;
+    if (!b || a.scrollHeight <= a.clientHeight) return;
+    const box = a.getBoundingClientRect();
+    const r = b.getBoundingClientRect();
+    if (r.top < box.top) a.scrollTop -= box.top - r.top + 8;
+    else if (r.bottom > box.bottom) a.scrollTop += r.bottom - box.bottom + 8;
   }
   // 模擬考借用同一張題目卡（ui/exam.js）
   ctx.fitCard = fitCard;
@@ -504,8 +525,12 @@ export function initPlay(ctx) {
   }
 
   el.card.addEventListener('scroll', updateMore, { passive: true });
+  el.answers.addEventListener('scroll', updateAnswersMore, { passive: true });
   window.addEventListener('resize', () => {
-    if (q && !$('#play').hidden) updateMore();
+    if (q && !$('#play').hidden) {
+      updateMore();
+      updateAnswersMore();
+    }
   });
   el.more.addEventListener('click', () => el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: 'smooth' }));
 
@@ -594,6 +619,7 @@ export function initPlay(ctx) {
           b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（${typed === null ? '你選的' : '你填的'}）</span>`);
         } else b.classList.add('dim');
       }
+      showAnswer(buttonFor(correctValue));
       const said = plainText(buttonFor(correctValue)).replace(/（正解）$/, '');
       const mine = typed !== null && outcome === 'wrong' ? `你填 ${typed}，` : '';
       el.status.textContent = outcome === 'right' ? '答對！' : `${outcome === 'wrong' ? '答錯。' : ''}${mine}正解是：${said}`;
@@ -909,7 +935,8 @@ export function initPlay(ctx) {
       } else if (e.key === '?' || e.key === '0') el.skip.click();
       return;
     }
-    if (q.type === 'mc' && /^[1-4]$/.test(e.key)) choose(Number(e.key) - 1);
+    // 單選題 1–4；共用選項最多 8 個，按 1–8
+    if (q.type === 'mc' && /^[1-9]$/.test(e.key) && Number(e.key) <= q.choices.length) choose(Number(e.key) - 1);
     else if (q.type === 'tf' && e.key === 'ArrowLeft') choose(false);
     else if (q.type === 'tf' && e.key === 'ArrowRight') choose(true);
     else if (e.key === '?' || e.key === '0') el.skip.click();

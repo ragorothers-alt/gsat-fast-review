@@ -4,6 +4,9 @@ import { audit, expect, openHome, test } from './fixtures.js';
 // 英文克漏字（一篇 5 個空格）與國文現代文題組
 const CLOZE = { group: 'english-g001', size: 5 };
 const READING = { group: 'chinese-g001' };
+// 文意選填（6 格共用 8 個字詞）與篇章結構（4 格共用 5 個句子）
+const BANK = { group: 'english-g061', size: 6 };
+const STRUCT = { group: 'english-g081', size: 4 };
 
 /** 從錯題本搜尋題組代號，練這一組 */
 async function practiceGroup(page, group, size) {
@@ -98,10 +101,47 @@ test('國文題組：回看上一題時文章收在可以展開的區塊', async
   await expect(page.locator('#q-topic')).toContainText('題組 2／');
 });
 
+test('文意選填：8 個共用選項不打亂、排兩欄；前面的空格用掉的選項標「已用」', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await practiceGroup(page, BANK.group, BANK.size);
+  const options = page.locator('#answers .answer .answer-text');
+  await expect(page.locator('#answers')).toHaveClass(/bank/);
+  await expect(options).toHaveCount(8);
+  const first = await options.allTextContents();
+  await expect(page.locator('#answers .used-tag')).toHaveCount(0);
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await audit(page, `文意選填（${scheme}）`);
+  }
+
+  // 看解答：第 1 格的正解公布了，下一格同樣的 8 個選項、同樣的順序，那一個標「已用」（還是可以按）
+  await page.locator('#skip').click();
+  const answer1 = (await page.locator('#answers .answer.correct .answer-text').textContent()).trim();
+  await page.locator('#next').click();
+  await expect(page.locator('#q-topic')).toContainText(`題組 2／${BANK.size}`);
+  expect(await options.allTextContents()).toEqual(first);
+  await expect(page.locator('#answers .answer.used')).toHaveCount(1);
+  await expect(page.locator('#answers .answer.used .answer-text')).toHaveText(answer1);
+  await expect(page.locator('#answers .answer.used')).toBeEnabled();
+  await audit(page, '文意選填：已用的選項');
+  // 鍵盤：8 個選項按 1–8
+  await page.keyboard.press('8');
+  await expect(page.locator('#answers .answer.correct')).toHaveCount(1);
+});
+
+test('篇章結構：5 個句子選項排一欄、字小一級', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await practiceGroup(page, STRUCT.group, STRUCT.size);
+  await expect(page.locator('#answers')).toHaveClass(/sentences/);
+  await expect(page.locator('#answers .answer')).toHaveCount(5);
+  await audit(page, '篇章結構');
+});
+
 test('模擬考：國文卷、英文卷標出含幾組閱讀題組', async ({ page }) => {
   await openHome(page);
   await page.locator('#open-exam').click();
-  await expect(page.locator('li:has([data-paper="english"]) .exam-paper-meta')).toContainText('含 2 組閱讀題組');
+  await expect(page.locator('li:has([data-paper="english"]) .exam-paper-meta')).toContainText('含 3 組閱讀題組');
   await expect(page.locator('li:has([data-paper="chinese"]) .exam-paper-meta')).toContainText('含 3 組閱讀題組');
   await expect(page.locator('li:has([data-paper="math"]) .exam-paper-meta')).not.toContainText('題組');
 });

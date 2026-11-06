@@ -64,14 +64,24 @@ export async function skipToResult(page, max = 30) {
   await expect(page.locator('#result')).toBeVisible();
 }
 
-/** 每題都點第一個選項作答（演算題改用選項作答、多選題選一個就送出；答錯就按「繼續」），直到結算 */
+/** 這一輪的總題數（「1 / 11」→ 11）：題組不拆開，最後一組放不下也整組出，所以一輪可能比 10 題多 */
+export async function roundSize(page) {
+  return Number((await page.locator('#play-progress').textContent()).split('/')[1]);
+}
+
+/** 作答這一題：點第一個選項（演算題改用選項作答、多選題選一個就送出） */
+export async function answerFirst(page) {
+  if (await page.locator('#answers .fill-switch').isVisible()) await page.locator('#answers .fill-switch').click();
+  await page.locator('#answers .answer').first().click();
+  if (await page.locator('#ms-send').isVisible()) await page.locator('#ms-send').click();
+}
+
+/** 每題都點第一個選項作答（答錯就按「繼續」），直到結算 */
 export async function answerToResult(page, max = 30) {
   for (let i = 0; i < max; i++) {
     if (await page.locator('#result').isVisible()) return;
     const progress = await page.locator('#play-progress').textContent();
-    if (await page.locator('#answers .fill-switch').isVisible()) await page.locator('#answers .fill-switch').click();
-    await page.locator('#answers .answer').first().click();
-    if (await page.locator('#ms-send').isVisible()) await page.locator('#ms-send').click();
+    await answerFirst(page);
     // 答對會自己換下一題；答錯或要看解析時等「繼續」出現
     await page.waitForFunction(
       (p) => !document.querySelector('#next').hidden || document.querySelector('#play').hidden || document.querySelector('#play-progress').textContent !== p,

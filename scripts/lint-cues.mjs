@@ -122,9 +122,13 @@ export function msAbsoluteGiveaway(q) {
   return abs.length >= 2 && abs.every((i) => !q.answer.includes(i));
 }
 
+/** 共用選項的題組（文意選填、篇章結構）：整組共用 5–8 個選項，選項長度、絕對詞的統計對它沒有意義，不列入 */
+const sharedChoices = (q) => q.type === 'mc' && q.choices.length > 4;
+
 /** 一題觸發了哪些線索 */
 export function cuesOf(q) {
   const cues = [];
+  if (sharedChoices(q)) return cues;
   if (q.type === 'ms') {
     if (msAbsoluteGiveaway(q)) cues.push('ms-absolute');
   } else if (q.type === 'mc') {
@@ -144,6 +148,7 @@ export function cuesOf(q) {
 export function measure(bank) {
   const by = {};
   for (const q of bank) {
+    if (sharedChoices(q)) continue;
     const m = (by[q.subject] ||= { mc: 0, lenN: 0, lenHit: 0, numN: 0, numMid: 0, absHit: 0, tfN: 0, toneHit: 0, msAbsN: 0, msAbsHit: 0, msLenN: 0, msLenHit: 0, explain: [] });
     if (q.type === 'ms') {
       q.choices.forEach((c, i) => {
