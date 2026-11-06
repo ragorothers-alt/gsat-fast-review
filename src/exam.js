@@ -1,10 +1,14 @@
 // 模擬考：依 111–115 學測各單元的出題占比抽一份卷，整卷計時，交卷後才對答案。純邏輯，不碰 DOM。
+import { SUBJECT_ITEMS, UNIT_SHARE } from './blueprint.js';
+import { isCorrect, msScore } from './session.js';
 import { shuffle } from './srs.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
 
+export { UNIT_SHARE };
+
 /**
  * 學測的五張考卷。題庫的題目比學測短（免紙筆、單題），題數和時間也照比例縮小：
- * 平均每題國文 50 秒、英文 40 秒、數學 72 秒、自然 60 秒、社會 45 秒。只出單選題（學測沒有是非題）
+ * 平均每題國文 50 秒、英文 40 秒、數學 72 秒、自然 60 秒、社會 45 秒。出單選與多選題（學測沒有是非題）
  */
 export const PAPERS = [
   { id: 'chinese', name: '國文', subjects: ['chinese'], size: 30, minutes: 25 },
@@ -15,25 +19,8 @@ export const PAPERS = [
 ];
 export const PAPER_BY_ID = Object.fromEntries(PAPERS.map((p) => [p.id, p]));
 
-/** 合科試卷裡各科的比重：111–115 學測逐題分析時各科的小題數（docs/exam-analysis.md） */
-const SUBJECT_ITEMS = { physics: 94, chemistry: 81, biology: 87, earth: 79, history: 109, geography: 109, civics: 116 };
-
-/**
- * 各單元在 111–115 學測的出題占比（%），由 docs/exam-analysis.md 的逐題分析算出：
- * 一題結合幾個單元就平均分給它們；數學含數 A、數 B 兩卷。沒列到的單元（占比 0）不出
- */
-export const UNIT_SHARE = {
-  chinese: { 字音字形: 5, 成語與詞語運用: 3, 文言字詞: 3, 修辭: 7, 核心古文: 12, 論孟選讀: 4, 詩詞曲: 8, 文學常識: 2, 應用文與語文常識: 6, 跨單元綜合: 52 },
-  english: { 核心單字: 14, 進階單字: 21, 片語與搭配詞: 14, 詞性與構詞: 4, 時態與語態: 4, 子句與連接詞: 2, '不定詞、動名詞與分詞': 2, 假設語氣與特殊句構: 1, 轉折語與篇章: 36, 跨單元綜合: 2 },
-  math: { 數與式: 6, 多項式函數: 9, 直線與圓: 12, 數列與級數: 7, 排列組合: 6, 機率: 8, 數據分析: 5, 三角比: 9, 三角函數: 5, 指數與對數: 7, 平面向量: 6, 空間向量與平面直線: 9, 矩陣: 6, '數B 專屬主題': 6 },
-  physics: { 科學方法與單位: 10, 牛頓運動定律: 8, 克卜勒定律與萬有引力: 2, 基本交互作用: 4, 電與磁: 13, 波動與光: 22, 能量與能量守恆: 20, 質能互換與核能: 5, 量子現象: 7, 探究與實作: 7, 跨單元綜合: 2 },
-  chemistry: { 物質的分類與組成: 9, 原子結構與同位素: 4, 週期表與元素性質: 2, 化學鍵與分子: 12, 莫耳與化學計量: 18, 化學反應與能量: 11, 溶液與溶解度: 9, '酸鹼與 pH': 8, 氧化還原: 7, 化學與能源及生活: 8, 探究與實作: 8, 跨單元綜合: 3 },
-  biology: { 細胞構造與功能: 17, 細胞與能量: 7, 細胞分裂: 6, 孟德爾遺傳: 8, 'DNA 與生物技術': 20, 演化: 17, 生物多樣性與分類: 8, 生態: 5, 探究與實作: 11, 跨單元綜合: 1 },
-  earth: { 宇宙與恆星: 8, 太陽系與天文現象: 16, 地球構造與板塊: 8, 岩石與地質作用: 13, 大氣與天氣: 22, 海洋: 17, 氣候變遷: 10, 天然災害與防災: 4, 探究與實作: 2, 跨單元綜合: 1 },
-  history: { 史料與歷史解釋: 8, 臺灣史前與原住民族: 2, 荷西與鄭氏時期: 2, 清領臺灣: 10, 日治臺灣: 11, 戰後臺灣: 4, 中國與東亞的國家與社會: 15, 東亞的交流與近代化: 12, 東亞的戰爭與冷戰: 3, 古代與中古世界: 9, 近代世界的變革: 10, 帝國主義與世界大戰: 11, 戰後世界: 2 },
-  geography: { 地理技能: 15, 地形: 9, 氣候與水文: 8, 人口: 8, 聚落與都市: 6, 產業與經濟活動: 21, 全球化與環境議題: 12, 區域地理: 21 },
-  civics: { 公民身分與人權: 17, 社會與文化: 18, 民主政治與參與: 9, 政府與憲政: 12, 民法與生活: 6, 刑法與行政法: 11, 市場與價格: 16, 市場失靈與政府: 3, 國民所得與國際貿易: 8 },
-};
+/** 各張考卷裡多選題約占幾成（111–115 學測的選擇題裡多選的比例）；題庫的多選題不夠時用單選補 */
+export const MS_SHARE = { chinese: 0.2, math: 0.3, science: 0.4 };
 
 /**
  * 把 n 題依權重分給各項（最大餘數法）：先給整數部分，剩下的依小數部分由大到小補一題
@@ -70,7 +57,8 @@ export function paperWeights(paper, excludedUnits = []) {
 }
 
 /**
- * 抽一份考卷：各單元依占比分配題數，單元裡隨機抽單選題；單元題目不夠時從同一張卷的其他單元補。
+ * 抽一份考卷：各單元依占比分配題數，每個單元的配額裡約 MS_SHARE 出多選題、其餘出單選題；
+ * 單元題目不夠時從同一張卷的其他單元補。
  * 題目照科目排（合科試卷先物理再化學…），同一科裡打亂；每題的選項順序也先打亂、整場固定。
  * @param {object[]} bank
  * @param {{ excludedUnits?: string[], flags?: Record<string, unknown>, rng?: () => number }} [opts] 被回報的題目不出
@@ -79,24 +67,32 @@ export function paperWeights(paper, excludedUnits = []) {
 export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = Math.random } = {}) {
   const off = new Set(excludedUnits);
   const counts = allocate(paperWeights(paper, excludedUnits), paper.size);
-  const pools = new Map(Object.keys(counts).map((k) => [k, []]));
+  const share = MS_SHARE[paper.id] ?? 0;
+  const pools = new Map(Object.keys(counts).map((k) => [k, { mc: [], ms: [] }]));
   for (const q of bank) {
-    if (q.type !== 'mc' || flags[q.id] || isUnitOff(q, off)) continue;
-    pools.get(unitKey(q.subject, q.topic))?.push(q);
+    if ((q.type !== 'mc' && q.type !== 'ms') || flags[q.id] || isUnitOff(q, off)) continue;
+    pools.get(unitKey(q.subject, q.topic))?.[q.type].push(q);
   }
   const picked = [];
   const spare = [];
   for (const [key, pool] of pools) {
-    shuffle(pool, rng);
-    picked.push(...pool.slice(0, counts[key]));
-    spare.push(...pool.slice(counts[key]));
+    const n = counts[key];
+    shuffle(pool.mc, rng);
+    shuffle(pool.ms, rng);
+    // 多選題的題數是 n × MS_SHARE，小數部分用亂數進位，整份卷平均下來才會接近 MS_SHARE
+    const ms = share ? pool.ms.splice(0, Math.floor(n * share + rng())) : [];
+    const mc = pool.mc.splice(0, n - ms.length);
+    // 單選題不夠時用這個單元其他的多選題補
+    if (share) ms.push(...pool.ms.splice(0, n - ms.length - mc.length));
+    picked.push(...ms, ...mc);
+    spare.push(...pool.mc, ...(share ? pool.ms : []));
   }
   picked.push(...shuffle(spare, rng).slice(0, Math.max(0, paper.size - picked.length)));
-  const ids = paper.subjects.flatMap((s) => shuffle(picked.filter((q) => q.subject === s), rng)).map((q) => q.id);
-  return { ids, orders: ids.map(() => shuffle([0, 1, 2, 3], rng)) };
+  const ordered = paper.subjects.flatMap((s) => shuffle(picked.filter((q) => q.subject === s), rng));
+  return { ids: ordered.map((q) => q.id), orders: ordered.map((q) => shuffle(q.choices.map((_, i) => i), rng)) };
 }
 
-/** 開考：作答（原始選項索引，沒作答是 null）、標記稍後回看、每題花的秒數都從空白開始 */
+/** 開考：作答（原始選項索引；多選題是選了的索引、由小到大；沒作答是 null）、標記稍後回看、每題花的秒數都從空白開始 */
 export function newExam(paper, { ids, orders }, now) {
   return {
     paper: paper.id,
@@ -114,15 +110,20 @@ export function newExam(paper, { ids, orders }, now) {
 
 /** 存檔裡的考卷還能不能接著考：格式對、題目都還在題庫裡 */
 export function validExam(exam, byId) {
-  if (!exam || typeof exam !== 'object' || !PAPER_BY_ID[exam.paper]) return false;
-  const n = exam.ids?.length;
-  const isPerm = (o) => Array.isArray(o) && o.length === 4 && [0, 1, 2, 3].every((i) => o.includes(i));
+  if (!exam || typeof exam !== 'object' || !PAPER_BY_ID[exam.paper] || !Array.isArray(exam.ids)) return false;
+  const n = exam.ids.length;
+  const qs = exam.ids.map((id) => byId.get(id));
+  const isPerm = (o, k) => Array.isArray(o) && o.length === k && [...Array(k).keys()].every((i) => o.includes(i));
+  const isChoice = (q, i) => Number.isInteger(i) && i >= 0 && i < q.choices.length;
+  // 單選題答一個選項；多選題答幾個不重複的選項（取消到一個都不選就是沒作答 null）
+  const isAnswer = (q, a) =>
+    a === null || (q.type === 'ms' ? Array.isArray(a) && a.length > 0 && new Set(a).size === a.length && a.every((i) => isChoice(q, i)) : isChoice(q, a));
   return (
     n > 0 &&
     ['orders', 'answers', 'marks', 'spent'].every((k) => Array.isArray(exam[k]) && exam[k].length === n) &&
-    exam.ids.every((id) => byId.get(id)?.type === 'mc') &&
-    exam.orders.every(isPerm) &&
-    exam.answers.every((a) => a === null || [0, 1, 2, 3].includes(a)) &&
+    qs.every((q) => q?.type === 'mc' || q?.type === 'ms') &&
+    exam.orders.every((o, i) => isPerm(o, qs[i].choices.length)) &&
+    exam.answers.every((a, i) => isAnswer(qs[i], a)) &&
     Number.isFinite(exam.elapsed) &&
     Number.isFinite(exam.limit) &&
     Number.isInteger(exam.index) &&
@@ -141,25 +142,33 @@ export function examOutcome(item) {
   return item.marked ? 'unsure' : 'right';
 }
 
+/** 分數取到小數第二位（多選題的部分分數是 0.2 的倍數，加起來會有浮點誤差） */
+const round2 = (x) => Math.round(x * 100) / 100;
+
 /**
- * 對答案：每題的結果、各單元的得分與用時、答對與答錯的題平均花幾秒
- * @returns {{ total: number, right: number, wrong: number, blank: number, secs: number, limit: number,
- *   items: { id: string, q: object, answer: number | null, right: boolean, blank: boolean, marked: boolean, secs: number, order: number[], n: number }[],
- *   units: { subject: string, unit: string, total: number, right: number, secs: number }[],
+ * 對答案：每題的結果與得分、各單元的得分與用時、答對與答錯的題平均花幾秒。
+ * 每題 1 分：單選題答對得分；多選題照學測規則部分給分（n 個選項錯 k 個得 (n−2k)/n，最低 0 分），全對才算答對
+ * @returns {{ total: number, right: number, wrong: number, blank: number, points: number, secs: number, limit: number,
+ *   items: { id: string, q: object, answer: number | number[] | null, right: boolean, blank: boolean, score: number, marked: boolean, secs: number, order: number[], n: number }[],
+ *   units: { subject: string, unit: string, total: number, right: number, points: number, secs: number }[],
  *   avgRight: number | null, avgWrong: number | null }}
  */
 export function gradeExam(exam, byId) {
   const items = exam.ids.map((id, i) => {
     const q = byId.get(id);
     const answer = exam.answers[i];
-    return { id, q, answer, right: answer === q.answer, blank: answer === null, marked: !!exam.marks[i], secs: exam.spent[i], order: exam.orders[i], n: i + 1 };
+    const blank = answer === null;
+    const right = !blank && isCorrect(q, answer);
+    const score = q.type === 'ms' ? msScore(q, answer) : right ? 1 : 0;
+    return { id, q, answer, right, blank, score, marked: !!exam.marks[i], secs: exam.spent[i], order: exam.orders[i], n: i + 1 };
   });
   const units = new Map();
   for (const it of items) {
     const key = unitKey(it.q.subject, it.q.topic);
-    const u = units.get(key) ?? units.set(key, { subject: it.q.subject, unit: it.q.topic, total: 0, right: 0, secs: 0 }).get(key);
+    const u = units.get(key) ?? units.set(key, { subject: it.q.subject, unit: it.q.topic, total: 0, right: 0, points: 0, secs: 0 }).get(key);
     u.total++;
     u.secs += it.secs;
+    u.points = round2(u.points + it.score);
     if (it.right) u.right++;
   }
   const avg = (list) => (list.length ? list.reduce((a, it) => a + it.secs, 0) / list.length : null);
@@ -173,6 +182,7 @@ export function gradeExam(exam, byId) {
     right: right.length,
     wrong: wrong.length,
     blank: items.filter((it) => it.blank).length,
+    points: round2(items.reduce((a, it) => a + it.score, 0)),
     secs: exam.elapsed,
     limit: exam.limit,
     items,
@@ -193,7 +203,10 @@ export const KEEP_EXAMS = 30;
 export function logExam(state, paperId, result, now) {
   const log = (state.examLog ||= []);
   const prev = [...log].reverse().find((e) => e.paper === paperId) ?? null;
-  log.push({ paper: paperId, at: now, total: result.total, right: result.right, blank: result.blank, secs: Math.round(result.secs) });
+  log.push({ paper: paperId, at: now, total: result.total, right: result.right, points: result.points, blank: result.blank, secs: Math.round(result.secs) });
   if (log.length > KEEP_EXAMS) log.splice(0, log.length - KEEP_EXAMS);
   return prev;
 }
+
+/** 一筆成績紀錄的得分（有多選題以前的紀錄沒有 points，那時只有單選題，得分就是答對題數） */
+export const examPoints = (entry) => (Number.isFinite(entry.points) ? entry.points : entry.right);

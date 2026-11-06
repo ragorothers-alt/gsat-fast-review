@@ -1,15 +1,5 @@
 // 無障礙檢查（axe）：各畫面在淺色、深色下都不能有 serious／critical 等級的問題
-import AxeBuilder from '@axe-core/playwright';
-import { expect, openHome, skipToResult, startMode, test } from './fixtures.js';
-
-/** 只看嚴重的問題；3D 畫布是裝飾（aria-hidden），不檢查 */
-async function audit(page, where) {
-  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).exclude('#world').analyze();
-  const serious = violations
-    .filter((v) => v.impact === 'serious' || v.impact === 'critical')
-    .map((v) => `${where}｜${v.id}：${v.help}\n${v.nodes.slice(0, 5).map((n) => `  ${n.target.join(' ')}｜${n.failureSummary?.split('\n').slice(1, 2).join('')}`).join('\n')}`);
-  expect(serious, serious.join('\n\n')).toEqual([]);
-}
+import { audit, expect, openHome, skipToResult, startMode, test } from './fixtures.js';
 
 for (const scheme of ['light', 'dark']) {
   test(`各畫面沒有嚴重的無障礙問題（${scheme === 'light' ? '淺色' : '深色'}）`, async ({ page }) => {
@@ -67,6 +57,8 @@ for (const scheme of ['light', 'dark']) {
 
 // 隨機抽到的題目不一定有公式選項，這裡固定練一題四個選項都是公式的
 test('只有公式的選項，螢幕閱讀器也念得出來', async ({ page }) => {
+  // 關掉動畫：題目卡淡入到一半時檢查對比度會誤判
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await openHome(page);
   await page.locator('#open-notebook').click();
   await page.locator('#notebook-views [data-view="search"]').click();

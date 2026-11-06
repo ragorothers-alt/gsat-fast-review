@@ -24,6 +24,13 @@ describe('回看上一題：當時的選項', () => {
     expect(seenChoices(mc, { outcome: 'skip', chosen: null }).map((c) => c.value)).toEqual([0, 1, 2, 3]);
   });
 
+  it('多選題：選對的、選錯的、漏選的；看解答沒有作答時，正解不算漏選', () => {
+    const ms = { type: 'ms', choices: ['甲', '乙', '丙', '丁', '戊'], answer: [0, 2] };
+    const states = (entry) => seenChoices(ms, entry).map((c) => c.state);
+    expect(states({ outcome: 'wrong', chosen: [0, 3], order: [0, 1, 2, 3, 4] })).toEqual(['right', '', 'missed', 'wrong', '']);
+    expect(states({ outcome: 'skip', chosen: null, order: [4, 3, 2, 1, 0] })).toEqual(['', '', 'right', '', 'right']);
+  });
+
   it('是非題固定左錯右對', () => {
     expect(seenChoices(tf, { outcome: 'wrong', chosen: true })).toEqual([
       { value: false, state: 'right' },

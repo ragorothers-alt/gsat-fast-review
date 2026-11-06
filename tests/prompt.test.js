@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { questionPrompt } from '../src/prompt.js';
+import { UNITS } from '../src/units.js';
 
 const mc = {
   id: 'math-001',
@@ -47,6 +48,21 @@ describe('questionPrompt', () => {
     expect(text).toContain('我的答案：不會');
     expect(text).toContain('正確答案：錯誤');
     expect(text).toContain('我不會這題');
+  });
+
+  it('多選題：標 (A)–(E)、說明要選出所有正確的選項，答案照畫面上的順序列', () => {
+    const ms = { id: 'physics-7001', subject: 'physics', topic: UNITS.physics[0], type: 'ms', q: '下列哪些是向量？', choices: ['位移', '速率', '加速度', '質量', '力'], answer: [0, 2, 4], explain: '有方向的才是向量。' };
+    const text = questionPrompt(ms, { order: [4, 3, 2, 1, 0], outcome: 'wrong', chosen: [0, 2] });
+    expect(text).toContain('多選題（選出所有正確的選項）');
+    expect(text).toContain('(A) 力\n(B) 質量\n(C) 加速度\n(D) 速率\n(E) 位移');
+    expect(text).toContain('我的答案：(C) 加速度、(E) 位移');
+    expect(text).toContain('正確答案：(A) 力、(C) 加速度、(E) 位移');
+  });
+
+  it('演算題自己填的答案不是任何一個選項', () => {
+    const text = questionPrompt(mc, { order: [0, 1, 2, 3], outcome: 'wrong', chosen: null, typed: '0.6' });
+    expect(text).toContain('我的答案：自己算出 0.6（不是任何一個選項）');
+    expect(text).toContain('正確答案：(A) $\\frac{1}{2}$');
   });
 
   it('從錯題本複製：沒有當時的答案，附上正解與解析', () => {

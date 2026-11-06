@@ -16,8 +16,10 @@ const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
 
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
-// 演算題（scratch: true）的解析要寫出完整的演算過程，放寬一些
+// 演算題（scratch: true）的解析要寫出完整的演算過程、多選題要逐一點出錯誤選項，都放寬一些
 const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
+// 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
+const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
 const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch']);
 
@@ -62,7 +64,7 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
-  const stats = { mc: 0, tf: 0, formula: 0, scratch: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
+  const stats = { mc: 0, tf: 0, ms: 0, formula: 0, scratch: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
 
   items.forEach((it, idx) => {
     const tag = it && typeof it.id === 'string' ? it.id : `#${idx}`;
@@ -101,8 +103,9 @@ for (const file of files) {
     }
 
     checkText(it.q, 'q', LIMITS.q, WARN.q, err, warn);
-    if (it.scratch) checkText(it.explain, 'explain', SCRATCH_EXPLAIN.max, SCRATCH_EXPLAIN.warn, err, warn);
+    if (it.scratch || it.type === 'ms') checkText(it.explain, 'explain', SCRATCH_EXPLAIN.max, SCRATCH_EXPLAIN.warn, err, warn);
     else checkText(it.explain, 'explain', LIMITS.explain, WARN.explain, err, warn);
+    if (it.type === 'ms' && [it.q, it.explain].some((t) => typeof t === 'string' && LETTER_REF.test(t))) err('多選題的選項會被打亂，題幹與解析不可用 (A)(B) 指稱選項');
 
     if (typeof it.q === 'string') {
       const norm = it.q.replace(/\s+/g, '');
@@ -122,12 +125,26 @@ for (const file of files) {
         if (new Set(norm).size !== norm.length) err('選項有重複');
       }
       if (!Number.isInteger(it.answer) || it.answer < 0 || it.answer > 3) err('mc 題 answer 必須是 0–3 的整數');
+    } else if (it.type === 'ms') {
+      stats.ms++;
+      if (!Array.isArray(it.choices) || it.choices.length !== 5) err('ms 題必須剛好 5 個選項');
+      else {
+        it.choices.forEach((c, i) => {
+          checkText(c, `choices[${i}]`, LIMITS.choice, Infinity, err, warn);
+          if (typeof c === 'string' && BANNED_CHOICES.test(c)) err(`choices[${i}] 不可用「以上皆是／皆非」類選項（選項會被打亂）`);
+        });
+        if (new Set(it.choices.map((c) => String(c).replace(/\s+/g, ''))).size !== 5) err('選項有重複');
+      }
+      const a = it.answer;
+      const ok = Array.isArray(a) && a.length >= 1 && a.every((x, i) => Number.isInteger(x) && x >= 0 && x <= 4 && (i === 0 || x > a[i - 1]));
+      if (!ok) err('ms 題 answer 必須是由小到大、不重複的 0–4 整數陣列，至少 1 個');
+      if (it.scratch) err('多選題不可標 scratch');
     } else if (it.type === 'tf') {
       stats.tf++;
       if (it.choices !== undefined) err('tf 題不可有 choices');
       if (typeof it.answer !== 'boolean') err('tf 題 answer 必須是 true/false');
     } else {
-      err('type 必須是 "mc" 或 "tf"');
+      err('type 必須是 "mc"、"tf" 或 "ms"');
     }
   });
 
@@ -138,7 +155,7 @@ for (const file of files) {
   }
 
   const n = items.length;
-  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、公式 ${stats.formula}、演算 ${stats.scratch}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
+  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}、公式 ${stats.formula}、演算 ${stats.scratch}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
   const topics = [...stats.topics].map(([t, c]) => `${t} ${c}`).join('、');
   if (topics) console.log(`  單元：${topics}`);
   if (warnings.length) {

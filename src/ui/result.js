@@ -4,8 +4,7 @@ import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
 import { copyQuestion } from './clipboard.js';
 import { openKeypointsFrom } from './keypoints.js';
-import { reviewItem, speakItem, tfLabel, toggleMark } from './review-item.js';
-import { richHTML } from './rich.js';
+import { mineHTML, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { sfx } from './feedback.js';
 
 export function initResult(ctx) {
@@ -82,7 +81,7 @@ export function initResult(ctx) {
 function mine(q, entry) {
   if (entry.outcome === 'skip') return '<span class="r-mine skip">看了解答</span>';
   if (entry.mark) return `<span class="r-mine skip">答對了，但你標了「${entry.mark === 'guess' ? '猜對的' : '不太確定'}」</span>`;
-  return `<span class="r-mine">你選：${q.type === 'tf' ? tfLabel(entry.chosen) : richHTML(q.choices[entry.chosen])}</span>`;
+  return `<span class="r-mine">${mineHTML(q, entry)}</span>`;
 }
 
 function pathCheer({ done, next, left }) {

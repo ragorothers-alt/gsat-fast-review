@@ -2,21 +2,26 @@
 import { SUBJECT_BY_ID } from './subjects.js';
 import { topicLabel } from './units.js';
 
-const LETTERS = ['A', 'B', 'C', 'D'];
+const LETTERS = ['A', 'B', 'C', 'D', 'E'];
+const KIND = { tf: '是非題', mc: '單選題', ms: '多選題' };
 
 /**
  * @param {object} q 題目
- * @param {{ order?: number[], outcome?: 'right'|'wrong'|'skip'|'review' | null, chosen?: number | boolean | null }} [opts]
- *   order：畫面上第 i 個選項 → 原始選項索引，讓 (A)–(D) 跟玩家看到的一致
- *   outcome / chosen：作答後才有（chosen 為原始選項索引或 true/false），會附上玩家的答案、正解與解析；
- *   review：從錯題本複製，沒有當時選的答案
+ * @param {{ order?: number[], outcome?: 'right'|'wrong'|'skip'|'review' | null, chosen?: number | number[] | boolean | null, typed?: string }} [opts]
+ *   order：畫面上第 i 個選項 → 原始選項索引，讓 (A)–(E) 跟玩家看到的一致
+ *   outcome / chosen：作答後才有（chosen 為原始選項索引、多選題的索引陣列或 true/false），會附上玩家的答案、正解與解析；
+ *   typed：演算題自己填的答案；review：從錯題本複製，沒有當時選的答案
  */
-export function questionPrompt(q, { order = [0, 1, 2, 3], outcome = null, chosen = null } = {}) {
+export function questionPrompt(q, { order = q.choices?.map((_, i) => i) ?? [], outcome = null, chosen = null, typed } = {}) {
   const subject = SUBJECT_BY_ID[q.subject]?.name ?? q.subject;
-  const label = (value) =>
-    q.type === 'tf' ? (value ? '正確' : '錯誤') : `(${LETTERS[order.indexOf(value)]}) ${q.choices[value]}`;
+  const one = (value) => `(${LETTERS[order.indexOf(value)]}) ${q.choices[value]}`;
+  const label = (value) => {
+    if (q.type === 'tf') return value ? '正確' : '錯誤';
+    if (q.type === 'ms') return value?.length ? [...value].sort((a, b) => order.indexOf(a) - order.indexOf(b)).map(one).join('、') : '沒有選';
+    return one(value);
+  };
 
-  const lines = [`這是一題台灣學測（${subject}・${topicLabel(q)}）的${q.type === 'tf' ? '是非題' : '單選題'}：`, ''];
+  const lines = [`這是一題台灣學測（${subject}・${topicLabel(q)}）的${KIND[q.type]}${q.type === 'ms' ? '（選出所有正確的選項）' : ''}：`, ''];
   if (q.type === 'tf') lines.push(`判斷下列敘述是否正確：${q.q}`);
   else lines.push(q.q, ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
 
@@ -27,7 +32,7 @@ export function questionPrompt(q, { order = [0, 1, 2, 3], outcome = null, chosen
 
   lines.push('');
   if (outcome === 'skip') lines.push('我的答案：不會，直接看了解答');
-  else if (outcome !== 'review') lines.push(`我的答案：${label(chosen)}`);
+  else if (outcome !== 'review') lines.push(`我的答案：${typed !== undefined && (chosen === null || chosen === undefined) ? `自己算出 ${typed}（不是任何一個選項）` : label(chosen)}`);
   lines.push(`正確答案：${label(q.answer)}`, `題目附的解析：${q.explain}`, '');
   if (outcome === 'right') {
     lines.push(

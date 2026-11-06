@@ -1,5 +1,7 @@
 // 學習分析：各單元與各科的作答統計、弱點單元、題庫存量、每日走勢、學測倒數。純邏輯，不碰 DOM。
+import { UNIT_SHARE } from './blueprint.js';
 import { PATH_SIZE } from './path.js';
+import { unitShares } from './priority.js';
 import { isWeak, mastery } from './srs.js';
 import { dayKey, shiftDay } from './stats.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
@@ -33,15 +35,22 @@ export function unitStats(bank, cards, subjects) {
 }
 
 /**
- * 弱點單元：作答夠多的單元依失誤率由高到低排。
+ * 弱點單元：作答夠多、有失誤的單元，依「失誤率 × 學測分量」由高到低排——學測考得多又常錯的單元最該先補。
  * 失誤率先做平滑 (失誤 + 1) / (作答 + 4)，免得只答過幾題、錯一兩題的單元就排到最前面。
+ * share 是這個單元在歷屆學測該科的出題占比（%），給畫面顯示。
  * @param {{ subjects: string[], excludedUnits?: string[], limit?: number }} opts
  */
 export function weakUnits(bank, cards, { subjects, excludedUnits = [], limit = 3 }) {
   const off = new Set(excludedUnits);
+  const shares = unitShares(subjects);
   return unitStats(bank, cards, subjects)
     .filter((u) => !off.has(u.key) && u.seen >= MIN_SEEN && u.misses > 0)
-    .map((u) => ({ ...u, rate: u.misses / u.seen, score: (u.misses + 1) / (u.seen + 4) }))
+    .map((u) => ({
+      ...u,
+      rate: u.misses / u.seen,
+      share: UNIT_SHARE[u.subject]?.[u.unit] ?? 0,
+      score: ((u.misses + 1) / (u.seen + 4)) * (shares.get(u.key) ?? 0),
+    }))
     .sort((a, b) => b.score - a.score || b.weak - a.weak)
     .slice(0, limit);
 }

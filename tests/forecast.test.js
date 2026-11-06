@@ -19,9 +19,9 @@ describe('dayIndex / dueBuckets', () => {
   it('依到期日與盒子分組；答對過、從沒失手的不再出，不算', () => {
     const never = schedule(undefined, 'right', NOW);
     const buckets = dueBuckets([card(2, 1), card(2, 1), card(4, 3), card(0, -1), never], NOW);
-    expect(buckets.get(0)).toEqual([1, 0, 0, 0, 0, 0]);
-    expect(buckets.get(1)).toEqual([0, 0, 2, 0, 0, 0]);
-    expect(buckets.get(3)).toEqual([0, 0, 0, 0, 1, 0]);
+    expect(buckets.get(0)).toEqual([1, 0, 0, 0, 0, 0, 0]);
+    expect(buckets.get(1)).toEqual([0, 0, 2, 0, 0, 0, 0]);
+    expect(buckets.get(3)).toEqual([0, 0, 0, 0, 1, 0, 0]);
     expect([...buckets.keys()].sort()).toEqual([0, 1, 3]);
   });
 });

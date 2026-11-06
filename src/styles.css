@@ -56,7 +56,7 @@
 }
 
 /* 黃底的按鈕上，字和圖示維持深色才看得清楚 */
-:root[data-theme='dark'] :is(.mode.primary, .primary-btn, .next-btn, .icon-btn[aria-pressed='true'], .tool[aria-pressed='true'], .seg-btn[aria-pressed='true']) {
+:root[data-theme='dark'] :is(.mode.primary, .primary-btn, .next-btn:not(:disabled), .fill-send, .icon-btn[aria-pressed='true'], .tool[aria-pressed='true'], .seg-btn[aria-pressed='true']) {
   color: var(--on-bright);
 }
 
@@ -961,10 +961,12 @@ p {
 }
 
 .tag {
+  flex: none;
   padding: 2px 10px;
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 800;
+  white-space: nowrap;
   background: color-mix(in srgb, var(--c, var(--accent)) 38%, var(--card));
   border: 1.5px solid var(--ink);
 }
@@ -1205,6 +1207,122 @@ p {
     opacity: 0;
     transform: scale(1.6) rotate(-12deg);
   }
+}
+
+/* ── 多選題：點選項切換要不要選，選好按底下的「送出」 ───────── */
+/* 一個都還沒選：虛線框，不像可以按的按鈕 */
+.play-foot .next-btn:disabled {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--line-soft);
+  box-shadow: none;
+  color: var(--muted);
+}
+
+/* 該選沒選的正解：正解的底色、虛線框，另外標「漏選」 */
+.answer.missed,
+.past-choice.missed {
+  border-style: dashed;
+}
+
+.miss-tag {
+  flex: none;
+  margin: 0 16px 0 auto;
+  padding: 1px 7px;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  background: var(--card);
+  color: var(--good-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+/* 解析上面的計分說明：多選題答錯幾個選項、填的答案不是任何一個選項
+   （用一般墨色：深色模式的解析底色上，紅字對比不到 4.5:1） */
+.ms-score {
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  font-weight: 700;
+}
+
+/* ── 演算題填答：上面是填好的答案，下面是數字鍵盤 ─────── */
+.answers.fill {
+  gap: 8px;
+}
+
+.fill-box {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 14px;
+  border-radius: var(--hand-sm);
+  border: 2px solid var(--ink);
+  background: var(--card);
+}
+
+.fill-box.shake {
+  animation: shake 0.35s ease;
+}
+
+.fill-value {
+  font-size: calc(1.5rem * var(--fs, 1));
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.fill-value.empty {
+  align-self: center;
+  color: var(--muted);
+  font-size: calc(1rem * var(--fs, 1));
+  font-weight: 600;
+}
+
+.fill-unit {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.fill-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.fill-key {
+  min-height: 44px;
+  border-radius: var(--hand-sm);
+  border: 2px solid var(--ink);
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--shadow);
+  font-size: calc(1.15rem * var(--fs, 1));
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.fill-key:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.fill-send {
+  grid-column: span 2;
+  background: var(--accent);
+}
+
+.fill-switch {
+  justify-self: center;
+  min-height: 32px;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: calc(0.85rem * var(--fs, 1));
+  text-decoration: underline dashed color-mix(in srgb, var(--ink) 40%, transparent);
+  text-underline-offset: 4px;
 }
 
 .play-foot {
@@ -1719,8 +1837,14 @@ p {
   display: none !important;
 }
 
-.play.exam :is(#quit, .score, #combo, #timer, #q-topic, #speak, #copy-q, #flag, #star, #q-explain, .tf-hint, .swipe-hint, #back, #skip, #certain, #related, #next) {
+.play.exam :is(#quit, .score, #combo, #timer, #speak, #copy-q, #flag, #star, #q-explain, .tf-hint, .swipe-hint, #back, #skip, #certain, #related, #ms-send, #next) {
   display: none !important;
+}
+
+/* 模擬考不顯示單元名稱，這一格只在多選題寫「多選題」 */
+.play.exam #q-topic {
+  color: var(--ink);
+  font-weight: 800;
 }
 
 .exam-clock {
@@ -1761,15 +1885,17 @@ p {
   flex: 1;
 }
 
-/* 選了的答案：作答時不對答案，只標出你選了哪個 */
-.play.exam .answer[aria-pressed='true'] {
+/* 選了的答案：作答時不對答案，只標出你選了哪個（練習時的多選題送出前也一樣） */
+.play.exam .answer[aria-pressed='true'],
+.answers.ms .answer[aria-pressed='true'] {
   background: color-mix(in srgb, var(--accent) 30%, var(--card));
   border-width: 3px;
   transform: translate(2px, 2px);
   box-shadow: 1px 1px 0 var(--shadow);
 }
 
-.play.exam .answer[aria-pressed='true'] .key {
+.play.exam .answer[aria-pressed='true'] .key,
+.answers.ms .answer[aria-pressed='true'] .key {
   background: var(--ink);
   border-color: var(--ink);
   color: var(--card);
@@ -2437,6 +2563,13 @@ p {
   width: 25px;
   height: 25px;
   animation: none;
+}
+
+/* 演算題填的答案不是任何一個選項：選項上標不出來，另外寫一行 */
+.past-typed {
+  margin: 10px 0 0;
+  color: var(--bad-ink);
+  font-weight: 700;
 }
 
 .past-card .explain {
@@ -3332,12 +3465,21 @@ p {
   .card-wrap { padding-top: 30px; }
   /* 選項按鈕排緊一點，把高度留給題目卡 */
   .answers { gap: 8px; }
-  .answers.mc .answer {
+  .answers.mc .answer,
+  .answers.ms .answer {
     min-height: 44px;
     padding: 6px 12px;
     font-size: calc(0.98rem * var(--fs, 1));
     line-height: 1.38;
   }
+  .answers.ms { gap: 6px; }
+  /* 填答：鍵盤壓矮一點，題目卡才不會被擠到要捲動 */
+  .answers.fill { gap: 6px; }
+  .fill-box { min-height: 42px; padding: 4px 12px; }
+  .fill-value { font-size: calc(1.3rem * var(--fs, 1)); }
+  .fill-keys { gap: 5px; }
+  .fill-key { min-height: 36px; }
+  .fill-switch { min-height: 28px; padding: 2px 8px; }
   .card { padding: 14px 15px 16px; }
 }
 

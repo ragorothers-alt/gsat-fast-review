@@ -3,10 +3,10 @@
 /**
  * endless：題目快用完時由 UI 補下一批，玩家自己按結束才結算
  * explainAlways：答對也停下來看解析，按「繼續」才換題
- * noScratch：不出要動筆算好幾分鐘的演算題（題目的 scratch）
+ * quickOnly：只出幾秒內答得完的題目：不出要動筆算好幾分鐘的演算題（題目的 scratch）和要逐一判斷五個選項的多選題
  */
 export const MODES = {
-  blitz: { name: '60 秒快閃', size: 80, timeLimit: 60, noScratch: true },
+  blitz: { name: '60 秒快閃', size: 80, timeLimit: 60, quickOnly: true },
   free: { name: '自由練習', size: 20, endless: true, explainAlways: true },
   ten: { name: '10 題一輪', size: 10 },
   formula: { name: '公式特訓', size: 10, formulaOnly: true },
@@ -103,8 +103,30 @@ export function tick(s, seconds) {
 }
 
 /**
- * 判斷作答是否正確。mc 的 chosen 是原始選項索引（UI 打亂後要換回來）；tf 為 boolean。
+ * 判斷作答是否正確。mc 的 chosen 是原始選項索引（UI 打亂後要換回來）；tf 為 boolean；
+ * ms（多選）是選了的原始選項索引陣列，要和正解完全一樣才算對。
  */
 export function isCorrect(q, chosen) {
+  if (q.type === 'ms') return Array.isArray(chosen) && chosen.length === q.answer.length && q.answer.every((i) => chosen.includes(i));
   return chosen === q.answer;
+}
+
+/** 多選題答錯幾個選項：該選沒選、不該選卻選了，各算一個（學測「各選項獨立判定」） */
+export function msWrong(q, chosen) {
+  const picked = new Set(chosen ?? []);
+  return q.choices.reduce((k, _, i) => k + (picked.has(i) !== q.answer.includes(i) ? 1 : 0), 0);
+}
+
+/** 多選題照學測計分（這題滿分算 1）：n 個選項答錯 k 個得 (n − 2k)/n，低於 0 或沒作答得 0 */
+export function msScore(q, chosen) {
+  if (!chosen?.length) return 0;
+  const n = q.choices.length;
+  return Math.max(0, (n - 2 * msWrong(q, chosen)) / n);
+}
+
+/** 多選題沒全對時的計分說明：答錯幾個選項、照學測規則這題可得幾分 */
+export function msNote(q, chosen) {
+  const k = msWrong(q, chosen);
+  const n = q.choices.length;
+  return `答錯 ${k} 個選項：${msScore(q, chosen) > 0 ? `學測這題可得 ${n - 2 * k}/${n} 的分數` : '學測這題 0 分'}`;
 }

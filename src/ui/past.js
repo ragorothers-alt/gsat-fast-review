@@ -14,14 +14,29 @@ const RESULT = { right: '答對', wrong: '答錯', skip: '看了解答', guess: 
 
 /**
  * 這題當時畫面上的選項，照當時的順序：value 是原始選項索引（是非題為 false、true），
- * state 是 'right'（正解）、'wrong'（選錯的那個）或 ''。
+ * state 是 'right'（正解）、'wrong'（選錯的那個）、'missed'（多選題該選沒選的正解）或 ''。
  * @param {object} q 題目
- * @param {{ chosen?: number | boolean | null, order?: number[] }} entry 這輪的作答紀錄；order 是單選題當時打亂後的順序
+ * @param {{ chosen?: number | number[] | boolean | null, order?: number[] }} entry 這輪的作答紀錄；order 是選項當時打亂後的順序
  */
 export function seenChoices(q, entry) {
-  const values = q.type === 'tf' ? [false, true] : (entry.order ?? [0, 1, 2, 3]);
+  const values = q.type === 'tf' ? [false, true] : (entry.order ?? q.choices.map((_, i) => i));
+  if (q.type === 'ms') {
+    // 看解答、沒作答時沒有選：正解都標成正解，不算漏選
+    const mine = Array.isArray(entry.chosen) ? new Set(entry.chosen) : null;
+    return values.map((value) => ({
+      value,
+      state: q.answer.includes(value) ? (!mine || mine.has(value) ? 'right' : 'missed') : mine?.has(value) ? 'wrong' : '',
+    }));
+  }
   return values.map((value) => ({ value, state: value === q.answer ? 'right' : value === entry.chosen ? 'wrong' : '' }));
 }
+
+/** 回看時選項上的圈叉與給螢幕閱讀器的說明 */
+const STATE_MARK = {
+  right: ['ok', '正解'],
+  wrong: ['ng', '你選的'],
+  missed: ['ok', '正解，你沒選'],
+};
 
 export function initPast(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -62,13 +77,19 @@ export function initPast(ctx) {
     const choices = seenChoices(q, entry)
       .map(({ value, state }, i) => {
         const label = q.type === 'tf' ? tfLabel(value) : richHTML(q.choices[value]);
-        const mark = state ? `${icon(state === 'right' ? 'ok' : 'ng', 'mark')}<span class="sr-only">（${state === 'right' ? '正解' : '你選的'}）</span>` : '';
-        return `<li class="past-choice ${state}">${q.type === 'mc' ? `<span class="key" aria-hidden="true">${i + 1}</span>` : ''}<span class="answer-text">${label}</span>${mark}</li>`;
+        const [mark, said] = STATE_MARK[state] ?? [];
+        const tag = state === 'missed' ? '<span class="miss-tag" aria-hidden="true">漏選</span>' : '';
+        const marked = mark ? `${tag}${icon(mark, 'mark')}<span class="sr-only">（${said}）</span>` : '';
+        // 漏選的正解也用正解的底色，另外標「漏選」
+        const cls = state === 'missed' ? 'right missed' : state;
+        return `<li class="past-choice ${cls}">${q.type === 'tf' ? '' : `<span class="key" aria-hidden="true">${i + 1}</span>`}<span class="answer-text">${label}</span>${marked}</li>`;
       })
       .join('');
+    // 演算題自己填的答案不是任何一個選項時，選項上標不出來，另外寫一行
+    const typed = entry.typed !== undefined && (entry.chosen === null || entry.chosen === undefined) ? `<p class="past-typed">你填的答案：${entry.typed}（不是任何一個選項）</p>` : '';
     card.innerHTML = `<div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${topicLabel(q)}</span>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="0" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${!!stars[q.id]}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${!!flags[q.id]}" aria-label="回報這題有問題">${icon('flag')}</button></div>
       <div class="r-q">${richHTML(q.q)}</div>
-      <ol class="past-choices ${q.type}">${choices}</ol>
+      ${typed}<ol class="past-choices ${q.type}">${choices}</ol>
       <div class="explain"><b>${icon('bulb')}解析</b>${richHTML(q.explain)}</div>`;
     $('#past-scroll').scrollTop = 0;
   }

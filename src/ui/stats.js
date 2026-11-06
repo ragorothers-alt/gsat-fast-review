@@ -268,7 +268,7 @@ export function initStats(ctx) {
       li.innerHTML = `<button type="button" class="weak-unit" style="--c:${subj.color}">
         <span class="tag">${subj.name}</span>
         <span class="weak-name"></span>
-        <span class="weak-meta">失誤 ${rate}%・作答 ${u.seen} 次${u.weak ? `・待練 ${u.weak} 題` : ''}</span>
+        <span class="weak-meta">失誤 ${rate}%${u.share ? `・學測占${subj.name} ${u.share}%` : ''}・作答 ${u.seen} 次${u.weak ? `・待練 ${u.weak} 題` : ''}</span>
         <span class="weak-go" aria-hidden="true">練 ›</span>
         <span class="unit-meter" aria-hidden="true"><i style="width:${rate}%"></i></span>
       </button><button type="button" class="kp-btn" aria-label="${u.unit}：考前重點">${icon('card')}重點</button>`;

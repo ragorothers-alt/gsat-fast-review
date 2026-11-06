@@ -292,6 +292,8 @@
             <button id="unsure" class="certain-btn" type="button" aria-pressed="false" title="沒有把握：10 分鐘後再考一次">不太確定</button>
           </div>
           <button id="related" class="related-btn" type="button" hidden title="接著練 3 題同單元的類似題"><svg class="ico" aria-hidden="true"><use href="#i-loop"/></svg>練 3 題類似題</button>
+          <!-- 多選題：選好選項再送出（放在這一列，選項區少一列，小手機才放得下五個選項） -->
+          <button id="ms-send" class="next-btn" type="button" hidden>送出</button>
           <button id="next" class="next-btn" type="button" hidden>繼續 ›</button>
           <!-- 模擬考：上一題、標記稍後回看、下一題（最後一題換成「檢查並交卷」） -->
           <div class="exam-nav exam-only">
@@ -352,7 +354,7 @@
             <p id="x-big" class="r-big"></p>
             <p id="x-cheer" class="r-cheer"></p>
             <div class="r-stats">
-              <div><b id="x-acc"></b><span>答對率</span></div>
+              <div><b id="x-acc"></b><span id="x-acc-label">答對率</span></div>
               <div><b id="x-time"></b><span id="x-time-label">用時</span></div>
               <div><b id="x-blank"></b><span>沒作答</span></div>
             </div>
@@ -408,7 +410,7 @@
           </section>
 
           <section class="stats-block paper">
-            <h3>弱點單元<small>依首頁選的科目；看解答也算失誤</small></h3>
+            <h3>弱點單元<small>學測考得多又常錯的排前面；看解答也算失誤</small></h3>
             <ol id="stats-weak" class="weak-list"></ol>
             <button id="stats-train" class="primary-btn" type="button">練最弱的 3 個單元</button>
           </section>

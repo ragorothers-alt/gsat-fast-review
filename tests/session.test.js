@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advance, createSession, current, extend, isCorrect, isOver, markLast, multiplier, submit, tick } from '../src/session.js';
+import { advance, createSession, current, extend, isCorrect, isOver, markLast, msNote, msScore, msWrong, multiplier, submit, tick } from '../src/session.js';
 import { adjustRight, currentStreak, dayKey, recordAnswer, today } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -80,6 +80,23 @@ describe('session', () => {
     expect(isCorrect({ type: 'mc', answer: 2 }, 1)).toBe(false);
     expect(isCorrect({ type: 'tf', answer: false }, false)).toBe(true);
     expect(isCorrect({ type: 'tf', answer: false }, true)).toBe(false);
+  });
+
+  it('多選題：選的和正解完全一樣才算對；沒全對照學測規則部分給分', () => {
+    const q = { type: 'ms', choices: ['甲', '乙', '丙', '丁', '戊'], answer: [0, 2] };
+    expect(isCorrect(q, [2, 0])).toBe(true);
+    expect(isCorrect(q, [0])).toBe(false);
+    expect(isCorrect(q, [0, 2, 3])).toBe(false);
+    expect(isCorrect(q, null)).toBe(false);
+    // 5 個選項：錯 0 個得 1、錯 1 個得 3/5、錯 2 個得 1/5、錯 3 個以上和沒作答都是 0
+    expect(msWrong(q, [0])).toBe(1);
+    expect(msScore(q, [0, 2])).toBe(1);
+    expect(msScore(q, [0])).toBeCloseTo(0.6);
+    expect(msScore(q, [0, 3])).toBeCloseTo(0.2);
+    expect(msScore(q, [1, 3, 4])).toBe(0);
+    expect(msScore(q, [])).toBe(0);
+    expect(msNote(q, [0])).toBe('答錯 1 個選項：學測這題可得 3/5 的分數');
+    expect(msNote(q, [1, 3])).toBe('答錯 4 個選項：學測這題 0 分');
   });
 });
 

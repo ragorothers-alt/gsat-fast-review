@@ -10,13 +10,29 @@ import { canSpeak, speak, speechText } from './speech.js';
 export const tfLabel = (v) => (v ? `${icon('ok')}對` : `${icon('ng')}錯`);
 
 /**
+ * 一個答案的 HTML：是非題是圈叉、單選題是選項、多選題是選了的幾個選項（照原始順序，用「；」隔開）
+ * @param {number | number[] | boolean} value
+ */
+export function answerHTML(q, value) {
+  if (q.type === 'tf') return tfLabel(value);
+  if (q.type === 'ms') return value?.length ? value.map((i) => richHTML(q.choices[i])).join('；') : '沒有選';
+  return richHTML(q.choices[value]);
+}
+
+/** 作答紀錄裡你的答案：演算題填的數不是任何一個選項時，顯示填的數 */
+export function mineHTML(q, entry) {
+  if (entry.typed !== undefined && (entry.chosen === null || entry.chosen === undefined)) return `你填：${entry.typed}`;
+  return `${entry.typed !== undefined ? '你填' : '你選'}：${answerHTML(q, entry.chosen)}`;
+}
+
+/**
  * @param {object} q 題目
  * @param {{ index: number, flagged: boolean, starred: boolean, note: string }} opts
  *   index：複製、發音按鈕對應的位置；note：正解前面那一段（你選了什麼、錯過幾次…）的 HTML
  */
 export function reviewItem(q, { index, flagged, starred, note }) {
   const subj = SUBJECT_BY_ID[q.subject];
-  const answer = q.type === 'tf' ? tfLabel(q.answer) : richHTML(q.choices[q.answer]);
+  const answer = answerHTML(q, q.answer);
   return `<li class="r-item" style="--c:${subj.color}">
     <div class="card-tag"><span class="tag">${subj.name}</span><button type="button" class="topic topic-link" data-kp="${q.subject}/${q.topic}" title="看這個單元的考前重點">${topicLabel(q)}</button>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="${index}" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${starred}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
     <div class="r-q">${richHTML(q.q)}</div>

@@ -1,5 +1,20 @@
 import { describe, expect, it } from 'vitest';
-import { KEEP_EXAMS, PAPERS, PAPER_BY_ID, UNIT_SHARE, allocate, buildPaper, examOutcome, gradeExam, logExam, newExam, paperWeights, validExam } from '../src/exam.js';
+import {
+  KEEP_EXAMS,
+  MS_SHARE,
+  PAPERS,
+  PAPER_BY_ID,
+  UNIT_SHARE,
+  allocate,
+  buildPaper,
+  examOutcome,
+  examPoints,
+  gradeExam,
+  logExam,
+  newExam,
+  paperWeights,
+  validExam,
+} from '../src/exam.js';
 import { UNITS, unitKey } from '../src/units.js';
 
 function seeded(seed = 1) {
@@ -9,17 +24,34 @@ function seeded(seed = 1) {
   };
 }
 
-/** 每科每單元 per 題單選、2 題是非 */
-function fakeBank(per = 10) {
+/** 每科每單元 per 題單選、ms 題多選、2 題是非 */
+function fakeBank(per = 10, ms = 0) {
   const bank = [];
   for (const [subject, units] of Object.entries(UNITS)) {
     units.forEach((topic, u) => {
-      for (let i = 0; i < per + 2; i++) {
-        bank.push({ id: `${subject}-${u * 100 + i + 100}`, subject, topic, type: i < per ? 'mc' : 'tf', answer: i < per ? i % 4 : true });
-      }
+      const id = (i) => `${subject}-${u * 100 + i + 100}`;
+      for (let i = 0; i < per; i++) bank.push({ id: id(i), subject, topic, type: 'mc', choices: ['甲', '乙', '丙', '丁'], answer: i % 4 });
+      for (let i = per; i < per + ms; i++) bank.push({ id: id(i), subject, topic, type: 'ms', choices: ['甲', '乙', '丙', '丁', '戊'], answer: [i % 5] });
+      for (let i = per + ms; i < per + ms + 2; i++) bank.push({ id: id(i), subject, topic, type: 'tf', answer: true });
     });
   }
   return bank;
+}
+
+const FIVE = ['甲', '乙', '丙', '丁', '戊'];
+const FOUR = ['甲', '乙', '丙', '丁'];
+
+/** 數學卷的三題：兩題多選（同一單元）、一題單選 */
+function mixed() {
+  const [u0, u1] = UNITS.math;
+  const qs = [
+    { id: 'math-1', subject: 'math', topic: u0, type: 'ms', choices: FIVE, answer: [0, 2] },
+    { id: 'math-2', subject: 'math', topic: u0, type: 'ms', choices: FIVE, answer: [1] },
+    { id: 'math-3', subject: 'math', topic: u1, type: 'mc', choices: FOUR, answer: 2 },
+  ];
+  const byId = new Map(qs.map((q) => [q.id, q]));
+  const exam = newExam(PAPER_BY_ID.math, { ids: qs.map((q) => q.id), orders: [[4, 3, 2, 1, 0], [0, 1, 2, 3, 4], [3, 2, 1, 0]] }, 0);
+  return { byId, exam, u0, u1 };
 }
 
 describe('考卷設定', () => {
@@ -79,6 +111,32 @@ describe('buildPaper', () => {
     expect(ids.some((id) => byId.get(id).topic === '轉折語與篇章')).toBe(false);
     expect(ids).toHaveLength(30);
   });
+
+  it('國文、數學、自然卷約有 MS_SHARE 的多選題，英文、社會卷不出；選項順序照各題的選項數', () => {
+    const big = fakeBank(20, 10);
+    const byId = new Map(big.map((q) => [q.id, q]));
+    for (const paper of PAPERS) {
+      let ms = 0;
+      let total = 0;
+      for (let seed = 1; seed <= 20; seed++) {
+        const { ids, orders } = buildPaper(big, paper, { rng: seeded(seed) });
+        expect(ids).toHaveLength(paper.size);
+        expect(new Set(ids).size).toBe(ids.length);
+        ids.forEach((id, i) => expect([...orders[i]].sort()).toEqual(byId.get(id).choices.map((_, k) => k)));
+        ms += ids.filter((id) => byId.get(id).type === 'ms').length;
+        total += ids.length;
+      }
+      expect(ms / total, paper.id).toBeCloseTo(MS_SHARE[paper.id] ?? 0, 1);
+    }
+  });
+
+  it('單元的單選題不夠時用同單元的多選題補，題數照樣湊滿', () => {
+    const thin = fakeBank(1, 6);
+    const byId = new Map(thin.map((q) => [q.id, q]));
+    const { ids } = buildPaper(thin, PAPER_BY_ID.math, { rng: seeded(2) });
+    expect(ids).toHaveLength(PAPER_BY_ID.math.size);
+    expect(ids.every((id) => ['mc', 'ms'].includes(byId.get(id).type))).toBe(true);
+  });
 });
 
 describe('對答案與紀錄', () => {
@@ -124,7 +182,38 @@ describe('對答案與紀錄', () => {
     expect(validExam({ ...exam, answers: exam.answers.slice(1) }, byId)).toBe(false);
     expect(validExam({ ...exam, ids: ['math-99999', ...exam.ids.slice(1)] }, byId)).toBe(false);
     expect(validExam({ ...exam, orders: [[0, 0, 1, 2], ...exam.orders.slice(1)] }, byId)).toBe(false);
+    expect(validExam({ ...exam, ids: 'math-100' }, byId)).toBe(false);
     expect(validExam(null, byId)).toBe(false);
+  });
+
+  it('gradeExam：多選題全對才算答對，沒全對照學測規則部分給分', () => {
+    const { byId, exam, u0, u1 } = mixed();
+    // 第 1 題全對；第 2 題多選了一個（錯 1 個選項，得 3/5）；第 3 題單選答對
+    exam.answers = [[0, 2], [1, 3], 2];
+    const r = gradeExam(exam, byId);
+    expect(r).toMatchObject({ total: 3, right: 2, wrong: 1, blank: 0, points: 2.6 });
+    expect(r.items.map((it) => it.score)).toEqual([1, 0.6, 1]);
+    expect(examOutcome(r.items[1])).toBe('wrong');
+    expect(r.units).toMatchObject([
+      { unit: u0, total: 2, right: 1, points: 1.6 },
+      { unit: u1, total: 1, right: 1, points: 1 },
+    ]);
+    // 錯 3 個以上選項得 0 分；沒作答也是 0 分
+    exam.answers = [[1, 3, 4], null, 0];
+    expect(gradeExam(exam, byId)).toMatchObject({ right: 0, wrong: 2, blank: 1, points: 0 });
+  });
+
+  it('validExam：多選題的作答是不重複的選項陣列，選項順序要照題目的選項數', () => {
+    const { byId, exam } = mixed();
+    exam.answers = [[0, 2], null, 1];
+    expect(validExam(exam, byId)).toBe(true);
+    const answers = (a) => validExam({ ...exam, answers: a }, byId);
+    expect(answers([[], null, 1])).toBe(false);
+    expect(answers([[0, 0], null, 1])).toBe(false);
+    expect(answers([[5], null, 1])).toBe(false);
+    expect(answers([2, null, 1])).toBe(false);
+    expect(answers([[0], null, [1]])).toBe(false);
+    expect(validExam({ ...exam, orders: [[0, 1, 2, 3], ...exam.orders.slice(1)] }, byId)).toBe(false);
   });
 
   it('logExam：記下成績、回傳上一次同一張卷的成績，只留最近幾次', () => {
@@ -136,5 +225,13 @@ describe('對答案與紀錄', () => {
     for (let i = 0; i < KEEP_EXAMS + 5; i++) logExam(state, 'math', r, 10 + i);
     expect(state.examLog).toHaveLength(KEEP_EXAMS);
     expect(state.examLog.at(-1).at).toBe(10 + KEEP_EXAMS + 4);
+  });
+
+  it('logExam 記下得分；有多選題以前的舊紀錄沒有得分，就用答對題數', () => {
+    const state = {};
+    logExam(state, 'math', { total: 3, right: 2, points: 2.6, blank: 0, secs: 10.4 }, 5);
+    expect(state.examLog[0]).toMatchObject({ right: 2, points: 2.6, secs: 10 });
+    expect(examPoints(state.examLog[0])).toBe(2.6);
+    expect(examPoints({ paper: 'math', right: 7, total: 25 })).toBe(7);
   });
 });

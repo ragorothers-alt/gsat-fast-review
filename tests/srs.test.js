@@ -29,6 +29,14 @@ describe('schedule', () => {
     expect(c.due).toBe(c.last + INTERVALS[MAX_BOX]);
   });
 
+  it('答錯過的題目隔 16 天還答得對，下次拉長到 35 天', () => {
+    let c = schedule(undefined, 'wrong', NOW);
+    while (c.box < 5) c = schedule(c, 'right', c.due);
+    expect(c.due - c.last).toBe(16 * DAY);
+    c = schedule(c, 'right', c.due);
+    expect(c.due - c.last).toBe(35 * DAY);
+  });
+
   it('還沒到期就又答對：記下次數，但不升盒、到期時間不變（連刷幾輪不能清空錯題本）', () => {
     const wrong = schedule(undefined, 'wrong', NOW);
     let c = wrong;
@@ -133,6 +141,8 @@ describe('mastery', () => {
     expect(mastery(qs, {})).toBe(0);
     expect(mastery(qs, { a: { box: MAX_BOX }, b: { box: MAX_BOX } })).toBe(1);
     expect(mastery(qs, { a: { box: MAX_BOX } })).toBe(0.5);
+    // 隔 16 天答對（第 5 盒）就算熟，再拉長間隔也不會超過 100%
+    expect(mastery(qs, { a: { box: 5 }, b: { box: 6 } })).toBe(1);
     expect(mastery([], {})).toBe(0);
   });
 
@@ -175,11 +185,13 @@ describe('buildQueue', () => {
     expect(out.map((x) => x.id).sort()).toEqual(['m4', 'p1']);
   });
 
-  it('快閃不出要動筆的演算題，其他模式照出', () => {
-    const withScratch = [...bank, q('m9', 'math', { scratch: true })];
+  it('快閃不出要動筆的演算題和多選題，其他模式照出', () => {
+    const slow = [...bank, q('m9', 'math', { scratch: true }), q('m8', 'math', { type: 'ms', choices: ['a', 'b', 'c', 'd', 'e'], answer: [0] })];
     const opts = { subjects: ['math'], size: 10, now: NOW, rng: seeded() };
-    expect(buildQueue(withScratch, {}, { ...opts, noScratch: true }).map((x) => x.id)).not.toContain('m9');
-    expect(buildQueue(withScratch, {}, opts).map((x) => x.id)).toContain('m9');
+    const quick = buildQueue(slow, {}, { ...opts, quickOnly: true }).map((x) => x.id);
+    expect(quick).not.toContain('m9');
+    expect(quick).not.toContain('m8');
+    expect(buildQueue(slow, {}, opts).map((x) => x.id)).toEqual(expect.arrayContaining(['m9', 'm8']));
   });
 
   it('到期的複習題先出，新題接著出，未到期的排最後', () => {

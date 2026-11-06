@@ -1,8 +1,9 @@
 // 模擬考：選考卷、作答、題號一覽與交卷、成績單。
 // 作答時借用作答畫面（#play 加上 .exam）：題目卡、選項、草稿區與橫放版面都一樣，只是不對答案，
 // 可以跳題、標記、回頭改，整卷計時。考到一半的卷存在 state.exam，離開後可以接著考。
-import { PAPERS, PAPER_BY_ID, buildPaper, examOutcome, gradeExam, logExam, newExam, validExam } from '../exam.js';
+import { PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, logExam, newExam, validExam } from '../exam.js';
 import { questionPrompt } from '../prompt.js';
+import { msNote } from '../session.js';
 import { schedule } from '../srs.js';
 import { recordAnswer } from '../stats.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
@@ -10,7 +11,7 @@ import { copyQuestion } from './clipboard.js';
 import { sfx } from './feedback.js';
 import { openKeypointsFrom } from './keypoints.js';
 import { plainText, richHTML, visibleLength } from './rich.js';
-import { reviewItem, speakItem, toggleMark } from './review-item.js';
+import { mineHTML, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
 /** 剩這麼多秒時，時間標紅並念一次（螢幕閱讀器） */
@@ -29,6 +30,8 @@ export function clock(secs) {
 }
 
 const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+/** 得分：多選題部分給分後可能有小數，取到小數第一位 */
+const fmt = (x) => String(Math.round(x * 10) / 10);
 const md = (ts) => {
   const d = new Date(ts);
   return `${d.getMonth() + 1}/${d.getDate()}`;
@@ -93,7 +96,7 @@ export function initExam(ctx) {
       return `<li style="--c:${subjects[0].color}">
         <span class="exam-paper-name">${p.name}</span>
         <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}</span>
-        <span class="exam-paper-last">${last ? `上次 ${pct(last.right, last.total)}%（${md(last.at)}）` : '還沒考過'}</span>
+        <span class="exam-paper-last">${last ? `上次 ${pct(examPoints(last), last.total)}%（${md(last.at)}）` : '還沒考過'}</span>
         <button type="button" class="secondary-btn exam-start" data-paper="${p.id}"${saved ? ' disabled' : ''} aria-label="開始${p.name}模擬考">開始</button>
       </li>`;
     }).join('');
@@ -169,8 +172,8 @@ export function initExam(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    // 學測不會告訴你考哪個單元：不顯示單元名稱
-    el.topic.textContent = '';
+    // 學測不會告訴你考哪個單元：不顯示單元名稱，只標出多選題（試卷上單選、多選分開標）
+    el.topic.textContent = q.type === 'ms' ? '多選題' : '';
     el.text.innerHTML = richHTML(q.q);
     el.progress.textContent = `${i + 1} / ${n}`;
     el.prev.disabled = i === 0;
@@ -186,17 +189,20 @@ export function initExam(ctx) {
     ctx.world.setFocusSubject(q.subject);
   }
 
+  /** 這個選項（原始索引）現在有沒有選：多選題的作答是陣列 */
+  const isOn = (answer, orig) => (Array.isArray(answer) ? answer.includes(orig) : answer === orig);
+
   function renderAnswers(q) {
     const order = exam.orders[exam.index];
     const chosen = exam.answers[exam.index];
-    const short = q.choices.every((c) => visibleLength(c) <= 10);
-    el.answers.className = `answers mc${short ? ' grid-2' : ''}`;
+    const short = q.type === 'mc' && q.choices.every((c) => visibleLength(c) <= 10);
+    el.answers.className = `answers ${q.type}${short ? ' grid-2' : ''}`;
     el.answers.innerHTML = '';
     order.forEach((orig, i) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'answer';
-      btn.setAttribute('aria-pressed', String(chosen === orig));
+      btn.setAttribute('aria-pressed', String(isOn(chosen, orig)));
       btn.innerHTML = `<span class="key" aria-hidden="true">${i + 1}</span><span class="answer-text">${richHTML(q.choices[orig])}</span>`;
       // 有公式的選項改念 plainText 轉出來的文字（同作答畫面）
       const text = btn.querySelector('.answer-text');
@@ -213,16 +219,27 @@ export function initExam(ctx) {
     });
   }
 
-  /** 選答案；再按一次同一個就取消。第一次選了答案就自動換下一題（最後一題不換） */
+  /**
+   * 選答案；再按一次同一個就取消。單選題第一次選了答案就自動換下一題（最後一題不換）；
+   * 多選題點選項只是切換要不要選，不知道選完了沒，所以不自動換題
+   */
   function choose(orig) {
     if (!exam) return;
     const i = exam.index;
+    const order = exam.orders[i];
+    const multi = current().type === 'ms';
     const was = exam.answers[i];
-    exam.answers[i] = was === orig ? null : orig;
-    for (const b of el.answers.children) b.setAttribute('aria-pressed', String(exam.answers[i] === b._orig));
-    el.status.textContent = exam.answers[i] === null ? '已取消作答' : `已選第 ${exam.orders[i].indexOf(orig) + 1} 個選項`;
+    if (multi) {
+      const set = new Set(was ?? []);
+      if (!set.delete(orig)) set.add(orig);
+      exam.answers[i] = set.size ? [...set].sort((a, b) => a - b) : null;
+    } else exam.answers[i] = was === orig ? null : orig;
+    const now = exam.answers[i];
+    for (const b of el.answers.children) b.setAttribute('aria-pressed', String(isOn(now, b._orig)));
+    const nth = (list) => list.map((o) => order.indexOf(o) + 1).sort((a, b) => a - b).join('、');
+    el.status.textContent = now === null ? '已取消作答' : `已選第 ${nth(multi ? now : [now])} 個選項`;
     ctx.save();
-    if (was === null && exam.answers[i] !== null && i < exam.ids.length - 1) {
+    if (!multi && was === null && now !== null && i < exam.ids.length - 1) {
       clearTimeout(autoNext);
       autoNext = setTimeout(() => go(1), AUTO_NEXT);
     }
@@ -351,10 +368,11 @@ export function initExam(ctx) {
   $('#exam-pause').addEventListener('click', pause);
   $('#exam-quit').addEventListener('click', pause);
 
-  // 鍵盤：1–4 選答案、←／→ 換題、M 標記、Esc 打開題號一覽
+  // 鍵盤：1–4（多選題 1–5）選答案、←／→ 換題、M 標記、Esc 打開題號一覽
   document.addEventListener('keydown', (e) => {
     if (!exam || play.hidden || topSheet() || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
-    if (/^[1-4]$/.test(e.key)) choose(exam.orders[exam.index][Number(e.key) - 1]);
+    const order = exam.orders[exam.index];
+    if (/^[1-9]$/.test(e.key) && Number(e.key) <= order.length) choose(order[Number(e.key) - 1]);
     else if (e.key === 'ArrowLeft') go(-1);
     else if (e.key === 'ArrowRight') go(1);
     else if (e.key === 'm' || e.key === 'M') el.mark.click();
@@ -388,37 +406,41 @@ export function initExam(ctx) {
 
   function showReport(paper, result, prev, timeUp) {
     report = { paper, result };
-    const { total, right, blank, secs, limit } = result;
+    const { total, right, points, blank, secs, limit } = result;
+    // 有多選題的卷照學測部分給分：大字是得分，不是答對題數
+    const hasMs = result.items.some((it) => it.q.type === 'ms');
     $('#x-paper').textContent = `${paper.name}模擬考${timeUp ? '・時間到，自動交卷' : ''}`;
-    $('#x-big').textContent = `${right} / ${total}`;
-    $('#x-acc').textContent = `${pct(right, total)}%`;
+    $('#x-big').textContent = `${fmt(points)} / ${total}`;
+    $('#x-acc').textContent = `${pct(points, total)}%`;
+    $('#x-acc-label').textContent = hasMs ? '得分率' : '答對率';
     $('#x-time').textContent = clock(secs);
     $('#x-time-label').textContent = `用時／${paper.minutes} 分`;
     $('#x-blank').textContent = String(blank);
-    const diff = prev ? pct(right, total) - pct(prev.right, prev.total) : null;
+    const partial = points - right;
+    const diff = prev ? pct(points, total) - pct(examPoints(prev), prev.total) : null;
     $('#x-cheer').textContent =
-      diff === null
-        ? cheer(right / total)
-        : `比上次（${md(prev.at)}）${diff === 0 ? '一樣' : diff > 0 ? `高 ${diff} 個百分點` : `低 ${-diff} 個百分點`}。${cheer(right / total)}`;
+      (partial > 0 ? `全對 ${right} 題，多選題照學測規則部分給分，另得 ${fmt(partial)} 分。` : '') +
+      (diff === null ? '' : `比上次（${md(prev.at)}）${diff === 0 ? '一樣' : diff > 0 ? `高 ${diff} 個百分點` : `低 ${-diff} 個百分點`}。`) +
+      cheer(points / total);
 
     // 合科試卷：每科先列一行小計，再列這科的各單元
     const multi = paper.subjects.length > 1;
     $('#x-units').innerHTML = result.units
       .map((u, i) => {
         const subj = SUBJECT_BY_ID[u.subject];
-        const p = pct(u.right, u.total);
+        const p = pct(u.points, u.total);
         let head = '';
         if (multi && result.units[i - 1]?.subject !== u.subject) {
           const mine = result.units.filter((x) => x.subject === u.subject);
           const sum = (k) => mine.reduce((a, x) => a + x[k], 0);
-          head = `<li class="x-subject" style="--c:${subj.color}"><span class="tag">${subj.name}</span><span class="x-unit-name">小計</span><b class="x-unit-score">${sum('right')}/${sum('total')}</b><span class="x-unit-secs">${Math.round(sum('secs') / sum('total'))} 秒</span></li>`;
+          head = `<li class="x-subject" style="--c:${subj.color}"><span class="tag">${subj.name}</span><span class="x-unit-name">小計</span><b class="x-unit-score">${fmt(sum('points'))}/${sum('total')}</b><span class="x-unit-secs">${Math.round(sum('secs') / sum('total'))} 秒</span></li>`;
         }
         return `${head}<li style="--c:${subj.color}">
           <span class="tag">${subj.name}</span>
           <span class="x-unit-name">${u.unit}</span>
-          <b class="x-unit-score">${u.right}/${u.total}</b>
+          <b class="x-unit-score">${fmt(u.points)}/${u.total}</b>
           <span class="x-unit-secs">${Math.round(u.secs / u.total)} 秒</span>
-          <span class="unit-meter" role="img" aria-label="答對 ${p}%"><i style="width:${p}%"></i></span>
+          <span class="unit-meter" role="img" aria-label="${hasMs ? '得分率' : '答對'} ${p}%"><i style="width:${p}%"></i></span>
         </li>`;
       })
       .join('');
@@ -436,12 +458,13 @@ export function initExam(ctx) {
     const slow = [...result.items].sort((a, b) => b.secs - a.secs).slice(0, SLOW_SHOWN);
     $('#x-slow').innerHTML = slow
       .map((it) => {
-        const state = it.blank ? '沒作答' : it.right ? '答對' : '答錯';
+        // 多選題沒全對但拿到部分分數的，標出得幾分
+        const [cls, state] = it.blank ? ['blank', '沒作答'] : it.right ? ['right', '答對'] : it.score > 0 ? ['partial', `得 ${fmt(it.score)} 分`] : ['wrong', '答錯'];
         return `<li><button type="button" class="x-slow-item" data-at="${it.n - 1}">
           <span class="x-slow-n">第 ${it.n} 題</span>
           <span class="x-slow-unit">${SUBJECT_BY_ID[it.q.subject].name}・${it.q.topic}</span>
           <span class="x-slow-secs">${Math.round(it.secs)} 秒</span>
-          <span class="x-slow-state ${it.blank ? 'blank' : it.right ? 'right' : 'wrong'}">${state}</span>
+          <span class="x-slow-state ${cls}">${state}</span>
         </button></li>`;
       })
       .join('');
@@ -459,16 +482,17 @@ export function initExam(ctx) {
     ctx.show('exam-report');
     $('#exam-report .result-scroll').scrollTop = 0;
     sfx.finish();
-    if (right / total >= 0.9) ctx.world.celebrate();
+    if (points / total >= 0.9) ctx.world.celebrate();
   }
 
-  /** 成績單下面要再看一眼的題目：答錯、沒作答，以及答對但標記過的 */
+  /** 成績單下面要再看一眼的題目：答錯（多選題沒全對）、沒作答，以及答對但標記過的 */
   const missed = () => report.result.items.filter((it) => !it.right || it.marked);
 
   function mine(it) {
     if (it.blank) return '<span class="r-mine skip">沒作答</span>';
     if (it.right) return '<span class="r-mine skip">答對了，但你標記了這題</span>';
-    return `<span class="r-mine">你選：${richHTML(it.q.choices[it.answer])}</span>`;
+    const note = it.q.type === 'ms' ? `<span class="r-mine skip">${msNote(it.q, it.answer)}</span>` : '';
+    return `<span class="r-mine">${mineHTML(it.q, entryOf(it))}</span>${note}`;
   }
 
   /** 這題在成績單上的作答紀錄（回看、複製題目用；選項照當時的順序） */
@@ -512,7 +536,7 @@ export function initExam(ctx) {
       return `${PAPER_BY_ID[saved.paper].name}考到一半・${answered}/${saved.ids.length} 題`;
     }
     const last = ctx.state.examLog?.at(-1);
-    return last && PAPER_BY_ID[last.paper] ? `上次${PAPER_BY_ID[last.paper].name} ${pct(last.right, last.total)}%` : '照學測配分出一份卷・整卷計時';
+    return last && PAPER_BY_ID[last.paper] ? `上次${PAPER_BY_ID[last.paper].name} ${pct(examPoints(last), last.total)}%` : '照學測配分出一份卷・整卷計時';
   };
 }
 

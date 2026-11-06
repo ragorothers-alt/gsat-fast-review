@@ -2,7 +2,8 @@
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
-import { MODES, advance, createSession, current, extend, isCorrect, markLast, submit, tick, multiplier } from '../session.js';
+import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
+import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
@@ -27,6 +28,15 @@ const RECENT = 8;
 const RECENT_MS = 30 * 60_000;
 /** 答錯後「練類似題」一次插入幾題 */
 const RELATED_COUNT = 3;
+/** 填答的按鍵（四欄）：[鍵, 顯示的字, 給螢幕閱讀器的名稱] */
+const FILL_KEYS = [
+  ['7', '7'], ['8', '8'], ['9', '9'], ['back', '⌫', '刪除'],
+  ['4', '4'], ['5', '5'], ['6', '6'], ['-', '−', '負號'],
+  ['1', '1'], ['2', '2'], ['3', '3'], ['/', '／', '分數線'],
+  ['0', '0'], ['.', '.', '小數點'],
+];
+/** 填答最多幾個字 */
+const FILL_MAX = 12;
 
 export function initPlay(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -39,6 +49,7 @@ export function initPlay(ctx) {
     answers: $('#answers'),
     back: $('#back'),
     skip: $('#skip'),
+    msSend: $('#ms-send'),
     next: $('#next'),
     progress: $('#play-progress'),
     combo: $('#combo'),
@@ -61,12 +72,15 @@ export function initPlay(ctx) {
   const byId = ctx.byId;
   // 最近是用鍵盤操作（不是點螢幕）：換題後把焦點放回選項上，不會掉回頁首
   let keyboard = false;
-  window.addEventListener('keydown', (e) => (keyboard ||= e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || /^[1-4]$|^Arrow/.test(e.key)), true);
+  window.addEventListener('keydown', (e) => (keyboard ||= e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || /^[1-5]$|^Arrow/.test(e.key)), true);
   window.addEventListener('pointerdown', () => (keyboard = false), true);
 
   let s = null;
   let q = null;
-  let order = null; // 單選題：畫面上第 i 個按鈕 → 原始選項索引
+  let order = null; // 單選、多選題：畫面上第 i 個按鈕 → 原始選項索引
+  let picked = new Set(); // 多選題：目前選了畫面上的哪幾個
+  let fill = null; // 演算題填答中：{ text } 是目前填的字；改看選項或作答後為 null
+  let useChoices = false; // 這題已經改用選項作答
   let pendingRelated = []; // 這題答錯後可以接著練的類似題
   let lastRight = null; // 剛答對的那題 { id, before, at }：標成猜的時，從答題前的紀錄重新排程
   let phase = 'idle'; // idle | answering | feedback
@@ -88,7 +102,7 @@ export function initPlay(ctx) {
       onlyUnits: units,
       exclude: [...exclude, ...Object.keys(ctx.state.flags)],
       formulaOnly: cfg.formulaOnly,
-      noScratch: cfg.noScratch,
+      quickOnly: cfg.quickOnly,
       weakOnly: cfg.weakOnly,
       size: cfg.size,
       now: Date.now(),
@@ -280,10 +294,12 @@ export function initPlay(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    el.topic.innerHTML = (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) + (q.scratch ? '・演算題' : '');
+    el.topic.innerHTML = (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) + (q.scratch ? '・演算題' : q.type === 'ms' ? '・多選' : '');
+    useChoices = false;
     el.text.innerHTML = richHTML(q.q);
     el.explain.hidden = true;
     el.next.hidden = true;
+    el.msSend.hidden = true;
     el.related.hidden = true;
     el.certain.hidden = true;
     pendingRelated = [];
@@ -309,16 +325,149 @@ export function initPlay(ctx) {
 
   function renderAnswers() {
     el.answers.innerHTML = '';
+    picked = new Set();
+    fill = null;
     if (q.type === 'tf') {
       el.answers.className = 'answers tf';
       // 與滑動方向一致：左錯右對
       el.answers.append(answerButton(`${icon('ng')}錯`, false, '←', true), answerButton(`${icon('ok')}對`, true, '→', true));
       return;
     }
-    order = shuffle([0, 1, 2, 3]);
+    order = shuffle(q.choices.map((_, i) => i));
+    if (q.type === 'ms') return renderMulti();
+    if (fillable(q) && !useChoices) return renderFill();
+    renderChoices();
+  }
+
+  function renderChoices() {
+    el.answers.innerHTML = '';
     const short = q.choices.every((c) => visibleLength(c) <= 10);
     el.answers.className = `answers mc${short ? ' grid-2' : ''}`;
     order.forEach((orig, i) => el.answers.append(answerButton(richHTML(q.choices[orig]), i, String(i + 1), true)));
+  }
+
+  // ── 多選題：點選項切換要不要選，選好按底下的「送出」 ───────────────
+  function renderMulti() {
+    el.answers.className = 'answers ms';
+    order.forEach((orig, i) => {
+      const btn = answerButton(richHTML(q.choices[orig]), i, String(i + 1), true);
+      btn.setAttribute('aria-pressed', 'false');
+      el.answers.append(btn);
+    });
+    el.msSend.hidden = false;
+    renderMultiSend();
+  }
+
+  /** 一個都還沒選時「送出」按不下去 */
+  function renderMultiSend() {
+    el.msSend.disabled = !picked.size;
+  }
+
+  el.msSend.addEventListener('click', submitMulti);
+
+  function toggleMulti(value) {
+    if (picked.has(value)) picked.delete(value);
+    else picked.add(value);
+    buttonFor(value).setAttribute('aria-pressed', String(picked.has(value)));
+    renderMultiSend();
+  }
+
+  function submitMulti() {
+    if (phase !== 'answering' || q.type !== 'ms') return;
+    if (!picked.size) {
+      el.status.textContent = '先選選項（數字鍵 1–5 或空白鍵），再按 Enter 送出';
+      return;
+    }
+    const chosen = [...picked].map((v) => order[v]).sort((a, b) => a - b);
+    resolve(isCorrect(q, chosen) ? 'right' : 'wrong', null, chosen);
+  }
+
+  /** 多選題作答後：選對的打圈、選錯的打叉、該選沒選的標「漏選」 */
+  function markMulti(outcome, chosen) {
+    el.msSend.hidden = true;
+    // 按「不會」看解答時沒有作答：正解都標成正解，不算漏選
+    const mine = Array.isArray(chosen) ? new Set(chosen) : null;
+    for (const b of el.answers.children) {
+      const orig = order[b._value];
+      const right = q.answer.includes(orig);
+      b.disabled = true;
+      b.removeAttribute('aria-pressed');
+      if (right && (!mine || mine.has(orig))) {
+        b.classList.add('correct');
+        b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（${mine ? '正解，你選了' : '正解'}）</span>`);
+      } else if (right) {
+        b.classList.add('correct', 'missed');
+        b.insertAdjacentHTML('beforeend', `<span class="miss-tag" aria-hidden="true">漏選</span>${icon('ok', 'mark')}<span class="sr-only">（正解，你沒選）</span>`);
+      } else if (mine?.has(orig)) {
+        b.classList.add('wrong');
+        b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（不該選，你選了）</span>`);
+      } else b.classList.add('dim');
+    }
+    const answers = q.answer.map((i) => plainText(buttonFor(order.indexOf(i)).querySelector('.answer-text')));
+    el.status.textContent = outcome === 'right' ? '全對！' : `${outcome === 'wrong' ? `${msNote(q, chosen)}。` : ''}正解是：${answers.join('；')}`;
+  }
+
+  // ── 演算題填答：先自己算出答案填進去（像學測選填），不先看選項；算不出來可以改看選項 ──
+  function renderFill() {
+    fill = { text: '' };
+    el.answers.className = 'answers fill';
+    const unit = fillUnit(q);
+    el.answers.innerHTML = `<div class="fill-box"><output class="fill-value" aria-label="你填的答案"></output><span class="fill-unit"></span></div>
+      <div class="fill-keys">${FILL_KEYS.map(([k, label, name]) => `<button type="button" class="fill-key" data-k="${k}"${name ? ` aria-label="${name}"` : ''}>${label}</button>`).join('')}<button type="button" class="fill-key fill-send" data-k="ok">送出</button></div>
+      <button type="button" class="fill-switch">算不出來？改用選項作答</button>`;
+    el.answers.querySelector('.fill-unit').textContent = unit;
+    const keys = el.answers.querySelector('.fill-keys');
+    keys.addEventListener('click', (e) => {
+      const key = e.target.closest('[data-k]');
+      if (key) typeKey(key.dataset.k);
+    });
+    // 用滑鼠點數字鍵不搶焦點：接著按實體鍵盤的 Enter 是送出，不會重按剛剛點的那顆鍵（用 Tab 移過去的照常）
+    keys.addEventListener('mousedown', (e) => e.preventDefault());
+    el.answers.querySelector('.fill-switch').addEventListener('click', () => {
+      if (phase !== 'answering') return;
+      fill = null;
+      useChoices = true;
+      renderChoices();
+      fitCard();
+      if (keyboard) el.answers.querySelector('.answer')?.focus({ preventScroll: true });
+    });
+    renderFillValue();
+  }
+
+  function renderFillValue() {
+    const out = el.answers.querySelector('.fill-value');
+    out.textContent = fill.text || '算出答案後填入';
+    out.classList.toggle('empty', !fill.text);
+  }
+
+  /** 按一個填答鍵：數字、小數點、負號（切換）、分數線、刪除、送出 */
+  function typeKey(k) {
+    if (phase !== 'answering' || !fill) return;
+    let t = fill.text;
+    if (k === 'ok') return submitFill();
+    if (k === 'back') t = t.slice(0, -1);
+    else if (k === '-') t = t.startsWith('-') ? t.slice(1) : `-${t}`;
+    else if (k === '/') t += /\d$/.test(t) && !t.includes('/') ? '/' : '';
+    else if (k === '.') {
+      // 分子、分母各自最多一個小數點；還沒有數字就補 0
+      const part = t.split('/').pop().replace('-', '');
+      if (!part.includes('.')) t += part ? '.' : '0.';
+    } else if (/^\d$/.test(k)) t += k;
+    if (t.length > FILL_MAX) return;
+    fill.text = t;
+    renderFillValue();
+  }
+
+  function submitFill() {
+    if (phase !== 'answering' || !fill) return;
+    const value = parseTyped(fill.text);
+    if (value === null) {
+      el.status.textContent = '先填入答案：整數、小數或分數，例如 -3、2.5、7/4';
+      restartAnimation(el.answers.querySelector('.fill-box'), 'shake');
+      return;
+    }
+    const m = matchTyped(q, value);
+    resolve(m === q.answer ? 'right' : 'wrong', m >= 0 ? order.indexOf(m) : null, m >= 0 ? m : null, fill.text);
   }
 
   // ── 小螢幕：題目卡放不下 ─────────────────────────────
@@ -374,15 +523,27 @@ export function initPlay(ctx) {
 
   function choose(value) {
     if (phase !== 'answering') return null;
+    // 多選題點選項只是切換選取，按「送出」才作答
+    if (q.type === 'ms') return toggleMulti(value), null;
     const chosen = q.type === 'mc' ? order[value] : value;
     const outcome = isCorrect(q, chosen) ? 'right' : 'wrong';
     resolve(outcome, value, chosen);
     return outcome;
   }
 
-  /** @param {'right'|'wrong'|'skip'} outcome  @param displayValue 被點的按鈕值（skip 為 null） */
-  function resolve(outcome, displayValue, chosen) {
+  /**
+   * @param {'right'|'wrong'|'skip'} outcome
+   * @param displayValue 被點的按鈕值（skip、多選題，以及填的答案不是任何一個選項時為 null）
+   * @param chosen 原始選項索引（多選題是陣列）
+   * @param {string | null} typed 演算題填的答案
+   */
+  function resolve(outcome, displayValue, chosen, typed = null) {
     phase = 'feedback';
+    // 填答（或填答中按「不會」）：作答後換回選項，標出正解與你填的是哪個選項
+    if (fill) {
+      fill = null;
+      renderChoices();
+    }
     const now = Date.now();
     const card = ctx.state.cards[q.id];
     ctx.state.cards[q.id] = schedule(card, outcome, now);
@@ -391,7 +552,9 @@ export function initPlay(ctx) {
     recordAnswer(ctx.state, outcome, now);
     const points = submit(s, outcome, chosen);
     // 記下當時的選項順序：回看上一題、複製題目時 (A)–(D) 跟畫面一致
-    if (q.type === 'mc') s.log[s.log.length - 1].order = order;
+    const entry = s.log[s.log.length - 1];
+    if (q.type !== 'tf') entry.order = order;
+    if (typed !== null) entry.typed = typed;
     el.back.hidden = true;
     if (s.path) {
       if (outcome !== 'right') addFollowUp(q);
@@ -403,20 +566,24 @@ export function initPlay(ctx) {
     const goal = ctx.state.settings.goal;
     if (before < goal && today(ctx.state, now).answered >= goal) ctx.toast(`今日 ${goal} 題目標達成！`);
 
-    const correctValue = q.type === 'mc' ? order.indexOf(q.answer) : q.answer;
-    // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯；螢幕閱讀器另外念「（正解）」「（你選的）」
-    for (const b of el.answers.children) {
-      b.disabled = true;
-      if (b._value === correctValue) {
-        b.classList.add('correct');
-        b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（正解）</span>`);
-      } else if (b._value === displayValue) {
-        b.classList.add('wrong');
-        b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（你選的）</span>`);
-      } else b.classList.add('dim');
+    const correctValue = q.type === 'tf' ? q.answer : order.indexOf(q.type === 'ms' ? q.answer[0] : q.answer);
+    if (q.type === 'ms') markMulti(outcome, chosen);
+    else {
+      // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯；螢幕閱讀器另外念「（正解）」「（你選的）」
+      for (const b of el.answers.children) {
+        b.disabled = true;
+        if (b._value === correctValue) {
+          b.classList.add('correct');
+          b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（正解）</span>`);
+        } else if (b._value === displayValue) {
+          b.classList.add('wrong');
+          b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（${typed === null ? '你選的' : '你填的'}）</span>`);
+        } else b.classList.add('dim');
+      }
+      const said = plainText(buttonFor(correctValue)).replace(/（正解）$/, '');
+      const mine = typed !== null && outcome === 'wrong' ? `你填 ${typed}，` : '';
+      el.status.textContent = outcome === 'right' ? '答對！' : `${outcome === 'wrong' ? '答錯。' : ''}${mine}正解是：${said}`;
     }
-    const said = plainText(buttonFor(correctValue)).replace(/（正解）$/, '');
-    el.status.textContent = outcome === 'right' ? '答對！' : `${outcome === 'wrong' ? '答錯。' : ''}正解是：${said}`;
     el.score.textContent = s.score;
     renderCombo();
     ctx.world.setCombo(s.combo);
@@ -445,6 +612,9 @@ export function initPlay(ctx) {
       restartAnimation(el.card, 'shake');
     }
     el.explain.innerHTML = `<b>${icon('bulb')}${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
+    // 多選題答錯：照學測規則這題還拿得到幾分（只錯一個選項也有部分分數）
+    if (q.type === 'ms' && outcome === 'wrong') el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">${msNote(q, chosen)}</span>`);
+    if (typed !== null && outcome === 'wrong' && displayValue === null) el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">你填的 ${typed} 不是任何一個選項的值</span>`);
     if (s.path && outcome !== 'right') el.explain.insertAdjacentHTML('beforeend', `<span class="path-note">${icon('loop')}這關最後補了一題類似題</span>`);
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
@@ -555,7 +725,7 @@ export function initPlay(ctx) {
     if (!q) return;
     // 作答後附上自己的答案、正解與解析；作答前只給題目，請它教怎麼解
     const entry = phase === 'feedback' ? s.log[s.log.length - 1] : null;
-    copyQuestion(questionPrompt(q, { order: q.type === 'mc' ? order : undefined, ...entry }), ctx.toast);
+    copyQuestion(questionPrompt(q, { order: q.type === 'tf' ? undefined : order, ...entry }), ctx.toast);
   });
 
   el.flag.addEventListener('click', () => {
@@ -707,6 +877,24 @@ export function initPlay(ctx) {
     }
     if (phase === 'feedback' && lastRight && (e.key === 'g' || e.key === 'u')) return setCertainty(e.key === 'g' ? 'guess' : 'unsure');
     if (phase !== 'answering') return;
+    // 演算題填答：直接打數字、小數點、負號、分數線，Backspace 刪除、Enter 送出
+    if (fill) {
+      const k = { Backspace: 'back', Enter: 'ok' }[e.key] ?? (/^[\d./-]$/.test(e.key) ? e.key : null);
+      if (k && !(k === 'ok' && e.target.closest?.('button'))) {
+        e.preventDefault();
+        typeKey(k);
+      } else if (e.key === '?') el.skip.click();
+      return;
+    }
+    if (q.type === 'ms') {
+      if (/^[1-5]$/.test(e.key)) choose(Number(e.key) - 1);
+      // Enter 一律是送出，焦點停在選項上也是（切換選項用數字鍵或空白鍵）；焦點在收藏、回報等其他按鈕上時交給那個按鈕
+      else if (e.key === 'Enter' && (!e.target.closest?.('button') || e.target.closest('#answers .answer'))) {
+        e.preventDefault();
+        submitMulti();
+      } else if (e.key === '?' || e.key === '0') el.skip.click();
+      return;
+    }
     if (q.type === 'mc' && /^[1-4]$/.test(e.key)) choose(Number(e.key) - 1);
     else if (q.type === 'tf' && e.key === 'ArrowLeft') choose(false);
     else if (q.type === 'tf' && e.key === 'ArrowRight') choose(true);

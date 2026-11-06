@@ -1,5 +1,6 @@
 // 共用的測試前置：擋掉同步後端（測試不能寫到正式資料庫，錯誤回報也不能送出去），
 // 並記下頁面上的未捕捉錯誤，每個測試結束時必須是零。
+import AxeBuilder from '@axe-core/playwright';
 import { test as base, expect } from '@playwright/test';
 
 export const test = base.extend({
@@ -25,6 +26,15 @@ export const test = base.extend({
 });
 
 export { expect };
+
+/** 無障礙檢查（axe）：只看嚴重的問題；3D 畫布是裝飾（aria-hidden），不檢查 */
+export async function audit(page, where) {
+  const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).exclude('#world').analyze();
+  const serious = violations
+    .filter((v) => v.impact === 'serious' || v.impact === 'critical')
+    .map((v) => `${where}｜${v.id}：${v.help}\n${v.nodes.slice(0, 5).map((n) => `  ${n.target.join(' ')}｜${n.failureSummary?.split('\n').slice(1, 2).join('')}`).join('\n')}`);
+  expect(serious, serious.join('\n\n')).toEqual([]);
+}
 
 /** 等題庫載入完成：題庫有兩萬多題，平行跑的測試一起下載、解析時會超過預設的 10 秒，所以放寬 */
 export async function waitForBoot(page) {
@@ -54,12 +64,14 @@ export async function skipToResult(page, max = 30) {
   await expect(page.locator('#result')).toBeVisible();
 }
 
-/** 每題都點第一個選項作答（答錯就按「繼續」），直到結算 */
+/** 每題都點第一個選項作答（演算題改用選項作答、多選題選一個就送出；答錯就按「繼續」），直到結算 */
 export async function answerToResult(page, max = 30) {
   for (let i = 0; i < max; i++) {
     if (await page.locator('#result').isVisible()) return;
     const progress = await page.locator('#play-progress').textContent();
+    if (await page.locator('#answers .fill-switch').isVisible()) await page.locator('#answers .fill-switch').click();
     await page.locator('#answers .answer').first().click();
+    if (await page.locator('#ms-send').isVisible()) await page.locator('#ms-send').click();
     // 答對會自己換下一題；答錯或要看解析時等「繼續」出現
     await page.waitForFunction(
       (p) => !document.querySelector('#next').hidden || document.querySelector('#play').hidden || document.querySelector('#play-progress').textContent !== p,

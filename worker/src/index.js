@@ -13,7 +13,7 @@ export const SUBJECT_IDS = ['chinese', 'english', 'math', 'physics', 'chemistry'
 const CARD_ID = new RegExp(`^(${SUBJECT_IDS.join('|')})-\\d{3,5}$`);
 /** 作答與標記的時間最多可以比伺服器時間晚多久（裝置時鐘些微不準）；更晚的列不收，免得凍結其他裝置的排程 */
 const CLOCK_SKEW = 86_400_000;
-/** 到期時間最多在作答後多久（最長的複習間隔是 16 天） */
+/** 到期時間最多在作答後多久（最長的複習間隔是 35 天） */
 const MAX_DUE = 40 * 86_400_000;
 const DAY = /^\d{4}-\d{2}-\d{2}$/;
 const DEVICE = /^[a-z0-9]{6,16}$/;

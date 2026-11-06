@@ -1,11 +1,15 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
+import { orderFresh, unitShares, unitSkill } from './priority.js';
 import { isUnitOff, unitKey } from './units.js';
 
 export const MINUTE = 60_000;
 export const DAY = 86_400_000;
-// 第 n 盒答對後隔多久再出現
-export const INTERVALS = [1 * MINUTE, 10 * MINUTE, 1 * DAY, 3 * DAY, 7 * DAY, 16 * DAY];
+// 第 n 盒答對後隔多久再出現。答錯過的題目隔 16 天還答得對，就拉長到 35 天：已經記牢的題目少複習幾次，
+// 時間留給新題與還不熟的題目（以前停在 16 天，失手過的題目越積越多）
+export const INTERVALS = [1 * MINUTE, 10 * MINUTE, 1 * DAY, 3 * DAY, 7 * DAY, 16 * DAY, 35 * DAY];
 export const MAX_BOX = INTERVALS.length - 1;
+/** 答錯過的題目隔開時間答對到這一盒（隔 16 天），熟練度就算滿 */
+export const LEARNED_BOX = 5;
 
 /**
  * 依作答結果更新一張卡片的排程。
@@ -67,15 +71,15 @@ export function neverMissed(card) {
   return !!card && card.seen > 0 && !everMissed(card);
 }
 
-/** 熟練度 0–1：每題的盒子數平均，沒看過算 0；答對過、從沒失手的不再複習，算滿 */
+/** 熟練度 0–1：每題的盒子數平均（到 LEARNED_BOX 算滿），沒看過算 0；答對過、從沒失手的不再複習，算滿 */
 export function mastery(questions, cards) {
   if (!questions.length) return 0;
   let sum = 0;
   for (const q of questions) {
     const c = cards[q.id];
-    sum += neverMissed(c) ? MAX_BOX : Math.min(c?.box ?? 0, MAX_BOX);
+    sum += neverMissed(c) ? LEARNED_BOX : Math.min(c?.box ?? 0, LEARNED_BOX);
   }
-  return sum / (questions.length * MAX_BOX);
+  return sum / (questions.length * LEARNED_BOX);
 }
 
 /**
@@ -88,17 +92,18 @@ export const REVIEW_SHARE = 1 - 1 / NEW_EVERY;
 
 /**
  * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。
+ * 新題依學測分量與單元熟練度排（priority.js）：考得多、還不熟的單元先出。
  * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {object[]} bank
  * @param {Record<string, object>} cards
- * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, noScratch?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
+ * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, size: number, now: number, rng?: () => number }} opts
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
- *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；noScratch：不出要動筆的演算題（q.scratch）
+ *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）和多選題
  */
 export function buildQueue(
   bank,
   cards,
-  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, noScratch = false, weakOnly = false, size, now, rng = Math.random },
+  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, size, now, rng = Math.random },
 ) {
   const wanted = new Set(subjects);
   const off = new Set(excludedUnits);
@@ -112,7 +117,7 @@ export function buildQueue(
       (!only || only.has(key)) &&
       !skip.has(q.id) &&
       (!formulaOnly || q.formula) &&
-      !(noScratch && q.scratch) &&
+      !(quickOnly && (q.scratch || q.type === 'ms')) &&
       !neverMissed(cards[q.id])
     );
   });
@@ -125,16 +130,16 @@ export function buildQueue(
   }
 
   const due = [];
-  const fresh = [];
+  const unseen = [];
   const later = [];
   for (const q of pool) {
     const c = cards[q.id];
-    if (!c) fresh.push(q);
+    if (!c) unseen.push(q);
     else if (c.due <= now) due.push(q);
     else later.push(q);
   }
   shuffle(due, rng).sort((a, b) => cards[a.id].box - cards[b.id].box);
-  shuffle(fresh, rng);
+  const fresh = orderFresh(unseen, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng });
   shuffle(later, rng).sort((a, b) => cards[a.id].due - cards[b.id].due);
 
   const out = [];
