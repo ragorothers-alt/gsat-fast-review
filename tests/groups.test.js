@@ -205,6 +205,36 @@ describe('模擬考的題組', () => {
     }
   });
 
+  it('自然卷抽 3 組題組、盡量每組不同科，排在各科單題的後面；數學卷抽 1 組混合題組', () => {
+    const sci = ['physics', 'chemistry', 'biology', 'earth'];
+    const singles = sci.flatMap((s) => UNITS[s].flatMap((topic, u) => Array.from({ length: 8 }, (_, i) => single(`${s}-${u * 100 + i + 100}`, s, topic))));
+    // 物理的題組最多，抽題時還是要分給不同科
+    const sciGroups = [
+      ...Array.from({ length: 6 }, (_, k) => group('physics', 801 + k, 8001 + k * 10, 3)),
+      group('chemistry', 801, 8001, 2),
+      group('biology', 801, 8001, 3),
+    ];
+    const math = UNITS.math.flatMap((topic, u) => Array.from({ length: 6 }, (_, i) => single(`math-${u * 100 + i + 100}`, 'math', topic)));
+    const mathGroups = Array.from({ length: 3 }, (_, k) => group('math', 801 + k, 8001 + k * 10, 3));
+    const all = [...singles, ...sciGroups.flat(), ...math, ...mathGroups.flat()];
+    const byAll = new Map(all.map((q) => [q.id, q]));
+    for (let seed = 1; seed <= 10; seed++) {
+      const paper = PAPER_BY_ID.science;
+      const qs = buildPaper(all, paper, { rng: seeded(seed) }).ids.map((id) => byAll.get(id));
+      expect(qs).toHaveLength(paper.size);
+      const packs = bundles(qs.filter((q) => q.group));
+      expect(packs).toHaveLength(3);
+      expect(new Set(packs.map((p) => p[0].subject)).size).toBe(3);
+      expect(contiguous(qs)).toBe(true);
+      // 同一科：單題在前、題組在後；科目照物理、化學、生物、地科
+      const order = qs.map((q) => sci.indexOf(q.subject));
+      expect(order.every((x, i) => !i || x >= order[i - 1])).toBe(true);
+      const m = buildPaper(all, PAPER_BY_ID.math, { rng: seeded(seed) }).ids.map((id) => byAll.get(id));
+      expect(new Set(m.filter((q) => q.group).map((q) => q.group)).size).toBe(1);
+      expect(m).toHaveLength(PAPER_BY_ID.math.size);
+    }
+  });
+
   it('組裡被回報的題目不出；剩不到 2 題的整組不出', () => {
     const flags = {};
     for (const g of zhGroups.slice(0, 5)) for (const q of g.slice(0, 2)) flags[q.id] = 1;

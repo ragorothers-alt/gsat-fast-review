@@ -69,6 +69,18 @@ export async function roundSize(page) {
   return Number((await page.locator('#play-progress').textContent()).split('/')[1]);
 }
 
+/** 跳過多選題與填答的演算題（按「不會？看解答」再「繼續」），停在點一下就作答的題目。
+ * 題庫一變，固定種子抽到的第一題也會變，假設「點第一個選項就作答」的測試先呼叫這個 */
+export async function skipToSingle(page, max = 30) {
+  for (let i = 0; i < max; i++) {
+    await expect(page.locator('#answers .answer, #answers .fill-switch').first()).toBeVisible();
+    if (!(await page.locator('#ms-send').isVisible()) && !(await page.locator('#answers .fill-switch').isVisible())) return;
+    await page.locator('#skip').click();
+    await page.locator('#next').click();
+  }
+  throw new Error(`連續 ${max} 題都是多選題或演算題`);
+}
+
 /** 作答這一題：點第一個選項（演算題改用選項作答、多選題選一個就送出） */
 export async function answerFirst(page) {
   if (await page.locator('#answers .fill-switch').isVisible()) await page.locator('#answers .fill-switch').click();

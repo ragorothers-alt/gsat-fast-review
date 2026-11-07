@@ -159,7 +159,7 @@ describe('對答案與紀錄', () => {
 
   it('gradeExam：答對、答錯、沒作答，各單元得分與平均用時', () => {
     const r = gradeExam(sat(), byId);
-    expect(r).toMatchObject({ total: 25, right: 10, wrong: 10, blank: 5, secs: 1200, limit: 1800, avgRight: 30, avgWrong: 60 });
+    expect(r).toMatchObject({ total: 25, right: 10, wrong: 10, blank: 5, secs: 1200, limit: paper.minutes * 60, avgRight: 30, avgWrong: 60 });
     expect(r.units.reduce((a, u) => a + u.total, 0)).toBe(25);
     expect(r.units.reduce((a, u) => a + u.right, 0)).toBe(10);
     // 照題庫的單元順序排

@@ -1,5 +1,5 @@
 // 鍵盤與螢幕閱讀器：面板的焦點、作答後的 Enter、念出作答結果、重點卡練別科的單元
-import { expect, openHome, startMode, test } from './fixtures.js';
+import { expect, openHome, skipToSingle, startMode, test } from './fixtures.js';
 
 test('設定面板：焦點移進面板、背景按不到，Esc 關閉後焦點回到齒輪', async ({ page }) => {
   await openHome(page);
@@ -23,6 +23,7 @@ test('答對後用鍵盤按「猜對的」：按鈕作用，不會直接換到�
   await openHome(page);
   await startMode(page, 'free');
   for (let i = 0; i < 40; i++) {
+    await skipToSingle(page);
     await page.locator('#answers .answer').first().click();
     if (await page.locator('#certain').isVisible()) break;
     await expect(page.locator('#answer-status')).toContainText('正解是');

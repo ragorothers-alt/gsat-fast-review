@@ -98,7 +98,7 @@ export function initExam(ctx) {
       const subjects = p.subjects.map((s) => SUBJECT_BY_ID[s]);
       return `<li style="--c:${subjects[0].color}">
         <span class="exam-paper-name">${p.name}</span>
-        <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}${p.groups ? `・含 ${p.groups} 組閱讀題組` : ''}</span>
+        <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}${p.groups ? `・含 ${p.groups} 組${p.groupName}` : ''}</span>
         <span class="exam-paper-last">${last ? `上次 ${pct(examPoints(last), last.total)}%（${md(last.at)}）` : '還沒考過'}</span>
         <button type="button" class="secondary-btn exam-start" data-paper="${p.id}"${saved ? ' disabled' : ''} aria-label="開始${p.name}模擬考">開始</button>
       </li>`;

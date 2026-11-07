@@ -1,5 +1,5 @@
 // 主要流程：首頁、作答到結算、收藏與搜尋、設定、手機橫放、離線開啟
-import { answerFirst, answerToResult, expect, openHome, roundSize, skipToResult, startMode, test, waitForBoot } from './fixtures.js';
+import { answerFirst, answerToResult, expect, openHome, roundSize, skipToResult, skipToSingle, startMode, test, waitForBoot } from './fixtures.js';
 
 test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await openHome(page);
@@ -52,6 +52,7 @@ test('只看解答不作答：結算列出全部題目，但不算進今日題�
 test('單選題點選項作答，答對或答錯都有回饋', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'free');
+  await skipToSingle(page);
   const first = page.locator('#answers .answer').first();
   await first.click();
   // 答對會蓋上圈、答錯會蓋上叉，正解一定會標出來
@@ -89,7 +90,8 @@ test('作答時回看上一題：當時的選項順序、正解與解析，看�
   await expect(page.locator('#past-result')).toHaveText('看了解答');
   await expect(page.locator('#past-card .r-q')).toHaveText(q1);
   await expect(page.locator('#past-card .past-choice .answer-text')).toHaveText(choices1);
-  await expect(page.locator('#past-card .past-choice.right')).toHaveCount(1);
+  // 第 1 題可能是多選題，正解不只一個
+  expect(await page.locator('#past-card .past-choice.right').count()).toBeGreaterThan(0);
   await expect(page.locator('#past-card .explain')).toBeVisible();
   await expect(page.locator('#past-prev')).toBeDisabled();
 
@@ -136,6 +138,7 @@ test('答對後標「猜對的」：結算列出這題，今天的答對數不�
   await startMode(page, 'free');
   // 每題點第一個選項，直到答對一題（答對才會出現「猜對的」）
   for (let i = 0; i < 40; i++) {
+    await skipToSingle(page);
     await page.locator('#answers .answer').first().click();
     if (await page.locator('#certain').isVisible()) break;
     await page.locator('#next').click();

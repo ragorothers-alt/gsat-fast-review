@@ -138,10 +138,12 @@ test('篇章結構：5 個句子選項排一欄、字小一級', async ({ page }
   await audit(page, '篇章結構');
 });
 
-test('模擬考：國文卷、英文卷標出含幾組閱讀題組', async ({ page }) => {
+test('模擬考：各張考卷標出含幾組題組', async ({ page }) => {
   await openHome(page);
   await page.locator('#open-exam').click();
   await expect(page.locator('li:has([data-paper="english"]) .exam-paper-meta')).toContainText('含 3 組閱讀題組');
   await expect(page.locator('li:has([data-paper="chinese"]) .exam-paper-meta')).toContainText('含 3 組閱讀題組');
-  await expect(page.locator('li:has([data-paper="math"]) .exam-paper-meta')).not.toContainText('題組');
+  await expect(page.locator('li:has([data-paper="math"]) .exam-paper-meta')).toContainText('含 1 組混合題組');
+  await expect(page.locator('li:has([data-paper="science"]) .exam-paper-meta')).toContainText('含 3 組題組');
+  await expect(page.locator('li:has([data-paper="social"]) .exam-paper-meta')).not.toContainText('題組');
 });
