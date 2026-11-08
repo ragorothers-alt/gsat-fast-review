@@ -151,6 +151,20 @@
         <path d="M4.3 4.2L9.7 4.3L9.6 9.7L4.2 9.6ZM14.3 4.3L19.8 4.2L19.9 9.6L14.4 9.7ZM4.2 14.4L9.6 14.3L9.7 19.8L4.3 19.9ZM14.4 14.3L19.9 14.4L19.8 19.9L14.3 19.8Z"/>
         <path d="M15.4 17L16.7 18.2L18.8 15.8" stroke-width="1.6"/>
       </symbol>
+      <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8.6 4.6L4.1 9.2L8.7 13.6"/>
+        <path d="M4.5 9.2Q11.8 8.9 15.4 9.3C19.3 9.8 20.9 12.6 20.3 15.7C19.7 18.7 17 20.2 13.9 20.1L10.1 20"/>
+      </symbol>
+      <symbol id="i-redo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15.4 4.6L19.9 9.2L15.3 13.6"/>
+        <path d="M19.5 9.2Q12.2 8.9 8.6 9.3C4.7 9.8 3.1 12.6 3.7 15.7C4.3 18.7 7 20.2 10.1 20.1L13.9 20"/>
+      </symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5.9 6.7L7 19.3Q7.2 21 8.8 20.9L15.3 20.9Q16.9 20.9 17.1 19.3L18.2 6.8" fill="#fffdf8"/>
+        <path d="M3.7 6.5Q12 6.1 20.3 6.6"/>
+        <path d="M9.3 6.3L9.5 3.7Q9.6 3.1 10.3 3.1L13.8 3.2Q14.5 3.2 14.5 3.8L14.7 6.4" stroke-width="1.8"/>
+        <path d="M10.2 10.3L10.4 17.2M13.9 10.3L13.7 17.2" stroke-width="1.6"/>
+      </symbol>
     </svg>
 
     <canvas id="world" aria-hidden="true"></canvas>
@@ -307,7 +321,7 @@
           </div>
         </footer>
 
-        <!-- 草稿區：平板上常駐，手機上按鉛筆拉出來 -->
+        <!-- 草稿區：平板上常駐，手機上按鉛筆拉出來。每題一頁；紙往下延伸，寫到下半部後可以捲動 -->
         <aside id="scratch" class="scratch" aria-label="草稿區">
           <div class="scratch-bar">
             <div class="scratch-tools" role="group" aria-label="筆">
@@ -315,13 +329,21 @@
               <button class="tool" type="button" data-tool="red" aria-pressed="false" aria-label="紅筆"><i></i></button>
               <button class="tool" type="button" data-tool="eraser" aria-pressed="false" aria-label="橡皮擦">擦</button>
             </div>
-            <button id="scratch-undo" class="tool-btn" type="button" aria-label="復原">↶</button>
-            <button id="scratch-clear" class="tool-btn" type="button">清空</button>
+            <div class="tool-pair" role="group" aria-label="復原與重做">
+              <button id="scratch-undo" class="tool-btn icon" type="button" aria-label="復原" title="復原（Ctrl+Z）" disabled><svg class="ico" aria-hidden="true"><use href="#i-undo"/></svg></button>
+              <button id="scratch-redo" class="tool-btn icon" type="button" aria-label="重做" title="重做（Ctrl+Shift+Z）" disabled><svg class="ico" aria-hidden="true"><use href="#i-redo"/></svg></button>
+            </div>
+            <button id="scratch-clear" class="tool-btn icon" type="button" aria-label="清空這一頁" title="清空這一頁（可以復原）" disabled><svg class="ico" aria-hidden="true"><use href="#i-trash"/></svg></button>
             <button id="scratch-close" class="tool-btn" type="button">收起</button>
           </div>
-          <div class="scratch-sheet">
+          <div id="scratch-sheet" class="scratch-sheet">
             <canvas id="scratch-canvas"></canvas>
-            <p id="scratch-hint" class="scratch-hint">在這裡演算<small>換題會翻新頁，按 ↶ 可以找回上一頁</small></p>
+            <p id="scratch-hint" class="scratch-hint">在這裡演算<small>每題各有一頁・畫線後停住會拉成直線</small><small id="scratch-tip">寫到下面可以往下捲</small></p>
+            <div id="scratch-track" class="scratch-track" aria-hidden="true" hidden><i id="scratch-thumb"></i></div>
+            <div id="scratch-nav" class="scratch-nav" role="group" aria-label="捲動草稿紙" hidden>
+              <button id="scratch-up" class="tool-btn icon" type="button" aria-label="往上捲"><svg class="ico flip" aria-hidden="true"><use href="#i-down"/></svg></button>
+              <button id="scratch-down" class="tool-btn icon" type="button" aria-label="往下捲，空出地方接著寫"><svg class="ico" aria-hidden="true"><use href="#i-down"/></svg></button>
+            </div>
           </div>
         </aside>
       </section>

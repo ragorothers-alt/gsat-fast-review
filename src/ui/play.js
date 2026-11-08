@@ -82,6 +82,7 @@ export function initPlay(ctx) {
 
   let s = null;
   let q = null;
+  let rounds = 0; // 開過幾輪：草稿區每輪每題一頁（見 ui/scratch.js）
   let order = null; // 單選、多選題：畫面上第 i 個按鈕 → 原始選項索引
   let picked = new Set(); // 多選題：目前選了畫面上的哪幾個
   let fill = null; // 演算題填答中：{ text } 是目前填的字；改看選項或作答後為 null
@@ -253,6 +254,7 @@ export function initPlay(ctx) {
     s = createSession(mode, queue);
     s.index = index;
     s.opts = opts;
+    s.round = ++rounds;
     // 作答中按「練 3 題類似題」、闖關答錯補進來的題目
     s.extra = new Set(extra);
     s.path = path;
@@ -261,6 +263,7 @@ export function initPlay(ctx) {
     el.timer.hidden = s.timeLeft === null;
     el.score.textContent = '0';
     renderCombo();
+    ctx.scratch.start();
     ctx.show('play');
     showQuestion();
     if (s.timeLeft !== null) {
@@ -330,7 +333,7 @@ export function initPlay(ctx) {
     el.status.textContent = '';
     if (keyboard && !looking) el.answers.querySelector('.answer')?.focus({ preventScroll: true });
     fitCard();
-    ctx.scratch.newPage(q);
+    ctx.scratch.newPage(q, `play-${s.round}-${s.index}`);
     ctx.world.setFocusSubject(q.subject);
     if (s.timeLeft !== null) renderTimer();
   }

@@ -147,6 +147,7 @@ export function initExam(ctx) {
     exam = ctx.state.exam;
     confirmSubmit = false;
     play.classList.add('exam');
+    ctx.scratch.start();
     ctx.show('play');
     showQuestion();
     lastT = performance.now();
@@ -194,7 +195,8 @@ export function initExam(ctx) {
     el.card.classList.add('enter');
     el.status.textContent = '';
     ctx.fitCard();
-    ctx.scratch.newPage(q);
+    // 每題一頁：回到這題（上一題、題號一覽、離開後接著考）時草稿還在
+    ctx.scratch.newPage(q, `exam-${exam.at}-${i}`);
     ctx.world.setFocusSubject(q.subject);
   }
 
