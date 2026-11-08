@@ -175,6 +175,105 @@ test('畫線後停住會拉成直線，接近水平時對齊；復原一次就�
   expect(await inked(page)).toBe(0);
 });
 
+/**
+ * 在畫布上依序送觸控筆事件。step = [type, x, y, buttons, pressure, 等幾毫秒再送]；
+ * contextmenu 的 step = ['contextmenu', x, y, pointerType]，回傳各個 contextmenu 有沒有被擋下預設動作
+ */
+const penEvents = (page, steps) =>
+  page.locator('#scratch-canvas').evaluate(async (c, steps) => {
+    const r = c.getBoundingClientRect();
+    const blocked = [];
+    for (const [type, x, y, buttons, pressure = 0, wait = 0] of steps) {
+      if (wait) await new Promise((res) => setTimeout(res, wait));
+      const at = { clientX: r.left + x, clientY: r.top + y, bubbles: true, cancelable: true };
+      if (type === 'contextmenu') {
+        const e = new PointerEvent('contextmenu', { ...at, pointerType: buttons });
+        c.dispatchEvent(e);
+        blocked.push(e.defaultPrevented);
+      } else c.dispatchEvent(new PointerEvent(type, { ...at, pointerId: 7, pointerType: 'pen', isPrimary: true, buttons, pressure }));
+    }
+    return blocked;
+  }, steps);
+
+test('觸控筆側鍵：懸空按一下切換筆和橡皮擦；按著側鍵點螢幕、按太久會換回來；懸空時不會畫線', async ({ page }) => {
+  await openHome(page);
+  await startMode(page, 'free');
+  await openScratch(page);
+  const tool = () => page.locator('#scratch [data-tool][aria-pressed="true"]').getAttribute('data-tool');
+  const ring = page.locator('#scratch-ring');
+  // 筆懸空移到紙上：空白頁的提示多一行側鍵的說明；拿的是筆，不畫範圍圈
+  await penEvents(page, [['pointermove', 100, 100, 0]]);
+  await expect(page.locator('#scratch-pen')).toBeVisible();
+  await expect(ring).toBeHidden();
+
+  await draw(page, [30, 60], [220, 60]);
+  expect(await inked(page, [30, 50, 190, 20])).toBeGreaterThan(0);
+  // Android 的 Chrome：懸空按側鍵只在 pointermove 看得到 buttons 1（筆壓 0），沒有 pointerdown
+  await penEvents(page, [
+    ['pointermove', 100, 100, 1],
+    ['pointermove', 102, 101, 1],
+    ['pointermove', 103, 101, 0],
+  ]);
+  expect(await tool()).toBe('eraser');
+  await expect(ring).toBeVisible();
+  // 換成橡皮擦後下筆是擦掉
+  await penEvents(page, [
+    ['pointerdown', 40, 60, 1, 0.5],
+    ['pointermove', 130, 60, 1, 0.5],
+    ['pointermove', 230, 60, 1, 0.5],
+    ['pointerup', 230, 60, 0, 0],
+  ]);
+  expect(await inked(page, [30, 50, 190, 20])).toBe(0);
+  // 再按一下換回筆，範圍圈收起來
+  await penEvents(page, [
+    ['pointermove', 100, 100, 1],
+    ['pointermove', 100, 100, 0],
+  ]);
+  expect(await tool()).toBe('ink');
+  await expect(ring).toBeHidden();
+
+  // 按著側鍵在空中移動：不畫線；按太久才放開，換回原本的筆
+  await penEvents(page, [
+    ['pointermove', 60, 150, 1],
+    ['pointermove', 160, 150, 1],
+    ['pointermove', 260, 150, 1],
+  ]);
+  expect(await tool()).toBe('eraser');
+  await penEvents(page, [['pointermove', 260, 150, 0, 0, 800]]);
+  expect(await tool()).toBe('ink');
+  expect(await inked(page, [50, 140, 220, 20])).toBe(0);
+
+  // 按著側鍵點螢幕：Chrome 只送 pointerType 空字串的 contextmenu（擋下選單），放開時換回原本的筆
+  const blocked = await penEvents(page, [
+    ['pointermove', 80, 200, 1],
+    ['contextmenu', 80, 200, ''],
+    ['pointermove', 80, 200, 0],
+  ]);
+  expect(blocked).toEqual([true]);
+  expect(await tool()).toBe('ink');
+  // 手指長按也不跳選單；滑鼠右鍵照常
+  expect(await penEvents(page, [['contextmenu', 80, 200, 'touch'], ['contextmenu', 80, 200, 'mouse']])).toEqual([true, false]);
+
+  // 電腦上的繪圖筆：懸空按側鍵是 pointerdown（buttons 2），不下筆
+  await penEvents(page, [
+    ['pointerdown', 60, 250, 2],
+    ['pointermove', 160, 250, 2],
+    ['pointerup', 160, 250, 0],
+  ]);
+  expect(await tool()).toBe('eraser');
+  expect(await inked(page, [50, 240, 120, 20])).toBe(0);
+  // 換回筆之後照常寫字
+  await penEvents(page, [
+    ['pointerdown', 60, 250, 2],
+    ['pointerup', 60, 250, 0],
+    ['pointerdown', 60, 300, 1, 0.5],
+    ['pointermove', 160, 300, 1, 0.5],
+    ['pointerup', 160, 300, 0, 0],
+  ]);
+  expect(await tool()).toBe('ink');
+  expect(await inked(page, [50, 290, 120, 20])).toBeGreaterThan(0);
+});
+
 test('模擬考每題一頁：選了答案換到下一題是新的一頁，回到前一題草稿還在', async ({ page }) => {
   await openHome(page);
   await page.locator('#open-exam').click();

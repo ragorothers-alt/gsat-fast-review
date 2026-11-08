@@ -2,6 +2,8 @@
 // 每題一頁（模擬考回到前面的題目，草稿還在）；頁的資料與規則在 scratch-pad.js。
 // 紙往下延伸：寫到下半部後，兩指上下拖、滾輪或右下角的箭頭可以捲動；用過觸控筆之後，一指就能捲。
 // 畫線後停住半秒會拉成直線（接近水平、垂直、45° 時對齊）。筆跡存成點列，縮放、捲動、復原時整頁重畫。
+// 觸控筆懸空時按一下側鍵（S Pen 等），在筆和橡皮擦之間切換；選橡皮擦時，筆或滑鼠移到紙上會看到擦的範圍。
+import { createPenButton, isAirPress } from '../pen-button.js';
 import {
   HOLD_MIN,
   HOLD_MS,
@@ -34,6 +36,8 @@ export function initScratch(ctx) {
   const sheet = $('#scratch-sheet');
   const hint = $('#scratch-hint');
   const tip = $('#scratch-tip');
+  const penTip = $('#scratch-pen');
+  const ring = $('#scratch-ring');
   const toggleBtn = $('#scratch-toggle');
   const closeBtn = $('#scratch-close');
   const undoBtn = $('#scratch-undo');
@@ -65,6 +69,12 @@ export function initScratch(ctx) {
   let holdTimer = 0;
   let glide = 0;
   let tool = 'ink';
+  /** 最後用的筆（黑或紅）：側鍵從橡皮擦切回來時用 */
+  let lastInk = 'ink';
+  /** 觸控筆的側鍵；按下時原本的工具（按著時碰過螢幕、按太久的話，放開時換回來） */
+  const penButton = createPenButton();
+  let pressTool = null;
+  let ringTimer = 0;
   let penSeen = false;
   let open = false;
   let dpr = 1;
@@ -80,6 +90,7 @@ export function initScratch(ctx) {
 
   function setOpen(on, remember = true) {
     open = on;
+    hideRing();
     play.classList.toggle('scratch-open', on);
     toggleBtn.setAttribute('aria-pressed', String(on));
     // 只記住平板上的開關；手機上每次都從收起開始
@@ -259,6 +270,47 @@ export function initScratch(ctx) {
     { passive: false },
   );
 
+  // ── 工具與觸控筆的側鍵 ───────────────────────────────
+  function setTool(next) {
+    tool = next;
+    if (next !== 'eraser') lastInk = next;
+    for (const b of toolBtns) b.setAttribute('aria-pressed', String(b.dataset.tool === next));
+  }
+
+  /**
+   * 側鍵（見 pen-button.js）：懸空按一下，在筆和橡皮擦之間切換。按著側鍵下筆（瀏覽器有送來的話）是暫時換工具，
+   * 放開換回原本的；按太久也換回來。Android 的 Chrome 收不到按著側鍵的下筆，只能用按一下切換。
+   */
+  function onPenButton(what) {
+    if (what === 'press') {
+      pressTool = tool;
+      setTool(tool === 'eraser' ? lastInk : 'eraser');
+    } else if (what === 'hold' && pressTool) setTool(pressTool);
+    if (what === 'click' || what === 'hold') pressTool = null;
+  }
+
+  function notePen() {
+    if (penSeen) return;
+    penSeen = true;
+    renderTip();
+  }
+
+  /** 橡皮擦的範圍：筆懸空或滑鼠移到紙上時，指標周圍畫一個圈（手指會蓋住，不畫） */
+  function updateRing(e) {
+    if (e.pointerType === 'touch' || (live?.tool ?? tool) !== 'eraser') return hideRing();
+    const r = canvas.getBoundingClientRect();
+    ring.style.transform = `translate(${e.clientX - r.left - ERASER / 2}px, ${e.clientY - r.top - ERASER / 2}px)`;
+    ring.hidden = false;
+    clearTimeout(ringTimer);
+    // Android 不送「筆離開感應範圍」的事件：筆一陣子沒動就收起來
+    if (e.pointerType === 'pen') ringTimer = setTimeout(hideRing, 1500);
+  }
+
+  function hideRing() {
+    clearTimeout(ringTimer);
+    if (!ring.hidden) ring.hidden = true;
+  }
+
   // ── 筆 ───────────────────────────────────────────────
   const toPage = (e, rect) => ({ x: e.clientX - rect.left, y: e.clientY - rect.top + page.scroll });
 
@@ -323,8 +375,14 @@ export function initScratch(ctx) {
 
   canvas.addEventListener('pointerdown', (e) => {
     ensureSize();
-    if (e.pointerType === 'pen') penSeen = true;
+    if (e.pointerType === 'pen') {
+      notePen();
+      onPenButton(penButton.handle(e));
+      // 懸空按側鍵（電腦上的繪圖筆）：只切換工具，不下筆
+      if (isAirPress(e)) return updateRing(e);
+    }
     if (e.pointerType === 'touch') {
+      hideRing();
       touches.set(e.pointerId, e.clientY);
       // 兩指是捲動；用過觸控筆之後手指不畫線（手掌靠在螢幕上也不會亂畫），一指就能捲
       if (touches.size > 1 || penSeen) {
@@ -347,9 +405,15 @@ export function initScratch(ctx) {
     addPoint(e);
     drawStroke(g, live, 0);
     hint.hidden = true;
+    updateRing(e);
   });
 
   canvas.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'pen') {
+      notePen();
+      onPenButton(penButton.handle(e));
+    }
+    if (e.pointerType !== 'touch') updateRing(e);
     if (touches.has(e.pointerId)) touches.set(e.pointerId, e.clientY);
     if (pan) {
       if (!touches.has(e.pointerId)) return;
@@ -374,6 +438,7 @@ export function initScratch(ctx) {
   });
 
   const lift = (e) => {
+    if (e.pointerType === 'pen') onPenButton(penButton.handle(e));
     const wasTouch = touches.delete(e.pointerId);
     if (pan && wasTouch) {
       // 還有手指按著就接著捲（以剩下的手指為準）；全部放開才結束，剩下的那指不會變成畫線
@@ -385,6 +450,14 @@ export function initScratch(ctx) {
   };
   canvas.addEventListener('pointerup', lift);
   canvas.addEventListener('pointercancel', lift);
+  canvas.addEventListener('pointerleave', (e) => e.pointerType !== 'touch' && hideRing());
+
+  // 紙上不跳選單：手指或筆尖長按（停住拉直線時）、按住側鍵點螢幕（Chrome 只送這個，pointerType 是空字串）。
+  // 滑鼠右鍵照常（Safari 的 contextmenu 沒有 pointerType，也照常）
+  canvas.addEventListener('contextmenu', (e) => {
+    if (e.pointerType !== 'mouse' && e.pointerType !== undefined) e.preventDefault();
+    penButton.handle(e);
+  });
 
   new ResizeObserver(resize).observe(canvas);
 
@@ -395,8 +468,8 @@ export function initScratch(ctx) {
 
   for (const btn of toolBtns) {
     btn.addEventListener('click', () => {
-      tool = btn.dataset.tool;
-      for (const b of toolBtns) b.setAttribute('aria-pressed', String(b === btn));
+      setTool(btn.dataset.tool);
+      pressTool = null;
     });
   }
   undoBtn.addEventListener('click', doUndo);
@@ -416,7 +489,11 @@ export function initScratch(ctx) {
     else doUndo();
   });
 
-  const renderTip = () => (tip.textContent = coarse.matches ? '寫到下半部後，兩指上下拖可以捲動' : '寫到下半部後，滾輪可以捲動');
+  /** 空白頁的提示：觸控螢幕說兩指捲動（用過觸控筆之後一指就能捲），滑鼠說滾輪；用過觸控筆才提側鍵 */
+  function renderTip() {
+    tip.textContent = coarse.matches ? `寫到下半部後，${penSeen ? '一指' : '兩指'}上下拖可以捲動` : '寫到下半部後，滾輪可以捲動';
+    penTip.hidden = !penSeen;
+  }
   coarse.addEventListener('change', renderTip);
   renderTip();
 

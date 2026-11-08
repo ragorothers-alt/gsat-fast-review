@@ -1865,7 +1865,26 @@ p {
   font-weight: 400;
 }
 
-.scratch-hint[hidden] {
+.scratch-hint[hidden],
+.scratch-hint small[hidden] {
+  display: none;
+}
+
+/* 橡皮擦的範圍（直徑 = 橡皮擦的粗細 28px）：筆懸空或滑鼠移到紙上時跟著指標；外圈的紙色讓它壓在筆跡上也看得到 */
+.scratch-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--card);
+  pointer-events: none;
+}
+
+.scratch-ring[hidden] {
   display: none;
 }
 
