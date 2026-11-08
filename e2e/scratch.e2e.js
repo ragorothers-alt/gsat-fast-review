@@ -175,6 +175,66 @@ test('畫線後停住會拉成直線，接近水平時對齊；復原一次就�
   expect(await inked(page)).toBe(0);
 });
 
+test('橡皮擦預設整條擦掉：碰到就擦掉整條，一次劃過幾條算一步；再按一下橡皮擦可以換成擦一塊', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openHome(page);
+  await startMode(page, 'free');
+  await openScratch(page);
+  const menu = page.locator('#eraser-menu');
+  const eraser = page.locator('#scratch [data-tool="eraser"]');
+  for (const y of [60, 110, 160]) await draw(page, [30, y], [230, y]);
+  const row = (y) => inked(page, [20, y - 10, 225, 20]);
+  const before = [await row(60), await row(110), await row(160)];
+  expect(Math.min(...before)).toBeGreaterThan(0);
+
+  await eraser.click();
+  await expect(menu).toBeHidden();
+  await expect(eraser).toHaveAttribute('aria-label', '橡皮擦（整條擦掉）');
+  // 在中間那條的右端輕輕劃過：整條都不見，上下兩條不動
+  await draw(page, [210, 100], [210, 120], 2);
+  expect(await row(110)).toBe(0);
+  near(await row(60), before[0]);
+  near(await row(160), before[2]);
+  // 一次劃過上下兩條：復原一次兩條都回來，再復原中間那條也回來
+  await draw(page, [100, 45], [100, 175], 6);
+  expect(await row(60)).toBe(0);
+  expect(await row(160)).toBe(0);
+  await page.locator('#scratch-undo').click();
+  near(await row(60), before[0]);
+  near(await row(160), before[2]);
+  expect(await row(110)).toBe(0);
+  await page.locator('#scratch-undo').click();
+  near(await row(110), before[1]);
+
+  // 已經是橡皮擦時再按一下：擦法選單
+  await eraser.click();
+  await expect(menu).toBeVisible();
+  await expect(menu.locator('[data-erase="stroke"]')).toHaveAttribute('aria-pressed', 'true');
+  await audit(page, '橡皮擦的擦法選單');
+  await page.emulateMedia({ colorScheme: 'dark', reducedMotion: 'reduce' });
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await audit(page, '橡皮擦的擦法選單（深色）');
+  await menu.locator('[data-erase="area"]').click();
+  await expect(menu).toBeHidden();
+  await expect(eraser).toHaveAttribute('aria-label', '橡皮擦（擦一塊）');
+  await expect.poll(() => page.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? '{}').settings?.eraser, KEY)).toBe('area');
+  // 擦一塊：只擦掉劃過的地方，同一條線的其他部分還在
+  await draw(page, [130, 100], [130, 120], 2);
+  expect(await inked(page, [122, 100, 16, 20])).toBe(0);
+  expect(await inked(page, [30, 100, 60, 20])).toBeGreaterThan(0);
+
+  // Esc 收起選單，不會離開這一輪；選單外按一下也收起
+  await eraser.click();
+  await expect(menu).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(page.locator('#play')).toBeVisible();
+  await eraser.click();
+  await expect(menu).toBeVisible();
+  await draw(page, [40, 250], [80, 250], 2);
+  await expect(menu).toBeHidden();
+});
+
 /**
  * 在畫布上依序送觸控筆事件。step = [type, x, y, buttons, pressure, 等幾毫秒再送]；
  * contextmenu 的 step = ['contextmenu', x, y, pointerType]，回傳各個 contextmenu 有沒有被擋下預設動作

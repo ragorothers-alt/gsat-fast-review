@@ -9,7 +9,11 @@ import {
   maxScroll,
   openPage,
   pathLength,
+  STROKE_ERASE_R,
+  eraseStrokes,
+  hitStrokes,
   redo,
+  segmentDistance,
   snapLine,
   undo,
   visible,
@@ -72,6 +76,66 @@ describe('草稿區的頁', () => {
     redo(page);
     expect(visible(page)).toHaveLength(0);
     expect(page.scroll).toBe(0);
+  });
+});
+
+describe('整條擦掉', () => {
+  /** 從 (x0, y) 到 (x1, y) 的橫線，中間每 10px 一個點 */
+  const line = (y, x0 = 0, x1 = 200, tool = 'ink') => {
+    const pts = [];
+    for (let x = x0; x <= x1; x += 10) pts.push({ x, y, w: 2 });
+    return { tool, pts, done: true };
+  };
+
+  it('橡皮擦拖過的線段碰到哪條就擦哪條：交叉、擦邊都算，離太遠不算', () => {
+    const top = line(50);
+    const mid = line(100);
+    const low = line(150);
+    // 由上往下劃過中間那條，沒碰到上下兩條
+    expect(hitStrokes([top, mid, low], { x: 95, y: 80 }, { x: 105, y: 120 })).toEqual([mid]);
+    // 只停在一點（剛下筆）：離線 STROKE_ERASE_R + 筆寬一半以內算碰到
+    expect(hitStrokes([mid], { x: 300, y: 100 }, { x: 300, y: 100 })).toEqual([]);
+    expect(hitStrokes([mid], { x: 120, y: 100 + STROKE_ERASE_R + 0.9 }, { x: 120, y: 100 + STROKE_ERASE_R + 0.9 })).toEqual([mid]);
+    expect(hitStrokes([mid], { x: 120, y: 100 + STROKE_ERASE_R + 1.1 }, { x: 120, y: 100 + STROKE_ERASE_R + 1.1 })).toEqual([]);
+    // 一下劃過三條
+    expect(hitStrokes([top, mid, low], { x: 30, y: 0 }, { x: 30, y: 200 })).toEqual([top, mid, low]);
+  });
+
+  it('只有一個點的筆劃（點一下）、拉直的線（兩個點）也擦得到；擦一塊的橡皮擦筆劃不算', () => {
+    const dot = { tool: 'ink', pts: [{ x: 40, y: 40, w: 3 }], done: true };
+    const straight = { tool: 'red', pts: [{ x: 0, y: 0, w: 2 }, { x: 200, y: 200, w: 2 }], straight: true, done: true };
+    const rub = line(100, 0, 200, 'eraser');
+    expect(hitStrokes([dot], { x: 30, y: 40 }, { x: 35, y: 40 })).toEqual([dot]);
+    // 斜線的兩個端點都離橡皮擦很遠，但從中間劃過
+    expect(hitStrokes([straight, rub], { x: 50, y: 150 }, { x: 150, y: 50 })).toEqual([straight]);
+  });
+
+  it('線段距離：交叉是 0，平行是兩線的間距', () => {
+    expect(segmentDistance({ x: 0, y: 0 }, { x: 10, y: 10 }, { x: 0, y: 10 }, { x: 10, y: 0 })).toBe(0);
+    expect(segmentDistance({ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 0, y: 5 }, { x: 10, y: 5 })).toBe(5);
+    expect(segmentDistance({ x: 0, y: 0 }, { x: 10, y: 0 }, { x: 13, y: 4 }, { x: 20, y: 4 })).toBe(5);
+  });
+
+  it('擦掉的筆劃看不到、不算進能捲多遠；復原一次全部回來，重做再擦掉', () => {
+    const page = openPage(createBook(), 'q');
+    const a = line(100);
+    const b = line(280);
+    addStroke(page, a);
+    addStroke(page, b);
+    expect(maxScroll(page, 300)).toBeGreaterThan(0);
+    expect(eraseStrokes(page, [])).toBe(false);
+    expect(eraseStrokes(page, [a, b])).toBe(true);
+    expect(visible(page)).toEqual([]);
+    expect(maxScroll(page, 300)).toBe(0);
+    expect(clearPage(page)).toBe(false);
+    undo(page);
+    expect(visible(page)).toEqual([a, b]);
+    redo(page);
+    expect(visible(page)).toEqual([]);
+    undo(page);
+    addStroke(page, line(10));
+    expect(page.redo).toHaveLength(0);
+    expect(visible(page)).toHaveLength(3);
   });
 });
 

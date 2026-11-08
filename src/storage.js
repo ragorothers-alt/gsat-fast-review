@@ -38,6 +38,8 @@ export function freshState() {
       goal: 30,
       sound: false,
       scratch: true,
+      // eraser：草稿區的橡皮擦 stroke（整條擦掉）／area（擦一塊）
+      eraser: 'stroke',
       examDate: DEFAULT_EXAM_DATE,
       theme: 'auto',
       fontScale: 1,

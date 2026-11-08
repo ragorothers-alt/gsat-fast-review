@@ -327,7 +327,11 @@
             <div class="scratch-tools" role="group" aria-label="筆">
               <button class="tool" type="button" data-tool="ink" aria-pressed="true" aria-label="黑筆"><i></i></button>
               <button class="tool" type="button" data-tool="red" aria-pressed="false" aria-label="紅筆"><i></i></button>
-              <button class="tool" type="button" data-tool="eraser" aria-pressed="false" aria-label="橡皮擦">擦</button>
+              <button class="tool" type="button" data-tool="eraser" aria-pressed="false" aria-label="橡皮擦（整條擦掉）" title="橡皮擦：選了之後再按一下可以換擦法">擦</button>
+              <div id="eraser-menu" class="eraser-menu" role="group" aria-label="橡皮擦的擦法" hidden>
+                <button class="tool-btn" type="button" data-erase="stroke" aria-pressed="true">整條擦掉</button>
+                <button class="tool-btn" type="button" data-erase="area" aria-pressed="false">擦一塊</button>
+              </div>
             </div>
             <div class="tool-pair" role="group" aria-label="復原與重做">
               <button id="scratch-undo" class="tool-btn icon" type="button" aria-label="復原" title="復原（Ctrl+Z）" disabled><svg class="ico" aria-hidden="true"><use href="#i-undo"/></svg></button>

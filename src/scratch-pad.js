@@ -1,4 +1,4 @@
-// 草稿區的資料：每題一頁、頁裡的筆劃、復原與重做、紙能往下捲多遠、拉直線時的角度對齊。
+// 草稿區的資料：每題一頁、頁裡的筆劃、復原與重做、整條擦掉、紙能往下捲多遠、拉直線時的角度對齊。
 // 純邏輯，不碰 DOM；畫面與手勢在 ui/scratch.js。座標是「頁面座標」：x 從紙的左緣、y 從這頁頂端算起（CSS px）。
 
 /** 寫到可視高度的一半以下才能往下捲；最多捲到最低的筆跡停在畫面上方 30% 處，下面空出七成接著寫 */
@@ -37,17 +37,28 @@ export function openPage(book, key) {
   return page;
 }
 
-/** 這頁現在看得到的筆劃：最後一次清空之後的 */
+/** 這頁現在看得到的筆劃：最後一次清空之後的，扣掉整條擦掉的 */
 export function visible(page) {
   let i = page.entries.length;
   while (i > 0 && !page.entries[i - 1].clear) i--;
-  return page.entries.slice(i);
+  const shown = page.entries.slice(i);
+  const gone = new Set();
+  for (const e of shown) if (e.erase) for (const s of e.erase) gone.add(s);
+  return shown.filter((e) => !e.erase && !gone.has(e));
 }
 
 /** 畫完一筆：之前復原掉的就不能再重做 */
 export function addStroke(page, stroke) {
   page.entries.push(stroke);
   page.redo = [];
+}
+
+/** 整條擦掉：記一筆「擦掉這幾條」（一次拖過去擦掉的算一步，復原就全部回來） */
+export function eraseStrokes(page, strokes) {
+  if (!strokes.length) return false;
+  page.entries.push({ erase: strokes });
+  page.redo = [];
+  return true;
 }
 
 /** 清空：記一個清空記號（可以復原），捲回頂端 */
@@ -98,6 +109,63 @@ export function maxScroll(page, viewH) {
 /** 捲到 y：不能捲到頂端以上，也不能超過能捲的範圍；已經在範圍外（例如復原掉下面的筆跡）就停在原地，不跳 */
 export function clampScroll(page, y, viewH) {
   return Math.min(Math.max(0, y), Math.max(maxScroll(page, viewH), page.scroll));
+}
+
+// ── 整條擦掉：橡皮擦拖過的線段碰到哪幾條筆劃 ─────────
+/** 整條擦掉的橡皮擦半徑（px）：離筆劃邊緣這麼近就算碰到 */
+export const STROKE_ERASE_R = 10;
+
+const cross = (o, a, b) => (a.x - o.x) * (b.y - o.y) - (a.y - o.y) * (b.x - o.x);
+
+/** 點 p 到線段 ab 的距離 */
+function pointToSegment(p, a, b) {
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const len2 = dx * dx + dy * dy;
+  const t = len2 ? Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / len2)) : 0;
+  return Math.hypot(p.x - (a.x + t * dx), p.y - (a.y + t * dy));
+}
+
+/** 線段 ab 與 cd 的最短距離（交叉時是 0） */
+export function segmentDistance(a, b, c, d) {
+  const d1 = cross(c, d, a);
+  const d2 = cross(c, d, b);
+  const d3 = cross(a, b, c);
+  const d4 = cross(a, b, d);
+  if (((d1 > 0 && d2 < 0) || (d1 < 0 && d2 > 0)) && ((d3 > 0 && d4 < 0) || (d3 < 0 && d4 > 0))) return 0;
+  return Math.min(pointToSegment(a, c, d), pointToSegment(b, c, d), pointToSegment(c, a, b), pointToSegment(d, a, b));
+}
+
+/** 筆劃的外框（含筆寬），算一次記在筆劃上 */
+function bounds(s) {
+  if (!s.box) {
+    const box = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity };
+    for (const p of s.pts) {
+      box.x0 = Math.min(box.x0, p.x - p.w / 2);
+      box.y0 = Math.min(box.y0, p.y - p.w / 2);
+      box.x1 = Math.max(box.x1, p.x + p.w / 2);
+      box.y1 = Math.max(box.y1, p.y + p.w / 2);
+    }
+    s.box = box;
+  }
+  return s.box;
+}
+
+/** 橡皮擦從 a 拖到 b（半徑 r）碰到的筆劃；橡皮擦的筆劃（擦一塊留下的）不算 */
+export function hitStrokes(strokes, a, b, r = STROKE_ERASE_R) {
+  const x0 = Math.min(a.x, b.x) - r;
+  const x1 = Math.max(a.x, b.x) + r;
+  const y0 = Math.min(a.y, b.y) - r;
+  const y1 = Math.max(a.y, b.y) + r;
+  return strokes.filter((s) => {
+    if (s.tool === 'eraser' || !s.pts?.length) return false;
+    const box = bounds(s);
+    if (box.x0 > x1 || box.x1 < x0 || box.y0 > y1 || box.y1 < y0) return false;
+    const p = s.pts;
+    if (p.length === 1) return pointToSegment(p[0], a, b) <= r + p[0].w / 2;
+    for (let i = 1; i < p.length; i++) if (segmentDistance(p[i - 1], p[i], a, b) <= r + Math.max(p[i - 1].w, p[i].w) / 2) return true;
+    return false;
+  });
 }
 
 export function pathLength(pts) {

@@ -3,15 +3,19 @@
 // 紙往下延伸：寫到下半部後，兩指上下拖、滾輪或右下角的箭頭可以捲動；用過觸控筆之後，一指就能捲。
 // 畫線後停住半秒會拉成直線（接近水平、垂直、45° 時對齊）。筆跡存成點列，縮放、捲動、復原時整頁重畫。
 // 觸控筆懸空時按一下側鍵（S Pen 等），在筆和橡皮擦之間切換；選橡皮擦時，筆或滑鼠移到紙上會看到擦的範圍。
+// 橡皮擦預設整條擦掉（碰到哪條擦哪條），選了橡皮擦再按一下可以換成擦一塊（照擦過的地方擦）。
 import { createPenButton, isAirPress } from '../pen-button.js';
 import {
   HOLD_MIN,
   HOLD_MS,
   HOLD_SLOP,
+  STROKE_ERASE_R,
   addStroke,
   clampScroll,
   clearPage,
   createBook,
+  eraseStrokes,
+  hitStrokes,
   maxScroll,
   openPage,
   pathLength,
@@ -49,6 +53,9 @@ export function initScratch(ctx) {
   const track = $('#scratch-track');
   const thumb = $('#scratch-thumb');
   const toolBtns = [...document.querySelectorAll('#scratch [data-tool]')];
+  const eraserBtn = toolBtns.find((b) => b.dataset.tool === 'eraser');
+  const eraseMenu = $('#eraser-menu');
+  const eraseBtns = [...eraseMenu.querySelectorAll('[data-erase]')];
   const g = canvas.getContext('2d');
   const side = matchMedia(SIDE);
   const bottom = matchMedia(BOTTOM);
@@ -58,7 +65,10 @@ export function initScratch(ctx) {
 
   const book = createBook();
   let page = openPage(book, 'start');
-  /** 正在畫的一筆；停住拉直之後 straight = true，只留起點 a、終點 b */
+  /**
+   * 正在畫的一筆；停住拉直之後 straight = true，只留起點 a、終點 b。
+   * 整條擦掉時 sweep = true：last 是上一個點，removed 是這次拖過去擦掉的筆劃（放開才記成一步）
+   */
   let live = null;
   /** 捲動中：按在紙上的手指的平均 y */
   let pan = null;
@@ -91,6 +101,7 @@ export function initScratch(ctx) {
   function setOpen(on, remember = true) {
     open = on;
     hideRing();
+    setMenu(false);
     play.classList.toggle('scratch-open', on);
     toggleBtn.setAttribute('aria-pressed', String(on));
     // 只記住平板上的開關；手機上每次都從收起開始
@@ -109,7 +120,9 @@ export function initScratch(ctx) {
     gc.globalCompositeOperation = 'source-over';
     gc.clearRect(0, 0, canvas.width, canvas.height);
     pageTransform(gc);
-    for (const s of visible(page)) drawStroke(gc, s, 0);
+    // 整條擦掉時，這次拖過去碰到的筆劃先不畫（放開才記進這頁）
+    const removed = live?.removed;
+    for (const s of visible(page)) if (!removed?.has(s)) drawStroke(gc, s, 0);
   }
 
   function redraw() {
@@ -117,7 +130,7 @@ export function initScratch(ctx) {
     if (live?.straight) {
       base = snapshot();
       renderStraight();
-    } else if (live) drawStroke(g, live, 0);
+    } else if (live && !live.sweep) drawStroke(g, live, 0);
     refresh();
   }
 
@@ -281,6 +294,22 @@ export function initScratch(ctx) {
    * 側鍵（見 pen-button.js）：懸空按一下，在筆和橡皮擦之間切換。按著側鍵下筆（瀏覽器有送來的話）是暫時換工具，
    * 放開換回原本的；按太久也換回來。Android 的 Chrome 收不到按著側鍵的下筆，只能用按一下切換。
    */
+  // 橡皮擦的擦法：整條擦掉（預設）或擦一塊，記在設定裡
+  const eraseMode = () => (settings.eraser === 'area' ? 'area' : 'stroke');
+
+  function renderEraseMode() {
+    const mode = eraseMode();
+    for (const b of eraseBtns) b.setAttribute('aria-pressed', String(b.dataset.erase === mode));
+    eraserBtn.setAttribute('aria-label', mode === 'stroke' ? '橡皮擦（整條擦掉）' : '橡皮擦（擦一塊）');
+    ring.classList.toggle('stroke', mode === 'stroke');
+  }
+
+  /** 擦法選單；用鍵盤打開時焦點移到目前的擦法 */
+  function setMenu(on, focus = false) {
+    eraseMenu.hidden = !on;
+    if (on && focus) eraseBtns.find((b) => b.getAttribute('aria-pressed') === 'true')?.focus();
+  }
+
   function onPenButton(what) {
     if (what === 'press') {
       pressTool = tool;
@@ -299,7 +328,8 @@ export function initScratch(ctx) {
   function updateRing(e) {
     if (e.pointerType === 'touch' || (live?.tool ?? tool) !== 'eraser') return hideRing();
     const r = canvas.getBoundingClientRect();
-    ring.style.transform = `translate(${e.clientX - r.left - ERASER / 2}px, ${e.clientY - r.top - ERASER / 2}px)`;
+    const d = eraseMode() === 'stroke' ? STROKE_ERASE_R * 2 : ERASER;
+    ring.style.transform = `translate(${e.clientX - r.left - d / 2}px, ${e.clientY - r.top - d / 2}px)`;
     ring.hidden = false;
     clearTimeout(ringTimer);
     // Android 不送「筆離開感應範圍」的事件：筆一陣子沒動就收起來
@@ -352,6 +382,10 @@ export function initScratch(ctx) {
     const s = live;
     live = null;
     base = null;
+    if (s.sweep) {
+      if (!discard) eraseStrokes(page, [...s.removed]);
+      return redraw();
+    }
     if (discard) return redraw();
     if (s.straight) {
       addStroke(page, { tool: s.tool, pts: [s.a, s.b], straight: true, done: true });
@@ -402,11 +436,28 @@ export function initScratch(ctx) {
     // 筆尾或筆身的橡皮擦按鈕（button 5 / buttons 32）也能擦
     const erasing = tool === 'eraser' || e.button === 5 || (e.buttons & 32) !== 0;
     live = { id: e.pointerId, pointerType: e.pointerType, t0: performance.now(), tool: erasing ? 'eraser' : tool, pts: [], rect: canvas.getBoundingClientRect() };
-    addPoint(e);
-    drawStroke(g, live, 0);
-    hint.hidden = true;
+    if (erasing && eraseMode() === 'stroke') {
+      live.sweep = true;
+      live.removed = new Set();
+      live.last = toPage(e, live.rect);
+      sweep(live.last);
+    } else {
+      addPoint(e);
+      drawStroke(g, live, 0);
+      hint.hidden = true;
+    }
     updateRing(e);
   });
+
+  /** 整條擦掉：從上一個點拖到 p，碰到的筆劃先藏起來 */
+  function sweep(p) {
+    const left = visible(page).filter((s) => !live.removed.has(s));
+    const hits = hitStrokes(left, live.last, p);
+    live.last = p;
+    if (!hits.length) return;
+    for (const s of hits) live.removed.add(s);
+    redraw();
+  }
 
   canvas.addEventListener('pointermove', (e) => {
     if (e.pointerType === 'pen') {
@@ -423,6 +474,11 @@ export function initScratch(ctx) {
       return;
     }
     if (!live || e.pointerId !== live.id) return;
+    if (live.sweep) {
+      const events = e.getCoalescedEvents?.();
+      for (const ev of events?.length ? events : [e]) sweep(toPage(ev, live.rect));
+      return;
+    }
     if (live.straight) {
       live.b = { ...snapLine(live.a, toPage(e, live.rect)), w: live.a.w };
       renderStraight();
@@ -467,11 +523,45 @@ export function initScratch(ctx) {
   const doClear = () => !live && clearPage(page) && redraw();
 
   for (const btn of toolBtns) {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      // 已經是橡皮擦時再按一下：打開（或收起）擦法選單
+      const again = btn === eraserBtn && tool === 'eraser';
       setTool(btn.dataset.tool);
       pressTool = null;
+      setMenu(again && eraseMenu.hidden, e.detail === 0);
     });
   }
+  for (const btn of eraseBtns) {
+    btn.addEventListener('click', (e) => {
+      settings.eraser = btn.dataset.erase;
+      ctx.save();
+      renderEraseMode();
+      setTool('eraser');
+      setMenu(false);
+      if (e.detail === 0) eraserBtn.focus();
+    });
+  }
+  // 選單外按一下就收起（按橡皮擦本身交給上面切換）；Esc 收起，不要穿過去變成離開這一輪、打開題號一覽
+  document.addEventListener(
+    'pointerdown',
+    (e) => {
+      if (!eraseMenu.hidden && !eraseMenu.contains(e.target) && e.target !== eraserBtn) setMenu(false);
+    },
+    true,
+  );
+  window.addEventListener(
+    'keydown',
+    (e) => {
+      if (e.key !== 'Escape' || eraseMenu.hidden) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const inside = eraseMenu.contains(document.activeElement);
+      setMenu(false);
+      if (inside) eraserBtn.focus();
+    },
+    true,
+  );
+  renderEraseMode();
   undoBtn.addEventListener('click', doUndo);
   redoBtn.addEventListener('click', doRedo);
   clearBtn.addEventListener('click', doClear);
