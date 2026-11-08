@@ -1,12 +1,20 @@
 // 線上同步的畫面與時機：開 App、每輪結算後、回到前景、切到背景、恢復連線時自動同步；
+// 畫面開著時（作答中也是）每分鐘看一次，有還沒上傳的作答、闖關進度等就同步，沒有變動也每 5 分鐘拉一次別台的。
 // 設定面板裡可以開啟、加入、立即同步、停止、刪除雲端資料。
-import { CloudError, checkCode, cloudOn, createCode, deleteCloud, makeRequest, normalizeCode, startCloud, stopCloud, syncCloud } from '../cloud.js';
+import { CloudError, checkCode, cloudOn, createCode, deleteCloud, hasChanges, makeRequest, normalizeCode, startCloud, stopCloud, syncCloud } from '../cloud.js';
 import { copyText } from './clipboard.js';
 
 /** 回到前景時，距離上次同步超過這麼久才再同步一次 */
 const STALE_MS = 30_000;
 /** 自動同步失敗後多久再試 */
 const RETRY_MS = 60_000;
+/** 畫面開著時多久看一次有沒有要上傳的變動 */
+export const TICK_MS = 60_000;
+/** 沒有要上傳的變動時，多久拉一次別台的變動 */
+export const PULL_MS = 5 * 60_000;
+
+/** 定時同步這一次要不要連線：有沒上傳的變動，或太久沒拉別台的變動 */
+export const tickDue = (state, now) => hasChanges(state) || now - (state.cloud?.syncedAt ?? 0) > PULL_MS;
 
 const offline = (e) => e instanceof CloudError && e.status === 0;
 // 只有後端明確回「沒有這組同步碼」才算雲端資料被刪除；Worker 改名、暫時的 404 都不該讓各台停止同步
@@ -80,6 +88,11 @@ export function initCloud(ctx) {
     else if (Date.now() - (ctx.state.cloud?.syncedAt ?? 0) > STALE_MS) auto();
   });
   window.addEventListener('online', () => auto());
+  // 定時同步：一輪做很久、做到一半 App 被關掉，答過的題目也已經上傳；失敗後的重試交給 retryTimer
+  setInterval(() => {
+    if (document.hidden || !cloudOn(ctx.state) || running || retryTimer) return;
+    if (tickDue(ctx.state, Date.now())) auto();
+  }, TICK_MS);
 
   // ── 設定面板 ───────────────────────────────────────
   function render() {
@@ -133,7 +146,7 @@ export function initCloud(ctx) {
         startCloud(ctx.state, code);
         const changed = await sync();
         input.value = '';
-        ctx.toast(changed ? `已加入同步，合併了 ${changed} 題的紀錄` : '已加入同步');
+        ctx.toast(changed ? `已加入同步，合併了 ${changed} 筆紀錄` : '已加入同步');
       } catch (err) {
         if (missing(err)) ctx.toast('找不到這組同步碼，請再確認一次');
         else if (offline(err)) ctx.toast(cloudOn(ctx.state) ? '已加入，連上網路後會自動同步' : '沒有網路，連上後再試一次');
@@ -151,7 +164,7 @@ export function initCloud(ctx) {
     busy(nowBtn, async () => {
       try {
         const changed = await sync();
-        ctx.toast(changed ? `同步完成，更新了 ${changed} 題的紀錄` : '同步完成，已經是最新的');
+        ctx.toast(changed ? `同步完成，更新了 ${changed} 筆紀錄` : '同步完成，已經是最新的');
       } catch (e) {
         if (missing(e)) ctx.toast('這組同步碼的雲端資料已被刪除，這台已停止同步');
         else ctx.toast(offline(e) ? '沒有網路，連上後會自動同步' : '同步失敗，稍後會再試');

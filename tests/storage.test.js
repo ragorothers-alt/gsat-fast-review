@@ -78,6 +78,23 @@ describe('同時開兩個分頁', () => {
     expect(b.absorbState(stateB, store.get(a.KEY))).toBe(false);
   });
 
+  it('闖關進度與模擬考成績兩邊合併，不會整份換成對方的', async () => {
+    const a = await tab();
+    const stateA = a.loadState();
+    vi.resetModules();
+    const b = await tab();
+    const stateB = b.loadState();
+    const exam = (at, paper) => ({ paper, at, total: 25, right: 10, points: 10, blank: 0, secs: 900 });
+    stateA.path = { math: { cleared: ['A'], clearedAt: { A: NOW }, runs: {} } };
+    stateA.examLog = [exam(NOW, 'math')];
+    a.saveState(stateA);
+    stateB.path = { physics: { cleared: ['力學'], clearedAt: { 力學: NOW + 1 }, runs: {} } };
+    stateB.examLog = [exam(NOW + 5, 'science')];
+    b.absorbState(stateB, store.get(a.KEY));
+    expect(Object.keys(stateB.path).sort()).toEqual(['math', 'physics']);
+    expect(stateB.examLog.map((e) => e.paper)).toEqual(['math', 'science']);
+  });
+
   it('設定沿用同一個物件（各畫面拿著它的參照），內容換成對方較新的', async () => {
     const a = await tab();
     const stateA = a.loadState();

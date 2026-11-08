@@ -1,6 +1,6 @@
 // 單元闖關的選關面板：一科一個分頁，列出每個單元過關了沒；點目前這關或已過關的單元就開始闖
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
-import { PATH_SIZE, currentUnit, pathProgress, pathUnits, settleRuns, unitStatus } from '../path.js';
+import { PATH_SIZE, currentUnit, pathProgress, pathUnits, resetProgress, settleRuns, unitStatus } from '../path.js';
 import { UNITS } from '../units.js';
 import { icon } from './icons.js';
 import { closeSheet, openSheet } from './sheet.js';
@@ -87,7 +87,7 @@ export function initPathSheet(ctx) {
   $('#path-reset').addEventListener('click', () => {
     const name = SUBJECT_BY_ID[current].name;
     if (!confirm(`要讓「${name}」從第一關重新闖嗎？\n只會清掉過關紀錄，作答紀錄與錯題本都會保留。`)) return;
-    ctx.state.path[current] = { cleared: [], runs: {} };
+    ctx.state.path[current] = resetProgress();
     ctx.save();
     render();
     ctx.refreshHome?.();

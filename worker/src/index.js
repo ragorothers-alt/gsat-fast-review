@@ -2,6 +2,7 @@
 // 同步碼就是鑰匙（不用帳號）：資料庫只存它的 SHA-256。
 // 合併規則與前端 src/sync.js 相同：作答排程以較晚作答的為準、次數取較大值；回報與收藏以較晚的動作為準；
 // 每日作答量每台裝置各記一份（相加），開始同步前的舊紀錄取較大值。
+// 單元闖關：每個單元的過關時間取較大值、做到一半的關以較晚的為準，「重新闖」記時間；模擬考成績各台合併。
 // 另外負責每日提醒的推播（push.js），每小時由 Cron 觸發；以及收集前端的執行錯誤（/v1/log）。
 import { PushError, progress, sendReminders, subscribe, unsubscribe } from './push.js';
 
@@ -21,6 +22,13 @@ const MAX_BODY = 1_000_000;
 const MAX_CARDS = 2000;
 const MAX_DAILY = 1000;
 const MAX_MARKS = 2000;
+const MAX_PATH = 500;
+const MAX_EXAMS = 100;
+/** 一關的題目（含補進來的類似題）最多幾題 */
+const MAX_RUN = 300;
+/** 每組同步碼留幾筆模擬考成績（前端顯示最近 30 筆） */
+const KEEP_EXAMS = 60;
+const PAPER = /^[a-z]{2,16}$/;
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -138,7 +146,7 @@ async function create(db) {
 
 async function remove(db, code) {
   const sid = await spaceId(db, code);
-  await db.batch(['cards', 'daily', 'flags', 'stars', 'spaces'].map((t) => db.prepare(`DELETE FROM ${t} WHERE sid = ?1`).bind(sid)));
+  await db.batch(['cards', 'daily', 'flags', 'stars', 'path', 'exams', 'spaces'].map((t) => db.prepare(`DELETE FROM ${t} WHERE sid = ?1`).bind(sid)));
   return { ok: true };
 }
 
@@ -150,7 +158,9 @@ WHERE sid = ?1 AND (
   EXISTS (SELECT 1 FROM cards WHERE sid = ?1 AND rev > spaces.rev) OR
   EXISTS (SELECT 1 FROM daily WHERE sid = ?1 AND rev > spaces.rev) OR
   EXISTS (SELECT 1 FROM flags WHERE sid = ?1 AND rev > spaces.rev) OR
-  EXISTS (SELECT 1 FROM stars WHERE sid = ?1 AND rev > spaces.rev))`;
+  EXISTS (SELECT 1 FROM stars WHERE sid = ?1 AND rev > spaces.rev) OR
+  EXISTS (SELECT 1 FROM path WHERE sid = ?1 AND rev > spaces.rev) OR
+  EXISTS (SELECT 1 FROM exams WHERE sid = ?1 AND rev > spaces.rev))`;
 
 const UPSERT_CARDS = `
 INSERT INTO cards (sid, id, box, due, seen, rights, wrongs, parked, last, missed, rev)
@@ -193,13 +203,37 @@ WHERE excluded.at > ${table}.at`;
 const UPSERT_FLAGS = upsertMarks('flags', 'flagged');
 const UPSERT_STARS = upsertMarks('stars', 'starred');
 
+/** 單元闖關：[subject, unit, cleared, runAt, run]；run 已經是 JSON 字串（或 null） */
+const UPSERT_PATH = `
+INSERT INTO path (sid, subject, unit, cleared, run_at, run, rev)
+SELECT ?1, json_extract(j.value, '$[0]'), json_extract(j.value, '$[1]'), json_extract(j.value, '$[2]'),
+       json_extract(j.value, '$[3]'), json_extract(j.value, '$[4]'), ${REV}
+FROM json_each(?2) AS j WHERE true
+ON CONFLICT (sid, subject, unit) DO UPDATE SET
+  cleared = max(path.cleared, excluded.cleared),
+  run = CASE WHEN excluded.run_at > path.run_at THEN excluded.run ELSE path.run END,
+  run_at = max(path.run_at, excluded.run_at),
+  rev = excluded.rev
+WHERE excluded.cleared > path.cleared OR excluded.run_at > path.run_at`;
+
+/** 模擬考成績：[at, paper, data]，同一筆不重複寫入；只留最近 KEEP_EXAMS 筆 */
+const INSERT_EXAMS = `
+INSERT INTO exams (sid, at, paper, data, rev)
+SELECT ?1, json_extract(j.value, '$[0]'), json_extract(j.value, '$[1]'), json_extract(j.value, '$[2]'), ${REV}
+FROM json_each(?2) AS j WHERE true
+ON CONFLICT (sid, at, paper) DO NOTHING`;
+const PRUNE_EXAMS = `
+DELETE FROM exams WHERE sid = ?1 AND at < (SELECT at FROM exams WHERE sid = ?1 ORDER BY at DESC LIMIT 1 OFFSET ${KEEP_EXAMS - 1})`;
+
 // 回傳的 JSON 直接由 SQLite 組好，Worker 不必逐列處理（免費方案每次請求只有 10 ms CPU）
 const PULL = `
 SELECT rev, best,
   (SELECT json_group_object(id, json_array(box, due, seen, rights, wrongs, parked, last, missed)) FROM cards WHERE sid = ?1 AND rev > ?2) AS cards,
   (SELECT json_group_array(json_array(device, day, answered, rights)) FROM daily WHERE sid = ?1 AND rev > ?2) AS daily,
   (SELECT json_group_object(id, json_array(at, flagged)) FROM flags WHERE sid = ?1 AND rev > ?2) AS flags,
-  (SELECT json_group_object(id, json_array(at, starred)) FROM stars WHERE sid = ?1 AND rev > ?2) AS stars
+  (SELECT json_group_object(id, json_array(at, starred)) FROM stars WHERE sid = ?1 AND rev > ?2) AS stars,
+  (SELECT json_group_array(json_array(subject, unit, cleared, run_at, json(run))) FROM path WHERE sid = ?1 AND rev > ?2) AS path,
+  (SELECT json_group_array(json(data)) FROM exams WHERE sid = ?1 AND rev > ?2) AS exams
 FROM spaces WHERE sid = ?1`;
 
 /**
@@ -214,11 +248,15 @@ async function sync(db, body, now, code) {
   const daily = cleanDaily(body.daily);
   const flags = cleanMarks(body.flags, now);
   const stars = cleanMarks(body.stars, now);
+  const path = cleanPath(body.path, now);
+  const exams = cleanExams(body.exams, now);
   const writes = [];
   if (Object.keys(cards).length) writes.push(db.prepare(UPSERT_CARDS).bind(sid, JSON.stringify(cards)));
   if (daily.length) writes.push(db.prepare(UPSERT_DAILY).bind(sid, JSON.stringify(daily)));
   if (Object.keys(flags).length) writes.push(db.prepare(UPSERT_FLAGS).bind(sid, JSON.stringify(flags)));
   if (Object.keys(stars).length) writes.push(db.prepare(UPSERT_STARS).bind(sid, JSON.stringify(stars)));
+  if (path.length) writes.push(db.prepare(UPSERT_PATH).bind(sid, JSON.stringify(path)));
+  if (exams.length) writes.push(db.prepare(INSERT_EXAMS).bind(sid, JSON.stringify(exams)), db.prepare(PRUNE_EXAMS).bind(sid));
 
   const stmts = [...writes];
   if (writes.length) stmts.push(db.prepare(BUMP).bind(sid, now));
@@ -226,7 +264,7 @@ async function sync(db, body, now, code) {
   stmts.push(db.prepare(PULL).bind(sid, since));
   const results = await db.batch(stmts);
   const row = results.at(-1).results[0];
-  const text = `{"rev":${row.rev},"best":${row.best},"cards":${row.cards},"daily":${row.daily},"flags":${row.flags},"stars":${row.stars}}`;
+  const text = `{"rev":${row.rev},"best":${row.best},"cards":${row.cards},"daily":${row.daily},"flags":${row.flags},"stars":${row.stars},"path":${row.path},"exams":${row.exams}}`;
   return new Response(text, { headers: { ...CORS, 'Content-Type': 'application/json' } });
 }
 
@@ -302,6 +340,47 @@ function cleanDaily(input) {
       isInt(v[3], 1e5) &&
       v[3] <= v[2],
   );
+}
+
+const cardIds = (list) => Array.isArray(list) && list.length <= MAX_RUN && list.every((id) => typeof id === 'string' && CARD_ID.test(id));
+
+/**
+ * 單元闖關：[[subject, unit, cleared, runAt, run]]。unit 空字串是「重新闖」的時間（不帶 run）；
+ * run 是 { ids, index, extra }，存成 JSON 字串。格式不對、時間在未來的列略過
+ */
+function cleanPath(input, now) {
+  if (!Array.isArray(input)) return [];
+  if (input.length > MAX_PATH) throw new HttpError(413, 'too many units');
+  const out = [];
+  for (const v of input) {
+    if (!Array.isArray(v) || v.length !== 5) continue;
+    const [subject, unit, cleared, runAt, run] = v;
+    if (!SUBJECT_IDS.includes(subject) || typeof unit !== 'string' || unit.length > 40) continue;
+    if (!isInt(cleared, now + CLOCK_SKEW) || !isInt(runAt, now + CLOCK_SKEW)) continue;
+    let text = null;
+    if (run !== null) {
+      if (!unit || !isObject(run) || !cardIds(run.ids) || !cardIds(run.extra ?? []) || !isInt(run.index, run.ids.length)) continue;
+      text = JSON.stringify({ ids: run.ids, index: run.index, extra: run.extra ?? [] });
+    } else if (runAt) continue;
+    out.push([subject, unit, cleared, runAt, text]);
+  }
+  return out;
+}
+
+/** 模擬考成績：[{ paper, at, total, right, points, blank, secs }]；格式不對、時間在未來的略過 */
+function cleanExams(input, now) {
+  if (!Array.isArray(input)) return [];
+  if (input.length > MAX_EXAMS) throw new HttpError(413, 'too many exams');
+  const out = [];
+  for (const e of input) {
+    if (!isObject(e) || typeof e.paper !== 'string' || !PAPER.test(e.paper) || !isInt(e.at, now + CLOCK_SKEW)) continue;
+    if (!isInt(e.total, 200) || !e.total || !isInt(e.right, e.total)) continue;
+    const num = (x) => Number.isFinite(x) && x >= 0 && x <= 1e5;
+    if (!num(e.points ?? 0) || !isInt(e.blank ?? 0, e.total) || !isInt(e.secs ?? 0, 1e5)) continue;
+    const data = { paper: e.paper, at: e.at, total: e.total, right: e.right, points: e.points ?? e.right, blank: e.blank ?? 0, secs: e.secs ?? 0 };
+    out.push([e.at, e.paper, JSON.stringify(data)]);
+  }
+  return out;
 }
 
 /** 回報或收藏：{ id: [at, on] }；時間在未來的不收 */

@@ -1,6 +1,8 @@
 // 進度存在 localStorage。私密瀏覽或被清除時讀不到也要能正常玩，所以全部包 try/catch。
 import { SUBJECTS } from './subjects.js';
 import { rebuildDaily } from './cloud.js';
+import { mergeExams } from './exam.js';
+import { applyPathRows, pathRows } from './path.js';
 import { cleanCard, mergeState } from './sync.js';
 
 export const KEY = 'gsat-quiz:v1';
@@ -23,10 +25,10 @@ export function freshState() {
     starsOff: {},
     // 線上同步（cloud.js）；沒開過就是 null
     cloud: null,
-    // 單元闖關的進度：科目 → { cleared, runs }（見 path.js），pathLast 是最近闖的科目。只存在這台裝置
+    // 單元闖關的進度：科目 → { cleared, runs, clearedAt, resetAt }（見 path.js），會線上同步；pathLast 是這台最近闖的科目
     path: {},
     pathLast: null,
-    // 模擬考：考到一半的卷（見 exam.js 的 newExam）與最近的成績（logExam）。只存在這台裝置
+    // 模擬考：考到一半的卷（見 exam.js 的 newExam）只存在這台；最近的成績（logExam）會線上同步
     exam: null,
     examLog: [],
     // scratch：平板上草稿區要不要展開（手機上一律收起）
@@ -130,9 +132,13 @@ export function absorbState(state, raw) {
   }
   lastRaw = raw;
   const merged = mergeState(state, other).state;
+  // 闖關進度、模擬考成績跟線上同步用同一套規則合併（重新闖、做到一半的關都比時間）
+  const path = state.path ?? {};
+  applyPathRows(path, pathRows(other.path));
+  mergeExams(merged, other.examLog);
   Object.assign(state, merged, {
     settings: Object.assign(state.settings, other.settings),
-    path: other.path,
+    path,
     pathLast: other.pathLast,
     cloud: mergeCloud(state.cloud, other.cloud),
   });

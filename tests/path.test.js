@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns, unitStatus } from '../src/path.js';
+import { applyPathRows, currentUnit, followUp, markCleared, pathProgress, pathRows, pathUnits, resetProgress, resumeRun, settleRuns, unitStatus } from '../src/path.js';
 import { UNITS, unitKey } from '../src/units.js';
 
 const units = ['A', 'B', 'C'];
@@ -10,6 +10,74 @@ describe('pathUnits', () => {
     const all = UNITS.physics;
     expect(pathUnits('physics')).toEqual(all);
     expect(pathUnits('physics', [unitKey('physics', all[1])])).toEqual(all.filter((_, i) => i !== 1));
+  });
+});
+
+describe('闖關進度的合併（線上同步、兩個分頁）', () => {
+  /** 把 b 的進度併進 a（跟雲端拉回來的列同一套規則） */
+  const absorb = (a, b, since = 0) => applyPathRows(a, pathRows(b, since));
+
+  it('兩台各自過關的單元都留下；做到一半的關以較晚的為準', () => {
+    const a = { math: { cleared: [], runs: { B: { ...run(['x', 'y', 'z'], 1), at: 10 } } } };
+    markCleared(a.math, 'A', 20);
+    const b = { math: { cleared: [], runs: { B: { ...run(['x', 'y', 'z'], 2), at: 30 } } }, physics: { cleared: [], runs: {} } };
+    markCleared(b.physics, '力學', 25);
+    expect(absorb(a, b)).toBe(2);
+    expect(a.math.cleared).toEqual(['A']);
+    expect(a.math.runs.B).toMatchObject({ index: 2, at: 30 });
+    expect(a.physics.cleared).toEqual(['力學']);
+    // 再併一次不會變
+    expect(absorb(a, b)).toBe(0);
+    // 反過來併：較舊的那份不會蓋掉較新的
+    expect(absorb(b, a)).toBe(1);
+    expect(b.math.cleared).toEqual(['A']);
+    expect(b.math.runs.B.index).toBe(2);
+  });
+
+  it('一台做完的關，另一台還留著較早的進行中紀錄：併進來後拿掉', () => {
+    const a = { math: { cleared: [], runs: { A: { ...run(['x', 'y'], 1), at: 10 } } } };
+    const b = { math: { cleared: [], runs: {} } };
+    markCleared(b.math, 'A', 20);
+    absorb(a, b);
+    expect(a.math.cleared).toEqual(['A']);
+    expect(a.math.runs).toEqual({});
+    // 過關之後又重闖這關：較晚的進行中紀錄留著
+    b.math.runs.A = { ...run(['x', 'y'], 0), at: 30 };
+    absorb(a, b);
+    expect(a.math.runs.A).toMatchObject({ at: 30 });
+    expect(a.math.cleared).toEqual(['A']);
+  });
+
+  it('從第一關重新闖：比它早的過關與進行中的關都不算，之後的照算；另一台舊的進度不會加回來', () => {
+    const a = { math: { cleared: [], runs: { C: { ...run(['x'], 0), at: 15 } } } };
+    markCleared(a.math, 'A', 10);
+    markCleared(a.math, 'B', 12);
+    const b = structuredClone(a);
+    b.math = resetProgress(20);
+    markCleared(b.math, 'A', 30);
+    absorb(a, b);
+    expect(a.math).toEqual({ cleared: ['A'], runs: {}, clearedAt: { A: 30 }, resetAt: 20 });
+    absorb(b, a);
+    expect(b.math.cleared).toEqual(['A']);
+    expect(b.math.runs).toEqual({});
+  });
+
+  it('舊紀錄沒有時間：第一次同步照樣上傳；有人重新闖過就不算', () => {
+    const legacy = { math: { cleared: ['A'], runs: { B: run(['x'], 0) } } };
+    expect(pathRows(legacy, 0)).toEqual([
+      ['math', 'A', 1, 0, null],
+      ['math', 'B', 0, 1, { ids: ['x'], index: 0, extra: [] }],
+    ]);
+    expect(pathRows(legacy, 5)).toEqual([]);
+    applyPathRows(legacy, [['math', '', 7, 0, null]]);
+    expect(legacy.math).toEqual({ cleared: [], runs: {}, resetAt: 7 });
+  });
+
+  it('只上傳 since 之後變動的單元；格式不對的列略過', () => {
+    const p = { math: { cleared: [], runs: { B: { ...run(['x'], 0), at: 50 } } } };
+    markCleared(p.math, 'A', 10);
+    expect(pathRows(p, 20).map((r) => r[1])).toEqual(['B']);
+    expect(applyPathRows(p, [['math', 'C'], null, ['math', 'C', 'x', 0, null], ['math', 'D', 0, 9, { ids: 'bad' }]])).toBe(0);
   });
 });
 
@@ -28,8 +96,8 @@ describe('闖關進度', () => {
     settleRuns(prog);
     expect(prog.runs.A).toBeDefined();
     prog.runs.A.index = 2;
-    settleRuns(prog);
-    expect(prog).toEqual({ cleared: ['A'], runs: {} });
+    settleRuns(prog, 5);
+    expect(prog).toEqual({ cleared: ['A'], runs: {}, clearedAt: { A: 5 } });
     expect(currentUnit(units, prog)).toBe('B');
     expect(units.map((u) => unitStatus(units, prog, u))).toEqual(['done', 'current', 'locked']);
   });

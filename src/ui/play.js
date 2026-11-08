@@ -4,7 +4,7 @@ import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
-import { currentUnit, followUp, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
+import { currentUnit, followUp, markCleared, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
 import { bundles, isBank, takeBundles, usedOptions } from '../groups.js';
 import { questionPrompt } from '../prompt.js';
 import { relatedQuestions, relatedQueue } from '../related.js';
@@ -195,8 +195,7 @@ export function initPlay(ctx) {
     let index = resumed.index;
     if (run?.index > 0 && index >= queue.length) {
       // 答過幾題了，剩下的都被回報而略過：這關算做完
-      if (!prog.cleared.includes(target)) prog.cleared.push(target);
-      delete prog.runs[target];
+      markCleared(prog, target);
       ctx.save();
       ctx.toast(`「${target}」剩下的題目都回報過了，這關算完成`);
       return startPath({ subject });
@@ -209,7 +208,7 @@ export function initPlay(ctx) {
       // 單元裡沒回報的題目都答對過、從沒失手：已經會了，算過關，往下一關
       const left = ctx.bank.some((x) => x.subject === subject && x.topic === target && !ctx.state.flags[x.id]);
       if (left && !prog.cleared.includes(target)) {
-        prog.cleared.push(target);
+        markCleared(prog, target);
         ctx.save();
         ctx.toast(`「${target}」的題目都答對過了，直接過關`);
         return startPath({ subject });
@@ -224,12 +223,13 @@ export function initPlay(ctx) {
     ctx.save();
   }
 
-  /** 闖關：記下這關的題目順序與下一題的位置 */
+  /** 闖關：記下這關的題目順序、下一題的位置與時間（同步時以較晚的為準） */
   function savePath(nextIndex) {
     pathProgress(ctx.state, s.path.subject).runs[s.path.unit] = {
       ids: s.queue.map((x) => x.id),
       index: nextIndex,
       extra: [...s.extra],
+      at: Date.now(),
     };
   }
 

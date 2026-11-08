@@ -1,13 +1,15 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import worker, { SUBJECT_IDS } from '../worker/src/index.js';
-import { CHUNK, CloudError, createCode, deleteCloud, makeRequest, normalizeCode, startCloud, stopCloud, syncCloud } from '../src/cloud.js';
+import { CHUNK, CloudError, SCHEMA, createCode, deleteCloud, makeRequest, normalizeCode, startCloud, stopCloud, syncCloud } from '../src/cloud.js';
 import { foldLegacy } from '../src/cloud.js';
 import { neverMissed, schedule } from '../src/srs.js';
 import { adjustRight, dayKey, recordAnswer } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 import { SUBJECTS } from '../src/subjects.js';
 import { mergeState, setFlag, setStar } from '../src/sync.js';
-import { statusText } from '../src/ui/cloud.js';
+import { PULL_MS, statusText, tickDue } from '../src/ui/cloud.js';
+import { KEEP_EXAMS } from '../src/exam.js';
+import { markCleared, pathProgress, resetProgress } from '../src/path.js';
 import { createD1 } from './helpers/d1.js';
 
 const T0 = new Date(2026, 9, 28, 10, 0).getTime();
@@ -257,6 +259,131 @@ describe('合併', () => {
     await sync(b);
     expect(a.daily[TODAY]).toEqual({ answered: 2, right: 2 });
     expect(b.daily[TODAY]).toEqual({ answered: 2, right: 2 });
+  });
+});
+
+describe('闖關進度與模擬考成績', () => {
+  const exam = (at, paper = 'math') => ({ paper, at, total: 25, right: 12, points: 13.5, blank: 1, secs: 1500 });
+
+  it('一台闖到一半，另一台同步後接著做；過關、重新闖也同步', async () => {
+    const { a, b } = await pair();
+    clock += 1000;
+    markCleared(pathProgress(a, 'math'), '數與式', clock);
+    pathProgress(a, 'math').runs['多項式函數'] = { ids: ['math-001', 'math-002', 'math-003'], index: 1, extra: [], at: clock };
+    await sync(a);
+    await sync(b);
+    expect(b.path.math.cleared).toEqual(['數與式']);
+    expect(b.path.math.runs['多項式函數']).toMatchObject({ ids: ['math-001', 'math-002', 'math-003'], index: 1 });
+    // B 接著做完這關，A 同步後也過關、進行中的紀錄拿掉
+    clock += 1000;
+    markCleared(pathProgress(b, 'math'), '多項式函數', clock);
+    await sync(b);
+    await sync(a);
+    expect(a.path.math.cleared.sort()).toEqual(['多項式函數', '數與式']);
+    expect(a.path.math.runs).toEqual({});
+    // A 從第一關重新闖：B 舊的過關紀錄不會再加回來
+    clock += 1000;
+    a.path.math = resetProgress(clock);
+    await sync(a);
+    await sync(b);
+    await sync(a);
+    expect(a.path.math.cleared).toEqual([]);
+    expect(b.path.math.cleared).toEqual([]);
+  });
+
+  it('模擬考成績兩台合併、依時間排好；重複同步不會重複', async () => {
+    const { a, b } = await pair();
+    a.examLog.push(exam(clock + 1000));
+    b.examLog.push(exam(clock + 2000, 'science'));
+    clock += 3000;
+    await sync(a);
+    await sync(b);
+    await sync(a);
+    await sync(b);
+    for (const s of [a, b]) expect(s.examLog.map((e) => e.paper)).toEqual(['math', 'science']);
+    expect(b.examLog[0]).toEqual(exam(T0 + 1000));
+    expect(env.DB.raw.prepare('SELECT count(*) AS n FROM exams').get().n).toBe(2);
+  });
+
+  it('雲端只留最近 60 筆成績；各台只留最近 30 筆', async () => {
+    const { a, b } = await pair();
+    for (let i = 1; i <= 70; i++) a.examLog.push(exam(clock + i));
+    clock += 100;
+    await sync(a);
+    expect(env.DB.raw.prepare('SELECT count(*) AS n FROM exams').get().n).toBe(60);
+    await sync(b);
+    expect(b.examLog).toHaveLength(KEEP_EXAMS);
+    expect(b.examLog.at(-1).at).toBe(T0 + 70);
+  });
+
+  it('舊版就開了同步的裝置：之前的闖關進度與成績在第一次用新版同步時全部上傳', async () => {
+    const { a, b } = await pair();
+    // 舊版同步過（上次上傳時間比這些紀錄晚），也沒有 schema
+    a.path = { math: { cleared: ['數與式'], runs: {} } };
+    a.examLog = [exam(T0 - 86_400_000)];
+    delete a.cloud.schema;
+    clock += 1000;
+    expect(tickDue(a, clock)).toBe(true);
+    await sync(a);
+    await sync(b);
+    expect(b.path.math.cleared).toEqual(['數與式']);
+    expect(b.examLog).toHaveLength(1);
+    expect(a.cloud.schema).toBe(SCHEMA);
+  });
+
+  it('後端還是舊版（不回 path）：不記 schema，換新後端後再全部上傳', async () => {
+    const { a, b } = await pair();
+    delete a.cloud.schema;
+    const old = makeRequest('https://sync.test', async (url, init) => {
+      const res = await worker.fetch(new Request(url, init), env);
+      const data = await res.json();
+      delete data.path;
+      delete data.exams;
+      return new Response(JSON.stringify(data), { status: res.status });
+    });
+    a.examLog.push(exam(clock + 1));
+    clock += 10;
+    await syncCloud(a, old, { now });
+    expect(a.cloud.schema).toBeUndefined();
+    env.DB.raw.exec('DELETE FROM exams');
+    await sync(a);
+    await sync(b);
+    expect(b.examLog).toHaveLength(1);
+  });
+
+  it('後端略過格式不對的闖關進度與成績', async () => {
+    const { a, code } = await pair();
+    const res = await request('/v1/sync', {
+      code,
+      device: a.cloud.device,
+      since: 0,
+      path: [
+        ['math', '數與式', 5, 0, null],
+        ['hack', '數與式', 5, 0, null],
+        ['math', '', 5, 3, { ids: ['math-001'], index: 0 }],
+        ['math', '指數', 0, 5, { ids: ['math-001'], index: 2 }],
+        ['math', '指數', 0, 5, { ids: ['<script>'], index: 0 }],
+      ],
+      exams: [exam(9), { ...exam(10), total: 0 }, { ...exam(11), paper: 'X Y' }, { ...exam(Date.now() + 10 * 86_400_000) }],
+    });
+    expect(res.path).toEqual([['math', '數與式', 5, 0, null]]);
+    expect(res.exams).toEqual([exam(9)]);
+  });
+
+  it('定時同步：有沒上傳的作答、闖關進度才連線，太久沒同步也拉一次', async () => {
+    const { a } = await pair();
+    expect(tickDue(a, clock)).toBe(false);
+    expect(tickDue(a, clock + PULL_MS + 1)).toBe(true);
+    answer(a, 'math-001', 'right');
+    expect(tickDue(a, clock)).toBe(true);
+    await sync(a);
+    expect(tickDue(a, clock)).toBe(false);
+    clock += 1000;
+    pathProgress(a, 'math').runs['數與式'] = { ids: ['math-001'], index: 0, extra: [], at: clock };
+    expect(tickDue(a, clock)).toBe(true);
+    await sync(a);
+    a.examLog.push(exam(clock + 1));
+    expect(tickDue(a, clock)).toBe(true);
   });
 });
 

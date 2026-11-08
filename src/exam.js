@@ -244,5 +244,38 @@ export function logExam(state, paperId, result, now) {
   return prev;
 }
 
+/** 成績紀錄裡合理的一筆（從雲端、另一個分頁讀進來的） */
+export function cleanExamEntry(e) {
+  const int = (x, max) => Number.isSafeInteger(x) && x >= 0 && x <= max;
+  if (!e || typeof e !== 'object' || typeof e.paper !== 'string' || !int(e.at, Number.MAX_SAFE_INTEGER)) return null;
+  if (!int(e.total, 200) || !e.total || !int(e.right, e.total)) return null;
+  const out = { paper: e.paper, at: e.at, total: e.total, right: e.right };
+  if (Number.isFinite(e.points)) out.points = e.points;
+  for (const k of ['blank', 'secs']) if (int(e[k], 1e5)) out[k] = e[k];
+  return out;
+}
+
+/**
+ * 併進別台的成績（同一時間、同一張卷是同一筆），依時間排好，只留最近 KEEP_EXAMS 次。回傳新增了幾筆。
+ * @param {object} state
+ * @param {unknown[]} incoming
+ */
+export function mergeExams(state, incoming) {
+  const log = (state.examLog ||= []);
+  const seen = new Set(log.map((e) => `${e.at}|${e.paper}`));
+  let added = 0;
+  for (const raw of Array.isArray(incoming) ? incoming : []) {
+    const e = cleanExamEntry(raw);
+    if (!e || seen.has(`${e.at}|${e.paper}`)) continue;
+    seen.add(`${e.at}|${e.paper}`);
+    log.push(e);
+    added++;
+  }
+  if (!added) return 0;
+  log.sort((a, b) => a.at - b.at);
+  if (log.length > KEEP_EXAMS) log.splice(0, log.length - KEEP_EXAMS);
+  return added;
+}
+
 /** 一筆成績紀錄的得分（有多選題以前的紀錄沒有 points，那時只有單選題，得分就是答對題數） */
 export const examPoints = (entry) => (Number.isFinite(entry.points) ? entry.points : entry.right);
