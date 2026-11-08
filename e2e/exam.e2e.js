@@ -198,3 +198,17 @@ test('學習分析的複習預報：未來 14 天每天到期的題數；複習�
   await expect(page.locator('#forecast-text')).toContainText('複習做得完');
   expect((await saved(page)).settings.goal).toBeGreaterThan(10);
 });
+
+test('學習分析的英文單字：依詞彙表級數列出練過題數與正確率，「練這一級」只出那一級的單字題', async ({ page }) => {
+  await openHome(page);
+  await page.locator('#daily').click();
+  await expect(page.locator('#stats-vocab')).toBeVisible();
+  // 題庫的單字題在第 1–5 級（學測詞彙題不考第 6 級，題庫也沒有）
+  await expect(page.locator('#vocab-levels li')).toHaveCount(5);
+  await expect(page.locator('#vocab-levels li').first()).toContainText('第 1 級');
+  await expect(page.locator('#vocab-levels li').last()).toContainText(/練過 0／\d+ 題・正確率 —/);
+  await page.locator('#vocab-levels .vocab-train[data-lv="5"]').click();
+  await expect(page.locator('#play')).toBeVisible();
+  await expect(page.locator('#q-subject')).toHaveText('英文');
+  await expect(page.locator('#q-topic')).toHaveText(/單字/);
+});

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, lowStock, subjectStats, weakUnits } from '../src/analysis.js';
+import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../src/analysis.js';
 import { CROSS_UNIT, UNITS } from '../src/units.js';
 
 const [U1, U2, U3] = UNITS.math;
@@ -38,6 +38,15 @@ describe('統計', () => {
     expect(series.map((d) => d.answered)).toEqual([2, 0, 4]);
     expect(accuracyOf(series)).toBeCloseTo(4 / 6);
     expect(accuracyOf([])).toBeNull();
+  });
+
+  it('英文單字依詞彙表級數分組：練過題數、正確率，以及還沒學會的題目（沒做過或失手過）', () => {
+    const en = (id, lv) => ({ id, subject: 'english', topic: '核心單字', ...(lv ? { lv } : {}) });
+    const words = [en('e1', 3), en('e2', 3), en('e3', 5), en('e4')];
+    const out = vocabLevelStats(words, { e1: c(2, 2, { box: 3 }), e2: c(2, 1) });
+    expect(out.map((r) => r.lv)).toEqual([3, 5]);
+    expect(out[0]).toMatchObject({ total: 2, practiced: 2, accuracy: 0.75, todo: ['e2'] });
+    expect(out[1]).toMatchObject({ total: 1, practiced: 0, accuracy: null, mastery: 0, todo: ['e3'] });
   });
 
   it('學測倒數以本地日期計算', () => {

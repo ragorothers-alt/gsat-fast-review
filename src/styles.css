@@ -1253,6 +1253,21 @@ p {
   margin-bottom: 4px;
 }
 
+/* 英文單字題：考的字在參考詞彙表第幾級（解析標題旁、錯題本的正解旁） */
+.lv-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 7px;
+  border-radius: 8px;
+  border: 1.5px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.6;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
 .tf-hint {
   display: none;
   margin-top: 14px;
@@ -3126,6 +3141,21 @@ p {
 .subject-stats .unit-meter {
   grid-column: 2;
   margin-top: 0;
+}
+
+/* 英文單字依詞彙表級數：右邊多一欄「練這一級」 */
+.vocab-levels li {
+  grid-template-columns: 56px 1fr auto;
+}
+
+.vocab-levels .vocab-train {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  white-space: nowrap;
+}
+
+.vocab-levels .vocab-train:disabled {
+  opacity: 0.45;
 }
 
 /* 題庫存量：新題快用完的單元列在上面，各科可以展開看每個單元；長條是還剩多少新題 */

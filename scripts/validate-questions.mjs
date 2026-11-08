@@ -17,12 +17,16 @@ const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
 
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
+// 英文題幹以字母計，同樣的字元數占的版面比中文少：照 111–115 學測詞彙題的題幹長度（50 題，中位數 108、最長 132 字元）
+const WARN_Q = { english: 132 };
 // 演算題（scratch: true）的解析要寫出完整的演算過程、多選題要逐一點出錯誤選項，都放寬一些
 const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 // 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
 const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv']);
+/** 英文單字題才有 lv：考的字在大考中心《高中英文參考詞彙表》的級數 */
+const LV_TOPICS = ['核心單字', '進階單字'];
 // 閱讀題組的文章長度（字元；國文是字數，英文約 6 個字元一個字）與題數
 const PASSAGE = { chinese: { min: 100, max: 800, warn: 650 }, english: { min: 400, max: 2000, warn: 1700 } };
 const PASSAGE_DEFAULT = { min: 80, max: 600, warn: 450 };
@@ -108,6 +112,10 @@ for (const file of files) {
     else if (it.formula) stats.formula++;
     if (![1, 2, 3].includes(it.level)) err('level 必須是 1、2 或 3');
     else stats.level[it.level]++;
+    if (it.lv !== undefined) {
+      if (subject !== 'english' || !LV_TOPICS.includes(it.topic) || it.type !== 'mc') err(`lv 只用在英文${LV_TOPICS.join('、')}的單選題`);
+      else if (![1, 2, 3, 4, 5, 6].includes(it.lv)) err('lv 必須是 1–6（參考詞彙表的級數）');
+    }
     if (it.scratch !== undefined) {
       if (it.scratch !== true) err('scratch 只能是 true（不是演算題就不要寫這個欄位）');
       else {
@@ -116,10 +124,12 @@ for (const file of files) {
       }
     }
 
-    checkText(it.q, 'q', LIMITS.q, WARN.q, err, warn);
+    checkText(it.q, 'q', LIMITS.q, WARN_Q[subject] ?? WARN.q, err, warn);
     if (it.scratch || it.type === 'ms') checkText(it.explain, 'explain', SCRATCH_EXPLAIN.max, SCRATCH_EXPLAIN.warn, err, warn);
     else checkText(it.explain, 'explain', LIMITS.explain, WARN.explain, err, warn);
     if (it.type === 'ms' && [it.q, it.explain].some((t) => typeof t === 'string' && LETTER_REF.test(t))) err('多選題的選項會被打亂，題幹與解析不可用 (A)(B) 指稱選項');
+    // 英文題沒有公式：沒跳脫的 $ 多半是金額（$8,000），兩個 $ 之間會被排成公式
+    if (subject === 'english' && [it.q, it.explain, it.passage, ...(Array.isArray(it.choices) ? it.choices : [])].some((t) => typeof t === 'string' && /(^|[^\\])\$/.test(t))) err('英文題不用 LaTeX 公式：字面上的錢字號要寫成 \\$（JSON 裡是 "\\\\$"）');
 
     if (it.group !== undefined || it.passage !== undefined) {
       stats.grouped++;

@@ -12,6 +12,22 @@ async function practice(page, id) {
   await expect(page.locator('#play')).toBeVisible();
 }
 
+test('英文單字題答錯：解析標出正解在參考詞彙表的級數，結算畫面也看得到', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  // english-1711：正解 abrupt 是《高中英文參考詞彙表》第 5 級
+  await practice(page, 'english-1711');
+  await page.locator('#answers .answer').filter({ hasNotText: 'abrupt' }).first().click();
+  await expect(page.locator('#q-explain .lv-tag')).toHaveText('詞彙表第 5 級');
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await audit(page, `詞彙表級數（${scheme}）`);
+  }
+  await page.locator('#next').click();
+  await expect(page.locator('#result')).toBeVisible();
+  await expect(page.locator('#r-list .lv-tag')).toHaveText('詞彙表第 5 級');
+});
+
 test('演算題填答：不先看選項，自己算出答案用數字鍵填；填的不是任何一個選項也記下來', async ({ page }) => {
   // 關掉動畫：題目卡淡入到一半時檢查對比度會誤判
   await page.emulateMedia({ reducedMotion: 'reduce' });

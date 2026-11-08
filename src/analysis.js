@@ -2,7 +2,7 @@
 import { UNIT_SHARE } from './blueprint.js';
 import { PATH_SIZE } from './path.js';
 import { unitShares } from './priority.js';
-import { isWeak, mastery } from './srs.js';
+import { isWeak, mastery, neverMissed } from './srs.js';
 import { dayKey, shiftDay } from './stats.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
 
@@ -71,6 +71,33 @@ export function subjectStats(bank, cards, subjects) {
     }
     return { subject, total: qs.length, practiced, accuracy: seen ? right / seen : null, mastery: mastery(qs, cards) };
   });
+}
+
+/**
+ * 英文單字題依《高中英文參考詞彙表》級數（題目的 lv）分組：題數、練過幾題、正確率、熟練度，
+ * 以及還沒學會的題目（沒做過，或失手過）給「練這一級」用
+ * @returns {{ lv: number, total: number, practiced: number, accuracy: number | null, mastery: number, todo: string[] }[]}
+ */
+export function vocabLevelStats(bank, cards) {
+  const byLv = new Map();
+  for (const q of bank) if (q.lv) (byLv.get(q.lv) ?? byLv.set(q.lv, []).get(q.lv)).push(q);
+  return [...byLv.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .map(([lv, qs]) => {
+      let practiced = 0;
+      let seen = 0;
+      let right = 0;
+      const todo = [];
+      for (const q of qs) {
+        const c = cards[q.id];
+        if (!c || !neverMissed(c)) todo.push(q.id);
+        if (!c) continue;
+        practiced++;
+        seen += c.seen;
+        right += c.right;
+      }
+      return { lv, total: qs.length, practiced, accuracy: seen ? right / seen : null, mastery: mastery(qs, cards), todo };
+    });
 }
 
 /** 單元裡沒做過的題目少於一關單元闖關的題數，就算新題快用完了 */

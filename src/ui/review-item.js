@@ -10,6 +10,9 @@ import { canSpeak, speak, speechText } from './speech.js';
 /** 是非題的答案：手繪圈叉加字 */
 export const tfLabel = (v) => (v ? `${icon('ok')}對` : `${icon('ng')}錯`);
 
+/** 英文單字題：考的字在大考中心《高中英文參考詞彙表》第幾級（學測詞彙題的正解多在第 3–5 級） */
+export const lvTag = (q) => (q.lv ? `<span class="lv-tag" title="大考中心《高中英文參考詞彙表》第 ${q.lv} 級">詞彙表第 ${q.lv} 級</span>` : '');
+
 /**
  * 一個答案的 HTML：是非題是圈叉、單選題是選項、多選題是選了的幾個選項（照原始順序，用「；」隔開）
  * @param {number | number[] | boolean} value
@@ -37,7 +40,7 @@ export function reviewItem(q, { index, flagged, starred, note }) {
   return `<li class="r-item" style="--c:${subj.color}">
     <div class="card-tag"><span class="tag">${subj.name}</span><button type="button" class="topic topic-link" data-kp="${q.subject}/${q.topic}" title="看這個單元的考前重點">${topicLabel(q)}</button>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="${index}" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${starred}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
     ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
-    <div class="r-ans">${note}<span class="r-right">正解：${answer}</span></div>
+    <div class="r-ans">${note}<span class="r-right">正解：${answer}</span>${lvTag(q)}</div>
     <div class="r-explain">${richHTML(q.explain)}</div>
   </li>`;
 }

@@ -12,6 +12,7 @@ import { adjustRight, recordAnswer, today } from '../stats.js';
 import { setFlag, setStar } from '../sync.js';
 import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
+import { lvTag } from './review-item.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
 import { sfx } from './feedback.js';
@@ -651,7 +652,7 @@ export function initPlay(ctx) {
       restartAnimation(el.flash, 'on');
       restartAnimation(el.card, 'shake');
     }
-    el.explain.innerHTML = `<b>${icon('bulb')}${outcome === 'skip' ? '解答' : '解析'}</b>${richHTML(q.explain)}`;
+    el.explain.innerHTML = `<b>${icon('bulb')}${outcome === 'skip' ? '解答' : '解析'}${lvTag(q)}</b>${richHTML(q.explain)}`;
     // 多選題答錯：照學測規則這題還拿得到幾分（只錯一個選項也有部分分數）
     if (q.type === 'ms' && outcome === 'wrong') el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">${msNote(q, chosen)}</span>`);
     if (typed !== null && outcome === 'wrong' && displayValue === null) el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">你填的 ${typed} 不是任何一個選項的值</span>`);

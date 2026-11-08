@@ -11,8 +11,26 @@ export default defineConfig({
   build: { target: 'es2020', chunkSizeWarningLimit: 1000 },
   // 版本號（設定裡的「關於與診斷」、錯誤回報用）：git commit 的前 7 碼與建置時間
   define: { __APP_VERSION__: JSON.stringify(commit()), __BUILD_TIME__: JSON.stringify(new Date().toISOString()) },
-  plugins: [precacheServiceWorker()],
+  plugins: [minifyJsonAssets(), precacheServiceWorker()],
 });
+
+/**
+ * 題庫、重點卡 JSON 原檔有縮排方便閱讀與比對；輸出時去掉空白，裝成 PWA 後占的空間少約 14%，解析也快一點。
+ * 檔名的雜湊照原檔內容算，內容有改才換檔名，不受這一步影響。
+ */
+function minifyJsonAssets() {
+  return {
+    name: 'minify-json-assets',
+    apply: 'build',
+    generateBundle(_, bundle) {
+      for (const file of Object.values(bundle)) {
+        if (file.type !== 'asset' || !file.fileName.endsWith('.json')) continue;
+        const text = typeof file.source === 'string' ? file.source : Buffer.from(file.source).toString('utf8');
+        file.source = JSON.stringify(JSON.parse(text));
+      }
+    },
+  };
+}
 
 /**
  * 建置時產生 sw.js：預先快取所有輸出檔，裝好之後完全離線可玩。

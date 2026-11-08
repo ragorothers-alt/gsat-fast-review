@@ -1,5 +1,5 @@
 // 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
-import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, weakUnits } from '../analysis.js';
+import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../analysis.js';
 import { dueBuckets, estimateRates, keepUpGoal, keepsUp, reviewForecast, studyPlan } from '../forecast.js';
 import { DAY, mastery } from '../srs.js';
 import { GOALS, dayKey, shiftDay, today } from '../stats.js';
@@ -68,7 +68,34 @@ export function initStats(ctx) {
         </li>`;
       })
       .join('');
+
+    renderVocab();
   }
+
+  /** 英文單字依詞彙表級數：練過題數、正確率、熟練度；「練這一級」出這一級還沒學會的題目 */
+  function renderVocab() {
+    const levels = vocabLevelStats(ctx.bank, ctx.state.cards);
+    $('#stats-vocab').hidden = !levels.length;
+    const color = SUBJECT_BY_ID.english.color;
+    $('#vocab-levels').innerHTML = levels
+      .map((r) => {
+        const m = Math.round(r.mastery * 100);
+        return `<li style="--c:${color}">
+          <span class="tag">第 ${r.lv} 級</span>
+          <span class="subject-meta">練過 ${r.practiced}／${r.total} 題・正確率 ${pct(r.accuracy)}</span>
+          <span class="unit-meter" role="img" aria-label="熟練度 ${m}%"><i style="width:${m}%"></i></span>
+          <button type="button" class="link-btn vocab-train" data-lv="${r.lv}" ${r.todo.length ? '' : 'disabled'} aria-label="練詞彙表第 ${r.lv} 級的單字題">練這一級</button>
+        </li>`;
+      })
+      .join('');
+    vocabTodo = new Map(levels.map((r) => [r.lv, r.todo]));
+  }
+  let vocabTodo = new Map();
+  $('#vocab-levels').addEventListener('click', (e) => {
+    const btn = e.target.closest('.vocab-train');
+    if (!btn || btn.disabled) return;
+    ctx.startRound('vocab', { ids: vocabTodo.get(Number(btn.dataset.lv)) ?? [] });
+  });
 
   /**
    * 考前規劃與複習預報共用：選的範圍（被回報的不算）、範圍內練過的卡片依到期日分組、推估用的答對比例
