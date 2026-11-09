@@ -68,11 +68,13 @@ describe('simulate', () => {
     ]);
   });
 
-  it('到期的太多：複習先出、每 4 題留 1 題給新題，沒輪到的複習留到隔天', () => {
+  it('到期的太多：複習先出、每 2 題複習配 1 題新題，沒輪到的複習留到隔天', () => {
     const many = dueBuckets(Array.from({ length: 40 }, () => card(2, 0)), NOW);
     const [day0, day1] = simulate(many, { days: 2, budget: () => 30, fresh: 100, recall: 1, first: 1 });
-    expect(day0).toEqual({ due: 40, review: 22.5, fresh: 7.5, carry: 17.5 });
-    expect(day1).toEqual({ due: 17.5, review: 17.5, fresh: 12.5, carry: 0 });
+    const fix = (r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, +v.toFixed(6)]));
+    // 30 題裡複習占 2/3 = 20 題，新題 10 題；沒輪到的 20 題留到隔天
+    expect(fix(day0)).toEqual({ due: 40, review: 20, fresh: 10, carry: 20 });
+    expect(fix(day1)).toEqual({ due: 20, review: 20, fresh: 10, carry: 0 });
     // 新題做完了：作答量全部給複習
     const [only] = simulate(many, { days: 1, budget: () => 30, fresh: 0, recall: 1, first: 1 });
     expect(only).toEqual({ due: 40, review: 30, fresh: 0, carry: 10 });

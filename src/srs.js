@@ -84,12 +84,13 @@ export function mastery(questions, cards) {
 }
 
 /**
- * 到期的複習先出，但每 NEW_EVERY 題留一題給新題：複習多的時候少排新題，免得複習越積越多；
- * 又不會整輪都是複習、完全沒有新進度。一邊出完了就全出另一邊。
+ * 到期的複習先出，但每 NEW_EVERY 題留一題給新題（每 2 題複習配 1 題新題），複習也最多連續出 NEW_EVERY − 1 題：
+ * 複習多的時候少排新題，免得複習越積越多；又不會一連好幾題都是做過的題、完全沒有新進度。一邊出完了就全出另一邊。
+ * （以前是每 4 題留 1 題，一組新的閱讀題組之後還會連出十幾題複習；改成 2:1 交錯，新題多一些，到期的複習累積得比較多）
  */
-export const NEW_EVERY = 4;
+export const NEW_EVERY = 3;
 /** 到期的複習和新題都夠時，複習占一輪的比例（forecast.js 推演用） */
-export const REVIEW_SHARE = 1 - 1 / NEW_EVERY;
+export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
 
 /**
  * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。
@@ -148,13 +149,18 @@ export function buildQueue(
   const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng }));
   const later = bundles(shuffle(laterList, rng).sort((a, b) => cards[a.id].due - cards[b.id].due));
 
-  // 第 NEW_EVERY、2×NEW_EVERY…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰
+  // 第 NEW_EVERY、2×NEW_EVERY…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。
+  // 但複習最多連續出 NEW_EVERY − 1 題就換新題：剛出了一整組新的閱讀題組（一次好幾題新題）時，
+  // 光照比例會接著連出一長串複習才補回來（到期的整組題組本身照樣一起出）
   const out = [];
   let freshCount = 0;
+  let inRow = 0;
   while (out.length < size && (due.length || fresh.length)) {
-    const wantFresh = out.length - freshCount >= (NEW_EVERY - 1) * (freshCount + 1);
+    const wantFresh = out.length - freshCount >= (NEW_EVERY - 1) * (freshCount + 1) || inRow >= NEW_EVERY - 1;
     const pack = (wantFresh ? fresh.length > 0 : !due.length) ? fresh.shift() : due.shift();
-    freshCount += pack.filter((q) => !cards[q.id]).length;
+    const added = pack.filter((q) => !cards[q.id]).length;
+    freshCount += added;
+    inRow = added ? 0 : inRow + pack.length;
     out.push(...pack);
   }
   out.push(...takeBundles(later, size - out.length));
