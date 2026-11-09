@@ -97,10 +97,11 @@ export function initPlay(ctx) {
 
   /**
    * 依目前選的單元組一批題目。被回報的題目一律先不出。
-   * @param {{ subjects?: string[], units?: string[] | null, exclude?: string[], allUnits?: boolean }} [opts]
+   * @param {{ subjects?: string[], units?: string[] | null, exclude?: string[], allUnits?: boolean, streak?: number }} [opts]
    *   units：只出這些單元（弱點加強用）；exclude：這批先不出的題目 id；allUnits：不管首頁關掉的單元（錯題本用）
+   *   streak：剛連續做了幾題複習（補下一批時接著算，見 buildQueue）
    */
-  function queueFor(mode, { subjects = ctx.state.settings.subjects, units = null, exclude = [], allUnits = false } = {}) {
+  function queueFor(mode, { subjects = ctx.state.settings.subjects, units = null, exclude = [], allUnits = false, streak = 0 } = {}) {
     const cfg = MODES[mode];
     return buildQueue(ctx.bank, ctx.state.cards, {
       subjects,
@@ -110,6 +111,7 @@ export function initPlay(ctx) {
       formulaOnly: cfg.formulaOnly,
       quickOnly: cfg.quickOnly,
       weakOnly: cfg.weakOnly,
+      streak,
       size: cfg.size,
       now: Date.now(),
     });
@@ -260,6 +262,8 @@ export function initPlay(ctx) {
     s.path = path;
     // 闖關裡答對後標成猜的，補進來的題目：取消標記時要拿掉
     s.followUps = new Map();
+    // 剛連續做了幾題複習（之前做過的題目）：自由練習補下一批時接著算
+    s.reviewRun = 0;
     el.timer.hidden = s.timeLeft === null;
     el.score.textContent = '0';
     renderCombo();
@@ -589,6 +593,7 @@ export function initPlay(ctx) {
     }
     const now = Date.now();
     const card = ctx.state.cards[q.id];
+    s.reviewRun = card ? s.reviewRun + 1 : 0;
     ctx.state.cards[q.id] = schedule(card, outcome, now);
     lastRight = outcome === 'right' ? { id: q.id, before: card, at: now } : null;
     const before = today(ctx.state, now).answered;
@@ -752,10 +757,11 @@ export function initPlay(ctx) {
     showQuestion();
   }
 
-  /** 自由練習：出完一批就再組一批；剛答過的先不出，題目太少時才允許重複 */
+  /** 自由練習：出完一批就再組一批；剛答過的先不出，題目太少時才允許重複。上一批最後連續的複習接著算 */
   function refill() {
-    const more = queueFor(s.mode, { exclude: s.log.slice(-RECENT).map((e) => e.id) });
-    extend(s, more.length ? more : queueFor(s.mode));
+    const streak = s.reviewRun;
+    const more = queueFor(s.mode, { exclude: s.log.slice(-RECENT).map((e) => e.id), streak });
+    extend(s, more.length ? more : queueFor(s.mode, { streak }));
   }
 
   // ── 收藏、回報題目 ─────────────────────────────────────

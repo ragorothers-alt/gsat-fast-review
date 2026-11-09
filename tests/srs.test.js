@@ -231,6 +231,51 @@ describe('buildQueue', () => {
     }
   });
 
+  it('上一批最後剛連出複習（streak）：接著算，自由練習兩批交界也不會連出 3 題以上複習', () => {
+    const many = [...Array(12)].map((_, i) => q(`d${i}`));
+    const fresh = [...Array(12)].map((_, i) => q(`n${i}`));
+    const cards = Object.fromEntries(many.map((x) => [x.id, { box: 2, due: NOW - 1, seen: 2, right: 1, wrong: 1 }]));
+    const kinds = (streak) =>
+      buildQueue([...many, ...fresh], cards, { subjects: ['math'], size: 7, streak, now: NOW, rng: seeded() })
+        .map((x) => x.id[0])
+        .join('');
+    expect(kinds(2)).toBe('nddnddn');
+    expect(kinds(1)).toBe('dnddndd');
+    expect(kinds(0)).toBe('ddnddnd');
+  });
+
+  it('剛出過 1 題複習時，到期的閱讀題組先等一題新題再整組出', () => {
+    const group = [...Array(3)].map((_, i) => q(`g${i}`, 'math', { group: 'math-g1' }));
+    const fresh = [...Array(6)].map((_, i) => q(`n${i}`));
+    const missed = { due: NOW - 1, seen: 2, right: 1, wrong: 1 };
+    // 單題的盒子小、先出，題組接在後面
+    const cards = { d0: { ...missed, box: 0 }, ...Object.fromEntries(group.map((x) => [x.id, { ...missed, box: 2 }])) };
+    const out = buildQueue([q('d0'), ...group, ...fresh], cards, { subjects: ['math'], size: 9, now: NOW, rng: seeded() });
+    expect(out.map((x) => x.id[0]).join('')).toBe('dngggnnnn');
+  });
+
+  it('新題還沒出完時，連續超過 2 題的複習只會是一整組到期的閱讀題組', () => {
+    const singles = [...Array(20)].map((_, i) => q(`d${i}`));
+    const groups = [2, 3, 4].flatMap((n, k) => [...Array(n)].map((_, i) => q(`g${k}${i}`, 'math', { group: `math-g${k}` })));
+    const fresh = [...Array(15)].map((_, i) => q(`n${i}`));
+    const cards = Object.fromEntries([...singles, ...groups].map((x) => [x.id, { box: 2, due: NOW - 1, seen: 2, right: 1, wrong: 1 }]));
+    for (let seed = 1; seed <= 30; seed++) {
+      const out = buildQueue([...singles, ...groups, ...fresh], cards, { subjects: ['math'], size: 40, now: NOW, rng: seeded(seed) });
+      const runs = [];
+      let run = [];
+      for (const x of out.slice(0, out.findLastIndex((x) => x.id[0] === 'n') + 1)) {
+        if (x.id[0] !== 'n') run.push(x);
+        else if (run.length) {
+          runs.push(run);
+          run = [];
+        }
+      }
+      for (const r of runs.filter((r) => r.length > 2)) expect(r.every((x) => x.group && x.group === r[0].group)).toBe(true);
+      // 三組題組都出了，確實測到題組
+      expect(new Set(out.filter((x) => x.group).map((x) => x.group)).size).toBe(3);
+    }
+  });
+
   it('答對過、從沒失手的題目不再出，到期了也不出；答錯過的照常複習', () => {
     const cards = {
       m1: { box: 2, due: NOW - 1, seen: 1, right: 1, wrong: 0 }, // 一次就答對，已到期

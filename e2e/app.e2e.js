@@ -231,6 +231,35 @@ test('答對過、從沒失手的題目不再出，答錯過的照常複習；�
   await expect(page.locator('#q-topic')).toContainText(units[1]);
 });
 
+test('自由練習：複習和新題交錯出，一批出完接著下一批也不會連出 3 題以上的複習（整組題組除外）', async ({ page }) => {
+  await openHome(page);
+  // 物理每一題都答錯過、到期該複習，數學全是新題；看 30 題，跨過一批 20 題的交界
+  const physicsJson = /\/physics-[\w-]+\.json$/;
+  await page.waitForFunction((re) => performance.getEntriesByType('resource').some((e) => new RegExp(re).test(e.name)), physicsJson.source);
+  await page.evaluate(async (re) => {
+    const urls = performance.getEntriesByType('resource').map((e) => e.name).filter((u) => new RegExp(re).test(u));
+    const physics = (await Promise.all(urls.map((u) => fetch(u).then((r) => r.json())))).flat();
+    const now = Date.now();
+    const card = { box: 2, due: now - 60_000, seen: 2, right: 1, wrong: 1, parked: false, missed: 1, last: now - 2 * 86_400_000 };
+    const cards = Object.fromEntries(physics.map((q) => [q.id, card]));
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: { subjects: ['math', 'physics'] } }));
+  }, physicsJson.source);
+  await page.reload();
+  await waitForBoot(page);
+  await startMode(page, 'free');
+  // n：數學新題；d：物理的單題複習；G、g：物理題組的第一題、同組後面的題目
+  let kinds = '';
+  for (let i = 0; i < 30; i++) {
+    const subject = await page.locator('#q-subject').textContent();
+    const topic = await page.locator('#q-topic').textContent();
+    kinds += subject.includes('數學') ? 'n' : /^題組 1／/.test(topic) ? 'G' : /^題組/.test(topic) ? 'g' : 'd';
+    await page.locator('#skip').click();
+    await page.locator('#next').click();
+  }
+  expect(kinds).toMatch(/n.*d|d.*n/);
+  for (const run of kinds.split('n')) if (run.length > 2) expect(run, `出題順序 ${kinds}`).toMatch(/^Gg+$/);
+});
+
 test('收藏的題目出現在錯題本的「收藏」，搜尋找得到並能練一輪', async ({ page }) => {
   await openHome(page);
   await startMode(page, 'ten');
