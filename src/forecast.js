@@ -39,13 +39,14 @@ export function estimateRates(cards, accuracy) {
 /**
  * 還會再出的卡片依「第幾天到期」與盒子分組。答對過、從沒失手的不再出，不算。
  * @param {object[]} cards 範圍內的卡片
+ * @param {(card: object) => number} [dueOf] 這張卡出題時用的到期時間（考前衝刺會把排到考後的拉回來，見 srs.js 的 dueFor）
  * @returns {Map<number, number[]>} 第幾天 → 各盒子的張數
  */
-export function dueBuckets(cards, now) {
+export function dueBuckets(cards, now, dueOf = (c) => c.due) {
   const out = new Map();
   for (const c of cards) {
     if (neverMissed(c)) continue;
-    const d = dayIndex(c.due, now);
+    const d = dayIndex(dueOf(c), now);
     const boxes = out.get(d) ?? out.set(d, new Array(MAX_BOX + 1).fill(0)).get(d);
     boxes[Math.min(c.box, MAX_BOX)]++;
   }

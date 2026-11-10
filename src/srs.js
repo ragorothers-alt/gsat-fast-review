@@ -72,6 +72,36 @@ export function neverMissed(card) {
   return !!card && card.seen > 0 && !everMissed(card);
 }
 
+/** 考前衝刺的天數：考前這幾天把排到考後的複習拉回來 */
+export const SPRINT_DAYS = 14;
+
+/** 'YYYY-MM-DD'（本地時間）那天 0 點的時間；格式不對時為 null */
+export function examStart(date) {
+  const [y, m, d] = String(date ?? '').split('-').map(Number);
+  const t = new Date(y, m - 1, d).getTime();
+  return Number.isFinite(t) ? t : null;
+}
+
+function hashOf(id) {
+  let h = 0;
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return h;
+}
+
+/**
+ * 出題時用的到期時間。平常就是卡片的 due；但失手過的題目答對幾次後間隔會拉到 16、35 天，
+ * 到期日落在考試當天或之後的，考前就不會再出現。考前衝刺：考前 SPRINT_DAYS 天內還沒再做過的這種題目，
+ * 各拉回來複習一次，照題號分散在這幾天（同一題每台裝置算出來的日子一樣）。
+ * 衝刺時答對，盒子與原本的到期日不變（還沒到期就答對不升盒，見 schedule），只記下做過了；答錯照常回到第 0 盒。
+ * @param {number | null} examAt 考試那天 0 點（examStart）；沒設定或已經考完就不衝刺
+ */
+export function dueFor(id, card, examAt, now) {
+  if (!examAt || now >= examAt || card.due < examAt) return card.due;
+  const start = examAt - SPRINT_DAYS * DAY;
+  if ((card.last ?? 0) >= start) return card.due;
+  return start + (hashOf(id) % SPRINT_DAYS) * DAY;
+}
+
 /** 熟練度 0–1：每題的盒子數平均（到 LEARNED_BOX 算滿），沒看過算 0；答對過、從沒失手的不再複習，算滿 */
 export function mastery(questions, cards) {
   if (!questions.length) return 0;
@@ -102,12 +132,13 @@ export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
  *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題和閱讀題組
  *   streak：這批之前剛連續做了幾題複習。自由練習一批出完再補下一批時接著算，兩批交界才不會一連出 4 題複習
+ *   examAt：考試那天 0 點（examStart）。有給的話，考前衝刺期間把排到考後的複習拉回來（見 dueFor）
  * 閱讀題組（q.group）的題目排在一起出；一輪的最後一組放不下時整組照出，所以最多會比 size 多出一組的題數。
  */
 export function buildQueue(
   bank,
   cards,
-  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, streak = 0, size, now, rng = Math.random },
+  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, streak = 0, examAt = null, size, now, rng = Math.random },
 ) {
   const wanted = new Set(subjects);
   const off = new Set(excludedUnits);
@@ -134,10 +165,16 @@ export function buildQueue(
   const dueList = [];
   const unseen = [];
   const laterList = [];
+  const dueAt = new Map();
   for (const q of pool) {
     const c = cards[q.id];
-    if (!c) unseen.push(q);
-    else if (c.due <= now) dueList.push(q);
+    if (!c) {
+      unseen.push(q);
+      continue;
+    }
+    const due = dueFor(q.id, c, examAt, now);
+    dueAt.set(q.id, due);
+    if (due <= now) dueList.push(q);
     else laterList.push(q);
   }
   // 閱讀題組：同組、同一類（到期／新題／還沒到期）的題目併成一包，一起出、文章只讀一次；
@@ -148,7 +185,7 @@ export function buildQueue(
   // bundles 把同組的題目併到這組第一次出現的位置，也就是到期那題的位置
   const due = bundles([...shuffle(dueList, rng).sort((a, b) => cards[a.id].box - cards[b.id].box), ...joining]);
   const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng }));
-  const later = bundles(shuffle(laterList, rng).sort((a, b) => cards[a.id].due - cards[b.id].due));
+  const later = bundles(shuffle(laterList, rng).sort((a, b) => dueAt.get(a.id) - dueAt.get(b.id)));
 
   // 第 NEW_EVERY、2×NEW_EVERY…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。
   // 但複習最多連續出 NEW_EVERY − 1 題就換新題：剛出了一整組新的閱讀題組（一次好幾題新題）時，

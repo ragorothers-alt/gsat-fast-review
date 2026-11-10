@@ -1,7 +1,7 @@
 // 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
 import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../analysis.js';
 import { dueBuckets, estimateRates, keepUpGoal, keepsUp, reviewForecast, studyPlan } from '../forecast.js';
-import { DAY, mastery } from '../srs.js';
+import { DAY, SPRINT_DAYS, dueFor, examStart, mastery, neverMissed } from '../srs.js';
 import { GOALS, dayKey, shiftDay, today } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { isUnitOff } from '../units.js';
@@ -99,19 +99,32 @@ export function initStats(ctx) {
 
   /**
    * 考前規劃與複習預報共用：選的範圍（被回報的不算）、範圍內練過的卡片依到期日分組、推估用的答對比例
-   * @returns {{ total: number, fresh: number, buckets: Map<number, number[]>, rates: { recall: number, first: number } }}
+   * @returns {{ total: number, fresh: number, buckets: Map<number, number[]>, rates: { recall: number, first: number }, sprint: number }}
+   *   sprint：考前衝刺會拉回來的題數（失手過、照排程要到考後才再出的）
    */
   function forecastScope(now) {
     const { cards, flags, settings, daily } = ctx.state;
     const selected = new Set(settings.subjects);
     const off = new Set(settings.excludedUnits);
     const pool = ctx.bank.filter((q) => selected.has(q.subject) && !isUnitOff(q, off) && !flags[q.id]);
-    const seen = pool.map((q) => cards[q.id]).filter(Boolean);
+    const examAt = examStart(settings.examDate);
+    // 出題時用的到期時間（考前衝刺會把排到考後的複習拉回來）
+    const dueAt = new Map();
+    let sprint = 0;
+    for (const q of pool) {
+      const c = cards[q.id];
+      if (!c) continue;
+      const due = dueFor(q.id, c, examAt, now);
+      dueAt.set(c, due);
+      if (due !== c.due && !neverMissed(c)) sprint++;
+    }
+    const seen = [...dueAt.keys()];
     return {
       total: pool.length,
       fresh: pool.length - seen.length,
-      buckets: dueBuckets(seen, now),
+      buckets: dueBuckets(seen, now, (c) => dueAt.get(c)),
       rates: estimateRates(seen, accuracyOf(dailySeries(daily, now, 14))),
+      sprint,
     };
   }
 
@@ -158,7 +171,7 @@ export function initStats(ctx) {
    * 複習預報：照每日目標，未來 14 天每天有幾題到期要複習、還能做幾題新題。
    * 出題時到期的複習先出、每 2 題複習配 1 題新題；到期的比做得完的多就會越積越多：算出跟得上的每日目標，一鍵調整
    */
-  function renderForecast(now, { total, fresh, buckets, rates }) {
+  function renderForecast(now, { total, fresh, buckets, rates, sprint }) {
     const goal = ctx.state.settings.goal;
     const opts = { days: FORECAST_DAYS, fresh, today: today(ctx.state, now).answered, ...rates };
     const rows = reviewForecast(buckets, { ...opts, goal });
@@ -188,7 +201,9 @@ export function initStats(ctx) {
             (keepUp ? `每日目標調到 ${keepUp} 題就跟得上。` : '先用「錯題複習」把到期的錯題做完，或把練的單元收少一點。')
           : fresh
             ? `照每日目標 ${goal} 題，複習做得完，每天還能做約 ${avgFresh} 題新題。`
-            : '選的範圍都練過了，接下來每天都是複習。');
+            : '選的範圍都練過了，接下來每天都是複習。') +
+        // 考前衝刺：失手過、照間隔要到考後才再出的題目，考前兩週各拉回來複習一次
+        (sprint ? `考前 ${SPRINT_DAYS} 天會把失手過、原本排到考後才複習的 ${sprint.toLocaleString('zh-TW')} 題各拉回來再考一次。` : '');
 
     const max = Math.max(1, ...rows.map((x) => x.due));
     const chart = $('#forecast-chart');

@@ -1,7 +1,7 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
-import { buildQueue, neverMissed, schedule, shuffle } from '../srs.js';
+import { buildQueue, examStart, neverMissed, schedule, shuffle } from '../srs.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, markCleared, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
@@ -112,6 +112,7 @@ export function initPlay(ctx) {
       quickOnly: cfg.quickOnly,
       weakOnly: cfg.weakOnly,
       streak,
+      examAt: examStart(ctx.state.settings.examDate),
       size: cfg.size,
       now: Date.now(),
     });

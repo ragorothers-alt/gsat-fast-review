@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DAY, INTERVALS, MAX_BOX, NEW_EVERY, buildQueue, everMissed, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
+import { DAY, INTERVALS, MAX_BOX, NEW_EVERY, SPRINT_DAYS, buildQueue, dueFor, everMissed, examStart, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
 
 const NOW = 1_700_000_000_000;
 
@@ -148,6 +148,56 @@ describe('mastery', () => {
 
   it('答對過、從沒失手的不再複習，算滿', () => {
     expect(mastery([q('a'), q('b')], { a: schedule(undefined, 'right', NOW) })).toBe(0.5);
+  });
+});
+
+describe('考前衝刺（dueFor）', () => {
+  const EXAM = examStart('2027-01-22');
+  const START = EXAM - SPRINT_DAYS * DAY;
+  // 失手過、後來答對到第 5 盒：下次到期在考後
+  const far = { box: 5, due: EXAM + 3 * DAY, seen: 4, right: 3, wrong: 1, missed: 1, last: START - 10 * DAY };
+
+  it('examStart 是本地時間那天 0 點；格式不對是 null', () => {
+    expect(EXAM).toBe(new Date(2027, 0, 22).getTime());
+    expect(examStart('')).toBeNull();
+    expect(examStart(undefined)).toBeNull();
+  });
+
+  it('到期日在考後的題目，拉回考前 14 天內的某一天；同一題每次算出來都一樣', () => {
+    const due = dueFor('math-001', far, EXAM, START - 30 * DAY);
+    expect(due).toBeGreaterThanOrEqual(START);
+    expect(due).toBeLessThan(EXAM);
+    expect((due - START) % DAY).toBe(0);
+    expect(dueFor('math-001', far, EXAM, START + 5 * DAY)).toBe(due);
+    // 分散在這 14 天，不會全擠在同一天
+    const days = new Set([...Array(200)].map((_, i) => dueFor(`math-${i}`, far, EXAM, START)));
+    expect(days.size).toBe(SPRINT_DAYS);
+  });
+
+  it('考前本來就會到期的、衝刺期間已經做過的、沒設考試日或已經考完的，都照原本的到期日', () => {
+    const soon = { ...far, due: EXAM - DAY };
+    expect(dueFor('math-001', soon, EXAM, START)).toBe(soon.due);
+    expect(dueFor('math-001', { ...far, last: START + DAY }, EXAM, START + 2 * DAY)).toBe(far.due);
+    expect(dueFor('math-001', far, null, START)).toBe(far.due);
+    expect(dueFor('math-001', far, EXAM, EXAM + DAY)).toBe(far.due);
+  });
+
+  it('衝刺時答對：盒子與到期日不變，只記下做過了，之後不會再被拉回來；答錯照常回到第 0 盒', () => {
+    const day = dueFor('math-001', far, EXAM, START);
+    const right = schedule(far, 'right', day + 3600_000);
+    expect(right).toMatchObject({ box: 5, due: far.due, right: 4 });
+    expect(dueFor('math-001', right, EXAM, day + DAY)).toBe(far.due);
+    expect(schedule(far, 'wrong', day + 3600_000).box).toBe(0);
+  });
+
+  it('buildQueue：衝刺日到了就當成到期的複習出；還沒到或沒給考試日就排在最後', () => {
+    const bank = [q('m1'), q('m2'), q('m3')];
+    const cards = { m1: far };
+    const day = dueFor('m1', far, EXAM, START);
+    const first = (opts) => buildQueue(bank, cards, { subjects: ['math'], size: 3, rng: seeded(), ...opts })[0].id;
+    expect(first({ now: day + 1000, examAt: EXAM })).toBe('m1');
+    expect(first({ now: day + 1000 })).not.toBe('m1');
+    expect(first({ now: START - DAY, examAt: EXAM })).not.toBe('m1');
   });
 });
 
