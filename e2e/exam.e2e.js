@@ -189,7 +189,8 @@ test('學習分析的複習預報：未來 14 天每天到期的題數；複習�
   await page.reload();
   await waitForBoot(page);
   await page.locator('#daily').click();
-  await expect(page.locator('#forecast-chart .bar')).toHaveCount(14);
+  // 學習分析要等全部題庫下載完才畫：CI 上比較慢，放寬
+  await expect(page.locator('#forecast-chart .bar')).toHaveCount(14, { timeout: 30_000 });
   // 明天：這 12 題，加上今天的新題預估會答錯、隔天要複習的
   const tomorrow = Number(await page.locator('#forecast-chart .bar').nth(1).locator('.bar-n').textContent());
   expect(tomorrow).toBeGreaterThanOrEqual(12);
@@ -220,7 +221,7 @@ test('學習分析的考前規劃：三個數字方塊加一兩句話；範圍�
     await page.reload();
     await waitForBoot(page);
     await page.locator('#daily').click();
-    await expect(page.locator('#stats-plan')).toBeVisible();
+    await expect(page.locator('#stats-plan')).toBeVisible({ timeout: 30_000 });
   };
   const tiles = page.locator('#plan-tiles .plan-tile');
   const text = page.locator('#plan-text');

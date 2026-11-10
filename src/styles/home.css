@@ -229,8 +229,11 @@
   gap: 2px;
 }
 
+/* 字型比較寬的裝置（例如沒有內建中文字型的 Linux）在 320 寬會差一兩個像素：寧可截掉，不要壓到「開始 ›」 */
 .daily-line {
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .daily-text b {

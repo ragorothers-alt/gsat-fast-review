@@ -289,12 +289,17 @@ function lazyWorld(canvas, anchors) {
 
   function load() {
     if (loading || motion === 'off') return;
-    loading = import('./scene.js').then(({ createWorld }) => {
-      real = createWorld(canvas, anchors, { motion });
-      real.onCatTap = tap;
-      for (const name of STATE) if (last[name]) real[name](...last[name]);
-      real.setMotion(motion);
-    });
+    loading = import('./scene.js')
+      .then(({ createWorld }) => {
+        real = createWorld(canvas, anchors, { motion });
+        real.onCatTap = tap;
+        for (const name of STATE) if (last[name]) real[name](...last[name]);
+        real.setMotion(motion);
+      })
+      // 背景的貓是裝飾：載入失敗（斷線、載到一半就重新整理）不影響作答，也不當成程式錯誤回報；下次呼叫再試
+      .catch(() => {
+        loading = null;
+      });
   }
   return world;
 }

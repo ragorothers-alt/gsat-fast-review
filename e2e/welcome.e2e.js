@@ -172,14 +172,14 @@ test('首頁標題在 320–412 寬都是一行；頂列與今日進度卡不超
       };
       const box = (sel) => document.querySelector(sel).getBoundingClientRect();
       const title = textRects(document.querySelector('.brand h1'));
-      const line = textRects(document.querySelector('.daily-line'));
       return {
         titleLines: new Set(title.map((r) => Math.round(r.top))).size,
         titleRight: Math.max(...title.map((r) => r.right)),
         actionsLeft: box('.top-actions').left,
         actionsRight: box('.top-actions').right,
         pageWidth: document.documentElement.scrollWidth,
-        lineRight: Math.max(...line.map((r) => r.right)),
+        // 今日題數那一行放不下時會截掉（字型較寬的裝置）：量這一行的框，不量文字本身
+        lineRight: box('.daily-line').right,
         goLeft: box('.daily-go').left,
         goRight: box('.daily-go').right,
         statsLeft: box('.daily-stats').left,
