@@ -257,7 +257,7 @@ test('答對過、從沒失手的題目不再出，答錯過的照常複習；�
   await expect(page.locator('#q-topic')).toContainText(units[1]);
 });
 
-test('自由練習：複習和新題交錯出，一批出完接著下一批也不會連出 3 題以上的複習（整組題組除外）', async ({ page }) => {
+test('自由練習：複習和新題一題一題輪流出，一批出完接著下一批也不會連出 2 題複習（整組題組除外）', async ({ page }) => {
   await openHome(page);
   // 物理每一題都答錯過、到期該複習，數學全是新題；看 30 題，跨過一批 20 題的交界
   const physicsJson = /\/physics-[\w-]+\.json$/;
@@ -283,7 +283,7 @@ test('自由練習：複習和新題交錯出，一批出完接著下一批也�
     await page.locator('#next').click();
   }
   expect(kinds).toMatch(/n.*d|d.*n/);
-  for (const run of kinds.split('n')) if (run.length > 2) expect(run, `出題順序 ${kinds}`).toMatch(/^Gg+$/);
+  for (const run of kinds.split('n')) if (run.length > 1) expect(run, `出題順序 ${kinds}`).toMatch(/^Gg+$/);
 });
 
 test('收藏的題目出現在錯題本的「收藏」，搜尋找得到並能練一輪', async ({ page }) => {

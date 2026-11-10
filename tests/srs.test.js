@@ -302,6 +302,32 @@ describe('buildQueue', () => {
     expect(kinds(0)).toBe('ddnddnd');
   });
 
+  it('newEvery = 2（自由練習）：複習和新題一題一題輪流，複習不連出；一邊出完了就全出另一邊', () => {
+    const many = [...Array(12)].map((_, i) => q(`d${i}`));
+    const fresh = [...Array(12)].map((_, i) => q(`n${i}`));
+    const cards = Object.fromEntries(many.map((x) => [x.id, { box: 2, due: NOW - 1, seen: 2, right: 1, wrong: 1 }]));
+    const kinds = (n, list, streak = 0) =>
+      buildQueue(list, cards, { subjects: ['math'], size: n, newEvery: 2, streak, now: NOW, rng: seeded() })
+        .map((x) => x.id[0])
+        .join('');
+    expect(kinds(8, [...many, ...fresh])).toBe('dndndndn');
+    // 上一批最後一題是複習：這批從新題開始
+    expect(kinds(6, [...many, ...fresh], 1)).toBe('ndndnd');
+    expect(kinds(8, [...many.slice(0, 2), ...fresh])).toBe('dndnnnnn');
+    expect(kinds(6, [...many, ...fresh.slice(0, 2)])).toBe('dndndd');
+    // 到期的題組整組一起出，但前面剛出過複習時先等一題新題
+    const group = [...Array(3)].map((_, i) => q(`g${i}`, 'math', { group: 'math-g1' }));
+    const withGroup = { ...cards, ...Object.fromEntries(group.map((x) => [x.id, { box: 2, due: NOW - 1, seen: 2, right: 1, wrong: 1 }])) };
+    for (let seed = 1; seed <= 20; seed++) {
+      const out = buildQueue([...many, ...group, ...fresh], withGroup, { subjects: ['math'], size: 20, newEvery: 2, now: NOW, rng: seeded(seed) })
+        .map((x) => x.id[0])
+        .join('');
+      expect(out).toContain('ggg');
+      const lastFresh = out.lastIndexOf('n');
+      for (const run of out.slice(0, lastFresh).split('n')) expect(['', 'd', 'ggg'], out).toContain(run);
+    }
+  });
+
   it('剛出過 1 題複習時，到期的閱讀題組先等一題新題再整組出', () => {
     const group = [...Array(3)].map((_, i) => q(`g${i}`, 'math', { group: 'math-g1' }));
     const fresh = [...Array(6)].map((_, i) => q(`n${i}`));

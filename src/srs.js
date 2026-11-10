@@ -131,6 +131,7 @@ export function mastery(questions, cards) {
  * 到期的複習先出，但每 NEW_EVERY 題留一題給新題（每 2 題複習配 1 題新題），複習也最多連續出 NEW_EVERY − 1 題：
  * 複習多的時候少排新題，免得複習越積越多；又不會一連好幾題都是做過的題、完全沒有新進度。一邊出完了就全出另一邊。
  * （以前是每 4 題留 1 題，一組新的閱讀題組之後還會連出十幾題複習；改成 2:1 交錯，新題多一些，到期的複習累積得比較多）
+ * 自由練習再多出一些新題（MODES.free.newEvery = 2，複習和新題一題一題輪流），考前能練到的題目比較多。
  */
 export const NEW_EVERY = 3;
 /** 到期的複習和新題都夠時，複習占一輪的比例（forecast.js 推演用） */
@@ -142,17 +143,18 @@ export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
  * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {Question[]} bank
  * @param {Record<string, Card>} cards
- * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, examAt?: number | null, size: number, now: number, rng?: () => number }} opts
+ * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, newEvery?: number, examAt?: number | null, size: number, now: number, rng?: () => number }} opts
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
  *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題、非選擇題、閱讀題組和圖表題
  *   streak：這批之前剛連續做了幾題複習。自由練習一批出完再補下一批時接著算，兩批交界才不會一連出 4 題複習
+ *   newEvery：每幾題留一題給新題（預設 NEW_EVERY）。2 就是複習和新題輪流出、複習不連出（整組題組除外）
  *   examAt：考試那天 0 點（examStart）。有給的話，考前衝刺期間把排到考後的複習拉回來（見 dueFor）
  * 閱讀題組（q.group）的題目排在一起出；一輪的最後一組放不下時整組照出，所以最多會比 size 多出一組的題數。
  */
 export function buildQueue(
   bank,
   cards,
-  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, streak = 0, examAt = null, size, now, rng = Math.random },
+  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, streak = 0, newEvery = NEW_EVERY, examAt = null, size, now, rng = Math.random },
 ) {
   const wanted = new Set(subjects);
   const off = new Set(excludedUnits);
@@ -201,16 +203,16 @@ export function buildQueue(
   const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng }));
   const later = bundles(shuffle(laterList, rng).sort((a, b) => dueAt.get(a.id) - dueAt.get(b.id)));
 
-  // 第 NEW_EVERY、2×NEW_EVERY…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。
-  // 但複習最多連續出 NEW_EVERY − 1 題就換新題：剛出了一整組新的閱讀題組（一次好幾題新題）時，
+  // 第 newEvery、2×newEvery…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。
+  // 但複習最多連續出 newEvery − 1 題就換新題：剛出了一整組新的閱讀題組（一次好幾題新題）時，
   // 光照比例會接著連出一長串複習才補回來。到期的閱讀題組整組一起出，不過剛出過複習、接上整組會超過上限時，
-  // 先出一題新題再出這組：連續的複習最多就是 2 題，或一整組題組本身的題數
+  // 先出一題新題再出這組：連續的複習最多就是 newEvery − 1 題，或一整組題組本身的題數
   const out = [];
   let freshCount = 0;
   let inRow = streak;
   while (out.length < size && (due.length || fresh.length)) {
-    const over = inRow > 0 && inRow + (due[0]?.length ?? 0) > NEW_EVERY - 1;
-    const wantFresh = out.length - freshCount >= (NEW_EVERY - 1) * (freshCount + 1) || over;
+    const over = inRow > 0 && inRow + (due[0]?.length ?? 0) > newEvery - 1;
+    const wantFresh = out.length - freshCount >= (newEvery - 1) * (freshCount + 1) || over;
     const pack = (wantFresh ? fresh.length > 0 : !due.length) ? fresh.shift() : due.shift();
     const added = pack.filter((q) => !cards[q.id]).length;
     freshCount += added;

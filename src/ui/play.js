@@ -124,6 +124,7 @@ export function initPlay(ctx) {
       quickOnly: cfg.quickOnly,
       weakOnly: cfg.weakOnly,
       streak,
+      newEvery: cfg.newEvery,
       examAt: examStart(ctx.state.settings.examDate),
       size: cfg.size,
       now: Date.now(),

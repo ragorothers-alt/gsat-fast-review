@@ -5,10 +5,12 @@
  * explainAlways：答對也停下來看解析，按「繼續」才換題
  * quickOnly：只出幾秒內答得完的題目：不出要動筆算好幾分鐘的演算題（題目的 scratch）、要逐一判斷五個選項的多選題，
  *   也不出要自己寫出答案的非選擇題
+ * newEvery：到期的複習和新題都有時，每幾題留一題給新題（沒寫就是 srs.js 的 NEW_EVERY，每 2 題複習配 1 題新題）。
+ *   自由練習是 2：複習和新題一題一題輪流，考前能練到的新題比較多，到期的複習也會清得慢一點
  */
 export const MODES = {
   blitz: { name: '60 秒快閃', size: 80, timeLimit: 60, quickOnly: true },
-  free: { name: '自由練習', size: 20, endless: true, explainAlways: true },
+  free: { name: '自由練習', size: 20, endless: true, explainAlways: true, newEvery: 2 },
   ten: { name: '10 題一輪', size: 10 },
   formula: { name: '公式特訓', size: 10, formulaOnly: true },
   review: { name: '錯題複習', size: 15, weakOnly: true },
