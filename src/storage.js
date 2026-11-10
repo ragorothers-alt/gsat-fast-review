@@ -2,6 +2,7 @@
 import { SUBJECTS } from './subjects.js';
 import { rebuildDaily } from './cloud.js';
 import { mergeExams } from './exam.js';
+import { cleanPace, mergePace } from './pace.js';
 import { applyPathRows, pathRows } from './path.js';
 import { cleanCard, mergeState } from './sync.js';
 
@@ -31,6 +32,8 @@ export function freshState() {
     // 模擬考：考到一半的卷（見 exam.js 的 newExam）只存在這台；最近的成績（logExam）會線上同步
     exam: null,
     examLog: [],
+    // 作答速度：單元 → 計時的題數與秒數（見 pace.js），只存在這台
+    pace: {},
     // scratch：平板上草稿區要不要展開（手機上一律收起）
     // theme：auto（跟著系統）／light／dark；fontScale：字體大小倍率
     // reminder：每日提醒，hour 是當地時間幾點（推播訂閱存在同步後端，見 ui/reminder.js）
@@ -78,6 +81,7 @@ export function parseState(raw) {
     // 考到一半的卷開考前會再檢查一次（ui/exam.js）；成績紀錄壞掉的筆數丟掉
     exam: saved.exam && typeof saved.exam === 'object' && !Array.isArray(saved.exam) ? saved.exam : null,
     examLog: Array.isArray(saved.examLog) ? saved.examLog.filter((e) => e && typeof e.paper === 'string' && num(e.at) && num(e.right) && num(e.total) && e.total > 0) : [],
+    pace: cleanPace(saved.pace),
     streak: { ...base.streak, ...saved.streak },
     best: { ...base.best, ...saved.best },
     settings: { ...base.settings, ...saved.settings, reminder: { ...base.settings.reminder, ...saved.settings?.reminder } },
@@ -140,6 +144,7 @@ export function absorbState(state, raw) {
     settings: Object.assign(state.settings, other.settings),
     path,
     pathLast: other.pathLast,
+    pace: mergePace(state.pace, other.pace),
     cloud: mergeCloud(state.cloud, other.cloud),
   });
   // 開了同步時，每日題數由各台的紀錄加總而來

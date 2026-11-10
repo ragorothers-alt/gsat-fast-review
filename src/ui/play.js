@@ -1,7 +1,8 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
-import { buildQueue, examStart, neverMissed, schedule, shuffle } from '../srs.js';
+import { buildQueue, examStart, isLeech, missCount, neverMissed, schedule, shuffle } from '../srs.js';
+import { recordPace } from '../pace.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, markCleared, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
@@ -12,6 +13,7 @@ import { adjustRight, recordAnswer, today } from '../stats.js';
 import { setFlag, setStar } from '../sync.js';
 import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
+import { openKeypointsFrom } from './keypoints.js';
 import { lvTag } from './review-item.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
@@ -91,6 +93,19 @@ export function initPlay(ctx) {
   let lastRight = null; // 剛答對的那題 { id, before, at }：標成猜的時，從答題前的紀錄重新排程
   let phase = 'idle'; // idle | answering | feedback
   let looking = false; // 正在回看剛剛的題目：暫停計時、不能作答
+  // 這題花了多久（作答速度，見 pace.js）：切到背景或回看上一題的時間不算
+  let shownAt = 0;
+  let pausedMs = 0;
+  let pauseStart = 0;
+  const pauseClock = () => {
+    if (!pauseStart) pauseStart = Date.now();
+  };
+  const resumeClock = () => {
+    if (!pauseStart || document.hidden || looking) return;
+    pausedMs += Date.now() - pauseStart;
+    pauseStart = 0;
+  };
+  document.addEventListener('visibilitychange', () => (document.hidden ? pauseClock() : resumeClock()));
   let autoNext = 0;
   let raf = 0;
   let lastT = 0;
@@ -304,6 +319,9 @@ export function initPlay(ctx) {
   function showQuestion() {
     q = current(s);
     phase = 'answering';
+    shownAt = Date.now();
+    pausedMs = 0;
+    pauseStart = document.hidden ? shownAt : 0;
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
@@ -599,6 +617,7 @@ export function initPlay(ctx) {
     lastRight = outcome === 'right' ? { id: q.id, before: card, at: now } : null;
     const before = today(ctx.state, now).answered;
     recordAnswer(ctx.state, outcome, now);
+    recordPace(ctx.state, q, outcome, (now - shownAt - pausedMs - (pauseStart ? now - pauseStart : 0)) / 1000);
     const points = submit(s, outcome, chosen);
     // 記下當時的選項順序：回看上一題、複製題目時 (A)–(D) 跟畫面一致
     const entry = s.log[s.log.length - 1];
@@ -666,6 +685,14 @@ export function initPlay(ctx) {
     if (q.type === 'ms' && outcome === 'wrong') el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">${msNote(q, chosen)}</span>`);
     if (typed !== null && outcome === 'wrong' && displayValue === null) el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">你填的 ${typed} 不是任何一個選項的值</span>`);
     if (s.path && outcome !== 'right') el.explain.insertAdjacentHTML('beforeend', `<span class="path-note">${icon('loop')}這關最後補了一題類似題</span>`);
+    // 卡關：同一題失手好幾次了，多半是背了答案又忘。提醒先回頭看這個單元的重點（快閃在計時，不打斷）
+    const after = ctx.state.cards[q.id];
+    if (outcome !== 'right' && s.timeLeft === null && isLeech(after)) {
+      el.explain.insertAdjacentHTML(
+        'beforeend',
+        `<span class="leech-note">這題已經失手 ${missCount(after)} 次。只記答案很快又會忘，先<button type="button" class="link-btn" data-kp="${q.subject}/${q.topic}">看這個單元的重點</button>，或練幾題類似題，換個角度弄懂。</span>`,
+      );
+    }
     el.explain.hidden = false;
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
     el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
@@ -841,6 +868,7 @@ export function initPlay(ctx) {
   el.back.addEventListener('click', () => {
     if (phase !== 'answering' || !s.log.length) return;
     looking = true;
+    pauseClock();
     stopSpeaking();
     // 紀錄和題號一對一，闖關接著做時第一筆不是第 1 題
     const first = s.index - s.log.length;
@@ -850,11 +878,16 @@ export function initPlay(ctx) {
       timed: s.timeLeft !== null,
       onClose: () => {
         looking = false;
+        resumeClock();
         renderMarks();
       },
     });
   });
 
+  // 解析裡的「看這個單元的重點」（卡關提示）
+  el.explain.addEventListener('click', (e) => {
+    openKeypointsFrom(ctx, e.target);
+  });
   el.next.addEventListener('click', next);
   el.skip.addEventListener('click', () => {
     if (phase === 'answering') resolve('skip', null, null);

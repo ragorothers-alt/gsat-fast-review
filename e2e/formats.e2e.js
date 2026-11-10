@@ -134,6 +134,59 @@ test('多選題：點選項切換、按「送出」作答；沒全對時標出�
   await expect(page.locator('#r-list .r-right')).toHaveText('正解：開頭稱祖父大人。；末尾署孫女怡文。');
 });
 
+test('卡關的題目：同一題失手第三次時，解析下面提醒先看這個單元的重點', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  // english-1711 已經失手過兩次
+  await page.addInitScript(() => {
+    if (localStorage.getItem('gsat-quiz:v1')) return;
+    const now = Date.now();
+    const card = { box: 0, due: now - 1000, seen: 2, right: 0, wrong: 2, parked: false, missed: 1, last: now - 3_600_000 };
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards: { 'english-1711': card } }));
+  });
+  await practice(page, 'english-1711');
+  await page.locator('#answers .answer').filter({ hasNotText: 'abrupt' }).first().click();
+  const note = page.locator('#q-explain .leech-note');
+  await expect(note).toContainText('這題已經失手 3 次');
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await audit(page, `卡關提示（${scheme}）`);
+  }
+  await note.getByRole('button', { name: '看這個單元的重點' }).click();
+  await expect(page.locator('#kp-unit')).toHaveText('進階單字');
+  await expect(page.locator('#kp-body')).toBeVisible();
+});
+
+test('作答速度：一般題記下每題花的秒數，學習分析列出各科平均與「會但花得久」的單元', async ({ page }) => {
+  // 數學：機率答對平均 40 秒，其他單元 15 秒
+  await page.addInitScript(() => {
+    if (localStorage.getItem('gsat-quiz:v1')) return;
+    const pace = { 'math/機率': { n: 10, t: 400, rn: 8, rt: 320 }, 'math/矩陣': { n: 30, t: 450, rn: 30, rt: 450 } };
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, pace, settings: { subjects: ['math'] } }));
+  });
+  await openHome(page);
+  await page.locator('#daily').click();
+  await expect(page.locator('#stats-pace')).toBeVisible();
+  await expect(page.locator('#pace-subjects li')).toHaveText(/數學\s*平均每題 21 秒・計時 40 題・學測每題約 77 秒/);
+  await expect(page.locator('#pace-slow li')).toHaveText(/數學\s*機率\s*答對平均 40 秒（這科 20 秒）/);
+  await audit(page, '作答速度');
+
+  // 再答一題一般題：計時的題數多一題
+  await page.locator('#stats-back').click();
+  await page.locator('[data-mode="free"]').click();
+  await expect(page.locator('#play')).toBeVisible();
+  for (let i = 0; i < 30; i++) {
+    await expect(page.locator('#answers .answer, #answers .fill-switch').first()).toBeVisible();
+    const plain = !(await page.locator('#ms-send').isVisible()) && !(await page.locator('#answers .fill-switch').isVisible()) && !(await page.locator('#q-passage').isVisible());
+    if (plain) break;
+    await page.locator('#skip').click();
+    await page.locator('#next').click();
+  }
+  await page.locator('#answers .answer').first().click();
+  const timed = await page.evaluate(() => Object.values(JSON.parse(localStorage.getItem('gsat-quiz:v1')).pace).reduce((a, p) => a + p.n, 0));
+  expect(timed).toBe(41);
+});
+
 test('圖表題：題幹下面畫出圖或資料表，圖帶文字敘述；深淺色與結算都看得到', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   // 把物理題庫換成兩題範例（折線圖、資料表）：不靠題庫裡剛好抽到哪一題

@@ -1852,6 +1852,26 @@ p {
   color: var(--accent-2-ink);
 }
 
+/* 卡關提示：同一題失手好幾次，提醒回頭看這個單元的重點 */
+.leech-note {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1.5px dashed var(--line-soft);
+  font-size: 0.85rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+
+.leech-note .link-btn {
+  margin: 0 3px;
+}
+
+/* 作答速度：會但花得久的單元，秒數不用警示的紅色 */
+.pace-slow b {
+  color: var(--ink-soft);
+}
+
 .secondary-btn {
   width: 100%;
   min-height: 54px;

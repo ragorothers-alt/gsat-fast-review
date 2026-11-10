@@ -57,6 +57,20 @@ export function isWeak(card) {
   return !!card && (card.parked || ((card.wrong > 0 || card.seen > card.right) && card.box < 3));
 }
 
+/** 失手幾次以上、而且還在錯題本裡，算卡關 */
+export const LEECH_MISSES = 3;
+
+/** 失手的次數：答錯、看解答、標成猜的或不太確定（作答次數減掉算數的答對次數） */
+export const missCount = (card) => (card ? Math.max(0, card.seen - card.right) : 0);
+
+/**
+ * 卡關的題目：失手 LEECH_MISSES 次以上還沒學會。同一題短時間內一錯再錯，多半是背了答案又忘，
+ * 不是多做幾次就會懂：作答畫面會提醒先看這個單元的重點卡或練類似題，錯題本也會標出來。
+ */
+export function isLeech(card) {
+  return isWeak(card) && missCount(card) >= LEECH_MISSES;
+}
+
 /**
  * 失手過：答錯、按過「不會」或標成猜的、不太確定。
  * 新紀錄看 missed；舊紀錄沒有這個欄位，從次數與盒子推回來：從沒失手的題目一定在第 2 盒以上、答對次數等於作答次數。

@@ -1,6 +1,7 @@
 // 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
 import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../analysis.js';
 import { dueBuckets, estimateRates, keepUpGoal, keepsUp, reviewForecast, studyPlan } from '../forecast.js';
+import { paceReport } from '../pace.js';
 import { DAY, SPRINT_DAYS, dueFor, examStart, mastery, neverMissed } from '../srs.js';
 import { GOALS, dayKey, shiftDay, today } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
@@ -13,6 +14,9 @@ const TRAIN_UNITS = 3;
 const FORECAST_DAYS = 14;
 /** 題庫存量上方最多列幾個新題快用完的單元，其餘展開各科看 */
 const LOW_SHOWN = 6;
+/** 作答速度：一科計時滿幾題才顯示；最多列幾個「會但花得久」的單元 */
+const PACE_MIN = 5;
+const PACE_SLOW_SHOWN = 5;
 
 export function initStats(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -54,6 +58,7 @@ export function initStats(ctx) {
     renderStock();
     weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, limit: 5 });
     renderWeak();
+    renderPace();
 
     renderChart(dailySeries(daily, now, 14), accuracyOf(week), accuracyOf(prev));
 
@@ -319,6 +324,40 @@ export function initStats(ctx) {
       li.querySelector('.kp-btn').addEventListener('click', () => ctx.openKeypoints(u.subject, u.unit));
       list.append(li);
     }
+  }
+
+  /**
+   * 作答速度：各科一般題平均每題幾秒（旁邊寫學測這科平均每題的時間當參考），
+   * 以及「會，但花得久」的單元：答對率不低，答對時卻比同一科的平均慢很多
+   */
+  function renderPace() {
+    const { settings, pace } = ctx.state;
+    const report = paceReport(pace, { subjects: settings.subjects, excludedUnits: settings.excludedUnits });
+    const rows = report.subjects.filter((s) => s.n >= PACE_MIN);
+    $('#stats-pace').hidden = !rows.length;
+    if (!rows.length) return;
+    const sec = (x) => `${Math.round(x)} 秒`;
+    $('#pace-text').textContent =
+      '一般題平均每題花的時間。後面是學測這一科平均每題有幾秒：考試還要讀題組、算計算題，一般題要比它快不少才有餘裕。' +
+      (report.slow.length ? '下面幾個單元你多半答得對，但花的時間比同一科的其他單元久，值得練到更熟：' : '');
+    $('#pace-subjects').innerHTML = rows
+      .map((s) => {
+        const subj = SUBJECT_BY_ID[s.subject];
+        const share = s.exam ? Math.min(100, (s.avg / s.exam) * 100) : 0;
+        return `<li style="--c:${subj.color}">
+          <span class="tag">${subj.name}</span>
+          <span class="subject-meta">平均每題 ${sec(s.avg)}・計時 ${s.n} 題${s.exam ? `・學測每題約 ${sec(s.exam)}` : ''}</span>
+          <span class="unit-meter" role="img" aria-label="${s.exam ? `是學測每題時間的 ${Math.round((s.avg / s.exam) * 100)}%` : ''}"><i style="width:${share}%"></i></span>
+        </li>`;
+      })
+      .join('');
+    $('#pace-slow').innerHTML = report.slow
+      .slice(0, PACE_SLOW_SHOWN)
+      .map((u) => {
+        const subj = SUBJECT_BY_ID[u.subject];
+        return `<li style="--c:${subj.color}"><span class="tag">${subj.name}</span><span class="stock-name">${u.unit}</span><b>答對平均 ${sec(u.avg)}（這科 ${sec(u.base)}）</b></li>`;
+      })
+      .join('');
   }
 
   function renderChart(series, acc, prevAcc) {
