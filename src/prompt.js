@@ -1,4 +1,5 @@
 // 把一題整理成可以直接貼給 ChatGPT 等 AI 家教的文字。純邏輯，方便測試。
+import { figureText } from './figure.js';
 import { isBank } from './groups.js';
 import { SUBJECT_BY_ID } from './subjects.js';
 import { topicLabel } from './units.js';
@@ -29,9 +30,11 @@ export function questionPrompt(q, { order = q.choices?.map((_, i) => i) ?? [], o
   // 閱讀題組：先附上整篇文章（克漏字的空格 __3__ 寫成 (3)），題目才看得懂
   if (q.group) lines.push(`閱讀下文，回答問題${/__\d+__/.test(q.passage) ? '（文中的 (1)、(2)… 是空格）' : ''}：`, blanks(q.passage), '');
   if (isBank(q)) lines.push(`（這組的 ${q.choices.length} 個選項是每一格共用的，每個選項最多填一格，有的選項用不到。）`);
-  if (q.type === 'tf') lines.push(`判斷下列敘述是否正確：${q.q}`);
-  else if (q.group) lines.push(blanks(q.q), ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
-  else lines.push(q.q, ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
+  // 圖表題：AI 看不到圖，把圖裡的數據寫成文字
+  const fig = q.fig ? [`（題目附的${figureText(q.fig)}）`] : [];
+  if (q.type === 'tf') lines.push(`判斷下列敘述是否正確：${q.q}`, ...fig);
+  else if (q.group) lines.push(blanks(q.q), ...fig, ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
+  else lines.push(q.q, ...fig, ...order.map((orig, i) => `(${LETTERS[i]}) ${q.choices[orig]}`));
 
   if (!outcome) {
     lines.push('', '請一步一步教我怎麼解這題：先說明用到的觀念，再帶我推出答案。');

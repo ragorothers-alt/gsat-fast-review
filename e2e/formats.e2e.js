@@ -133,3 +133,77 @@ test('多選題：點選項切換、按「送出」作答；沒全對時標出�
   await expect(page.locator('#r-list .r-mine')).toHaveText('你選：開頭稱祖父大人。；末尾署姪女怡文。');
   await expect(page.locator('#r-list .r-right')).toHaveText('正解：開頭稱祖父大人。；末尾署孫女怡文。');
 });
+
+test('圖表題：題幹下面畫出圖或資料表，圖帶文字敘述；深淺色與結算都看得到', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  // 把物理題庫換成兩題範例（折線圖、資料表）：不靠題庫裡剛好抽到哪一題
+  const base = { subject: 'physics', type: 'mc', formula: false, level: 2 };
+  const figs = [
+    {
+      ...base,
+      id: 'physics-9901',
+      topic: '牛頓運動定律',
+      q: '一輛玩具車沿直線運動，速度與時間的關係如圖。哪一段時間內車子所受的合力為零？',
+      fig: { type: 'line', x: { label: '時間 (s)' }, y: { label: '速度 (m/s)' }, series: [{ points: [[0, 0], [2, 8], [6, 8], [8, 0]] }] },
+      choices: ['0–2 秒', '2–6 秒', '6–8 秒', '0–8 秒全程'],
+      answer: 1,
+      explain: '2–6 秒速度不變，加速度為零，合力為零。',
+    },
+    {
+      ...base,
+      id: 'physics-9902',
+      topic: '克卜勒定律與萬有引力',
+      q: '甲、乙兩顆行星繞同一恆星運行，資料如表。乙的公轉週期是甲的幾倍？',
+      fig: { type: 'table', cols: ['行星', '軌道半徑', '週期 (年)'], rows: [['甲', '$R$', 1], ['乙', '$4R$', '？']] },
+      choices: ['$8$', '$4$', '$16$', '$2$'],
+      answer: 0,
+      explain: '克卜勒第三定律 $T^2\\propto R^3$：$4^3=64=8^2$，週期是 8 倍。',
+    },
+  ];
+  await page.route('**/assets/physics-*.json', async (route) => {
+    const res = await route.fetch();
+    const body = await res.json();
+    // 同樣開頭的還有重點卡的檔案：只換題庫
+    if (Array.isArray(body) && body[0]?.id?.startsWith('physics-')) await route.fulfill({ response: res, json: figs });
+    else await route.fulfill({ response: res });
+  });
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { subjects: ['physics'] } }));
+  });
+  await openHome(page);
+  await page.locator('[data-mode="ten"]').click();
+  await expect(page.locator('#play')).toBeVisible();
+
+  const seen = [];
+  for (let i = 0; i < 2; i++) {
+    const fig = page.locator('#q-text .fig');
+    await expect(fig).toBeVisible();
+    if (await fig.locator('table').count()) {
+      seen.push('table');
+      await expect(fig.locator('tbody tr')).toHaveCount(2);
+      // 儲存格裡的公式照樣排版
+      await expect(fig.locator('tbody .katex').first()).toBeVisible();
+    } else {
+      seen.push('line');
+      const svg = fig.locator('svg[role="img"]');
+      await expect(svg).toHaveAttribute('aria-label', /折線圖，橫軸：時間 \(s\)，縱軸：速度 \(m\/s\)。\(0, 0\)、\(2, 8\)、\(6, 8\)、\(8, 0\)/);
+      await expect(svg.locator('.fig-line')).toHaveCount(1);
+      await expect(svg.locator('.fig-dot')).toHaveCount(4);
+      // 圖不會把題目卡撐出畫面
+      const box = await svg.boundingBox();
+      expect(box.x).toBeGreaterThanOrEqual(0);
+      expect(box.x + box.width).toBeLessThanOrEqual(page.viewportSize().width);
+    }
+    for (const scheme of ['light', 'dark']) {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+      await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+      await audit(page, `圖表題 ${seen.at(-1)}（${scheme}）`);
+    }
+    await page.locator('#skip').click();
+    await page.locator('#next').click();
+  }
+  expect(seen.sort()).toEqual(['line', 'table']);
+  await expect(page.locator('#result')).toBeVisible();
+  // 結算列出題目時圖表也在
+  await expect(page.locator('#r-list .fig')).toHaveCount(2);
+});

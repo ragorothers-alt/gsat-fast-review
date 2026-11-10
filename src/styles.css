@@ -988,6 +988,179 @@ p {
   line-height: 1.6;
 }
 
+/* ── 圖表題：題幹下面的圖或資料表（src/figure.js 從題目的 fig 欄位畫出來） ── */
+.fig {
+  margin: 6px 0 0;
+  --fig-1: #1f6fb2;
+  --fig-2: #c8452f;
+  --fig-3: #26804b;
+  --fig-4: #8a5a00;
+}
+
+:root[data-theme='dark'] .fig {
+  --fig-1: #8cc0f2;
+  --fig-2: #f58a7c;
+  --fig-3: #6fcf97;
+  --fig-4: #f2c14e;
+}
+
+.fig-title {
+  margin-bottom: 2px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.fig-svg {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin: 0 auto;
+  color: var(--ink);
+}
+
+/* 題目卡放不下而縮小字級時，圖也縮一點，留高度給選項 */
+.q-text.compact .fig-svg {
+  max-width: 272px;
+}
+
+.fig-svg text {
+  fill: currentColor;
+  font-family: inherit;
+}
+
+.fig-tick {
+  font-size: 10px;
+}
+
+.fig-label {
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.fig-grid {
+  stroke: currentColor;
+  stroke-opacity: 0.16;
+}
+
+.fig-axis {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.fig-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.fig-c1 {
+  --fc: var(--fig-1);
+}
+
+.fig-c2 {
+  --fc: var(--fig-2);
+}
+
+.fig-c3 {
+  --fc: var(--fig-3);
+}
+
+.fig-c4 {
+  --fc: var(--fig-4);
+}
+
+.fig-line,
+.fig-dot,
+.fig-bar {
+  stroke: var(--fc);
+}
+
+.fig-dot {
+  fill: var(--fc);
+  stroke-width: 1;
+}
+
+/* 長條不只靠顏色分：第一組實心、第二組半透明、第三組空心 */
+.fig-bar {
+  fill: var(--fc);
+  stroke-width: 1.2;
+}
+
+.fig-bar.fig-c2 {
+  fill: color-mix(in srgb, var(--fc) 42%, transparent);
+}
+
+.fig-bar.fig-c3 {
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.fig-mark {
+  fill: var(--card);
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.fig-mark-label {
+  font-size: 11px;
+  font-weight: 700;
+  paint-order: stroke;
+  stroke: var(--card);
+  stroke-width: 3px;
+}
+
+.fig-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.fig-key {
+  width: 22px;
+  height: 10px;
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+.fig-table-wrap {
+  overflow-x: auto;
+}
+
+.fig-table {
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: calc(0.86rem * var(--fs, 1));
+  line-height: 1.35;
+}
+
+.fig-table th,
+.fig-table td {
+  padding: 3px 9px;
+  border: 1.2px solid var(--line-soft);
+  text-align: center;
+}
+
+.fig-table thead th {
+  border-bottom: 1.6px solid var(--ink);
+  font-weight: 700;
+}
+
+.fig-table tbody th {
+  font-weight: 600;
+}
+
 /* ── 閱讀題組：文章放在題目上方的框裡自己捲動，題目與選項一直看得到 ── */
 .nowrap {
   white-space: nowrap;

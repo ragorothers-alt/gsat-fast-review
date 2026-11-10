@@ -8,6 +8,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { checkFigure } from '../src/figure.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../src/subjects.js';
 import { CROSS_UNIT, MIN_PER_UNIT, UNITS } from '../src/units.js';
 import { checkText } from './text-check.mjs';
@@ -24,7 +25,11 @@ const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 // 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
 const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv', 'fig']);
+/** 圖表題（fig）：圖占掉題目卡一大塊，題幹要短 */
+const FIG_Q = 120;
+/** 題幹指著圖表（如圖、如下表、附圖…）：一定要有 fig。「例如表面」「由圖例」「表現」「下表皮」這些不算 */
+const FIG_REF = /(?<!例)如(下|右|附)?[圖表](?![現示面達列例皮層])|[附下右][圖表](?![現示面達格例皮層])/;
 /** 英文單字題才有 lv：考的字在大考中心《高中英文參考詞彙表》的級數 */
 const LV_TOPICS = ['核心單字', '進階單字'];
 // 閱讀題組的文章長度（字元；國文是字數，英文約 6 個字元一個字）與題數
@@ -77,7 +82,7 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
-  const stats = { mc: 0, tf: 0, ms: 0, formula: 0, scratch: 0, grouped: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
+  const stats = { mc: 0, tf: 0, ms: 0, formula: 0, scratch: 0, grouped: 0, fig: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
   /** 題組代號 → 這組的題目（檔案裡的順序） */
   const groups = new Map();
 
@@ -140,6 +145,17 @@ for (const file of files) {
       if (it.type === 'tf') err('題組的題目不可是是非題');
       if (it.scratch) err('題組的題目不可標 scratch');
       if (typeof it.group === 'string') (groups.get(it.group) ?? groups.set(it.group, []).get(it.group)).push(it);
+    }
+    if (it.fig !== undefined) {
+      stats.fig++;
+      if (it.type !== 'mc' && it.type !== 'ms') err('圖表題（fig）只能是單選或多選題');
+      if (it.group !== undefined) err('題組的題目不可有 fig');
+      for (const m of checkFigure(it.fig)) err(m);
+      if (typeof it.q === 'string' && it.q.length > FIG_Q) err(`圖表題的題幹上限 ${FIG_Q} 字（現在 ${it.q.length} 字）：數據放在圖裡，題幹只寫情境與要問的`);
+      const word = it.fig?.type === 'table' ? '表' : '圖';
+      if (typeof it.q === 'string' && !it.q.includes(word)) err(`圖表題的題幹要指出要看${word}（例如「如${word}」）`);
+    } else if (it.group === undefined && typeof it.q === 'string' && FIG_REF.test(it.q)) {
+      err('題幹提到圖或表，但沒有 fig：要讀圖表的題目用 fig 欄位給資料');
     }
     if (it.group === undefined && [it.q, ...(Array.isArray(it.choices) ? it.choices : [])].some((t) => typeof t === 'string' && blanksIn(t).length)) {
       err('只有題組的題目可以用 __1__ 這種空格代號');
@@ -236,7 +252,7 @@ for (const file of files) {
   }
 
   const n = items.length;
-  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}、公式 ${stats.formula}、演算 ${stats.scratch}${stats.grouped ? `、題組 ${groups.size} 組 ${stats.grouped} 題` : ''}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
+  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}、公式 ${stats.formula}、演算 ${stats.scratch}${stats.grouped ? `、題組 ${groups.size} 組 ${stats.grouped} 題` : ''}${stats.fig ? `、圖表 ${stats.fig}` : ''}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
   const topics = [...stats.topics].map(([t, c]) => `${t} ${c}`).join('、');
   if (topics) console.log(`  單元：${topics}`);
   if (warnings.length) {
