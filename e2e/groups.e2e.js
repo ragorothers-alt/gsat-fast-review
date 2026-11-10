@@ -145,5 +145,5 @@ test('模擬考：各張考卷標出含幾組題組', async ({ page }) => {
   await expect(page.locator('li:has([data-paper="chinese"]) .exam-paper-meta')).toContainText('含 3 組閱讀題組');
   await expect(page.locator('li:has([data-paper="math"]) .exam-paper-meta')).toContainText('含 1 組混合題組');
   await expect(page.locator('li:has([data-paper="science"]) .exam-paper-meta')).toContainText('含 3 組題組');
-  await expect(page.locator('li:has([data-paper="social"]) .exam-paper-meta')).not.toContainText('題組');
+  await expect(page.locator('li:has([data-paper="social"]) .exam-paper-meta')).toContainText('含 3 組題組');
 });

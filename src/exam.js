@@ -13,7 +13,7 @@ export { UNIT_SHARE };
  * 學測的五張考卷。題庫的題目比學測短（免紙筆、單題），題數和時間也照比例縮小：
  * 平均每題國文 50 秒、英文 40 秒、數學 72 秒、自然 60 秒、社會 45 秒。出單選與多選題（學測沒有是非題）。
  * 另外抽幾組題組（groups 組，算在 size 裡）：國文、英文是閱讀題組，數學是一個情境連問幾題的混合題，
- * 自然是讀一段實驗或科學短文連答幾題的題組；每組多給約 1–2 分鐘讀文章或情境
+ * 自然是讀一段實驗或科學短文連答幾題的題組，社會是讀一段史料、地理資料或生活情境連答幾題的題組；每組多給約 1–2 分鐘讀文章或情境
  * @type {Paper[]}
  */
 export const PAPERS = [
@@ -21,7 +21,7 @@ export const PAPERS = [
   { id: 'english', name: '英文', subjects: ['english'], size: 30, minutes: 27, groups: 3, groupName: '閱讀題組' },
   { id: 'math', name: '數學', subjects: ['math'], size: 25, minutes: 32, groups: 1, groupName: '混合題組' },
   { id: 'science', name: '自然', subjects: ['physics', 'chemistry', 'biology', 'earth'], size: 40, minutes: 44, groups: 3, groupName: '題組' },
-  { id: 'social', name: '社會', subjects: ['history', 'geography', 'civics'], size: 40, minutes: 30 },
+  { id: 'social', name: '社會', subjects: ['history', 'geography', 'civics'], size: 40, minutes: 34, groups: 3, groupName: '題組' },
 ];
 export const PAPER_BY_ID = Object.fromEntries(PAPERS.map((p) => [p.id, p]));
 

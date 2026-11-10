@@ -15,7 +15,7 @@ test('模擬考：作答時不對答案，可以標記、跳題、回頭改；�
   await openHome(page);
   await startPaper(page, 'social');
   await expect(page.locator('#play-progress')).toHaveText('1 / 40');
-  await expect(page.locator('#exam-clock')).toHaveText(/^(30:00|29:5\d)$/);
+  await expect(page.locator('#exam-clock')).toHaveText(/^(34:00|33:5\d)$/);
   // 作答畫面的計分、看解答都收起來
   await expect(page.locator('#skip')).toBeHidden();
   await expect(page.locator('.score')).toBeHidden();
