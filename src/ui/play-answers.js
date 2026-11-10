@@ -80,7 +80,8 @@ export function markMultiChoices(buttons, order, answer, mine) {
 }
 
 /**
- * 非選擇題作答後：自評寫到的要點打圈、沒寫到的淡掉；按「不會」時都不勾也不淡掉
+ * 非選擇題作答後：自評寫到的要點打圈；沒寫到的正是最該看的，不淡化，改成虛線框並標「沒寫到」。
+ * 按「不會」時都不勾也不標
  * @param {Iterable<HTMLButtonElement>} buttons 評分要點的按鈕
  * @param {Set<number>} mine 自評寫到的要點索引
  * @param {boolean} skipped 按「不會」看的參考答案
@@ -92,6 +93,9 @@ export function markOpenPoints(buttons, mine, skipped) {
     if (mine.has(b._value)) {
       b.classList.add('correct');
       b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（寫到了）</span>`);
-    } else if (!skipped) b.classList.add('dim');
+    } else if (!skipped) {
+      b.classList.add('missed');
+      b.insertAdjacentHTML('beforeend', '<span class="miss-tag todo" aria-hidden="true">沒寫到</span><span class="sr-only">（沒寫到）</span>');
+    }
   }
 }

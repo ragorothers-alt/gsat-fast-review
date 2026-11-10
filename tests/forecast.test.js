@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { dayIndex, dueBuckets, estimateRates, keepUpGoal, reviewForecast, simulate, studyPlan } from '../src/forecast.js';
+import { PLAN_STRETCH, dayIndex, dueBuckets, estimateRates, keepUpGoal, planVerdict, reviewForecast, simulate, studyPlan } from '../src/forecast.js';
 import { DAY, schedule } from '../src/srs.js';
 import { GOALS } from '../src/stats.js';
 
@@ -129,6 +129,35 @@ describe('studyPlan', () => {
     expect(studyPlan({ ...base, total: 1e6, fresh: 1e6, daysLeft: 1, pace: 30 })).toMatchObject({ needDaily: null, suggest: null });
     expect(studyPlan({ ...base, total: 500, fresh: 500, daysLeft: 1, pace: 0 })).toMatchObject({ projected: 0, needDaily: 500, suggest: null });
     expect(studyPlan({ ...base, total: 500, fresh: 0, daysLeft: 10, pace: 30 })).toMatchObject({ remaining: 0, needDaily: 0, suggest: 10 });
+  });
+});
+
+describe('planVerdict', () => {
+  const base = { buckets: new Map(), goals: GOALS, recall: 1, first: 1 };
+  const plan = (total, fresh, daysLeft) => studyPlan({ ...base, total, fresh, daysLeft, pace: 30 });
+
+  it('沒選範圍、全部練過', () => {
+    expect(planVerdict(plan(0, 0, 40), { total: 0, goal: 30 })).toBe('empty');
+    expect(planVerdict(plan(500, 0, 40), { total: 500, goal: 30 })).toBe('done');
+  });
+
+  it('每天要做的題數不超過每日目標的 3 倍：說得出每天做幾題就練得完一輪', () => {
+    // 800 題分 40 天：每天 20 題
+    expect(planVerdict(plan(1000, 800, 40), { total: 1000, goal: 30 })).toBe('reachable');
+    // 剛好 3 倍還算練得完：3,600 題分 40 天是每天 90 題
+    const edge = plan(3600, 3600, 40);
+    expect(edge.needDaily).toBe(30 * PLAN_STRETCH);
+    expect(planVerdict(edge, { total: 3600, goal: 30 })).toBe('reachable');
+    // 同一份規劃，每日目標比較小就練不完
+    expect(planVerdict(edge, { total: 3600, goal: 20 })).toBe('beyond');
+  });
+
+  it('範圍很大（三萬多題、剩 70 天）：每天要做幾百題以上，算練不完一輪；根本排不完（needDaily 是 null）也是', () => {
+    const huge = plan(33_490, 33_480, 70);
+    expect(huge.needDaily).toBeGreaterThan(30 * PLAN_STRETCH);
+    expect(planVerdict(huge, { total: 33_490, goal: 30 })).toBe('beyond');
+    expect(planVerdict(huge, { total: 33_490, goal: 120 })).toBe('beyond');
+    expect(planVerdict({ remaining: 1e6, needDaily: null }, { total: 1e6, goal: 120 })).toBe('beyond');
   });
 });
 

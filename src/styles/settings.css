@@ -60,6 +60,59 @@
   grid-template-columns: repeat(4, 1fr);
 }
 
+/* 每日目標下面的「只出單題」開關與說明 */
+#quick-toggle {
+  margin-top: 10px;
+}
+
+.quick-note {
+  margin: 6px 0 0;
+}
+
+/* ── 第一次開啟的設定（ui/welcome.js）：沿用設定面板的分段鈕與首頁的科目鈕 ── */
+/* 三段都要一眼看完：矮螢幕上面板可以比其他面板高一點 */
+#welcome-sheet .sheet-body {
+  max-height: 92vh;
+}
+
+#welcome-tracks {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#welcome-goals {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.welcome-skip {
+  flex: none;
+  min-height: 40px;
+  padding: 4px 12px;
+}
+
+.welcome-chips {
+  margin-top: 10px;
+}
+
+/* 面板是方格紙的底色：沒選的科目鈕墊一層紙卡色，字才夠清楚 */
+.welcome-chips .chip {
+  padding: 10px 4px;
+  background: var(--card);
+}
+
+.welcome-chips .chip[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--c) 24%, var(--card));
+}
+
+.welcome-note {
+  margin: 8px 0 0;
+}
+
+.welcome-foot {
+  display: grid;
+  margin-top: 12px;
+  flex: none;
+}
+
 .set-sub {
   margin: 14px 0 8px;
   font-size: 0.82rem;

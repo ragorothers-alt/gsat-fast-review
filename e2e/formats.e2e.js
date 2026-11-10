@@ -1,5 +1,5 @@
 // 題型：演算題的填答（像學測選填）、多選題
-import { audit, expect, openHome, test } from './fixtures.js';
+import { audit, expect, openHome, seedVeteran, test } from './fixtures.js';
 
 /** 從錯題本搜尋題號，只練這一題 */
 async function practice(page, id) {
@@ -224,9 +224,8 @@ test('圖表題：題幹下面畫出圖或資料表，圖帶文字敘述；深�
     if (Array.isArray(body) && body[0]?.id?.startsWith('physics-')) await route.fulfill({ response: res, json: figs });
     else await route.fulfill({ response: res });
   });
-  await page.addInitScript(() => {
-    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { subjects: ['physics'] } }));
-  });
+  // 過了新手期（作答紀錄滿 20 題）10 題一輪才出圖表題
+  await seedVeteran(page, { subjects: ['physics'] });
   await openHome(page);
   await page.locator('[data-mode="ten"]').click();
   await expect(page.locator('#play')).toBeVisible();
@@ -265,6 +264,161 @@ test('圖表題：題幹下面畫出圖或資料表，圖帶文字敘述；深�
   await expect(page.locator('#r-list .fig')).toHaveCount(2);
 });
 
+// ── 小螢幕作答後：沒選到的錯誤選項收成一行，高度讓給題目卡 ──────────
+const foldBase = { subject: 'physics', type: 'mc', topic: '牛頓運動定律', formula: false, level: 2 };
+// 題幹、選項與解析都長：375×667 上作答後題目卡一定放不下
+const FOLD_LONG = {
+  ...foldBase,
+  id: 'physics-9911',
+  q: '小安在水平桌面上用彈簧秤沿水平方向拉一個質量 2 kg 的木塊。彈簧秤讀數由 0 慢慢增加，讀數到 6 N 時木塊才開始滑動；滑動之後，他調整拉力讓木塊維持等速度前進，這時讀數穩定在 4 N。接著他把拉力加大到 10 N 並維持不變。若重力加速度取 10 m/s²，關於這個實驗，下列敘述何者正確？',
+  choices: [
+    '木塊開始滑動前，桌面給它的靜摩擦力一直等於 6 N，和拉力大小無關',
+    '木塊與桌面之間的動摩擦係數是 0.2，拉力 10 N 時加速度是 3 m/s²',
+    '木塊等速度前進時所受合力不為零，因為彈簧秤的讀數不是零',
+    '拉力加大到 10 N 之後，動摩擦力也跟著變大成 10 N，所以木塊仍然等速',
+  ],
+  answer: 1,
+  explain:
+    '滑動前靜摩擦力隨拉力改變，最大值才是 6 N。等速時合力為零，動摩擦力等於拉力 4 N，所以動摩擦係數 = 4 ÷ (2 × 10) = 0.2。動摩擦力和拉力大小無關，拉力變成 10 N 時合力是 10 − 4 = 6 N，加速度 = 6 ÷ 2 = 3 m/s²。常見的錯誤是把最大靜摩擦力當成動摩擦力，或以為摩擦力會跟著拉力一起變大。',
+};
+// 題幹、選項、解析都短：作答後題目卡放得下
+const FOLD_SHORT = { ...foldBase, id: 'physics-9912', q: '力的 SI 單位是什麼？', choices: ['牛頓', '焦耳', '瓦特', '帕'], answer: 0, explain: '力的單位是牛頓（N）。' };
+
+/** 把物理題庫換成這幾題，首頁只選物理，開始 10 題一輪 */
+async function mockFold(page, questions) {
+  await page.route('**/assets/physics-*.json', async (route) => {
+    const res = await route.fetch();
+    const body = await res.json();
+    // 同樣開頭的還有重點卡的檔案：只換題庫
+    if (Array.isArray(body) && body[0]?.id?.startsWith('physics-')) await route.fulfill({ response: res, json: questions });
+    else await route.fulfill({ response: res });
+  });
+  await seedVeteran(page, { subjects: ['physics'] });
+  await openHome(page);
+  await page.locator('[data-mode="ten"]').click();
+  await expect(page.locator('#play')).toBeVisible();
+}
+
+test('小螢幕（375×667）作答後題目卡放不下：沒選到的錯誤選項各收成一行，點一下全部展開；展開後還是不能作答', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 375, height: 667 });
+  await mockFold(page, [FOLD_LONG]);
+  const answers = page.locator('#answers');
+  await expect(answers.locator('.answer')).toHaveCount(4);
+  await expect(answers).not.toHaveClass(/folded/);
+  // 選一個錯的：正解、你選錯的照原樣，另外兩個變淡的收成一行
+  await answers.locator('.answer', { hasText: '合力不為零' }).click();
+  await expect(page.locator('#q-explain')).toBeVisible();
+  await expect(answers).toHaveClass(/folded/);
+  await expect(answers.locator('.answer.dim')).toHaveCount(2);
+
+  const measure = () =>
+    page.evaluate(() => {
+      const h = (el) => Math.round(el.getBoundingClientRect().height);
+      const all = [...document.querySelectorAll('#answers .answer')];
+      // 選項的字排成幾行（看文字每一行的位置，不是按鈕的外框）
+      const lines = (b) => {
+        const range = document.createRange();
+        range.selectNodeContents(b.querySelector('.answer-text'));
+        return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+      };
+      return {
+        dim: all.filter((b) => b.classList.contains('dim')).map((b) => ({ h: h(b), lines: lines(b), clipped: b.querySelector('.answer-text').scrollWidth > b.querySelector('.answer-text').clientWidth })),
+        kept: all.filter((b) => !b.classList.contains('dim')).map(h),
+        right: Math.max(...all.map((b) => b.getBoundingClientRect().right)),
+        pageWidth: document.documentElement.scrollWidth,
+        card: h(document.querySelector('#card')),
+        answers: h(document.querySelector('#answers')),
+        screenOverflow: document.querySelector('#play').scrollHeight - document.querySelector('#play').clientHeight,
+      };
+    });
+  const folded = await measure();
+  // 收起來的每個一行、超出省略；正解與選錯的那個還是完整的兩行
+  for (const d of folded.dim) {
+    expect(d.h).toBeLessThanOrEqual(34);
+    expect(d.lines).toBe(1);
+    expect(d.clipped).toBe(true);
+  }
+  for (const k of folded.kept) expect(k).toBeGreaterThanOrEqual(44);
+  // 不換行的字不能把選項撐出畫面
+  expect(folded.right).toBeLessThanOrEqual(375);
+  expect(folded.pageWidth).toBeLessThanOrEqual(375);
+  expect(folded.screenOverflow).toBeLessThanOrEqual(1);
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await audit(page, `作答後收起錯誤選項（${scheme}）`);
+  }
+
+  // 點選項之間的空隙、點正解都不展開
+  await answers.locator('.answer.correct').click({ force: true });
+  await expect(answers).toHaveClass(/folded/);
+  // 點其中一個收起來的（它是停用的按鈕，點擊落在選項區）：全部展開回原樣，題目卡把高度還回去
+  const box = await answers.locator('.answer.dim').first().boundingBox();
+  await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
+  await expect(answers).not.toHaveClass(/folded/);
+  const open = await measure();
+  for (const d of open.dim) {
+    expect(d.h).toBeGreaterThanOrEqual(44);
+    expect(d.lines).toBeGreaterThan(1);
+  }
+  expect(open.answers).toBeGreaterThan(folded.answers + 30);
+  expect(open.card).toBeLessThan(folded.card - 30);
+  // 展開後還是批改完的狀態：選項都停用，再點也不會重新作答
+  await expect(answers.locator('.answer:disabled')).toHaveCount(4);
+  const again = await answers.locator('.answer.dim').first().boundingBox();
+  await page.mouse.click(again.x + again.width / 2, again.y + again.height / 2);
+  await expect(answers).not.toHaveClass(/folded/);
+  await expect(answers.locator('.answer.correct')).toHaveCount(1);
+  await expect(answers.locator('.answer.wrong')).toHaveCount(1);
+  await expect(page.locator('#play-progress')).toHaveText('1 / 1');
+  await page.locator('#next').click();
+  await expect(page.locator('#result')).toBeVisible();
+  await expect(page.locator('#r-big')).toHaveText('0 / 1');
+});
+
+test('作答後題目卡放得下就不收：小螢幕與大螢幕（412×915）上的短題，沒選到的選項都維持原樣', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 375, height: 667 });
+  await mockFold(page, [FOLD_SHORT]);
+  const answers = page.locator('#answers');
+  await answers.locator('.answer', { hasText: '焦耳' }).click();
+  await expect(page.locator('#q-explain')).toBeVisible();
+  await expect(answers.locator('.answer.dim')).toHaveCount(2);
+  await expect(answers).not.toHaveClass(/folded/);
+  expect(await page.locator('#card').evaluate((c) => c.scrollHeight - c.clientHeight)).toBeLessThanOrEqual(2);
+
+  // 大螢幕重來一次
+  await page.locator('#next').click();
+  await expect(page.locator('#result')).toBeVisible();
+  await page.setViewportSize({ width: 412, height: 915 });
+  await page.locator('#r-again').click();
+  await expect(page.locator('#play')).toBeVisible();
+  await answers.locator('.answer', { hasText: '瓦特' }).click();
+  await expect(page.locator('#q-explain')).toBeVisible();
+  await expect(answers).not.toHaveClass(/folded/);
+});
+
+test('小螢幕按「不會」看解答的長題：三個錯誤選項都收成一行，正解完整顯示', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 375, height: 667 });
+  await mockFold(page, [FOLD_LONG]);
+  await page.locator('#skip').click();
+  await expect(page.locator('#q-explain')).toBeVisible();
+  await expect(page.locator('#answers')).toHaveClass(/folded/);
+  await expect(page.locator('#answers .answer.dim')).toHaveCount(3);
+  const heights = await page.locator('#answers .answer').evaluateAll((list) => list.map((b) => [b.classList.contains('correct'), Math.round(b.getBoundingClientRect().height)]));
+  for (const [correct, h] of heights) {
+    if (correct) expect(h).toBeGreaterThanOrEqual(44);
+    else expect(h).toBeLessThanOrEqual(34);
+  }
+  // 換下一題（這裡是結算）不會把收起的狀態帶過去：再來一輪的選項是完整的
+  await page.locator('#next').click();
+  await page.locator('#r-again').click();
+  await expect(page.locator('#answers')).not.toHaveClass(/folded/);
+  await expect(page.locator('#answers .answer:disabled')).toHaveCount(0);
+});
+
 // ── 非選擇題（type: "open"）：題庫還沒有這種題，把英文題庫換成樣本題來測 ──────────
 const openBase = { subject: 'english', type: 'open' };
 const OPEN_SHORT = {
@@ -298,9 +452,8 @@ async function mockOpen(page, questions) {
     if (Array.isArray(body) && body[0]?.id?.startsWith('english-')) await route.fulfill({ response: res, json: questions });
     else await route.fulfill({ response: res });
   });
-  await page.addInitScript(() => {
-    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { subjects: ['english'] } }));
-  });
+  // 過了新手期（作答紀錄滿 20 題）10 題一輪才出非選擇題
+  await seedVeteran(page, { subjects: ['english'] });
   await openHome(page);
   await page.locator('[data-mode="ten"]').click();
   await expect(page.locator('#play')).toBeVisible();
@@ -356,12 +509,17 @@ test('非選擇題：先自己寫，看參考答案後勾寫到的要點自評�
   await auditBoth(page, '非選擇題自評');
   await page.locator('#ms-send').click();
 
-  // 沒全寫到：算答錯，寫到的要點打圈、其他淡掉，顯示解析；不問「猜的／不太確定」
+  // 沒全寫到：算答錯，寫到的要點打圈；沒寫到的正是最該看的，不淡化、標「沒寫到」（螢幕閱讀器也念得到）。顯示解析；不問「猜的／不太確定」
   const n = first.points.length;
   await expect(page.locator('#ms-send')).toBeHidden();
   await expect(points.nth(0)).toHaveClass(/correct/);
   await expect(page.locator('#answers .answer.correct')).toHaveCount(1);
-  await expect(page.locator('#answers .answer.dim')).toHaveCount(n - 1);
+  await expect(page.locator('#answers .answer.dim')).toHaveCount(0);
+  await expect(page.locator('#answers .answer.missed')).toHaveCount(n - 1);
+  await expect(page.locator('#answers .answer.missed .miss-tag')).toHaveText(Array(n - 1).fill('沒寫到'));
+  await expect(points.nth(0)).toHaveAccessibleName(/（寫到了）$/);
+  await expect(points.nth(1)).toHaveAccessibleName(/（沒寫到）$/);
+  expect(await points.nth(1).evaluate((b) => getComputedStyle(b).opacity)).toBe('1');
   await expect(page.locator('#answers .answer:disabled')).toHaveCount(n);
   await expect(page.locator('#answer-status')).toHaveText(`自評：寫到 1／${n} 個要點`);
   await expect(page.locator('#q-explain')).toContainText(first.explain);
@@ -426,9 +584,11 @@ test('非選擇題在小螢幕（360×640）：參考答案加四個要點放不
         card: box('#card'),
         stem: box('#q-text'),
         answers: box('#answers'),
+        ref: box('#answers .open-ref'),
         send: box('#ms-send'),
         next: box('#next'),
         explain: box('#q-explain'),
+        cardOverflow: document.querySelector('#card').scrollHeight - document.querySelector('#card').clientHeight,
         widest: Math.max(...[...answers.children].map((c) => c.getBoundingClientRect().right)),
       };
     });
@@ -437,11 +597,13 @@ test('非選擇題在小螢幕（360×640）：參考答案加四個要點放不
   expect(before.pageWidth).toBeLessThanOrEqual(360);
   expect(before.screenOverflow).toBeLessThanOrEqual(1);
   expect(before.widest).toBeLessThanOrEqual(360);
-  // 題幹看得到，題目卡沒有被擠扁
+  // 題幹看得到，題目卡沒有被擠扁：題目卡留住內容需要的高度（不用捲），放不下的是作答區在捲
   expect(before.card.height).toBeGreaterThanOrEqual(150);
   expect(before.stem.top).toBeGreaterThanOrEqual(before.card.top);
-  // 作答區在題目卡下面、送出按鈕上面，送出按鈕在畫面裡
-  expect(before.answers.top).toBeGreaterThanOrEqual(before.card.bottom - 1);
+  expect(before.cardOverflow).toBeLessThanOrEqual(2);
+  expect(before.answersOverflow).toBeGreaterThan(0);
+  // 參考答案在題目卡下面（作答區的框往上多撐了一點留給對錯記號，所以看裡面的參考答案）、作答區在送出按鈕上面，送出按鈕在畫面裡
+  expect(before.ref.top).toBeGreaterThanOrEqual(before.card.bottom);
   expect(before.answers.bottom).toBeLessThanOrEqual(before.send.top + 1);
   expect(before.send.bottom).toBeLessThanOrEqual(640);
   await audit(page, '非選擇題（360×640）');
@@ -460,6 +622,65 @@ test('非選擇題在小螢幕（360×640）：參考答案加四個要點放不
   expect(after.next.bottom).toBeLessThanOrEqual(640);
   expect(after.card.height).toBeGreaterThanOrEqual(150);
   await audit(page, '非選擇題看解答（360×640）');
+});
+
+test('非選擇題在一般手機（412×915）：看了參考答案後題目卡只占內容的高度，四個要點不用捲就全部看得到', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 412, height: 915 });
+  // 參考答案和要點都接近長度上限的那一題
+  await mockOpen(page, [OPEN_LONG]);
+  await page.locator('#answers .open-reveal').click();
+  const points = page.locator('#answers .answer');
+  await expect(points).toHaveCount(4);
+
+  const layout = () =>
+    page.evaluate(() => {
+      const r = (sel) => document.querySelector(sel).getBoundingClientRect();
+      const answers = document.querySelector('#answers');
+      const card = document.querySelector('#card');
+      const list = [...answers.querySelectorAll('.answer')].map((b) => b.getBoundingClientRect());
+      return {
+        answersOverflow: answers.scrollHeight - answers.clientHeight,
+        cardOverflow: card.scrollHeight - card.clientHeight,
+        lastPointBottom: Math.max(...list.map((b) => b.bottom)),
+        firstPointTop: Math.min(...list.map((b) => b.top)),
+        refTop: r('#answers .open-ref').top,
+        cardBottom: r('#card').bottom,
+        sendTop: r('#ms-send').top,
+        nextTop: r('#next').top,
+        screenOverflow: document.querySelector('#play').scrollHeight - document.querySelector('#play').clientHeight,
+      };
+    });
+
+  // 作答區不用捲：參考答案與四個要點都在送出按鈕上面，題目卡也沒被擠到要捲
+  const revealed = await layout();
+  expect(revealed.answersOverflow).toBeLessThanOrEqual(1);
+  expect(revealed.cardOverflow).toBeLessThanOrEqual(2);
+  expect(revealed.lastPointBottom).toBeLessThanOrEqual(revealed.sendTop);
+  expect(revealed.refTop).toBeGreaterThanOrEqual(revealed.cardBottom);
+  expect(revealed.screenOverflow).toBeLessThanOrEqual(1);
+  await expect(page.locator('#card-more')).toBeHidden();
+  await auditBoth(page, '非選擇題看參考答案（412×915）');
+
+  // 只勾第一個就送出：沒寫到的三個標「沒寫到」、不淡化，標籤不占文字的寬度（要點不會多折一行）
+  const before = await points.evaluateAll((list) => list.map((b) => Math.round(b.getBoundingClientRect().height)));
+  await points.nth(0).click();
+  await page.locator('#ms-send').click();
+  await expect(page.locator('#q-explain')).toBeVisible();
+  await expect(page.locator('#answers .answer.missed .miss-tag')).toHaveText(['沒寫到', '沒寫到', '沒寫到']);
+  await expect(page.locator('#answers .answer.dim')).toHaveCount(0);
+  const after = await points.evaluateAll((list) => list.map((b) => Math.round(b.getBoundingClientRect().height)));
+  expect(after).toEqual(before);
+  // 「沒寫到」在要點的框裡看得到（沒被作答區切掉）
+  const tags = await page.locator('#answers .miss-tag').evaluateAll((list) => {
+    const box = document.querySelector('#answers').getBoundingClientRect();
+    return list.map((t) => {
+      const r = t.getBoundingClientRect();
+      return r.top >= box.top && r.right <= box.right && r.width > 0;
+    });
+  });
+  expect(tags).toEqual([true, true, true]);
+  await auditBoth(page, '非選擇題自評後（412×915）');
 });
 
 test('非選擇題的鍵盤操作：Enter 看參考答案、數字鍵勾要點、Enter 送出；還沒看就按 ? 是不會', async ({ page }, info) => {

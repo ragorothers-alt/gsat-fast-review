@@ -138,6 +138,30 @@
   color: var(--muted);
 }
 
+/* 題目卡上的單元那一行（play-card.js 的 topicHTML）：前面的「題組 2／4・」和後面的「・多選」「・非選」「・演算題」「・類似題」
+   不換行、不截斷；放不下時截斷的是中間的單元名稱（最多兩行；題組只留一行，見 passage-groups.css） */
+.card .card-tag .topic {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.topic-fixed {
+  flex: none;
+}
+
+.topic-name {
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .q-text {
   font-size: calc(clamp(1.08rem, 4.6vw, 1.3rem) * var(--fs, 1));
   line-height: 1.7;

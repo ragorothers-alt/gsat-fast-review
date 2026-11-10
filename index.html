@@ -188,19 +188,25 @@
           </div>
         </header>
 
-        <!-- 點今日進度卡進學習分析 -->
-        <button class="daily paper" id="daily" type="button" title="點一下看學習分析">
-          <svg class="ring" viewBox="0 0 36 36" aria-hidden="true">
-            <circle class="ring-bg" cx="18" cy="18" r="15.9" />
-            <circle class="ring-fg" id="daily-ring" cx="18" cy="18" r="15.9" pathLength="100" />
-          </svg>
-          <span class="daily-text">
-            <span>今日 <b id="daily-count">0</b> / <span id="daily-goal">30</span> 題</span>
-            <small id="daily-acc"></small>
-          </span>
-          <span class="countdown" id="countdown" hidden><small>距學測</small><b id="countdown-days">0</b><small>天</small></span>
-          <span class="daily-more" aria-hidden="true">分析 ›</span>
-        </button>
+        <!-- 今日進度卡：左半（圓環與今日題數）直接開始今天的練習（自由練習），右半（學測倒數）進學習分析 -->
+        <div class="daily paper" id="daily-card">
+          <button class="daily-start" id="daily-start" type="button" title="開始今天的練習（自由練習）">
+            <svg class="ring" viewBox="0 0 36 36" aria-hidden="true">
+              <circle class="ring-bg" cx="18" cy="18" r="15.9" />
+              <circle class="ring-fg" id="daily-ring" cx="18" cy="18" r="15.9" pathLength="100" />
+            </svg>
+            <span class="daily-text">
+              <span class="sr-only">開始今天的練習：</span>
+              <span class="daily-line">今日 <b id="daily-count">0</b> / <span id="daily-goal">30</span> 題</span>
+              <small id="daily-acc"></small>
+            </span>
+            <span class="daily-go" aria-hidden="true">開始 ›</span>
+          </button>
+          <button class="daily-stats" id="daily" type="button" title="看學習分析">
+            <span class="countdown" id="countdown" hidden><small>距學測</small><span class="countdown-n"><b id="countdown-days">0</b><small>天</small></span></span>
+            <span class="daily-more"><span class="sr-only">學習</span>分析 ›</span>
+          </button>
+        </div>
 
         <div class="stage" aria-hidden="true"></div>
 
@@ -419,6 +425,7 @@
 
           <section id="stats-plan" class="stats-block paper">
             <h3><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>考前規劃<small>依首頁選的科目與單元</small></h3>
+            <div id="plan-tiles" class="plan-tiles"></div>
             <p id="plan-text" class="plan-text"></p>
             <div class="plan-meter" aria-hidden="true"><i id="plan-done"></i><i id="plan-proj"></i></div>
             <p id="plan-legend" class="plan-legend"></p>
@@ -544,7 +551,7 @@
           <h2 id="exam-title">模擬考</h2>
           <button id="exam-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
         </header>
-        <p class="sheet-tip">照 111–115 學測各單元的出題比例抽一份卷（只有單選），整卷計時。作答時不對答案，可以跳題、標記、回頭改；交卷後才看成績、各單元得分與時間分配，答錯的題目加入錯題複習。</p>
+        <p class="sheet-tip">照 111–115 學測各單元的出題比例抽一份卷（國文、數學、自然卷含多選題），整卷計時。作答時不對答案，可以跳題、標記、回頭改；交卷後才看成績、各單元得分與時間分配，答錯的題目加入錯題複習。</p>
         <div id="exam-resume" class="exam-resume" hidden>
           <p id="exam-resume-text"></p>
           <div class="exam-resume-actions">
@@ -584,6 +591,10 @@
           <section class="set-group">
             <h3>每日目標</h3>
             <div id="goal-options" class="seg" role="group" aria-label="每日目標題數"></div>
+            <button id="quick-toggle" class="switch" type="button" role="switch" aria-checked="false" aria-describedby="quick-note">
+              <span>只出單題</span><i aria-hidden="true"></i>
+            </button>
+            <p id="quick-note" class="set-note quick-note">通勤、零碎時間用：不出題組、圖表題、多選、演算題與非選擇題。單元闖關、模擬考和指定的題目不受影響。</p>
           </section>
 
           <section class="set-group">
@@ -711,6 +722,36 @@
             <button id="install-ok" class="secondary-btn" type="button">知道了</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- 第一次開啟（這台裝置還沒有作答紀錄）：先選考哪些科、學測日期與每日目標，按「開始練習」直接進自由練習 -->
+    <div id="welcome-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="welcome-title">
+        <header class="sheet-head">
+          <h2 id="welcome-title">先設定一下</h2>
+          <button id="welcome-skip" class="link-btn welcome-skip" type="button">之後再說</button>
+        </header>
+        <p class="sheet-tip">三件事就好，之後都能在首頁和設定裡改。</p>
+        <div class="settings-scroll">
+          <section class="set-group">
+            <h3>考哪些科？</h3>
+            <div id="welcome-tracks" class="seg" role="group" aria-label="快速選擇"></div>
+            <div id="welcome-subjects" class="chips welcome-chips" role="group" aria-label="選擇科目"></div>
+            <p id="welcome-note" class="set-note welcome-note" role="status"></p>
+          </section>
+          <section class="set-group">
+            <h3>學測日期</h3>
+            <input id="welcome-date" class="date-input" type="date" aria-label="學測日期" />
+          </section>
+          <section class="set-group">
+            <h3>每天想做幾題？</h3>
+            <div id="welcome-goals" class="seg" role="group" aria-label="每日目標題數"></div>
+          </section>
+        </div>
+        <nav class="welcome-foot">
+          <button id="welcome-start" class="primary-btn" type="button">開始練習</button>
+        </nav>
       </div>
     </div>
 

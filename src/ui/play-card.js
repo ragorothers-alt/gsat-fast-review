@@ -1,4 +1,4 @@
-// 作答畫面的題目卡：放不下時縮小字級與「往下還有」的提示、是非題的左右滑動。
+// 作答畫面的題目卡：放不下時縮小字級與「往下還有」的提示、作答後收起沒選到的錯誤選項、單元那一行、是非題的左右滑動。
 // 只管卡片本身的 DOM；現在能不能作答、滑過去算什麼，由呼叫的人（ui/play.js）用參數告訴它
 
 const SWIPE_THRESHOLD = 80;
@@ -15,11 +15,28 @@ export function initCardFit(el, active) {
     return el.card.scrollHeight - el.card.clientHeight > 2;
   }
 
+  /**
+   * 題目卡照內容需要多高（含卡片上方留給貓的那一條），記在 --card-need。
+   * 非選擇題的版面用它當題目卡高度的下限（answers.css）：內容短就只留內容的高度，其餘都給參考答案與評分要點。
+   * 題目卡的內容變了（換題、換字級、顯示解析）就重算
+   */
+  function updateNeed() {
+    const wrap = el.card.parentElement;
+    if (!wrap) return;
+    const frame = el.card.offsetHeight - el.card.clientHeight;
+    const pad = parseFloat(getComputedStyle(wrap).paddingTop) || 0;
+    wrap.style.setProperty('--card-need', `${Math.ceil(el.card.scrollHeight + frame + pad)}px`);
+  }
+
   function fitCard() {
     el.card.scrollTop = 0;
     el.text.classList.remove('compact');
     el.card.classList.remove('tight');
-    if (overflowing()) el.text.classList.add('compact');
+    updateNeed();
+    if (overflowing()) {
+      el.text.classList.add('compact');
+      updateNeed();
+    }
     // 閱讀題組還是放不下：文章框再壓矮（剩兩三行，可以按「展開文章」看全文），題目一定要看得到
     if (overflowing() && el.card.classList.contains('grouped')) el.card.classList.add('tight');
     updateMore();
@@ -47,17 +64,59 @@ export function initCardFit(el, active) {
     el.more.hidden = el.card.scrollHeight - el.card.clientHeight - el.card.scrollTop <= 6;
   }
 
+  /**
+   * 作答後（解析已經顯示）題目卡放不下：把沒選到的錯誤選項（.dim）各收成一行，高度讓給題目卡；
+   * 正解和你選錯的那個照原樣。放得下就不收。回傳有沒有收
+   */
+  function foldDim() {
+    if (!overflowing() || !el.answers.querySelector('.answer.dim')) return false;
+    el.answers.classList.add('folded');
+    return true;
+  }
+
+  // 點任何一個收起來的選項就全部展開。它們是停用的按鈕、收不到點擊（樣式裡也讓點擊穿過去），
+  // 所以由選項區接：點的位置落在收起來的選項上才展開。展開後這題不再收
+  el.answers.addEventListener('click', (e) => {
+    if (!el.answers.classList.contains('folded')) return;
+    const hit = [...el.answers.querySelectorAll('.answer.dim')].some((b) => {
+      const r = b.getBoundingClientRect();
+      return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+    });
+    if (!hit) return;
+    el.answers.classList.remove('folded');
+    updateMore();
+  });
+
   el.card.addEventListener('scroll', updateMore, { passive: true });
   el.answers.addEventListener('scroll', updateAnswersMore, { passive: true });
   window.addEventListener('resize', () => {
     if (active()) {
+      updateNeed();
       updateMore();
       updateAnswersMore();
     }
   });
   el.more.addEventListener('click', () => el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: 'smooth' }));
 
-  return { fitCard, updateMore, updateAnswersMore, showAnswer };
+  return { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim };
+}
+
+/**
+ * 題目卡上「單元」那一行的 HTML：［題組 2／4・］［單元名稱］［・類似題・多選］。
+ * 題組位置和後面的標記不換行、不截斷；放不下時截斷的是中間的單元名稱（樣式見 play.css 的 .topic-fixed、.topic-name）
+ * @param {{ where?: string, name?: string, kinds?: string[] }} parts
+ *   where：題組裡的第幾題（例如「題組 2／4」）；name：單元名稱的 HTML；kinds：接在後面的標記，空字串略過
+ */
+export function topicHTML({ where = '', name = '', kinds = [] }) {
+  const tail = kinds
+    .filter(Boolean)
+    .map((k) => `・${k}`)
+    .join('');
+  return (
+    (where ? `<span class="topic-fixed">${where}・</span>` : '') +
+    (name ? `<span class="topic-name">${name}</span>` : '') +
+    (tail ? `<span class="topic-fixed">${tail}</span>` : '')
+  );
 }
 
 /**

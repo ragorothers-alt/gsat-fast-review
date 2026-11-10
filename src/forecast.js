@@ -133,6 +133,25 @@ export function keepUpGoal(buckets, { goals, ...opts }) {
   return goals.find((goal) => keepsUp(reviewForecast(buckets, { ...opts, goal }))) ?? null;
 }
 
+/** 「全部練過一輪每天要做的題數」超過每日目標的幾倍，就算這個範圍考前練不完一輪 */
+export const PLAN_STRETCH = 3;
+
+/**
+ * 考前規劃下面那段話該怎麼說：
+ * - 'empty'：沒選範圍；'done'：選的範圍都練過了；
+ * - 'reachable'：每天做 needDaily 題就能在考前練完一輪（不超過每日目標的 PLAN_STRETCH 倍）；
+ * - 'beyond'：考前練不完一輪（needDaily 是 null，或超過每日目標的 PLAN_STRETCH 倍）。範圍很大時這很正常，
+ *   畫面上不寫「每天要做幾千題」那種數字，改說 App 會照學測出題比例與弱點挑題、可以縮小範圍。
+ * @param {{ remaining: number, needDaily: number | null }} plan studyPlan 的結果
+ * @param {{ total: number, goal: number }} opts total：選的範圍有幾題；goal：每日目標
+ * @returns {'empty' | 'done' | 'reachable' | 'beyond'}
+ */
+export function planVerdict(plan, { total, goal }) {
+  if (!total) return 'empty';
+  if (!plan.remaining) return 'done';
+  return plan.needDaily !== null && plan.needDaily <= goal * PLAN_STRETCH ? 'reachable' : 'beyond';
+}
+
 const freshSum = (rows) => rows.reduce((a, r) => a + r.fresh, 0);
 
 /**

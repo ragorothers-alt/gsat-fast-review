@@ -1,6 +1,6 @@
-// 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁的今日進度卡進來。
+// 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁今日進度卡右半的「分析 ›」進來。
 import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../analysis.js';
-import { dueBuckets, estimateRates, keepUpGoal, keepsUp, reviewForecast, studyPlan } from '../forecast.js';
+import { dueBuckets, estimateRates, keepUpGoal, keepsUp, planVerdict, reviewForecast, studyPlan } from '../forecast.js';
 import { paceReport } from '../pace.js';
 import { DAY, SPRINT_DAYS, dueFor, examStart, mastery, neverMissed } from '../srs.js';
 import { GOALS, dayKey, shiftDay, today } from '../stats.js';
@@ -133,7 +133,10 @@ export function initStats(ctx) {
     };
   }
 
-  /** 考前規劃：照目前步調考前能練到多少、全部練過一輪每天要做幾題（扣掉之後每天的複習量） */
+  /**
+   * 考前規劃：三個數字（範圍、已練、照目前步調考前還能練到的新題），加一兩句話——
+   * 每天做幾題就能在考前練完一輪（扣掉之後每天的複習量）；範圍太大、練不完一輪時改說怎麼挑重點（forecast.js 的 planVerdict）
+   */
   function renderPlan(now, week, { total, fresh, buckets, rates }) {
     const { settings } = ctx.state;
     const left = daysUntil(settings.examDate, now);
@@ -146,30 +149,40 @@ export function initStats(ctx) {
     const n = (x) => x.toLocaleString('zh-TW');
     const goalBtn = $('#plan-goal');
     goalBtn.hidden = true;
+    const verdict = planVerdict(p, { total, goal: settings.goal });
 
-    if (!total) {
-      $('#plan-text').textContent = '先在首頁選要練的科目。';
-    } else if (!p.remaining) {
-      $('#plan-text').textContent = `距學測 ${left} 天。選的範圍 ${n(total)} 題已經全部練過了！接下來靠錯題複習和弱點加強，把還不熟的練到熟。`;
-    } else {
-      const pace = byGoal ? `照每日目標 ${settings.goal} 題` : `照近 7 天每天約 ${Math.round(recent)} 題`;
-      $('#plan-text').textContent =
-        `距學測 ${left} 天，選的範圍有 ${n(total)} 題，已練過 ${n(total - fresh)} 題。${pace}的步調，扣掉該複習的，考前大約能再練到 ${n(p.projected)} 題新題。` +
-        (p.needDaily === null
-          ? '選的範圍考前做不完一輪，先在首頁的「單元」挑重點，或用弱點加強集中火力。'
-          : `想在考前全部練過一輪，每天要做約 ${n(p.needDaily)} 題（其中複習約 ${n(p.needReview)} 題）。` +
-            (p.suggest === null ? '題目太多的話，先在首頁的「單元」挑重點，或用弱點加強集中火力。' : ''));
-      if (p.suggest !== null && p.suggest > settings.goal) {
-        goalBtn.hidden = false;
-        goalBtn.textContent = `把每日目標改成 ${p.suggest} 題`;
-        goalBtn.dataset.goal = String(p.suggest);
-      }
+    // 上面三個數字：範圍、已練、考前還能練到的新題；下面一兩句話
+    const tiles = $('#plan-tiles');
+    tiles.hidden = verdict === 'empty';
+    tiles.innerHTML = [
+      [n(total), '範圍題數'],
+      [n(total - fresh), '已練題數'],
+      [p.remaining ? `約 ${n(p.projected)}` : '0', '考前可練新題'],
+    ]
+      .map(([v, k]) => `<div class="plan-tile"><b>${v}</b><span>${k}</span></div>`)
+      .join('');
+
+    const pace = byGoal ? `照每日目標 ${settings.goal} 題` : `照近 7 天每天約 ${Math.round(recent)} 題`;
+    const text = {
+      empty: '先在首頁選要練的科目。',
+      done: `距學測 ${left} 天。選的範圍已經全部練過了！接下來靠錯題複習和弱點加強，把還不熟的練到熟。`,
+      reachable: `距學測 ${left} 天。每天做約 ${n(p.needDaily ?? 0)} 題（其中複習約 ${n(p.needReview)} 題），就能在考前把選的範圍練完一輪。`,
+      // 範圍很大時不寫「每天要做幾千題」：那個數字沒有意義，只會嚇到人
+      beyond:
+        `距學測 ${left} 天。這個範圍考前練不完一輪是正常的：App 會照學測各單元的出題比例和你的弱點挑題，先練最值得練的。` +
+        '想集中火力，可以到首頁的「單元」縮小範圍，或用「弱點加強」。',
+    };
+    $('#plan-text').textContent = text[verdict];
+    if (verdict === 'reachable' && p.suggest !== null && p.suggest > settings.goal) {
+      goalBtn.hidden = false;
+      goalBtn.textContent = `把每日目標改成 ${p.suggest} 題`;
+      goalBtn.dataset.goal = String(p.suggest);
     }
     const done = Math.round(p.coverage * 100);
     const proj = Math.round(p.projectedCoverage * 100);
     $('#plan-done').style.width = `${p.coverage * 100}%`;
     $('#plan-proj').style.width = `${(p.projectedCoverage - p.coverage) * 100}%`;
-    $('#plan-legend').textContent = p.remaining ? `已練過 ${done}%・照這個步調考前約 ${proj}%` : '';
+    $('#plan-legend').textContent = p.remaining ? `已練過 ${done}%・${pace}的步調，考前約 ${proj}%` : '';
   }
 
   /**

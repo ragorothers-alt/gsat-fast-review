@@ -1,4 +1,4 @@
-// 首頁：科目選擇、今日進度、學測倒數、模式入口
+// 首頁：科目選擇、今日進度（左半直接開始今天的練習）、學測倒數（進學習分析）、模式入口
 import { daysUntil, weakUnits } from '../analysis.js';
 import { currentUnit, pathUnits } from '../path.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
@@ -54,6 +54,8 @@ export function initHome(ctx) {
   $('#open-settings').addEventListener('click', () => ctx.openSettings());
   ctx.openSettings = (section) => settingsSheet.open(section);
   $('#open-notebook').addEventListener('click', () => ctx.showNotebook());
+  // 今日進度卡：左半直接開始今天的練習（自由練習），右半（學測倒數）進學習分析
+  $('#daily-start').addEventListener('click', () => ctx.startRound('free'));
   $('#daily').addEventListener('click', () => ctx.showStats());
   $('#open-stock').addEventListener('click', () => ctx.showStats('stock'));
 
@@ -94,11 +96,14 @@ export function initHome(ctx) {
     const goal = settings.goal;
     $('#daily-count').textContent = day.answered;
     $('#daily-goal').textContent = goal;
+    // 「今日 120 / 120 題」這種三位數的組合比較寬：字縮一點，窄螢幕才不會擠到旁邊的「開始 ›」
+    $('#daily-start .daily-line').classList.toggle('long', `${day.answered}${goal}`.length > 4);
     const ring = $('#daily-ring');
     ring.style.strokeDasharray = `${Math.min(100, (day.answered / goal) * 100)} 100`;
     ring.style.opacity = day.answered ? '1' : '0'; // 0 題時圓頭線帽會留一個點
-    $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : '今天還沒開始，來一輪吧！';
-    $('#daily').classList.toggle('done', day.answered >= goal);
+    // 旁邊就是「開始 ›」，還沒開始時這行寫短一點（窄螢幕才放得下）
+    $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : '今天還沒開始';
+    $('#daily-card').classList.toggle('done', day.answered >= goal);
 
     // 考完就不再倒數
     const left = daysUntil(settings.examDate, now);
@@ -121,7 +126,7 @@ export function initHome(ctx) {
     $('#exam-sub').textContent = ctx.examSummary?.() ?? '';
 
     const disabled = !inSelection.length;
-    document.querySelectorAll('#home [data-mode]').forEach((b) => (b.disabled = disabled));
+    document.querySelectorAll('#home [data-mode], #daily-start').forEach((b) => (b.disabled = disabled));
     // 還沒做過（沒有作答紀錄）的題目；各單元的細目在學習分析的題庫存量
     const fresh = inSelection.filter((q) => !cards[q.id]).length;
     $('#bank-info').textContent = ctx.bank.length

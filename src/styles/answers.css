@@ -209,6 +209,37 @@
   box-shadow: none;
 }
 
+/* 小螢幕：作答後加了解析、題目卡放不下時，沒選到的錯誤選項各收成一行（play-card.js 的 foldDim），高度讓給題目卡。
+   停用的按鈕收不到點擊，所以讓點擊穿過去落在選項區，由它展開回原樣 */
+.answers.folded {
+  cursor: pointer;
+}
+
+.answers.folded .answer.dim {
+  /* 不換行的字不能把格線的欄位撐寬（撐寬了所有選項都會超出畫面） */
+  min-width: 0;
+  min-height: 0;
+  gap: 8px;
+  padding: 3px 12px;
+  font-size: calc(0.88rem * var(--fs, 1));
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.answers.folded .answer.dim .key {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px 7px 5px 8px;
+  font-size: 0.7rem;
+}
+
+.answers.folded .answer.dim .answer-text {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 /* 批改記號：正解蓋圈、選錯的蓋叉，壓在按鈕右上角 */
 .answer {
   position: relative;
@@ -261,6 +292,18 @@
   color: var(--good-ink);
   font-size: 0.75rem;
   font-weight: 800;
+  white-space: nowrap;
+}
+
+/* 非選擇題自評沒寫到的要點：不是正解的綠，用提醒的珊瑚色。貼在按鈕右上角的框線上（寫到的要點那裡是圈），
+   不占要點文字的寬度，送出自評後文字才不會多折一行 */
+.miss-tag.todo {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  margin: 0;
+  line-height: 1.35;
+  color: var(--accent-2-ink);
 }
 
 /* 解析上面的計分說明：多選題答錯幾個選項、填的答案不是任何一個選項
@@ -275,9 +318,13 @@
 
 /* ── 非選擇題：先自己寫，看了參考答案再對照評分要點，自己勾寫到了哪幾個 ─────── */
 /* 參考答案加幾個要點比四個選項高：矮螢幕放不下時作答區自己捲動，題目卡留得住題幹與解析
-   （做法同篇章結構的長句選項：往外撐開一點，對錯記號和陰影才不會被切掉） */
+   （做法同篇章結構的長句選項：往外撐開一點，對錯記號和陰影才不會被切掉）。
+   題目卡照內容的高度（flex-basis: auto），不一律保留畫面的四成：中譯英的題幹只有一兩行，保留的高度用不到，
+   反而把要點擠到要捲才看得到。空間夠時題目卡與作答區都完整顯示；放不下時先讓作答區捲動，題目卡留住內容需要的高度
+   （--card-need，play-card.js 的 updateNeed 量的），內容超過畫面的四成多（長題幹加解析）才連題目卡一起縮、各自捲動 */
 .card-wrap:has(~ .answers.open) {
-  min-height: clamp(13rem, 38%, 19rem);
+  flex: 1 1 auto;
+  min-height: min(var(--card-need, 13rem), clamp(13rem, 44%, 21rem));
 }
 
 .answers.open {
@@ -289,6 +336,16 @@
   overscroll-behavior: contain;
   margin: -12px -10px 0;
   padding: 12px 10px 6px;
+}
+
+/* 評分要點是一張勾選清單：排得比一般選項緊一點，412×915 上最長的參考答案加四個要點、送出後多了解析也放得下 */
+.answers.open {
+  gap: 8px;
+}
+
+.answers.open .answer {
+  min-height: 44px;
+  padding: 6px 14px;
 }
 
 .open-hint,

@@ -28,6 +28,26 @@ export const MODES = {
   exam: { name: '模擬考錯題', size: 40, explainAlways: true },
 };
 
+/** 新手期：作答紀錄不到這麼多題之前，下面這幾個模式只出單題 */
+export const NOVICE_CARDS = 20;
+
+/** 設定的「只出單題」與新手期管得到的模式；單元闖關、指定題目（收藏、搜尋、單字、模擬考錯題）與錯題延伸照原樣出 */
+const SINGLES_MODES = new Set(['ten', 'free', 'formula', 'review', 'weak']);
+
+/**
+ * 這一輪要不要只出單題（buildQueue 的 quickOnly：不出演算題、多選題、非選擇題、題組與圖表題）。
+ * - 模式本身就只出單題（60 秒快閃）：一律是；
+ * - 10 題一輪、自由練習、公式特訓、錯題複習、弱點加強：設定開了「只出單題」，或還在新手期
+ *   （作答紀錄不到 NOVICE_CARDS 題：剛開始用的人不會第一題就遇到長題組或要動筆的題目）；
+ * - 其他模式不受影響。
+ * @param {string} mode MODES 的鍵
+ * @param {{ quickOnly?: boolean, answered?: number }} [opts] quickOnly：設定的「只出單題」；answered：有作答紀錄的題數
+ */
+export function quickOnlyFor(mode, { quickOnly = false, answered = 0 } = {}) {
+  if (MODES[mode]?.quickOnly) return true;
+  return SINGLES_MODES.has(mode) && (quickOnly || answered < NOVICE_CARDS);
+}
+
 export function createSession(mode, queue) {
   return {
     mode,

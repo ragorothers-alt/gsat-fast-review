@@ -182,7 +182,8 @@ export function initExam(ctx) {
       i,
     );
     const where = pos ? `題組 ${pos.k}／${pos.n}` : '';
-    el.topic.innerHTML = [q.type === 'ms' ? '多選題' : '', where && `<span class="nowrap">${where}</span>`].filter(Boolean).join('・');
+    // 兩段各自不換行（和作答畫面一樣，題型的標記不會被拆成兩行）
+    el.topic.innerHTML = [q.type === 'ms' ? '多選題' : '', where].filter(Boolean).map((t) => `<span class="topic-fixed">${t}</span>`).join('・');
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
     el.progress.textContent = `${i + 1} / ${n}`;

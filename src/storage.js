@@ -41,6 +41,8 @@ export function freshState() {
       subjects: SUBJECTS.map((s) => s.id),
       excludedUnits: [],
       goal: 30,
+      // quickOnly：只出單題（不出題組、圖表題、多選、演算題與非選擇題；見 session.js 的 quickOnlyFor）
+      quickOnly: false,
       sound: false,
       scratch: true,
       // eraser：草稿區的橡皮擦 stroke（整條擦掉）／area（擦一塊）

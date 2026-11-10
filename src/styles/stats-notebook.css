@@ -58,7 +58,39 @@
   flex: none;
 }
 
-/* 考前規劃 */
+/* 考前規劃：上面三個數字方塊（範圍、已練、考前還能練的新題），下面一兩句話 */
+.plan-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.plan-tile {
+  min-width: 0;
+  padding: 8px 4px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--hand-sm);
+  text-align: center;
+}
+
+.plan-tile b {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.plan-tile span {
+  display: block;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--muted);
+  /* 320 寬時折成兩行：兩行排得差不多長，不要最後一行只剩一個字 */
+  text-wrap: balance;
+}
+
 .plan-text {
   font-size: 0.88rem;
   line-height: 1.7;

@@ -71,10 +71,13 @@
   font-size: calc(clamp(1rem, 4.2vw, 1.15rem) * var(--fs, 1));
 }
 
-/* 題組的單元名稱只占一行，太長就截斷（「題組 2／4」在最前面，一定看得到） */
+/* 題組的單元名稱只占一行，太長就截斷（「題組 2／4」在最前面、「・多選」這類標記在最後，一定看得到） */
 .card.grouped .card-tag .topic {
-  min-width: 0;
   overflow: hidden;
+}
+
+.card.grouped .topic-name {
+  display: block;
   white-space: nowrap;
   text-overflow: ellipsis;
 }

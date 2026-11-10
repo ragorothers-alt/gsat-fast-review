@@ -6,9 +6,12 @@ import { test as base, expect } from '@playwright/test';
 export const test = base.extend({
   // iPhone 的 Safari 練過一輪後會跳出「加入主畫面」的提醒，蓋住首頁。預設當成已經看過；要測提醒本身的測試用 test.use({ installHint: true })
   installHint: [false, { option: true }],
-  page: async ({ page, installHint }, use) => {
+  // 第一次開啟（還沒有作答紀錄）會跳出「先設定一下」的面板，蓋住首頁。預設當成已經看過；要測這個面板的測試用 test.use({ welcome: true })
+  welcome: [false, { option: true }],
+  page: async ({ page, installHint, welcome }, use) => {
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
+    if (!welcome) await page.addInitScript(skipWelcome);
     if (!installHint) {
       await page.addInitScript(() => {
         try {
@@ -37,6 +40,32 @@ export const test = base.extend({
 });
 
 export { expect };
+
+/** 當成已經看過第一次開啟的設定（給 page.addInitScript；自己開 context 的測試也要呼叫） */
+export function skipWelcome() {
+  try {
+    localStorage.setItem('gsat-quiz:welcome', '1');
+  } catch {
+    // 存不了就算了
+  }
+}
+
+/**
+ * 在開啟 App 之前放好 n 筆作答紀錄（題庫裡沒有的題號，不影響出題）：過了新手期（作答紀錄不到 20 題時只出單題），
+ * 10 題一輪、自由練習等模式才會出題組、圖表題、多選、演算題與非選擇題。已經有存檔就不動；settings 併進存檔
+ */
+export async function seedVeteran(page, settings = {}, n = 20) {
+  await page.addInitScript(
+    ({ settings, n }) => {
+      if (localStorage.getItem('gsat-quiz:v1')) return;
+      const now = Date.now();
+      const cards = {};
+      for (let i = 0; i < n; i++) cards[`seed-${String(900 + i)}`] = { box: 2, due: now + 86_400_000, seen: 1, right: 1, wrong: 0, parked: false, missed: 0, last: now - 86_400_000 };
+      localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings }));
+    },
+    { settings, n },
+  );
+}
 
 /** 無障礙檢查（axe）：只看嚴重的問題；3D 畫布是裝飾（aria-hidden），不檢查 */
 export async function audit(page, where) {

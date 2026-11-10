@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advance, createSession, current, extend, isCorrect, isOver, markLast, msNote, msScore, msWrong, multiplier, openNote, submit, tick } from '../src/session.js';
+import { MODES, NOVICE_CARDS, advance, createSession, current, extend, isCorrect, isOver, markLast, msNote, msScore, msWrong, multiplier, openNote, quickOnlyFor, submit, tick } from '../src/session.js';
 import { adjustRight, currentStreak, dayKey, recordAnswer, today } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -73,6 +73,30 @@ describe('session', () => {
     tick(s, 2);
     expect(s.timeLeft).toBe(0);
     expect(isOver(s)).toBe(true);
+  });
+
+  it('只出單題：設定開著或還在新手期（作答紀錄不到 20 題）時，10 題一輪、自由練習、公式特訓、錯題複習、弱點加強都只出單題', () => {
+    const veteran = { answered: NOVICE_CARDS };
+    for (const mode of ['ten', 'free', 'formula', 'review', 'weak']) {
+      // 老手、設定沒開：照常出
+      expect(quickOnlyFor(mode, veteran), mode).toBe(false);
+      // 設定開了
+      expect(quickOnlyFor(mode, { ...veteran, quickOnly: true }), mode).toBe(true);
+      // 新手期：0–19 題都是，滿 20 題就不是
+      expect(quickOnlyFor(mode, { answered: 0 }), mode).toBe(true);
+      expect(quickOnlyFor(mode, { answered: NOVICE_CARDS - 1 }), mode).toBe(true);
+      // 沒給作答題數當成新手
+      expect(quickOnlyFor(mode), mode).toBe(true);
+    }
+  });
+
+  it('只出單題：快閃一律只出單題；單元闖關、指定題目的模式與錯題延伸不受設定與新手期影響', () => {
+    expect(quickOnlyFor('blitz', { answered: 500 })).toBe(true);
+    for (const mode of ['path', 'starred', 'picked', 'vocab', 'exam', 'related']) {
+      expect(quickOnlyFor(mode, { quickOnly: true, answered: 0 }), mode).toBe(false);
+    }
+    // 每個模式都歸得到其中一類（新增模式時記得決定它受不受影響）
+    for (const mode of Object.keys(MODES)) expect(typeof quickOnlyFor(mode, { answered: 0 })).toBe('boolean');
   });
 
   it('判斷正誤：單選比索引、是非比布林', () => {

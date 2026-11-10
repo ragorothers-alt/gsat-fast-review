@@ -4,7 +4,7 @@ import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, examStart, isLeech, missCount, neverMissed, schedule, shuffle } from '../srs.js';
 import { recordPace } from '../pace.js';
 import { reportQuestion } from '../report.js';
-import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, openNote, submit, tick, multiplier } from '../session.js';
+import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, openNote, quickOnlyFor, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, markCleared, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
 import { bundles, isBank, takeBundles, usedOptions } from '../groups.js';
@@ -21,7 +21,7 @@ import { plainText, richHTML, stemHTML } from './rich.js';
 import { sfx } from './feedback.js';
 import { choicesClass, groupPosition, initReadFull, markUsed, showPassage } from './passage.js';
 import { answerButton as createAnswerButton, markChoices, markMultiChoices, markOpenPoints } from './play-answers.js';
-import { initCardFit, initCardSwipe } from './play-card.js';
+import { initCardFit, initCardSwipe, topicHTML } from './play-card.js';
 import { fillHTML, fillKeyFor, typeFillKey } from './play-fill.js';
 import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
 import { topSheet } from './sheet.js';
@@ -115,20 +115,26 @@ export function initPlay(ctx) {
    */
   function queueFor(mode, { subjects = ctx.state.settings.subjects, units = null, exclude = [], allUnits = false, streak = 0 } = {}) {
     const cfg = MODES[mode];
-    return buildQueue(ctx.bank, ctx.state.cards, {
-      subjects,
-      excludedUnits: allUnits ? [] : ctx.state.settings.excludedUnits,
-      onlyUnits: units,
-      exclude: [...exclude, ...Object.keys(ctx.state.flags)],
-      formulaOnly: cfg.formulaOnly,
-      quickOnly: cfg.quickOnly,
-      weakOnly: cfg.weakOnly,
-      streak,
-      newEvery: cfg.newEvery,
-      examAt: examStart(ctx.state.settings.examDate),
-      size: cfg.size,
-      now: Date.now(),
-    });
+    const build = (quickOnly) =>
+      buildQueue(ctx.bank, ctx.state.cards, {
+        subjects,
+        excludedUnits: allUnits ? [] : ctx.state.settings.excludedUnits,
+        onlyUnits: units,
+        exclude: [...exclude, ...Object.keys(ctx.state.flags)],
+        formulaOnly: cfg.formulaOnly,
+        quickOnly,
+        weakOnly: cfg.weakOnly,
+        streak,
+        newEvery: cfg.newEvery,
+        examAt: examStart(ctx.state.settings.examDate),
+        size: cfg.size,
+        now: Date.now(),
+      });
+    // 設定開了「只出單題」，或還在新手期（作答紀錄不到 20 題）：只出單題
+    const quick = quickOnlyFor(mode, { quickOnly: ctx.state.settings.quickOnly, answered: Object.keys(ctx.state.cards).length });
+    const queue = build(quick);
+    // 選的範圍剛好沒有單題可出（例如待練的錯題都是題組）：照一般方式出，不要變成「沒有題目」。快閃本來就只出單題，不放寬
+    return queue.length || !quick || cfg.quickOnly ? queue : build(false);
   }
 
   /** 不出的題目：被回報的、答對過從沒失手的，以及剛答過的（找類似題時才不會又抽到剛做完的） */
@@ -325,11 +331,13 @@ export function initPlay(ctx) {
     el.subject.textContent = subj.name;
     const pos = groupPosition(s.queue, s.index);
     const where = pos ? `題組 ${pos.k}／${pos.n}` : '';
-    // 題組：「題組 2／4」放最前面，單元名稱太長時在後面截斷（卡片一行放得下，留高度給文章）
-    el.topic.innerHTML =
-      (where ? `${where}・` : '') +
-      (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) +
-      (q.scratch ? '・演算題' : q.type === 'ms' ? '・多選' : q.type === 'open' ? '・非選' : '');
+    // 題組：「題組 2／4」放最前面；單元名稱太長時截斷的是名稱，後面的「・類似題」「・多選」這些標記不拆開（play-card.js）
+    const extra = s.extra.has(q.id);
+    el.topic.innerHTML = topicHTML({
+      where,
+      name: `${extra ? icon('loop') : ''}${topicLabel(q)}`,
+      kinds: [extra ? '類似題' : '', q.scratch ? '演算題' : q.type === 'ms' ? '多選' : q.type === 'open' ? '非選' : ''],
+    });
     useChoices = false;
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
@@ -471,7 +479,7 @@ export function initPlay(ctx) {
     resolve(isCorrect(q, chosen) ? 'right' : 'wrong', null, chosen);
   }
 
-  /** 非選擇題作答後：自評寫到的要點打圈、沒寫到的淡掉；按「不會」時列出參考答案與要點，都不勾 */
+  /** 非選擇題作答後：自評寫到的要點打圈、沒寫到的標「沒寫到」（那正是最該看的，不淡化）；按「不會」時列出參考答案與要點，都不勾 */
   function markOpen(outcome, chosen) {
     el.msSend.hidden = true;
     if (!revealed) showOpenAnswer();
@@ -536,7 +544,7 @@ export function initPlay(ctx) {
   }
 
   // ── 小螢幕：題目卡放不下時縮小字級、提示「往下還有」（play-card.js） ─────────────
-  const { fitCard, updateMore, updateAnswersMore, showAnswer } = initCardFit(
+  const { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim } = initCardFit(
     { card: el.card, text: el.text, answers: el.answers, more: el.more },
     () => !!q && !$('#play').hidden,
   );
@@ -652,9 +660,16 @@ export function initPlay(ctx) {
       );
     }
     el.explain.hidden = false;
+    // 題目卡多了解析，需要的高度變了（非選擇題的版面用得到，見 play-card.js）
+    updateNeed();
+    // 小螢幕：加了解析後題目卡放不下，就把沒選到的錯誤選項各收成一行，高度讓給題目卡（點一下展開）。
+    // 多選題、共用選項、非選擇題的要點每一個都要對照著看，是非題只有一列，都不收
+    if (q.type === 'mc' && !isBank(q)) foldDim();
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
     el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
     updateMore();
+    // 題目卡加了解析會長高，作答區（非選擇題的要點、篇章結構的長句）可能變成要捲動：底部的淡出提示重算一次
+    updateAnswersMore();
     el.skip.hidden = true;
     // 答錯或不會：可以馬上再練幾題同單元的類似題（快閃模式在計時，不打斷）
     offerRelated(outcome !== 'right');

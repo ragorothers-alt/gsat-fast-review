@@ -27,6 +27,17 @@ describe('讀檔', () => {
     expect(s.settings.goal).toBe(50);
     // 舊存檔少了巢狀設定的欄位也補上預設值
     expect(s.settings.reminder).toEqual({ on: false, hour: 20 });
+    // 舊存檔沒有「只出單題」：預設關
+    expect(s.settings.quickOnly).toBe(false);
+  });
+
+  it('「只出單題」跟其他設定一樣存檔、讀回來', async () => {
+    const { freshState, loadState, saveState } = await tab();
+    const s = freshState();
+    expect(s.settings.quickOnly).toBe(false);
+    s.settings.quickOnly = true;
+    expect(saveState(s)).toBe(true);
+    expect(loadState().settings.quickOnly).toBe(true);
   });
 
   it('模擬考：考到一半的卷照存；成績紀錄壞掉的筆數丟掉', async () => {

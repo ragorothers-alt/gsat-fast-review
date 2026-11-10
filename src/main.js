@@ -19,6 +19,7 @@ import { initResult } from './ui/result.js';
 import { initScratch } from './ui/scratch.js';
 import { topSheet } from './ui/sheet.js';
 import { initStats } from './ui/stats.js';
+import { initWelcome } from './ui/welcome.js';
 
 const UPDATED_KEY = 'gsat-quiz:updated';
 // Android 長按 App 圖示的捷徑（manifest 的 shortcuts）帶 ?mode= 進來，直接開始這個模式
@@ -105,6 +106,7 @@ const ctx = {
   cloudSync: null,
   reminder: null,
   install: null,
+  welcome: null,
   startRound: null,
   showResult: null,
   showStats: null,
@@ -173,12 +175,14 @@ function start(bank) {
   initReminder(ctx);
   initAbout(ctx);
   initKeypoints(ctx);
+  initWelcome(ctx);
   for (const name of ['showStats', 'showNotebook', 'openKeypoints', 'openPath', 'openUnits', 'openExam']) needFullBank(name);
   ctx.goHome();
   document.querySelector('#boot').hidden = true;
   ctx.cloudSync();
   ctx.reminder.sync();
-  openShortcut();
+  // 第一次開啟（這台還沒有作答紀錄）：先問考哪些科、學測日期與每日目標；從捷徑直接開始一輪的就不打斷
+  if (!openShortcut()) ctx.welcome.open();
   loadRest();
   // 首頁能操作了才載入背景場景（three.js 很大，不擋題庫下載與開機）
   world.load();
@@ -193,12 +197,15 @@ function start(bank) {
   }
 }
 
+/** 回傳有沒有直接開始一輪 */
 function openShortcut() {
   const mode = new URLSearchParams(location.search).get('mode');
-  if (!mode) return;
+  if (!mode) return false;
   // 網址恢復成首頁，重新整理或更新版本時不會又直接開始一輪
   history.replaceState(null, '', location.pathname);
-  if (SHORTCUT_MODES.has(mode)) ctx.startRound(mode);
+  if (!SHORTCUT_MODES.has(mode)) return false;
+  ctx.startRound(mode);
+  return true;
 }
 
 // 題庫要先下載（裝成 App 後從快取讀，幾乎是瞬間）：先載首頁選的科目就開始，其他科之後補；

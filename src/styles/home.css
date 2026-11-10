@@ -11,6 +11,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 
 .brand-icon {
@@ -18,12 +19,15 @@
   height: 42px;
   border-radius: 12px;
   transform: rotate(-4deg);
+  flex: none;
 }
 
+/* 標題一律一行：窄螢幕縮字、右邊的按鈕群收一點（見下面與 toast-motion-responsive.css 的窄螢幕規則） */
 .brand h1 {
   font-size: 1.22rem;
   font-weight: 900;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .tagline {
@@ -37,23 +41,49 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: none;
 }
 
+/* 一般手機（375–430 寬）：「學測快問快答」原本會斷成兩行。標題跟著螢幕寬度縮一點，圖示與間距也收一點 */
+@media (max-width: 430px) {
+  .topbar {
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+  }
+
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand h1 {
+    font-size: clamp(1rem, 4.4vw, 1.22rem);
+  }
+
+  /* 副標比標題寬的話，撐開的是它：跟著縮一點 */
+  .tagline {
+    font-size: 0.7rem;
+  }
+
+  .top-actions {
+    gap: 6px;
+  }
+
+  .top-actions .pill {
+    padding: 5px 9px;
+  }
+}
+
+/* 320 寬的舊手機：拿掉裝飾用的 App 圖示與副標，標題才放得下一行 */
 @media (max-width: 340px) {
   .topbar {
     gap: 6px;
   }
 
-  .brand {
-    gap: 6px;
-    min-width: 0;
-  }
-
-  .brand-icon {
-    width: 34px;
-    height: 34px;
-  }
-
+  .brand-icon,
   .tagline {
     display: none;
   }
@@ -107,18 +137,61 @@
   margin: 0;
 }
 
+/* 今日進度卡：左半是「開始今天的練習」的按鈕，右半（學測倒數）進學習分析 */
 .daily {
   width: 100%;
   display: flex;
+  align-items: stretch;
+}
+
+.daily-start {
+  flex: 1;
+  min-width: 0;
+  display: flex;
   align-items: center;
   gap: 12px;
-  padding: 9px 14px;
+  padding: 9px 12px 9px 14px;
+  border-radius: 16px 0 0 20px;
   text-align: left;
   transition: transform 0.1s;
 }
 
-.daily:active {
+.daily-stats {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  margin: 7px 0;
+  padding: 0 14px 0 12px;
+  border-left: 1.5px dashed var(--line-soft);
+  transition: transform 0.1s;
+}
+
+.daily-start:active:not(:disabled),
+.daily-stats:active {
   transform: translate(1px, 1px);
+}
+
+/* 「開始 ›」：黃色膠囊，一眼看得出這半張卡是開始練習 */
+.daily-go {
+  flex: none;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--accent);
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--on-bright);
+  font-size: 0.88rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+/* 一科都沒選：開始不了 */
+.daily-start:disabled .daily-go {
+  opacity: 0.45;
+  box-shadow: none;
 }
 
 .ring {
@@ -156,9 +229,22 @@
   gap: 2px;
 }
 
+.daily-line {
+  white-space: nowrap;
+}
+
 .daily-text b {
   font-size: 1.2rem;
   color: var(--accent-2-ink);
+}
+
+/* 三位數的題數（例如 120 / 120）：字縮一點（home.js） */
+.daily-line.long {
+  font-size: 0.86rem;
+}
+
+.daily-line.long b {
+  font-size: 1.02rem;
 }
 
 .daily.done .daily-text b {
@@ -170,34 +256,41 @@
   font-size: 0.8rem;
 }
 
-/* 學測倒數 */
+/* 學測倒數：「距學測」一行、「72 天」一行，下面是「分析 ›」。三行排緊一點，卡片才不會比原本高 */
 .countdown {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-left: 12px;
-  border-left: 1.5px dashed var(--line-soft);
-  line-height: 1.15;
+  line-height: 1.1;
   flex: none;
 }
 
+.countdown-n {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
 .countdown b {
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 900;
   font-variant-numeric: tabular-nums;
 }
 
 .countdown small {
-  font-size: 0.68rem;
+  font-size: 0.66rem;
   color: var(--muted);
 }
 
 .daily-more {
   flex: none;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--ink-soft);
   white-space: nowrap;
+  text-decoration: underline dashed color-mix(in srgb, var(--ink) 40%, transparent);
+  text-underline-offset: 3px;
 }
 
 .stage {

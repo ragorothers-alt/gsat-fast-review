@@ -1,5 +1,5 @@
 // 主要流程：首頁、作答到結算、收藏與搜尋、設定、手機橫放、離線開啟
-import { answerFirst, answerToResult, audit, expect, openHome, roundSize, skipToResult, skipToSingle, startMode, test, waitForBoot } from './fixtures.js';
+import { answerFirst, answerToResult, audit, expect, openHome, roundSize, skipToResult, skipToSingle, skipWelcome, startMode, test, waitForBoot } from './fixtures.js';
 
 test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await openHome(page);
@@ -384,6 +384,8 @@ test('手機橫放：首頁不用捲動，作答時題目在左、選項在右',
 test('裝好離線快取後，斷網也能開', async ({ browser, baseURL }) => {
   const context = await browser.newContext({ baseURL, serviceWorkers: 'allow' });
   const page = await context.newPage();
+  // 自己開的 context 沒有共用的前置：第一次開啟的設定面板當成看過
+  await page.addInitScript(skipWelcome);
   await page.route('https://gsat-sync.ragorothers.workers.dev/**', (route) => route.abort());
   await page.goto('./');
   await waitForBoot(page);

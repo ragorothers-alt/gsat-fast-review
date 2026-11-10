@@ -1,4 +1,4 @@
-// 設定：每日目標、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目、關於與診斷。底部彈出面板。
+// 設定：每日目標、只出單題、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目、關於與診斷。底部彈出面板。
 import { daysUntil } from '../analysis.js';
 import { foldLegacy } from '../cloud.js';
 import { GOALS, dayKey } from '../stats.js';
@@ -49,6 +49,13 @@ export function initSettings(ctx, onChange) {
     });
     $('#goal-options').append(btn);
     return btn;
+  });
+
+  // ── 只出單題：10 題一輪、自由練習、公式特訓、錯題複習、弱點加強不出題組、圖表題、多選、演算題與非選擇題（session.js 的 quickOnlyFor） ──
+  const quickBtn = $('#quick-toggle');
+  quickBtn.addEventListener('click', () => {
+    settings.quickOnly = !settings.quickOnly;
+    commit();
   });
 
   // ── 學測日期 ───────────────────────────────────────
@@ -186,6 +193,7 @@ export function initSettings(ctx, onChange) {
   // ── 面板 ───────────────────────────────────────────
   function render() {
     goalBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(GOALS[i] === settings.goal)));
+    quickBtn.setAttribute('aria-checked', String(!!settings.quickOnly));
     dateInput.value = settings.examDate;
     const left = daysUntil(settings.examDate, Date.now());
     $('#exam-left').textContent = left > 0 ? `還有 ${left} 天` : left === 0 ? '就是今天' : '已經考完了';
