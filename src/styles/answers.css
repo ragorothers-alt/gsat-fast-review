@@ -1,0 +1,620 @@
+/* answers.css：題目卡捲動提示、解析、選項與批改記號、多選題、非選擇題、演算題填答、答題後的按鈕 */
+/* 還是放不下：卡片底部淡出，加一顆「往下還有」 */
+.card-wrap {
+  position: relative;
+}
+
+.card-more {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 2px;
+  height: 46px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  border-radius: 0 0 15px 19px;
+  background: linear-gradient(transparent, var(--card) 62%);
+  pointer-events: none;
+  animation: fade-in 0.2s ease-out;
+}
+
+.card-more button {
+  pointer-events: auto;
+  padding: 3px 12px 3px 9px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--shadow);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.card-more .ico {
+  margin-right: 0.15em;
+}
+
+/* KaTeX 對齊分數用的隱形撐高元素會伸到公式外面：兩欄選項時會蓋住上面那顆按鈕，點上面卻選到下面。
+   公式本身不用點，讓點擊穿過去給底下真正的按鈕 */
+.katex {
+  font-size: 1.08em;
+  pointer-events: none;
+}
+
+.explain {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border-radius: var(--hand-sm);
+  background: var(--note);
+  border: 1.5px dashed color-mix(in srgb, var(--ink) 45%, transparent);
+  font-size: calc(0.95rem * var(--fs, 1));
+  line-height: 1.65;
+  animation: card-in 0.25s ease-out;
+}
+
+.explain b {
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* 英文單字題：考的字在參考詞彙表第幾級（解析標題旁、錯題本的正解旁） */
+.lv-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 0 7px;
+  border-radius: 8px;
+  border: 1.5px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.6;
+  vertical-align: 1px;
+  white-space: nowrap;
+}
+
+.tf-hint {
+  display: none;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.card.swipeable .tf-hint {
+  display: block;
+}
+
+.swipe-hint {
+  display: none;
+  position: absolute;
+  top: 14px;
+  padding: 3px 12px;
+  border-radius: 10px;
+  font-weight: 900;
+  background: var(--card);
+  pointer-events: none;
+  transform: rotate(-6deg);
+}
+
+.card.swipeable .swipe-hint {
+  display: block;
+}
+
+.swipe-yes {
+  right: 14px;
+  color: var(--good);
+  border: 2.5px solid var(--good);
+  opacity: var(--yes, 0);
+}
+
+.swipe-no {
+  left: 14px;
+  color: var(--bad);
+  border: 2.5px solid var(--bad);
+  opacity: var(--no, 0);
+  transform: rotate(6deg);
+}
+
+.answers {
+  display: grid;
+  gap: 10px;
+  flex: none;
+}
+
+.answers.grid-2,
+.answers.tf {
+  grid-template-columns: 1fr 1fr;
+}
+
+.answer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 9px 14px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  text-align: left;
+  font-size: calc(1.05rem * var(--fs, 1));
+  line-height: 1.45;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.2s, opacity 0.2s;
+}
+
+.answer:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.answers.grid-2 .answer {
+  justify-content: center;
+  text-align: center;
+}
+
+.answers.tf .answer {
+  min-height: 74px;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.key {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px 9px 7px 10px;
+  border: 1.5px solid var(--line-soft);
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.answers.grid-2 .key,
+.answers.tf .key {
+  display: none;
+}
+
+.answer-text {
+  overflow-wrap: anywhere;
+}
+
+.answer.correct {
+  background: var(--good-bg);
+  opacity: 1;
+}
+
+.answer.wrong {
+  background: var(--bad-bg);
+  opacity: 1;
+}
+
+.answer.correct .key {
+  background: var(--good);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.answer.wrong .key {
+  background: var(--bad);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.answer.dim {
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+/* 批改記號：正解蓋圈、選錯的蓋叉，壓在按鈕右上角 */
+.answer {
+  position: relative;
+}
+
+.ico.mark {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 3px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--card);
+  animation: stamp 0.22s ease-out;
+}
+
+@keyframes stamp {
+  from {
+    opacity: 0;
+    transform: scale(1.6) rotate(-12deg);
+  }
+}
+
+/* ── 多選題：點選項切換要不要選，選好按底下的「送出」 ───────── */
+/* 一個都還沒選：虛線框，不像可以按的按鈕 */
+.play-foot .next-btn:disabled {
+  background: transparent;
+  border-style: dashed;
+  border-color: var(--line-soft);
+  box-shadow: none;
+  color: var(--muted);
+}
+
+/* 該選沒選的正解：正解的底色、虛線框，另外標「漏選」 */
+.answer.missed,
+.past-choice.missed {
+  border-style: dashed;
+}
+
+.miss-tag {
+  flex: none;
+  margin: 0 16px 0 auto;
+  padding: 1px 7px;
+  border-radius: 8px;
+  border: 1.5px solid var(--ink);
+  background: var(--card);
+  color: var(--good-ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+/* 解析上面的計分說明：多選題答錯幾個選項、填的答案不是任何一個選項
+   （用一般墨色：深色模式的解析底色上，紅字對比不到 4.5:1） */
+.ms-score {
+  display: block;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px dashed color-mix(in srgb, var(--ink) 30%, transparent);
+  font-weight: 700;
+}
+
+/* ── 非選擇題：先自己寫，看了參考答案再對照評分要點，自己勾寫到了哪幾個 ─────── */
+/* 參考答案加幾個要點比四個選項高：矮螢幕放不下時作答區自己捲動，題目卡留得住題幹與解析
+   （做法同篇章結構的長句選項：往外撐開一點，對錯記號和陰影才不會被切掉） */
+.card-wrap:has(~ .answers.open) {
+  min-height: clamp(13rem, 38%, 19rem);
+}
+
+.answers.open {
+  flex: 0 1 auto;
+  grid-auto-rows: max-content;
+  min-height: 6.5rem;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: -12px -10px 0;
+  padding: 12px 10px 6px;
+}
+
+.open-hint,
+.open-ask {
+  margin: 0;
+  color: var(--muted);
+  font-size: calc(0.88rem * var(--fs, 1));
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* 窄螢幕會折成兩行：兩行排得差不多長，不要最後一行只剩一個字 */
+.open-hint {
+  text-align: center;
+  text-wrap: balance;
+}
+
+.open-reveal {
+  min-height: 54px;
+  padding: 9px 14px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  font-size: calc(1.05rem * var(--fs, 1));
+  font-weight: 800;
+}
+
+.open-reveal:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+/* 參考答案：紙卡的底、細框，和可以按的要點按鈕（粗框、有陰影）分得出來 */
+.open-ref {
+  padding: 9px 14px 10px;
+  border-radius: var(--hand-sm);
+  border: 1.5px solid var(--line-soft);
+  background: var(--card);
+  color: var(--ink);
+  font-size: calc(1.02rem * var(--fs, 1));
+  line-height: 1.6;
+}
+
+.open-ref:focus-visible {
+  outline: 2.5px dashed var(--accent-2-ink);
+  outline-offset: 2px;
+}
+
+.open-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.open-ref-text {
+  overflow-wrap: anywhere;
+}
+
+/* 結算、錯題本、回看上一題：正解下面列出評分要點 */
+.open-points {
+  margin: 0 0 8px;
+  padding-left: 1.4em;
+  color: var(--ink);
+  font-size: calc(0.9rem * var(--fs, 1));
+  line-height: 1.6;
+}
+
+.open-point {
+  overflow-wrap: anywhere;
+}
+
+.ico.open-got {
+  margin: 0 0 0 0.3em;
+}
+
+/* 回看上一題：自評寫到幾個要點、參考答案 */
+.open-note {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.past-card .open-ref {
+  margin: 10px 0 8px;
+}
+
+/* ── 演算題填答：上面是填好的答案，下面是數字鍵盤 ─────── */
+.answers.fill {
+  gap: 8px;
+}
+
+.fill-box {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 14px;
+  border-radius: var(--hand-sm);
+  border: 2px solid var(--ink);
+  background: var(--card);
+}
+
+.fill-box.shake {
+  animation: shake 0.35s ease;
+}
+
+.fill-value {
+  font-size: calc(1.5rem * var(--fs, 1));
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.fill-value.empty {
+  align-self: center;
+  color: var(--muted);
+  font-size: calc(1rem * var(--fs, 1));
+  font-weight: 600;
+}
+
+.fill-unit {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.fill-keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.fill-key {
+  min-height: 44px;
+  border-radius: var(--hand-sm);
+  border: 2px solid var(--ink);
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--shadow);
+  font-size: calc(1.15rem * var(--fs, 1));
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.fill-key:active {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.fill-send {
+  grid-column: span 2;
+  background: var(--accent);
+}
+
+.fill-switch {
+  justify-self: center;
+  min-height: 32px;
+  padding: 4px 8px;
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: calc(0.85rem * var(--fs, 1));
+  text-decoration: underline dashed color-mix(in srgb, var(--ink) 40%, transparent);
+  text-underline-offset: 4px;
+}
+
+.play-foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 8px;
+  min-height: 56px;
+  flex: none;
+}
+
+/* 旁邊有「猜對的」「練類似題」時縮窄，真的擠不下才換到下一行 */
+.play-foot .next-btn {
+  flex: 1 1 64px;
+}
+
+.ghost-btn {
+  padding: 10px 16px;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  text-decoration: underline dashed color-mix(in srgb, var(--ink) 40%, transparent);
+  text-underline-offset: 4px;
+}
+
+.next-btn,
+.primary-btn {
+  width: 100%;
+  min-height: 54px;
+  border-radius: var(--hand);
+  background: var(--accent);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  font-weight: 900;
+  font-size: 1.1rem;
+}
+
+.next-btn:active,
+.primary-btn:active,
+.secondary-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.next-btn[hidden],
+.ghost-btn[hidden] {
+  display: none;
+}
+
+/* 答錯後「練 3 題類似題」：跟「繼續」並排 */
+.related-btn {
+  flex: none;
+  min-height: 54px;
+  margin-right: 10px;
+  padding: 0 14px;
+  border-radius: var(--hand);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.related-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.related-btn.wide {
+  width: 100%;
+  margin: 0 0 12px;
+  min-height: 48px;
+}
+
+/* 答對後「猜對的」「不太確定」：小一號的切換鈕，跟「繼續」並排 */
+.certain {
+  flex: none;
+  display: flex;
+  gap: 6px;
+  margin-right: 10px;
+}
+
+.certain-btn {
+  min-height: 54px;
+  padding: 0 10px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink-soft);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+.certain-btn:active,
+.certain-btn[aria-pressed='true'] {
+  transform: translate(2px, 2px);
+  box-shadow: none;
+}
+
+.certain-btn[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--accent-2) 30%, var(--card));
+  border-width: 2px;
+  color: var(--ink);
+}
+
+.certain-btn[aria-pressed='true']::before {
+  content: '✓ ';
+}
+
+/* 標了其中一個就收起另一個，騰出位置給「練類似題」 */
+.certain.marked .certain-btn[aria-pressed='false'] {
+  display: none;
+}
+
+/* 手機上（直放或橫放的右欄）「猜對的」和「練類似題」同時出現時，類似題按鈕省掉題數 */
+@media (max-width: 400px), (orientation: landscape) and (max-height: 500px) {
+  .certain:not([hidden]) ~ .related-btn .related-n {
+    display: none;
+  }
+}
+
+.secondary-btn:disabled,
+.primary-btn:disabled {
+  opacity: 0.45;
+}
+
+/* 闖關答錯時解析下面的小字：這關最後補了一題類似題 */
+.path-note {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-2-ink);
+}
+
+/* 卡關提示：同一題失手好幾次，提醒回頭看這個單元的重點 */
+.leech-note {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1.5px dashed var(--line-soft);
+  font-size: 0.85rem;
+  line-height: 1.9;
+  color: var(--ink-soft);
+}
+
+.leech-note .link-btn {
+  margin: 0 3px;
+}
+
+/* 作答速度：會但花得久的單元，秒數不用警示的紅色 */
+.pace-slow b {
+  color: var(--ink-soft);
+}
+
+.secondary-btn {
+  width: 100%;
+  min-height: 54px;
+  border-radius: var(--hand);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  font-weight: 800;
+}
+

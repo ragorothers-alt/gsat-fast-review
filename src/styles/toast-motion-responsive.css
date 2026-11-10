@@ -1,0 +1,232 @@
+/* toast-motion-responsive.css：提示訊息、開啟時的載入畫面、動畫、矮螢幕／橫放／窄螢幕的調整 */
+/* ── 提示 ───────────────────────────────────────────── */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(96px + env(safe-area-inset-bottom));
+  transform: translate(-50%, 20px);
+  max-width: calc(100% - 32px);
+  padding: 10px 16px;
+  border-radius: var(--hand-sm);
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+  z-index: 30;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+/* ── 開啟時載入題庫 ─────────────────────────────────── */
+.boot {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  z-index: 40;
+  /* 從快取讀通常一下子就好，慢了才顯示，避免每次開啟都閃一下 */
+  animation: boot-in 0.2s 0.3s both;
+}
+
+@keyframes boot-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.boot-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 16px 22px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  font-weight: 700;
+}
+
+.boot .boot-error,
+.boot.failed .boot-loading {
+  display: none;
+}
+
+.boot.failed .boot-error {
+  display: block;
+}
+
+#boot-retry {
+  min-height: 44px;
+  width: auto;
+  padding: 0 28px;
+}
+
+/* ── 動畫 ───────────────────────────────────────────── */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+}
+
+@keyframes shake {
+  20% { transform: translateX(-8px) rotate(-1deg); }
+  40% { transform: translateX(7px) rotate(1deg); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(3px); }
+}
+
+@keyframes bump {
+  50% { transform: scale(1.18) rotate(-3deg); }
+}
+
+@keyframes pop-up {
+  0% { opacity: 0; transform: translateY(0); }
+  20% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-34px); }
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes blink {
+  to { opacity: 0.45; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(40px); opacity: 0; }
+}
+
+/* 矮螢幕（小手機）壓縮間距 */
+@media (max-height: 680px) {
+  .screen { gap: 8px; }
+  .stage { min-height: 104px; }
+  .mode { min-height: 54px; }
+  .mode-pair .mode { min-height: 60px; }
+  .mode.exam { min-height: 38px; }
+  .answer { min-height: 48px; }
+  .answers.tf .answer { min-height: 62px; }
+  .card-wrap { padding-top: 30px; }
+  /* 選項按鈕排緊一點，把高度留給題目卡 */
+  .answers { gap: 8px; }
+  .answers.mc .answer,
+  .answers.ms .answer,
+  .answers.open .answer {
+    min-height: 44px;
+    padding: 6px 12px;
+    font-size: calc(0.98rem * var(--fs, 1));
+    line-height: 1.38;
+  }
+  .answers.ms,
+  .answers.open { gap: 6px; }
+  .open-reveal { min-height: 48px; }
+  .open-ref { padding: 6px 12px 7px; font-size: calc(0.98rem * var(--fs, 1)); line-height: 1.5; }
+  /* 填答：鍵盤壓矮一點，題目卡才不會被擠到要捲動 */
+  .answers.fill { gap: 6px; }
+  .fill-box { min-height: 42px; padding: 4px 12px; }
+  .fill-value { font-size: calc(1.3rem * var(--fs, 1)); }
+  .fill-keys { gap: 5px; }
+  .fill-key { min-height: 36px; }
+  .fill-switch { min-height: 28px; padding: 2px 8px; }
+  .card { padding: 14px 15px 16px; }
+}
+
+/* 手機橫放：高度只剩一半，上下排放不下，改成左右兩欄（:not([hidden]) 免得蓋掉隱藏畫面的 display: none） */
+@media (orientation: landscape) and (max-height: 500px) {
+  /* 首頁：左邊書架上的貓、右邊選科目和模式 */
+  .home:not([hidden]) {
+    max-width: 980px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: 'top panel' 'daily panel' 'stage modes' 'stage foot';
+    column-gap: 20px;
+  }
+  .home .topbar { grid-area: top; }
+  .home .daily { grid-area: daily; }
+  .home .stage { grid-area: stage; min-height: 140px; }
+  .home .panel { grid-area: panel; }
+  .home .modes { grid-area: modes; align-self: end; }
+  .home .foot { grid-area: foot; }
+
+  /* 作答：題目卡在左、選項在右 */
+  .play:not([hidden]) {
+    max-width: 980px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr) auto;
+    grid-template-areas: 'bar bar' 'timer timer' 'card answers' 'card foot';
+    column-gap: 20px;
+    row-gap: 6px;
+  }
+  .play .card-wrap { padding-top: 26px; }
+  .play .answers { align-self: center; }
+  .play .play-foot { min-height: 48px; }
+  /* 草稿拉出來：題目留在左邊，草稿換到右邊，選項先收起（按「去作答」回來） */
+  .play[data-dock=''].scratch-open:not([hidden]) {
+    grid-template-areas: 'bar bar' 'timer timer' 'card pad' 'card pad';
+  }
+  .play[data-dock=''].scratch-open .card { max-height: 100%; }
+  .play[data-dock=''].scratch-open .scratch { min-height: 0; }
+}
+
+/* 小手機橫放（例如 iPhone SE）：每欄只剩 300 多 px，標題列和科目卡再收一點才不會換行 */
+@media (orientation: landscape) and (max-height: 500px) and (max-width: 720px) {
+  .home .brand > div,
+  .home .panel-head h2 small { display: none; }
+  .home .top-actions { gap: 6px; }
+  .home .pill { padding: 5px 9px; }
+  .home .chips { gap: 6px; }
+  .home .chip { padding: 6px 2px 5px; gap: 4px; }
+}
+
+@media (max-width: 480px) {
+  .stats-head { grid-template-columns: 1fr 1fr; row-gap: 12px; }
+  .seg { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 360px) {
+  .chips { gap: 6px; }
+  .mode-row .mode-title { font-size: 0.82rem; }
+  .daily-more { display: none; }
+  .brand { gap: 8px; }
+  .brand-icon { width: 36px; height: 36px; }
+  .top-actions { gap: 6px; }
+  .pill { padding: 5px 9px; }
+  .chip-name { font-size: 0.85rem; }
+  .chip-name::before { display: none; }
+  .brand h1 { font-size: 1.05rem; }
+  .mode-pair { gap: 8px; }
+  .mode-pair .mode .mode-title { font-size: 0.98rem; }
+}
+
+/* 320 寬的舊手機：三個大按鈕的圖示先拿掉，標題才放得下 */
+@media (max-width: 340px) {
+  .mode-pair .mode-title .ico { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

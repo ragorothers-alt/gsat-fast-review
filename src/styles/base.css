@@ -1,0 +1,184 @@
+/* base.css：設計變數（日間筆記本／夜間黑板）、重設、共用元件與畫面骨架 */
+/* 手繪筆記本風：米色方格紙、深棕墨線、貼紙感的按鈕與卡片 */
+:root {
+  --paper: #fbf5ea;
+  --grid: #efe5d4;
+  --card: #fffdf8;
+  --ink: #3b2f2a;
+  --ink-soft: #6f6159;
+  --muted: #776a60;
+  --line-soft: rgba(59, 47, 42, 0.22);
+  --accent: #f2b632;
+  --accent-2: #f0705f;
+  --good: #2f9e5b;
+  --good-bg: #d9f2e0;
+  --bad: #d9473c;
+  --bad-bg: #fde1dc;
+  /* 小字用的對錯色：比底色、邊框用的深一點，白底上才夠清楚 */
+  --good-ink: #237a45;
+  --bad-ink: #bf3a30;
+  --accent-2-ink: #b84a3a;
+  --note: #fff4cf;
+  --hand: 18px 22px 17px 21px / 21px 17px 22px 18px;
+  --hand-sm: 12px 15px 11px 14px / 14px 11px 15px 12px;
+  --pop: 3px 3px 0 var(--shadow);
+  --pad-x: 16px;
+  --track: #eee3d1;
+  --shadow: var(--ink);
+  --scrim: rgba(59, 47, 42, 0.35);
+  /* 黃色、珊瑚色等亮底上的字，深色模式也維持深色 */
+  --on-bright: #3b2f2a;
+  color-scheme: light;
+}
+
+/* 夜間：黑板風。墨線變粉筆、紙變黑板，貼紙的立體陰影改成深色 */
+:root[data-theme='dark'] {
+  --paper: #232b28;
+  --grid: #2a3430;
+  --card: #2d3733;
+  --ink: #ece4d4;
+  --ink-soft: #c9c0af;
+  --muted: #aea79a;
+  --line-soft: rgba(236, 228, 212, 0.2);
+  --accent: #f2b632;
+  --accent-2: #f0806f;
+  --good: #52c07c;
+  --good-bg: #24473a;
+  --bad: #f06c5f;
+  --bad-bg: #4d2d2a;
+  --good-ink: #52c07c;
+  --bad-ink: #f47f73;
+  --accent-2-ink: #f0806f;
+  --note: #393a2c;
+  --track: #3b4642;
+  --shadow: #141917;
+  --scrim: rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
+/* 黃底的按鈕上，字和圖示維持深色才看得清楚 */
+:root[data-theme='dark'] :is(.mode.primary, .primary-btn, .next-btn:not(:disabled), .fill-send, .icon-btn[aria-pressed='true'], .tool[aria-pressed='true'], .eraser-menu .tool-btn[aria-pressed='true'], .seg-btn[aria-pressed='true']) {
+  color: var(--on-bright);
+}
+
+/* 科目標籤：黑板上底色淡一點，粉筆字才清楚 */
+:root[data-theme='dark'] .tag {
+  background: color-mix(in srgb, var(--c, var(--accent)) 30%, var(--card));
+}
+
+/* 成績的螢光筆底線：黑板上淡一點，粉筆字才清楚 */
+:root[data-theme='dark'] .r-big {
+  background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 40%, transparent) 62%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* 只給螢幕閱讀器念，畫面上看不到 */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  color: var(--ink);
+  font-family: system-ui, -apple-system, 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 26px 26px;
+  background-position: -1px -1px;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+button:focus-visible {
+  outline: 2.5px dashed var(--accent-2-ink);
+  outline-offset: 3px;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+#world {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: manipulation;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: max(14px, env(safe-area-inset-top)) var(--pad-x) max(14px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+/* 首頁中間的書架留給 3D 貓咪，讓點擊穿透到 canvas */
+.screen.home {
+  pointer-events: none;
+}
+
+.home > :not(.stage) {
+  pointer-events: auto;
+}
+
+/* 共用：紙卡 */
+.paper {
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: var(--hand);
+  box-shadow: 2px 3px 0 var(--line-soft);
+}
+

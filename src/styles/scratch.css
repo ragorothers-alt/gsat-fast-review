@@ -1,0 +1,344 @@
+/* scratch.css：草稿區：工具列、草稿紙、橡皮擦、各種螢幕的版面 */
+/* ── 草稿區 ─────────────────────────────────────────── */
+.icon-btn[aria-pressed='true'] {
+  background: var(--accent);
+}
+
+/* 演算題：草稿區收著時，鉛筆按鈕加一圈黃框、晃兩下，提示這題要動筆算 */
+.icon-btn.nudge[aria-pressed='false'] {
+  box-shadow: 0 0 0 3px var(--accent);
+  animation: pencil-nudge 0.6s ease-in-out 2;
+}
+
+@keyframes pencil-nudge {
+  25% { transform: rotate(-10deg); }
+  75% { transform: rotate(10deg); }
+}
+
+.scratch {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.play.scratch-open .scratch {
+  display: flex;
+}
+
+/* 360 寬的手機上一排要放三支筆、復原重做、清空與「作答」：按鈕 38px、間距收小 */
+.scratch-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+
+.scratch-tools {
+  position: relative;
+  display: flex;
+  gap: 4px;
+  margin-right: auto;
+}
+
+/* 橡皮擦的擦法：選了橡皮擦再按一下，在工具列下方展開 */
+.eraser-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 3;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: var(--hand-sm);
+  box-shadow: 3px 3px 0 var(--shadow);
+}
+
+.eraser-menu[hidden] {
+  display: none;
+}
+
+.eraser-menu .tool-btn {
+  white-space: nowrap;
+}
+
+.eraser-menu .tool-btn[aria-pressed='true'] {
+  background: var(--accent);
+}
+
+.tool {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.tool i {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--ink);
+}
+
+.tool[data-tool='red'] i {
+  background: var(--bad);
+}
+
+/* 深色模式的草稿紙還是白紙、黑筆還是深色墨水（見 .scratch-sheet），圓點跟著畫出來的顏色 */
+:root[data-theme='dark'] .tool[data-tool='ink'] i {
+  background: #3b2f2a;
+  box-shadow: 0 0 0 1.5px var(--ink);
+}
+
+.tool[aria-pressed='true'] {
+  background: var(--accent);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+
+.tool-btn {
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0 12px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.tool-btn.icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  padding: 0;
+}
+
+.tool-btn .ico {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+}
+
+.ico.flip {
+  transform: rotate(180deg);
+}
+
+/* 復原、重做併成一組 */
+.tool-pair {
+  display: flex;
+}
+
+.tool-pair .tool-btn:first-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.tool-pair .tool-btn:last-child {
+  margin-left: -1.5px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.tool-btn:disabled {
+  opacity: 0.38;
+  cursor: default;
+}
+
+.tool:active,
+.tool-btn:not(:disabled):active {
+  transform: translate(1px, 1px);
+}
+
+.scratch-sheet {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--card);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 22px 22px;
+  border: 2px solid var(--ink);
+  border-radius: var(--hand);
+  box-shadow: 4px 5px 0 var(--shadow);
+}
+
+/* 深色模式也維持白紙：筆是深色墨水，跟著變成黑板就看不到了（紙色稍微暗一點，晚上不刺眼） */
+:root[data-theme='dark'] .scratch-sheet {
+  --card: #f1ebdf;
+  --grid: #e0d5c1;
+  --muted: #776a60;
+}
+
+#scratch-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  cursor: crosshair;
+  -webkit-touch-callout: none;
+}
+
+.scratch-hint {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.scratch-hint small {
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.scratch-hint[hidden],
+.scratch-hint small[hidden] {
+  display: none;
+}
+
+/* 橡皮擦的範圍（直徑 = 橡皮擦的粗細 28px）：筆懸空或滑鼠移到紙上時跟著指標；外圈的紙色讓它壓在筆跡上也看得到 */
+.scratch-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  box-sizing: border-box;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px var(--card);
+  pointer-events: none;
+}
+
+/* 整條擦掉：碰到的範圍比較小（半徑 10px），圈也小一點 */
+.scratch-ring.stroke {
+  width: 20px;
+  height: 20px;
+}
+
+.scratch-ring[hidden] {
+  display: none;
+}
+
+/* 紙往下延伸：右緣的捲軸看得出捲到哪裡，右下角的箭頭可以上下捲（手指不方便兩指拖、用滑鼠時） */
+.scratch-track {
+  position: absolute;
+  top: 12px;
+  right: 4px;
+  bottom: 12px;
+  width: 4px;
+  border-radius: 2px;
+  background: var(--grid);
+  pointer-events: none;
+}
+
+.scratch-track i {
+  position: absolute;
+  left: 0;
+  right: 0;
+  min-height: 12px;
+  border-radius: 2px;
+  background: var(--muted);
+  opacity: 0.6;
+}
+
+.scratch-nav {
+  position: absolute;
+  right: 14px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+}
+
+.scratch-nav .tool-btn {
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--shadow);
+}
+
+.scratch-track[hidden],
+.scratch-nav[hidden] {
+  display: none;
+}
+
+/* 深色模式的紙仍是淺色：紙上的按鈕用深色墨水 */
+:root[data-theme='dark'] .scratch-nav {
+  --ink: #3b2f2a;
+  --shadow: rgba(59, 47, 42, 0.35);
+}
+
+/* 手機：草稿拉出來時先收起選項，題目縮在上方 */
+.play[data-dock=''].scratch-open .answers,
+.play[data-dock=''].scratch-open .play-foot {
+  display: none;
+}
+
+.play[data-dock=''].scratch-open .card-wrap,
+.play[data-dock='bottom'].scratch-open .card-wrap {
+  flex: none;
+}
+
+.play[data-dock=''].scratch-open .card {
+  max-height: 40vh;
+}
+
+.play[data-dock=''].scratch-open .scratch {
+  flex: 1 1 0;
+  min-height: 220px;
+}
+
+/* 平板橫放：左邊作答、右邊草稿（:not([hidden]) 免得蓋掉隱藏畫面的 display: none） */
+.play-bar { grid-area: bar; }
+.timer { grid-area: timer; }
+.card-wrap { grid-area: card; }
+.answers { grid-area: answers; }
+.play-foot { grid-area: foot; }
+.scratch { grid-area: pad; }
+
+.play[data-dock='side'].scratch-open:not([hidden]) {
+  max-width: 1280px;
+  display: grid;
+  grid-template-columns: minmax(340px, 500px) minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+  grid-template-areas: 'bar pad' 'timer pad' 'card pad' 'answers pad' 'foot pad';
+  column-gap: 24px;
+}
+
+/* 平板直放：草稿接在選項下面 */
+.play[data-dock='bottom'].scratch-open {
+  max-width: 760px;
+}
+
+.play[data-dock='bottom'].scratch-open .card {
+  max-height: 34vh;
+}
+
+.play[data-dock='bottom'].scratch-open .scratch {
+  flex: 1 1 0;
+  min-height: 300px;
+}
+
+#flash {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 50%, rgba(240, 112, 95, 0.35) 100%);
+  opacity: 0;
+  z-index: 5;
+}
+
+#flash.on {
+  animation: flash 0.45s ease-out;
+}
+

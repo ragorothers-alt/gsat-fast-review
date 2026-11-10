@@ -1,0 +1,56 @@
+/* question-tools.css：題目卡上的發音、收藏、複製、回報按鈕 */
+/* ── 發音、收藏、複製、回報題目 ─────────────────────── */
+/* 單元名稱把按鈕推到右邊（英文題才有發音鈕，所以不能靠第一顆按鈕推） */
+.card-tag .topic {
+  margin-right: auto;
+}
+
+.speak-btn,
+.star-btn,
+.copy-btn,
+.flag-btn {
+  position: relative;
+  width: 36px;
+  height: 30px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 9px 10px 8px 11px;
+  border: 1.5px solid transparent;
+  font-size: 1rem;
+  color: var(--muted);
+  transition: color 0.2s, background 0.2s;
+}
+
+.speak-btn::before,
+.star-btn::before,
+.copy-btn::before,
+.flag-btn::before {
+  content: '';
+  position: absolute;
+  inset: -5px -2px;
+}
+
+.speak-btn:hover,
+.speak-btn:active,
+.star-btn:hover,
+.copy-btn:hover,
+.flag-btn:hover,
+.copy-btn:active {
+  color: var(--ink);
+}
+
+/* 收藏中：星星塗黃 */
+.star-btn[aria-pressed='true'] {
+  color: var(--ink);
+  --star-fill: var(--accent);
+}
+
+/* 回報中：旗面塗紅 */
+.flag-btn[aria-pressed='true'] {
+  color: var(--bad);
+  --flag-fill: var(--bad);
+  background: var(--bad-bg);
+  border-color: var(--bad);
+}
+

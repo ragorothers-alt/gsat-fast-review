@@ -1,0 +1,264 @@
+/* keypoints-review.css：考前重點卡、回看剛剛的題目、各處的「重點」按鈕與清單 */
+/* ── 考前重點卡 ─────────────────────────────────────── */
+.kp .sheet-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.kp-h {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.kp-h .ico {
+  margin: 0;
+}
+
+.kp-h.trap {
+  margin-top: 18px;
+  color: var(--bad-ink);
+}
+
+.kp-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: kp;
+}
+
+.kp-list li {
+  position: relative;
+  padding: 10px 12px 10px 40px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  font-size: calc(0.95rem * var(--fs, 1));
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.kp-list li::before {
+  counter-increment: kp;
+  content: counter(kp);
+  position: absolute;
+  left: 10px;
+  top: 11px;
+  width: 21px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1.5px solid var(--ink);
+  background: color-mix(in srgb, var(--c, var(--accent)) 30%, var(--card));
+  font-size: 0.72rem;
+  font-weight: 900;
+}
+
+.kp-list.traps li {
+  border-style: dashed;
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad-bg) 55%, var(--card));
+}
+
+.kp-list.traps li::before {
+  content: '!';
+  border-color: var(--bad);
+  background: var(--bad-bg);
+  color: var(--bad-ink);
+}
+
+/* 捲動區可以用鍵盤捲（Tab 進來後按方向鍵） */
+#kp-scroll:focus-visible {
+  outline: 2.5px dashed var(--accent-2);
+  outline-offset: 2px;
+}
+
+.kp-actions {
+  display: grid;
+  grid-template-columns: 52px 1fr 52px;
+  gap: 10px;
+  margin-top: 12px;
+  flex: none;
+}
+
+.kp-actions .secondary-btn {
+  padding: 0;
+  font-size: 1.3rem;
+}
+
+/* ── 回看剛剛的題目 ─────────────────────────────────── */
+.past .sheet-head h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.past-result {
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  background: var(--card);
+  color: var(--muted);
+}
+
+.past-result[data-result='right'] {
+  background: var(--good-bg);
+  color: var(--good-ink);
+}
+
+.past-result[data-result='wrong'] {
+  background: var(--bad-bg);
+  color: var(--bad-ink);
+}
+
+/* 當時的選項：照當時的順序，正解蓋圈、選錯的蓋叉 */
+.past-choices {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+
+.past-choices.tf {
+  grid-template-columns: 1fr 1fr;
+}
+
+.past-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--hand-sm);
+  border: 1.5px solid var(--line-soft);
+  font-size: calc(0.95rem * var(--fs, 1));
+  line-height: 1.5;
+}
+
+.past-choices.tf .past-choice {
+  justify-content: center;
+  font-weight: 800;
+}
+
+.past-choice.right {
+  background: var(--good-bg);
+  border-color: var(--ink);
+}
+
+.past-choice.wrong {
+  background: var(--bad-bg);
+  border-color: var(--ink);
+}
+
+.past-choice.right .key {
+  background: var(--good);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.past-choice.wrong .key {
+  background: var(--bad);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.past-choice .ico.mark {
+  top: -9px;
+  right: -6px;
+  width: 25px;
+  height: 25px;
+  animation: none;
+}
+
+/* 演算題填的答案不是任何一個選項：選項上標不出來，另外寫一行 */
+.past-typed {
+  margin: 10px 0 0;
+  color: var(--bad-ink);
+  font-weight: 700;
+}
+
+.past-card .explain {
+  margin-top: 14px;
+  animation: none;
+}
+
+/* 單元列旁邊的「重點」按鈕（單元面板、弱點單元） */
+.unit-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.unit-row > :first-child {
+  flex: 1;
+  min-width: 0;
+}
+
+.kp-btn {
+  flex: none;
+  width: 48px;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  border: 1.5px dashed var(--line-soft);
+  border-radius: var(--hand-sm);
+  color: var(--ink-soft);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.kp-btn .ico {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+
+.kp-btn:hover,
+.kp-btn:active {
+  border-style: solid;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+/* 錯題本「重點」分頁的單元清單 */
+.kp-unit {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 11px 12px;
+  text-align: left;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-left: 6px solid var(--c);
+  border-radius: var(--hand-sm);
+}
+
+.kp-unit-name {
+  font-weight: 700;
+}
+
+.kp-unit-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.kp-unit .unit-meter {
+  grid-column: 1 / 4;
+}
+

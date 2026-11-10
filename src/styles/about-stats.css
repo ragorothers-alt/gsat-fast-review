@@ -1,0 +1,420 @@
+/* about-stats.css：關於與診斷、學習分析的清單與圖表（弱點、長條、複習預報、題庫存量） */
+/* ── 關於與診斷 ─────────────────────────────────────── */
+.set-group h3 .ico {
+  margin: 0 -2px 0 0;
+}
+
+.about-list {
+  margin: 0 0 10px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.about-list div {
+  display: grid;
+  grid-template-columns: 5.5em 1fr;
+  gap: 8px;
+}
+
+.about-list dt {
+  color: var(--muted);
+}
+
+.about-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.about-errors {
+  margin-bottom: 10px;
+  padding: 8px 12px;
+  border: 1.5px dashed var(--bad);
+  border-radius: var(--hand-sm);
+  font-size: 0.8rem;
+}
+
+.about-errors h4 {
+  margin: 0 0 4px;
+  color: var(--bad-ink);
+  font-size: 0.85rem;
+}
+
+.about-errors ul {
+  margin: 0;
+  padding-left: 1.2em;
+  overflow-wrap: anywhere;
+}
+
+.nb-empty {
+  padding: 24px 8px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+#notebook-more {
+  flex: none;
+}
+
+.nb-actions {
+  display: grid;
+  flex: none;
+}
+
+.stats-block h3,
+.set-group h3 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  font-weight: 900;
+}
+
+.stats-block h3 small {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.weak-list,
+.subject-stats,
+.flag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weak-list {
+  margin-bottom: 12px;
+}
+
+.weak-unit {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: 'tag name go' 'tag meta go' 'bar bar bar';
+  align-items: center;
+  gap: 2px 10px;
+  padding: 10px 12px;
+  text-align: left;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+}
+
+.weak-unit:active {
+  transform: translate(1px, 1px);
+}
+
+.weak-unit .tag {
+  grid-area: tag;
+}
+
+.weak-name {
+  grid-area: name;
+  font-weight: 800;
+}
+
+.weak-meta {
+  grid-area: meta;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.weak-go {
+  grid-area: go;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--accent-2-ink);
+}
+
+.weak-unit .unit-meter {
+  grid-area: bar;
+  margin-top: 6px;
+}
+
+.weak-unit .unit-meter i {
+  background: var(--accent-2);
+}
+
+.weak-empty,
+.flag-empty {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.bars {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  align-items: end;
+  gap: 4px;
+}
+
+.bar {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar i {
+  width: 72%;
+  background: var(--accent);
+  border: 1.5px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 5px 6px 0 0;
+}
+
+.bar i.zero {
+  border: 0;
+}
+
+.bar.today i {
+  background: var(--accent-2);
+}
+
+.bar-n {
+  min-height: 1.2em;
+  font-size: 0.62rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.bar-day {
+  width: 100%;
+  min-height: 1.5em;
+  padding-top: 3px;
+  border-top: 1.5px solid var(--ink);
+  font-size: 0.62rem;
+  color: var(--muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* 複習預報：每天到期要複習的題數；照每日目標做不完、會留到隔天的日子畫斜線、數字標紅 */
+.forecast {
+  margin-top: 10px;
+}
+
+.forecast .bar i {
+  background: var(--accent-2);
+}
+
+.forecast .bar.over i {
+  background: repeating-linear-gradient(135deg, var(--accent-2) 0 4px, color-mix(in srgb, var(--bad) 70%, var(--card)) 4px 8px);
+}
+
+.forecast .bar.over .bar-n {
+  color: var(--bad-ink);
+  font-weight: 800;
+}
+
+.forecast .bar:first-child .bar-day {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.forecast-legend {
+  display: flex;
+  align-items: center;
+  gap: 4px 6px;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.forecast-legend .swatch {
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+}
+
+.forecast-legend .swatch:not(:first-child) {
+  margin-left: 8px;
+}
+
+.forecast-legend .due {
+  background: var(--accent-2);
+}
+
+.forecast-legend .over {
+  background: repeating-linear-gradient(135deg, var(--accent-2) 0 3px, color-mix(in srgb, var(--bad) 70%, var(--card)) 3px 6px);
+}
+
+#forecast-goal {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.subject-stats li {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 4px 10px;
+}
+
+.subject-stats .tag {
+  grid-row: span 2;
+  justify-self: start;
+}
+
+.subject-meta {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.subject-stats .unit-meter {
+  grid-column: 2;
+  margin-top: 0;
+}
+
+/* 英文單字依詞彙表級數：右邊多一欄「練這一級」 */
+.vocab-levels li {
+  grid-template-columns: 56px 1fr auto;
+}
+
+.vocab-levels .vocab-train {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  white-space: nowrap;
+}
+
+.vocab-levels .vocab-train:disabled {
+  opacity: 0.45;
+}
+
+/* 題庫存量：新題快用完的單元列在上面，各科可以展開看每個單元；長條是還剩多少新題 */
+.stock-low,
+.stock-list,
+.stock-units {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-low {
+  gap: 6px;
+  margin: 10px 0 14px;
+}
+
+.stock-low:empty {
+  display: none;
+}
+
+.stock-low li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.stock-low b {
+  font-size: 0.8rem;
+  color: var(--bad-ink);
+  white-space: nowrap;
+}
+
+.stock-low .stock-more {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.stock-list {
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.stock-list summary {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 4px 10px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.stock-list summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 右邊的展開箭頭，打開時轉向下 */
+.stock-list summary::after {
+  content: '›';
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  padding: 0 4px;
+  font-weight: 900;
+  color: var(--muted);
+  transition: transform 0.15s;
+}
+
+.stock-list details[open] summary::after {
+  transform: rotate(90deg);
+}
+
+.stock-list summary .tag {
+  grid-row: span 2;
+  justify-self: start;
+}
+
+.stock-list summary .unit-meter {
+  grid-column: 2;
+  margin-top: 0;
+}
+
+/* 「幾個單元快用完」自成一行，不在字中間斷開 */
+.subject-meta em {
+  display: block;
+  font-style: normal;
+  font-weight: 800;
+  color: var(--bad-ink);
+}
+
+.stock-units {
+  gap: 8px;
+  margin: 10px 0 4px 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--line-soft);
+}
+
+.stock-unit {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 3px 8px;
+  font-size: 0.82rem;
+}
+
+.stock-unit .unit-meter {
+  grid-column: 1 / 3;
+  margin-top: 0;
+}
+
+.stock-n {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.stock-unit.low .stock-n {
+  font-weight: 800;
+  color: var(--bad-ink);
+}
+
+.stock-unit.low .unit-meter i {
+  background: var(--bad);
+}
+

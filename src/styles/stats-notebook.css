@@ -1,0 +1,193 @@
+/* stats-notebook.css：學習分析畫面的骨架與考前規劃、錯題本 */
+/* ── 學習分析 ───────────────────────────────────────── */
+.stats {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.stats-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.stats-bar h2 {
+  font-size: 1.15rem;
+  font-weight: 900;
+}
+
+.stats-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 4px 12px 0;
+}
+
+/* 上方留空給趴在卡片上的貓 */
+.stats-head {
+  margin-top: 48px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  padding: 14px 10px;
+  text-align: center;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: var(--hand);
+  box-shadow: 4px 5px 0 var(--shadow);
+  flex: none;
+}
+
+.tile b {
+  display: block;
+  font-size: 1.35rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.tile span {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.stats-block {
+  padding: 14px;
+  flex: none;
+}
+
+/* 考前規劃 */
+.plan-text {
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.plan-meter {
+  display: flex;
+  height: 10px;
+  margin: 12px 0 6px;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.plan-meter i {
+  display: block;
+  height: 100%;
+}
+
+#plan-done {
+  background: var(--good);
+}
+
+#plan-proj {
+  background: repeating-linear-gradient(135deg, var(--accent) 0 5px, color-mix(in srgb, var(--accent) 45%, var(--card)) 5px 10px);
+}
+
+.plan-legend {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+#plan-goal {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ── 錯題本 ─────────────────────────────────────────── */
+.nb-head {
+  margin-top: 48px;
+  padding: 14px 16px 4px;
+  flex: none;
+  border-width: 2px;
+  box-shadow: 4px 5px 0 var(--shadow);
+}
+
+.nb-count {
+  margin-bottom: 6px;
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+.nb-count b {
+  font-size: 1.6rem;
+  margin-right: 4px;
+}
+
+#notebook-tabs {
+  margin-bottom: -4px;
+}
+
+.seg.nb-views {
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: 12px;
+}
+
+.nb-views .seg-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.nb-views .seg-btn .ico {
+  margin: 0;
+}
+
+/* 收藏分頁的按鈕：星星塗黃 */
+.nb-views [data-view='star'] {
+  --star-fill: var(--accent);
+}
+
+/* 選中時按鈕本身是黃底，星星改塗白 */
+.nb-views .seg-btn[data-view='star'][aria-pressed='true'] {
+  --star-fill: var(--card);
+}
+
+.nb-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 12px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  color: var(--muted);
+}
+
+.nb-search:focus-within {
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink);
+}
+
+.nb-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem; /* 小於 16px 時 iPhone 會自動放大頁面 */
+}
+
+.r-note {
+  color: var(--muted);
+}
+
+/* 題目卡上的單元名稱：點了打開這個單元的考前重點卡 */
+.topic-link {
+  text-align: left;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+}
+
+.topic-link:hover {
+  color: var(--ink);
+}
+

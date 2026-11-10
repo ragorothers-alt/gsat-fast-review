@@ -1,0 +1,198 @@
+/* units.css：單元選擇面板與單元闖關的關卡列 */
+/* ── 單元選擇 ───────────────────────────────────────── */
+.sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: var(--scrim);
+  pointer-events: auto;
+  animation: fade-in 0.2s ease-out;
+}
+
+.sheet[hidden] {
+  display: none;
+}
+
+.sheet-body:focus {
+  outline: none;
+}
+
+.sheet-body {
+  width: 100%;
+  max-width: 560px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  border-bottom: 0;
+  border-radius: 22px 26px 0 0;
+  padding: 14px var(--pad-x) max(14px, env(safe-area-inset-bottom));
+  animation: sheet-up 0.25s ease-out;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.sheet-head h2 {
+  font-size: 1.1rem;
+  font-weight: 900;
+}
+
+.sheet-tip {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.sheet-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 2px 2px 8px;
+  flex: none;
+  scrollbar-width: none;
+}
+
+.sheet-tab {
+  flex: none;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1.5px dashed var(--line-soft);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.sheet-tab.on {
+  border-style: solid;
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.sheet-tab[aria-pressed='true'] {
+  background: color-mix(in srgb, var(--c) 30%, var(--card));
+  box-shadow: 2px 2px 0 var(--shadow);
+  color: var(--ink);
+}
+
+.unit-list {
+  list-style: none;
+  margin: 0;
+  padding: 2px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.unit {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 26px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  text-align: left;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+}
+
+.unit[aria-pressed='false'] {
+  border-style: dashed;
+  border-color: var(--line-soft);
+  color: var(--muted);
+  background: transparent;
+}
+
+.unit-check {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 7px 8px 6px 9px;
+  font-size: 0.85rem;
+  font-weight: 900;
+  background: var(--c);
+}
+
+.unit[aria-pressed='false'] .unit-check {
+  background: transparent;
+  border-color: var(--line-soft);
+  color: transparent;
+}
+
+/* 單元闖關：還沒解鎖、在「選單元」關掉的關畫成虛線；現在這關像按鈕一樣浮起來 */
+.path-unit[aria-disabled='true'] {
+  border-style: dashed;
+  border-color: var(--line-soft);
+  color: var(--muted);
+  background: transparent;
+}
+
+.path-unit[aria-disabled='true'] .unit-check {
+  background: transparent;
+  border-color: var(--line-soft);
+}
+
+.path-unit[data-status='off'] .unit-name {
+  text-decoration: line-through;
+}
+
+.path-unit[data-status='current'] {
+  border-width: 2px;
+  box-shadow: var(--pop);
+}
+
+.path-unit[data-status='current'] .unit-meta {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.unit-check .ico {
+  margin: 0;
+}
+
+.unit-name {
+  font-weight: 700;
+}
+
+.unit-meta {
+  font-size: 0.75rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.unit-meter {
+  grid-column: 2 / 4;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--track);
+  overflow: hidden;
+  margin-top: -2px;
+}
+
+.unit-meter i {
+  display: block;
+  height: 100%;
+  background: var(--c);
+}
+
+.sheet-foot {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 10px;
+  margin-top: 12px;
+  flex: none;
+}
+

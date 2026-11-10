@@ -20,6 +20,9 @@ import { icon } from './icons.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
 import { sfx } from './feedback.js';
 import { choicesClass, groupPosition, initReadFull, markUsed, showPassage } from './passage.js';
+import { answerButton as createAnswerButton, markChoices, markMultiChoices, markOpenPoints } from './play-answers.js';
+import { initCardFit, initCardSwipe } from './play-card.js';
+import { fillHTML, fillKeyFor, typeFillKey } from './play-fill.js';
 import { canSpeak, speak, speechText, stopSpeaking } from './speech.js';
 import { topSheet } from './sheet.js';
 
@@ -27,22 +30,12 @@ import { topSheet } from './sheet.js';
 const RIGHT_DELAY = 1400;
 /** 自動換題的模式裡按了「猜對的／不太確定」，稍等一下讓按鈕狀態看得見再換題 */
 const MARK_DELAY = 350;
-const SWIPE_THRESHOLD = 80;
 /** 自由練習補題時，最近答過的幾題先不出 */
 const RECENT = 8;
 /** 找類似題時，這段時間內答過的題目先不出 */
 const RECENT_MS = 30 * 60_000;
 /** 答錯後「練類似題」一次插入幾題 */
 const RELATED_COUNT = 3;
-/** 填答的按鍵（四欄）：[鍵, 顯示的字, 給螢幕閱讀器的名稱] */
-const FILL_KEYS = [
-  ['7', '7'], ['8', '8'], ['9', '9'], ['back', '⌫', '刪除'],
-  ['4', '4'], ['5', '5'], ['6', '6'], ['-', '−', '負號'],
-  ['1', '1'], ['2', '2'], ['3', '3'], ['/', '／', '分數線'],
-  ['0', '0'], ['.', '.', '小數點'],
-];
-/** 填答最多幾個字 */
-const FILL_MAX = 12;
 
 export function initPlay(ctx) {
   const $ = (sel) => document.querySelector(sel);
@@ -436,22 +429,7 @@ export function initPlay(ctx) {
     el.msSend.hidden = true;
     // 按「不會」看解答時沒有作答：正解都標成正解，不算漏選
     const mine = Array.isArray(chosen) ? new Set(chosen) : null;
-    for (const b of el.answers.children) {
-      const orig = order[b._value];
-      const right = q.answer.includes(orig);
-      b.disabled = true;
-      b.removeAttribute('aria-pressed');
-      if (right && (!mine || mine.has(orig))) {
-        b.classList.add('correct');
-        b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（${mine ? '正解，你選了' : '正解'}）</span>`);
-      } else if (right) {
-        b.classList.add('correct', 'missed');
-        b.insertAdjacentHTML('beforeend', `<span class="miss-tag" aria-hidden="true">漏選</span>${icon('ok', 'mark')}<span class="sr-only">（正解，你沒選）</span>`);
-      } else if (mine?.has(orig)) {
-        b.classList.add('wrong');
-        b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（不該選，你選了）</span>`);
-      } else b.classList.add('dim');
-    }
+    markMultiChoices(el.answers.children, order, q.answer, mine);
     const answers = q.answer.map((i) => plainText(buttonFor(order.indexOf(i)).querySelector('.answer-text')));
     el.status.textContent = outcome === 'right' ? '全對！' : `${outcome === 'wrong' ? `${msNote(q, chosen)}。` : ''}正解是：${answers.join('；')}`;
   }
@@ -497,15 +475,7 @@ export function initPlay(ctx) {
     el.msSend.hidden = true;
     if (!revealed) showOpenAnswer();
     el.answers.querySelector('.open-ask').textContent = '評分要點';
-    const mine = new Set(chosen ?? []);
-    for (const b of el.answers.querySelectorAll('.answer')) {
-      b.disabled = true;
-      b.removeAttribute('aria-pressed');
-      if (mine.has(b._value)) {
-        b.classList.add('correct');
-        b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（寫到了）</span>`);
-      } else if (outcome !== 'skip') b.classList.add('dim');
-    }
+    markOpenPoints(el.answers.querySelectorAll('.answer'), new Set(chosen ?? []), outcome === 'skip');
     el.answers.scrollTop = 0;
     updateAnswersMore();
     el.status.textContent = outcome === 'skip' ? `參考答案：${openRefText()}` : openNote(q, chosen);
@@ -516,9 +486,7 @@ export function initPlay(ctx) {
     fill = { text: '' };
     el.answers.className = 'answers fill';
     const unit = fillUnit(q);
-    el.answers.innerHTML = `<div class="fill-box"><output class="fill-value" aria-label="你填的答案"></output><span class="fill-unit"></span></div>
-      <div class="fill-keys">${FILL_KEYS.map(([k, label, name]) => `<button type="button" class="fill-key" data-k="${k}"${name ? ` aria-label="${name}"` : ''}>${label}</button>`).join('')}<button type="button" class="fill-key fill-send" data-k="ok">送出</button></div>
-      <button type="button" class="fill-switch">算不出來？改用選項作答</button>`;
+    el.answers.innerHTML = fillHTML();
     el.answers.querySelector('.fill-unit').textContent = unit;
     const keys = el.answers.querySelector('.fill-keys');
     keys.addEventListener('click', (e) => {
@@ -544,20 +512,12 @@ export function initPlay(ctx) {
     out.classList.toggle('empty', !fill.text);
   }
 
-  /** 按一個填答鍵：數字、小數點、負號（切換）、分數線、刪除、送出 */
+  /** 按一個填答鍵：數字、小數點、負號（切換）、分數線、刪除、送出（字串怎麼變見 play-fill.js） */
   function typeKey(k) {
     if (phase !== 'answering' || !fill) return;
-    let t = fill.text;
     if (k === 'ok') return submitFill();
-    if (k === 'back') t = t.slice(0, -1);
-    else if (k === '-') t = t.startsWith('-') ? t.slice(1) : `-${t}`;
-    else if (k === '/') t += /\d$/.test(t) && !t.includes('/') ? '/' : '';
-    else if (k === '.') {
-      // 分子、分母各自最多一個小數點；還沒有數字就補 0
-      const part = t.split('/').pop().replace('-', '');
-      if (!part.includes('.')) t += part ? '.' : '0.';
-    } else if (/^\d$/.test(k)) t += k;
-    if (t.length > FILL_MAX) return;
+    const t = typeFillKey(fill.text, k);
+    if (t === null) return;
     fill.text = t;
     renderFillValue();
   }
@@ -574,76 +534,16 @@ export function initPlay(ctx) {
     resolve(m === q.answer ? 'right' : 'wrong', m >= 0 ? order.indexOf(m) : null, m >= 0 ? m : null, fill.text);
   }
 
-  // ── 小螢幕：題目卡放不下 ─────────────────────────────
-  // 先把題目字縮小一級；還是放不下就在卡片底部提示「往下還有」，免得沒看完題目就作答
-  function overflowing() {
-    return el.card.scrollHeight - el.card.clientHeight > 2;
-  }
-
-  function fitCard() {
-    el.card.scrollTop = 0;
-    el.text.classList.remove('compact');
-    el.card.classList.remove('tight');
-    if (overflowing()) el.text.classList.add('compact');
-    // 閱讀題組還是放不下：文章框再壓矮（剩兩三行，可以按「展開文章」看全文），題目一定要看得到
-    if (overflowing() && el.card.classList.contains('grouped')) el.card.classList.add('tight');
-    updateMore();
-    el.answers.scrollTop = 0;
-    updateAnswersMore();
-  }
-
-  // 篇章結構的長句選項在矮螢幕上自己捲動：下面還有選項時底部淡出
-  function updateAnswersMore() {
-    const a = el.answers;
-    a.classList.toggle('more-below', a.scrollHeight - a.clientHeight - a.scrollTop > 4);
-  }
-
-  /** 選項區會捲動時，把這個選項捲進看得到的地方（作答後的正解） */
-  function showAnswer(b) {
-    const a = el.answers;
-    if (!b || a.scrollHeight <= a.clientHeight) return;
-    const box = a.getBoundingClientRect();
-    const r = b.getBoundingClientRect();
-    if (r.top < box.top) a.scrollTop -= box.top - r.top + 8;
-    else if (r.bottom > box.bottom) a.scrollTop += r.bottom - box.bottom + 8;
-  }
+  // ── 小螢幕：題目卡放不下時縮小字級、提示「往下還有」（play-card.js） ─────────────
+  const { fitCard, updateMore, updateAnswersMore, showAnswer } = initCardFit(
+    { card: el.card, text: el.text, answers: el.answers, more: el.more },
+    () => !!q && !$('#play').hidden,
+  );
   // 模擬考借用同一張題目卡（ui/exam.js）
   ctx.fitCard = fitCard;
 
-  function updateMore() {
-    el.more.hidden = el.card.scrollHeight - el.card.clientHeight - el.card.scrollTop <= 6;
-  }
-
-  el.card.addEventListener('scroll', updateMore, { passive: true });
-  el.answers.addEventListener('scroll', updateAnswersMore, { passive: true });
-  window.addEventListener('resize', () => {
-    if (q && !$('#play').hidden) {
-      updateMore();
-      updateAnswersMore();
-    }
-  });
-  el.more.addEventListener('click', () => el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: 'smooth' }));
-
   function answerButton(label, value, key, isHTML = false) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'answer';
-    btn.innerHTML = `<span class="key" aria-hidden="true">${key}</span><span class="answer-text"></span>`;
-    const text = btn.querySelector('.answer-text');
-    if (isHTML) text.innerHTML = label;
-    else text.textContent = label;
-    // 有公式的選項改念 plainText 轉出來的文字，螢幕閱讀器才念得出來；
-    // 不用 aria-label，名稱才會跟著按鈕內容走（axe 的 label-in-name 規則）
-    if (text.querySelector('math')) {
-      const said = document.createElement('span');
-      said.className = 'sr-only';
-      said.textContent = plainText(text);
-      text.setAttribute('aria-hidden', 'true');
-      btn.append(said);
-    }
-    btn.addEventListener('click', () => choose(value));
-    btn._value = value;
-    return btn;
+    return createAnswerButton(label, value, key, isHTML, choose);
   }
 
   function buttonFor(value) {
@@ -703,17 +603,7 @@ export function initPlay(ctx) {
     if (open) markOpen(outcome, chosen);
     else if (q.type === 'ms') markMulti(outcome, chosen);
     else {
-      // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯；螢幕閱讀器另外念「（正解）」「（你選的）」
-      for (const b of el.answers.children) {
-        b.disabled = true;
-        if (b._value === correctValue) {
-          b.classList.add('correct');
-          b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（正解）</span>`);
-        } else if (b._value === displayValue) {
-          b.classList.add('wrong');
-          b.insertAdjacentHTML('beforeend', `${icon('ng', 'mark')}<span class="sr-only">（${typed === null ? '你選的' : '你填的'}）</span>`);
-        } else b.classList.add('dim');
-      }
+      markChoices(el.answers.children, correctValue, displayValue, typed !== null);
       showAnswer(buttonFor(correctValue));
       const said = plainText(buttonFor(correctValue)).replace(/（正解）$/, '');
       const mine = typed !== null && outcome === 'wrong' ? `你填 ${typed}，` : '';
@@ -973,47 +863,15 @@ export function initPlay(ctx) {
     }
   });
 
-  // ── 是非題：卡片左右滑 ────────────────────────────────
-  let drag = null;
-  el.card.addEventListener('pointerdown', (e) => {
-    // 卡片上的按鈕（複製、回報）不能被滑動手勢搶走指標，否則點不到
-    if (phase !== 'answering' || q.type !== 'tf' || e.target.closest('button')) return;
-    drag = { x: e.clientX, y: e.clientY, dx: 0, active: false };
-    el.card.setPointerCapture(e.pointerId);
-  });
-  el.card.addEventListener('pointermove', (e) => {
-    if (!drag) return;
-    drag.dx = e.clientX - drag.x;
-    // 主要是垂直移動時當作捲動，不算滑動作答
-    if (!drag.active && Math.abs(drag.dx) > 8 && Math.abs(drag.dx) > Math.abs(e.clientY - drag.y)) drag.active = true;
-    if (!drag.active) return;
-    el.card.classList.add('dragging');
-    el.card.style.transform = `translateX(${drag.dx}px) rotate(${drag.dx / 22}deg)`;
-    el.card.style.setProperty('--yes', String(Math.max(0, Math.min(1, drag.dx / SWIPE_THRESHOLD))));
-    el.card.style.setProperty('--no', String(Math.max(0, Math.min(1, -drag.dx / SWIPE_THRESHOLD))));
-  });
-  const endDrag = () => {
-    if (!drag) return;
-    const { dx, active } = drag;
-    drag = null;
-    if (active && Math.abs(dx) >= SWIPE_THRESHOLD && phase === 'answering') {
-      const outcome = choose(dx > 0);
-      el.card.classList.remove('dragging');
+  // ── 是非題：卡片左右滑（play-card.js） ────────────────────
+  const resetCardDrag = initCardSwipe(el.card, {
+    canStart: () => phase === 'answering' && q.type === 'tf',
+    onSwipe: (right) => {
+      if (phase !== 'answering') return null;
       // 答對且馬上換題就讓卡片順勢飛出；要看解析的拉回中間
-      const dir = Math.sign(dx);
-      const flyOut = outcome === 'right' && !MODES[s.mode].explainAlways;
-      el.card.style.transform = flyOut ? `translateX(${dir * 120}%) rotate(${dir * 16}deg)` : '';
-    } else resetCardDrag();
-  };
-  el.card.addEventListener('pointerup', endDrag);
-  el.card.addEventListener('pointercancel', endDrag);
-
-  function resetCardDrag() {
-    el.card.classList.remove('dragging');
-    el.card.style.transform = '';
-    el.card.style.setProperty('--yes', '0');
-    el.card.style.setProperty('--no', '0');
-  }
+      return choose(right) === 'right' && !MODES[s.mode].explainAlways;
+    },
+  });
 
   // ── 鍵盤（桌機） ─────────────────────────────────────
   document.addEventListener('keydown', (e) => {
@@ -1031,7 +889,7 @@ export function initPlay(ctx) {
     if (phase !== 'answering') return;
     // 演算題填答：直接打數字、小數點、負號、分數線，Backspace 刪除、Enter 送出
     if (fill) {
-      const k = { Backspace: 'back', Enter: 'ok' }[e.key] ?? (/^[\d./-]$/.test(e.key) ? e.key : null);
+      const k = fillKeyFor(e.key);
       if (k && !(k === 'ok' && e.target.closest?.('button'))) {
         e.preventDefault();
         typeKey(k);

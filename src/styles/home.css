@@ -1,0 +1,460 @@
+/* home.css：首頁：標題列、科目卡、模式按鈕、學測倒數、題庫存量入口 */
+/* ── 首頁 ───────────────────────────────────────────── */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  transform: rotate(-4deg);
+}
+
+.brand h1 {
+  font-size: 1.22rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.tagline {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+@media (max-width: 340px) {
+  .topbar {
+    gap: 6px;
+  }
+
+  .brand {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .brand-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .tagline {
+    display: none;
+  }
+
+  .top-actions {
+    gap: 4px;
+  }
+}
+
+.pill {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  font-size: 1.05rem;
+  flex: none;
+}
+
+/* 手繪小圖示（index.html 開頭的 sprite）：大小跟著文字，墨線跟著文字顏色 */
+.ico {
+  width: 1.2em;
+  height: 1.2em;
+  flex: none;
+  margin-right: 0.28em;
+  vertical-align: -0.25em;
+  overflow: visible;
+}
+
+.ico-lg {
+  width: 24px;
+  height: 24px;
+}
+
+.icon-btn .ico,
+.speak-btn .ico,
+.star-btn .ico,
+.copy-btn .ico,
+.flag-btn .ico {
+  margin: 0;
+}
+
+.daily {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 14px;
+  text-align: left;
+  transition: transform 0.1s;
+}
+
+.daily:active {
+  transform: translate(1px, 1px);
+}
+
+.ring {
+  width: 44px;
+  height: 44px;
+  transform: rotate(-90deg);
+  flex: none;
+}
+
+.ring circle {
+  fill: none;
+  stroke-width: 3.8;
+}
+
+.ring-bg {
+  stroke: var(--track);
+}
+
+.ring-fg {
+  stroke: var(--accent-2);
+  stroke-linecap: round;
+  stroke-dasharray: 0 100;
+  transition: stroke-dasharray 0.6s ease;
+}
+
+.daily.done .ring-fg {
+  stroke: var(--good);
+}
+
+.daily-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.daily-text b {
+  font-size: 1.2rem;
+  color: var(--accent-2-ink);
+}
+
+.daily.done .daily-text b {
+  color: var(--good);
+}
+
+.daily-text small {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* 學測倒數 */
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-left: 12px;
+  border-left: 1.5px dashed var(--line-soft);
+  line-height: 1.15;
+  flex: none;
+}
+
+.countdown b {
+  font-size: 1.35rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown small {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.daily-more {
+  flex: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.stage {
+  flex: 1;
+  min-height: 170px;
+}
+
+.panel {
+  padding: 12px;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.panel-head h2 {
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.panel-head h2 small {
+  margin-left: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.panel-actions {
+  display: flex;
+  gap: 4px;
+  flex: none;
+}
+
+.link-btn {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line-soft);
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.chip {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+  padding: 8px 4px 7px;
+  border-radius: var(--hand-sm);
+  border: 1.5px dashed var(--line-soft);
+  color: var(--muted);
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.12s;
+}
+
+.chip:active {
+  transform: scale(0.95);
+}
+
+.chip[aria-pressed='true'] {
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  background: color-mix(in srgb, var(--c) 24%, var(--card));
+}
+
+.chip-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.chip-name::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+  border: 1.5px solid var(--ink);
+  flex: none;
+  opacity: 0.5;
+}
+
+.chip[aria-pressed='true'] .chip-name::before {
+  opacity: 1;
+}
+
+.chip-meter {
+  height: 4px;
+  margin: 0 6px;
+  border-radius: 2px;
+  background: var(--track);
+  overflow: hidden;
+}
+
+.chip-meter i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--c);
+  transition: width 0.6s ease;
+}
+
+.chip-units {
+  position: absolute;
+  top: -6px;
+  right: -4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--accent-2);
+  border: 1.5px solid var(--ink);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  line-height: 15px;
+}
+
+.chip-units[hidden] {
+  display: none;
+}
+
+.modes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mode {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 62px;
+  border-radius: var(--hand);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  transition: transform 0.1s, box-shadow 0.1s, opacity 0.2s;
+}
+
+.mode:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+.mode:disabled {
+  opacity: 0.45;
+}
+
+.mode-title {
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.mode-sub {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.mode.primary {
+  min-height: 70px;
+  background: var(--accent);
+}
+
+.mode.primary .mode-title {
+  font-size: 1.3rem;
+}
+
+.mode.primary .mode-sub {
+  color: var(--on-bright);
+}
+
+.mode-pair {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr 1fr;
+  gap: 10px;
+}
+
+.mode-pair .mode {
+  min-height: 70px;
+  min-width: 0;
+  padding: 0 4px;
+}
+
+.mode-pair .mode .mode-title {
+  font-size: 1.12rem;
+  white-space: nowrap;
+}
+
+.mode-pair .mode-sub {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mode.free {
+  background: color-mix(in srgb, var(--good) 24%, var(--card));
+}
+
+/* 單元闖關：珊瑚色，跟自由練習的綠分開 */
+.mode.path {
+  background: color-mix(in srgb, var(--accent-2) 24%, var(--card));
+}
+
+:is(.mode.free, .mode.path) .mode-sub {
+  color: color-mix(in srgb, var(--ink) 88%, transparent);
+}
+
+.mode-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.mode-row .mode {
+  padding: 0 2px;
+}
+
+.mode-row .mode-title {
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.mode-row .mode-sub {
+  font-size: 0.7rem;
+  white-space: nowrap;
+}
+
+.foot {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+/* 首頁底部：直接看學習分析的題庫存量 */
+.foot-link {
+  margin-left: 6px;
+  padding: 6px 4px;
+  font-weight: 800;
+  color: var(--ink-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+

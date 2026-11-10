@@ -1,0 +1,207 @@
+/* passage-groups.css：閱讀題組、克漏字、共用選項（文意選填、篇章結構） */
+/* ── 閱讀題組：文章放在題目上方的框裡自己捲動，題目與選項一直看得到 ── */
+.nowrap {
+  white-space: nowrap;
+}
+
+.passage[hidden] {
+  display: none;
+}
+
+.card.grouped {
+  display: flex;
+  flex-direction: column;
+}
+
+.card.grouped > * {
+  flex: none;
+}
+
+.card.grouped .passage {
+  position: relative;
+  flex: 0 1 auto;
+  min-height: 7.5em;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--hand-sm);
+  background: color-mix(in srgb, var(--grid) 55%, var(--card));
+  font-size: calc(0.98rem * var(--fs, 1));
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.card.grouped .passage:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.passage p,
+.passage-body p {
+  margin: 0 0 0.55em;
+}
+
+.passage p:last-child,
+.passage-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* 克漏字的空格：底線加編號；這題問的那一格塗上螢光筆 */
+.blank {
+  display: inline-block;
+  min-width: 2.4em;
+  margin: 0 0.15em;
+  padding: 0 0.35em;
+  border-bottom: 2px solid var(--ink);
+  font-weight: 700;
+  line-height: 1.35;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.blank.on {
+  border-radius: 4px 4px 0 0;
+  background: var(--accent);
+  color: var(--on-bright);
+}
+
+.card.grouped .q-text {
+  font-size: calc(clamp(1rem, 4.2vw, 1.15rem) * var(--fs, 1));
+}
+
+/* 題組的單元名稱只占一行，太長就截斷（「題組 2／4」在最前面，一定看得到） */
+.card.grouped .card-tag .topic {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* 「展開文章」：收起選項與底下其他按鈕，文章占滿題目卡 */
+.play.reading .answers,
+.play.reading .play-foot > :not(#read-full) {
+  display: none !important;
+}
+
+.play.reading .card-wrap {
+  align-items: stretch;
+}
+
+.play.reading .card.grouped .passage {
+  flex-grow: 1;
+}
+
+@media (max-height: 680px) {
+  .card.grouped .passage {
+    min-height: 5.2em;
+  }
+}
+
+.card.grouped.tight {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.card.grouped.tight .card-tag {
+  margin-bottom: 6px;
+}
+
+.card.grouped.tight .passage {
+  min-height: 3.6em;
+  margin-bottom: 8px;
+}
+
+/* 結算、錯題本、回看上一題：文章收起來，要看再展開 */
+.r-passage {
+  margin: 0 0 8px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--hand-sm);
+  background: color-mix(in srgb, var(--grid) 55%, var(--card));
+}
+
+.r-passage summary {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+/* 共用選項（文意選填、篇章結構）：字詞排兩欄、句子排一欄縮小字級；別格已用的選項淡一點並加標籤 */
+.answers.bank {
+  gap: 7px;
+}
+
+.answers.bank .answer {
+  min-height: 44px;
+  padding: 6px 12px;
+}
+
+.answers.bank.sentences .answer {
+  gap: 9px;
+  font-size: calc(0.92rem * var(--fs, 1));
+  line-height: 1.38;
+  padding: 6px 10px;
+}
+
+.answers.sentences .key {
+  width: 22px;
+  height: 22px;
+}
+
+/* 篇章結構的五個長句：矮螢幕放不下時，題目卡至少留給文章四、五行，選項區自己捲動
+   （左右、下面多留一點空間，按鈕的陰影才不會被切掉） */
+.card-wrap:has(~ .answers.sentences) {
+  min-height: clamp(15.5rem, 38%, 19rem);
+}
+
+.answers.sentences {
+  flex: 0 1 auto;
+  /* 容器高度固定時 auto 列會縮到按鈕的 min-height，句子疊在一起；每列照內容高度，多的捲動 */
+  grid-auto-rows: max-content;
+  min-height: 6.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* 對錯記號凸出按鈕右上角 12px、陰影在右下：捲動區往外撐開，不切到它們 */
+  margin: -12px -10px 0;
+  padding: 12px 10px 6px;
+}
+
+/* 下面還有選項：底部淡出 */
+.answers.more-below {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 34px), transparent);
+}
+
+.answer.used {
+  border-style: dashed;
+  box-shadow: none;
+  color: var(--muted);
+}
+
+/* 標籤貼在選項左上角的框線上，不占選項的寬度（右上角留給對錯記號） */
+.used-tag {
+  position: absolute;
+  top: -9px;
+  left: 8px;
+  padding: 0 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--line-soft);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
+.r-passage .passage-body {
+  max-height: 45vh;
+  overflow-y: auto;
+  padding: 0 12px 10px;
+  font-size: calc(0.95rem * var(--fs, 1));
+  line-height: 1.7;
+}
+

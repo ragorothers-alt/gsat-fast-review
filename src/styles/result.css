@@ -1,0 +1,143 @@
+/* result.css：結算畫面 */
+/* ── 結算 ───────────────────────────────────────────── */
+.result {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.result-scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 4px 10px 0;
+}
+
+/* 上方留空給趴在卡片上的貓 */
+.result-head {
+  margin-top: 48px;
+  text-align: center;
+  padding: 16px 12px;
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: var(--hand);
+  box-shadow: 4px 5px 0 var(--shadow);
+}
+
+.r-mode {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.r-big {
+  display: inline-block;
+  margin: 6px 0;
+  padding: 0 6px;
+  font-size: 2.9rem;
+  font-weight: 900;
+  background: linear-gradient(transparent 62%, color-mix(in srgb, var(--accent) 70%, transparent) 62%);
+}
+
+.r-badge {
+  font-weight: 900;
+  color: var(--accent-2-ink);
+  animation: bump 0.5s ease 2;
+}
+
+.r-cheer {
+  margin-top: 4px;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.r-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1.5px dashed var(--line-soft);
+}
+
+.r-stats div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.r-stats b {
+  font-size: 1.3rem;
+}
+
+.r-stats span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.r-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 0 4px;
+}
+
+.r-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.r-item {
+  padding: 14px;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-left: 6px solid var(--c);
+  border-radius: var(--hand-sm);
+}
+
+.r-item .card-tag {
+  margin-bottom: 8px;
+}
+
+.r-q {
+  font-size: calc(1rem * var(--fs, 1));
+  line-height: 1.65;
+}
+
+.r-ans {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 8px 0;
+  font-size: calc(0.92rem * var(--fs, 1));
+  font-weight: 600;
+}
+
+.r-mine {
+  color: var(--bad-ink);
+}
+
+.r-mine.skip {
+  color: var(--muted);
+}
+
+.r-right {
+  color: var(--good-ink);
+}
+
+.r-explain {
+  font-size: calc(0.9rem * var(--fs, 1));
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.result-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 10px;
+  flex: none;
+}
+
