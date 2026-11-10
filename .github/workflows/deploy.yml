@@ -27,11 +27,14 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
       - run: npm run validate
       - run: npm test
       - run: npm run build
-      # 端對端測試與無障礙檢查：在無頭 Chromium 裡實際操作建置好的版本，沒過就不部署
+      # 端對端測試與無障礙檢查：在無頭 Chromium 與 WebKit（iPhone 的 Safari 用的引擎）裡實際操作建置好的版本，沒過就不部署
       - run: npx playwright install --with-deps --only-shell chromium
+      - run: npx playwright install --with-deps webkit
       - run: npm run e2e
       # 失敗時留下截圖與追蹤檔，到 Actions 頁面下載來看
       - if: failure()

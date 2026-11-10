@@ -9,7 +9,7 @@ export async function copyText(text) {
     ta.style.cssText = 'position:fixed;opacity:0';
     document.body.append(ta);
     ta.select();
-    let ok = false;
+    let ok;
     try {
       ok = document.execCommand('copy');
     } catch {

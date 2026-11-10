@@ -108,8 +108,8 @@ export function mergeStreak(daily, ...streaks) {
 /**
  * 合併兩份進度，回傳 { state, added, updated }。
  * 本機設定（科目、單元、音效、目標…）維持原樣，且沿用同一個 settings 物件，畫面上的參照不會失效。
- * @param {object} local 本機目前的 state
- * @param {object} incoming parseBackup 讀出的進度
+ * @param {AppState} local 本機目前的 state
+ * @param {any} incoming parseBackup 讀出的進度
  */
 export function mergeState(local, incoming) {
   const inCards = obj(incoming.cards);

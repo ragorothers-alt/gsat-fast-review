@@ -35,7 +35,7 @@ export function unitShares(subjects) {
 
 /**
  * 各單元練得怎麼樣：練過幾題（n）、其中第一次就答對而且之後沒失手的有幾題（known），估計的熟練度 p（0–1）
- * @param {(card: object | undefined) => boolean} isKnown 答對過、從沒失手（srs.js 的 neverMissed）
+ * @param {(card: Card | undefined) => boolean} isKnown 答對過、從沒失手（srs.js 的 neverMissed）
  * @returns {Map<string, { n: number, known: number, p: number }>}
  */
 export function unitSkill(bank, cards, subjects, isKnown) {
@@ -83,9 +83,9 @@ function packUnit(pack) {
  * 新題的出題順序：每個位置先依單元優先度抽一個單元，再出這個單元排在最前面的題目；
  * 單元裡的題目事先依難度權重做加權隨機排序（每題的鍵是 u^(1/權重)，大的先出）。
  * 閱讀題組整組一起出：一組算一個候選，歸到組裡最多題的單元，難度權重取各題的平均。
- * @param {object[]} fresh 還沒做過的題目（已依模式篩好）
+ * @param {Question[]} fresh 還沒做過的題目（已依模式篩好）
  * @param {{ shares: Map<string, number>, skill: Map<string, { n: number, p: number }>, size: number, rng?: () => number }} opts
- * @returns {object[]} 最多 size 題（最後一個題組放不下時整組照出）；同組的題目排在一起
+ * @returns {Question[]} 最多 size 題（最後一個題組放不下時整組照出）；同組的題目排在一起
  */
 export function orderFresh(fresh, { shares, skill, size, rng = Math.random }) {
   const groups = new Map();

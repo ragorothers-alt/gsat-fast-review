@@ -3,6 +3,7 @@ import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, examStart, isLeech, missCount, neverMissed, schedule, shuffle } from '../srs.js';
 import { recordPace } from '../pace.js';
+import { reportQuestion } from '../report.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, markCleared, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
@@ -810,6 +811,7 @@ export function initPlay(ctx) {
     if (!q) return;
     const { flags } = ctx.state;
     setFlag(ctx.state, q.id, !flags[q.id], Date.now());
+    if (flags[q.id]) reportQuestion(q.id);
     ctx.save();
     renderMarks();
     ctx.toast(flags[q.id] ? '已回報這題，之後先不出；清單在首頁的設定裡' : '已取消回報');

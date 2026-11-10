@@ -8,6 +8,8 @@
     "build": "vite build",
     "preview": "vite preview --host",
     "test": "vitest run",
+    "lint": "eslint .",
+    "typecheck": "tsc -p jsconfig.json",
     "validate": "node scripts/validate-questions.mjs && node scripts/validate-keypoints.mjs && node scripts/lint-cues.mjs --strict",
     "e2e": "playwright test"
   },
@@ -17,7 +19,11 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.64.1",
+    "eslint": "^10.14.0",
+    "globals": "^17.14.0",
+    "typescript": "^7.0.2",
     "vite": "^8.3.5",
     "vitest": "^5.0.5"
   }

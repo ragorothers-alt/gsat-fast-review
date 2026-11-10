@@ -41,7 +41,7 @@ for (const file of files) {
   const subject = basename(file, '.json');
   const units = UNITS[subject];
   if (!SUBJECT_BY_ID[subject] || !units) errors.push(`檔名 ${subject} 不是已知科目`);
-  let items = [];
+  let items;
   try {
     items = JSON.parse(readFileSync(file, 'utf8').replace(/^﻿/, ''));
     if (!Array.isArray(items)) throw new Error('最外層必須是陣列');

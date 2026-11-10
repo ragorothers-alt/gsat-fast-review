@@ -38,6 +38,8 @@ export function unitStats(bank, cards, subjects) {
  * 弱點單元：作答夠多、有失誤的單元，依「失誤率 × 學測分量」由高到低排——學測考得多又常錯的單元最該先補。
  * 失誤率先做平滑 (失誤 + 1) / (作答 + 4)，免得只答過幾題、錯一兩題的單元就排到最前面。
  * share 是這個單元在歷屆學測該科的出題占比（%），給畫面顯示。
+ * @param {Question[]} bank
+ * @param {Record<string, Card>} cards
  * @param {{ subjects: string[], excludedUnits?: string[], limit?: number }} opts
  */
 export function weakUnits(bank, cards, { subjects, excludedUnits = [], limit = 3 }) {
@@ -106,6 +108,8 @@ export const LOW_STOCK = PATH_SIZE;
 /**
  * 題庫存量：選的範圍裡，各科、各單元還有幾題沒做過（沒有作答紀錄）。
  * 被回報而暫停出題的題目不算；結合了關掉單元的跨單元題也不出，所以不算（見 isUnitOff）。
+ * @param {Question[]} bank
+ * @param {Record<string, Card>} cards
  * @param {{ subjects: string[], excludedUnits?: string[], flags?: Record<string, unknown> }} opts
  * @returns {{ total: number, fresh: number, subjects: { subject: string, total: number, fresh: number, units: { unit: string, key: string, total: number, fresh: number }[] }[] }}
  */

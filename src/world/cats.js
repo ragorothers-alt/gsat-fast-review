@@ -494,8 +494,8 @@ export class Cat {
     for (let i = 0; i <= TAIL_N; i++) {
       const j0 = Math.max(0, i - 1);
       const j1 = Math.min(TAIL_N, i + 1);
-      let dx = this.cx[j1] - this.cx[j0];
-      let dy = this.cy[j1] - this.cy[j0];
+      const dx = this.cx[j1] - this.cx[j0];
+      const dy = this.cy[j1] - this.cy[j0];
       const len = Math.hypot(dx, dy) || 1;
       this.tx[i] = dx / len;
       this.ty[i] = dy / len;

@@ -1,4 +1,5 @@
 // 結算畫面與錯題本共用的題目卡：科目、單元、發音／收藏／複製／回報按鈕、題目、正解與解析
+import { reportQuestion } from '../report.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { setFlag, setStar } from '../sync.js';
 import { topicLabel } from '../units.js';
@@ -65,6 +66,7 @@ export function toggleMark(ctx, target) {
   const id = btn.dataset.star ?? btn.dataset.flag;
   const on = !ctx.state[kind][id];
   (kind === 'stars' ? setStar : setFlag)(ctx.state, id, on, Date.now());
+  if (kind === 'flags' && on) reportQuestion(id);
   ctx.save();
   btn.setAttribute('aria-pressed', String(on));
   if (kind === 'stars') ctx.toast(on ? '已收藏，在錯題本的「收藏」找得到' : '已取消收藏');

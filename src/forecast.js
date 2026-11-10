@@ -28,7 +28,7 @@ export function dayIndex(ts, now) {
 /**
  * 推估用的兩個比例，都有上下限，免得極端資料算出離譜的預報：
  * recall：複習時答對的比例，用近期正確率；first：新題第一次就答對、之後不再出的比例，用練過的題目裡從沒失手的比例
- * @param {object[]} cards 範圍內練過的卡片
+ * @param {Card[]} cards 範圍內練過的卡片
  * @param {number | null} accuracy 近期正確率（沒有作答時為 null）
  */
 export function estimateRates(cards, accuracy) {
@@ -38,8 +38,9 @@ export function estimateRates(cards, accuracy) {
 
 /**
  * 還會再出的卡片依「第幾天到期」與盒子分組。答對過、從沒失手的不再出，不算。
- * @param {object[]} cards 範圍內的卡片
- * @param {(card: object) => number} [dueOf] 這張卡出題時用的到期時間（考前衝刺會把排到考後的拉回來，見 srs.js 的 dueFor）
+ * @param {Card[]} cards 範圍內的卡片
+ * @param {number} now
+ * @param {(card: Card) => number} [dueOf] 這張卡出題時用的到期時間（考前衝刺會把排到考後的拉回來，見 srs.js 的 dueFor）
  * @returns {Map<number, number[]>} 第幾天 → 各盒子的張數
  */
 export function dueBuckets(cards, now, dueOf = (c) => c.due) {
@@ -112,6 +113,7 @@ export function simulate(buckets, { days, budget, fresh, recall, first, newRetur
 
 /**
  * 已經練過的題目接下來 days 天的複習預報（新題答錯的不算回來，見 simulate 的 newReturns）
+ * @param {Map<number, number[]>} buckets dueBuckets 的結果
  * @param {{ days: number, goal: number, fresh: number, recall: number, first: number, today?: number }} opts
  *   goal：每日目標；today：今天已經作答幾題（今天只剩目標減掉這些）
  */

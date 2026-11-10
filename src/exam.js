@@ -7,11 +7,14 @@ import { UNITS, isUnitOff, unitKey } from './units.js';
 
 export { UNIT_SHARE };
 
+/** @typedef {{ id: string, name: string, subjects: string[], size: number, minutes: number, groups?: number, groupName?: string }} Paper */
+
 /**
  * 學測的五張考卷。題庫的題目比學測短（免紙筆、單題），題數和時間也照比例縮小：
  * 平均每題國文 50 秒、英文 40 秒、數學 72 秒、自然 60 秒、社會 45 秒。出單選與多選題（學測沒有是非題）。
  * 另外抽幾組題組（groups 組，算在 size 裡）：國文、英文是閱讀題組，數學是一個情境連問幾題的混合題，
  * 自然是讀一段實驗或科學短文連答幾題的題組；每組多給約 1–2 分鐘讀文章或情境
+ * @type {Paper[]}
  */
 export const PAPERS = [
   { id: 'chinese', name: '國文', subjects: ['chinese'], size: 30, minutes: 31, groups: 3, groupName: '閱讀題組' },
@@ -28,12 +31,14 @@ export const MS_SHARE = { chinese: 0.2, math: 0.3, science: 0.4 };
 /**
  * 把 n 題依權重分給各項（最大餘數法）：先給整數部分，剩下的依小數部分由大到小補一題
  * @param {Record<string, number>} weights
+ * @param {number} n
  * @returns {Record<string, number>}
  */
 export function allocate(weights, n) {
   const entries = Object.entries(weights).filter(([, w]) => w > 0);
   const total = entries.reduce((a, [, w]) => a + w, 0);
   if (!total) return {};
+  /** @type {[string, number][]} */
   const raw = entries.map(([k, w]) => [k, (w / total) * n]);
   const out = Object.fromEntries(raw.map(([k, x]) => [k, Math.floor(x)]));
   let left = n - Object.values(out).reduce((a, b) => a + b, 0);
@@ -87,7 +92,8 @@ function pickGroups(questions, count, rng) {
  * 抽一份考卷：先抽 paper.groups 組題組（題庫沒有題組時就全出單題）；其餘題數依各單元占比分配，
  * 每個單元的配額裡約 MS_SHARE 出多選題、其餘出單選題；單元題目不夠時從同一張卷的其他單元補。
  * 題目照科目排（合科試卷先物理再化學…），同一科裡單題打亂、題組整組排在單題後面；每題的選項順序也先打亂、整場固定。
- * @param {object[]} bank
+ * @param {Question[]} bank
+ * @param {Paper} paper PAPERS 裡的一張考卷
  * @param {{ excludedUnits?: string[], flags?: Record<string, unknown>, rng?: () => number }} [opts] 被回報的題目不出
  * @returns {{ ids: string[], orders: number[][] }}
  */
@@ -185,7 +191,7 @@ const round2 = (x) => Math.round(x * 100) / 100;
  * 對答案：每題的結果與得分、各單元的得分與用時、答對與答錯的題平均花幾秒。
  * 每題 1 分：單選題答對得分；多選題照學測規則部分給分（n 個選項錯 k 個得 (n−2k)/n，最低 0 分），全對才算答對
  * @returns {{ total: number, right: number, wrong: number, blank: number, points: number, secs: number, limit: number,
- *   items: { id: string, q: object, answer: number | number[] | null, right: boolean, blank: boolean, score: number, marked: boolean, secs: number, order: number[], n: number }[],
+ *   items: { id: string, q: Question, answer: number | number[] | null, right: boolean, blank: boolean, score: number, marked: boolean, secs: number, order: number[], n: number }[],
  *   units: { subject: string, unit: string, total: number, right: number, points: number, secs: number }[],
  *   avgRight: number | null, avgWrong: number | null }}
  */
@@ -257,7 +263,7 @@ export function cleanExamEntry(e) {
 
 /**
  * 併進別台的成績（同一時間、同一張卷是同一筆），依時間排好，只留最近 KEEP_EXAMS 次。回傳新增了幾筆。
- * @param {object} state
+ * @param {AppState} state
  * @param {unknown[]} incoming
  */
 export function mergeExams(state, incoming) {

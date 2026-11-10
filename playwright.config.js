@@ -20,6 +20,8 @@ export default defineConfig({
   projects: [
     { name: 'phone', use: { ...devices['Pixel 7'] } },
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
+    // Safari 的引擎（WebKit）：iPhone 上所有瀏覽器都是它
+    { name: 'iphone', use: { ...devices['iPhone 14'] } },
   ],
   webServer: {
     command: 'npx vite preview --port 4173 --strictPort',

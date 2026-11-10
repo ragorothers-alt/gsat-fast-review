@@ -138,6 +138,7 @@ function niceStep(raw) {
  * 座標軸的範圍與刻度：沒指定就從資料取整齊的範圍（約 5 格）；資料都不小於 0、而且最小值不到最大值的一半時從 0 開始
  * @param {number[]} values
  * @param {{ min?: number, max?: number, step?: number }} [axis]
+ * @returns {Scale}
  */
 export function scale(values, axis = {}) {
   let lo = Math.min(...values);
@@ -187,7 +188,20 @@ function smoothPath(p) {
   return d;
 }
 
-/** 畫框、格線、刻度與軸標題；回傳 SVG 片段。right：右邊另一條軸（氣候圖的降水量） */
+/** @typedef {{ min: number, max: number, step: number, ticks: number[] }} Scale 座標軸的範圍與刻度（scale 的結果） */
+
+/**
+ * 畫框、格線、刻度與軸標題；回傳 SVG 片段。right：右邊另一條軸（氣候圖的降水量）
+ * @param {{
+ *   box: { l: number, r: number, t: number, b: number },
+ *   xs?: Scale,
+ *   ys: Scale,
+ *   xLabel?: string,
+ *   yLabel: string,
+ *   xTicks: [x: number, label: string, grid: boolean][],
+ *   right?: { scale: Scale, label: string },
+ * }} opts xs：橫軸是數值時才有（長條圖、氣候圖的橫軸是類別）；xTicks：橫軸每個刻度的位置、文字、要不要畫格線
+ */
 function frame({ box, xs, ys, xLabel, yLabel, xTicks, right }) {
   const { l, r, t, b } = box;
   let s = '';
@@ -221,6 +235,7 @@ function frame({ box, xs, ys, xLabel, yLabel, xTicks, right }) {
   return s;
 }
 
+/** @param {Figure} fig */
 function plotXY(fig) {
   const pts = [...fig.series.flatMap((s) => s.points), ...(fig.marks ?? []).map((m) => [m.x, m.y])];
   const xs = scale(pts.map((p) => p[0]), fig.x);
@@ -247,6 +262,7 @@ function plotXY(fig) {
   return s;
 }
 
+/** @param {Figure} fig */
 function plotBar(fig) {
   const ys = scale([0, ...fig.series.flatMap((s) => s.values)], { min: 0, ...fig.y });
   const box = { l: 44, r: W - 12, t: 10, b: H - (fig.x.label ? 36 : 22) };
@@ -266,6 +282,7 @@ function plotBar(fig) {
   return s;
 }
 
+/** @param {Figure} fig */
 function plotClimate(fig) {
   const ts = scale(fig.temp, {});
   const rs = scale([0, ...fig.rain], { min: 0 });
@@ -290,6 +307,8 @@ const hasDots = (fig, ser) => fig.type === 'scatter' || (!ser.smooth && ser.poin
 /**
  * 圖表的 HTML。rich：把一段文字（可能含 $…$ 公式）轉成 HTML 的函式，只有表格的儲存格與標題會用到；
  * 沒給就只做跳脫（測試用）。
+ * @param {Figure} fig
+ * @param {(text: string) => string} [rich]
  */
 export function figureHTML(fig, rich = esc) {
   const title = fig.title ? `<figcaption class="fig-title">${fig.type === 'table' ? rich(fig.title) : esc(fig.title)}</figcaption>` : '';
@@ -312,7 +331,10 @@ export function figureHTML(fig, rich = esc) {
 
 const KIND = { line: '折線圖', scatter: '散布圖', bar: '長條圖', climate: '氣候圖', table: '表' };
 
-/** 圖表的文字敘述：螢幕閱讀器念的、複製給 AI 的（AI 看不到圖，要把數據寫出來） */
+/**
+ * 圖表的文字敘述：螢幕閱讀器念的、複製給 AI 的（AI 看不到圖，要把數據寫出來）
+ * @param {Figure} fig
+ */
 export function figureText(fig) {
   const head = `${KIND[fig.type]}${fig.title ? `「${fig.title}」` : ''}`;
   if (fig.type === 'table') return `${head}：${fig.cols.join('｜')}；${fig.rows.map((r) => r.map((c) => (typeof c === 'number' ? fmt(c) : c)).join('｜')).join('；')}`;

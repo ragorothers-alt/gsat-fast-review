@@ -19,8 +19,8 @@ function grams(q) {
 
 /**
  * 與 q 最相近的幾題（不含 q 本身）。
- * @param {object[]} bank
- * @param {object} q
+ * @param {Question[]} bank
+ * @param {Question} q
  * @param {{ count?: number, exclude?: Iterable<string> }} [opts] exclude：不要出的題目 id
  */
 export function relatedQuestions(bank, q, { count = 3, exclude = [] } = {}) {
@@ -55,6 +55,8 @@ export function relatedQuestions(bank, q, { count = 3, exclude = [] } = {}) {
 
 /**
  * 錯題延伸練習的一輪：每題錯題各找幾題相近的，輪流排，讓每題錯題都練到。
+ * @param {Question[]} bank
+ * @param {Question[]} seeds 錯題
  * @param {{ size: number, perSeed?: number, exclude?: Iterable<string> }} opts
  */
 export function relatedQueue(bank, seeds, { size, perSeed = 3, exclude = [] }) {

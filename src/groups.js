@@ -7,8 +7,8 @@ const idNumber = (q) => Number(q.id.slice(q.id.lastIndexOf('-') + 1));
 
 /**
  * 把題目分成一包一包：沒有題組的一題一包；同組的題目併成一包，放在這組第一次出現的位置，包裡照題號排。
- * @param {object[]} list
- * @returns {object[][]}
+ * @param {Question[]} list
+ * @returns {Question[][]}
  */
 export function bundles(list) {
   const out = [];
@@ -35,7 +35,9 @@ export const keepTogether = (list) => bundles(list).flat();
 
 /**
  * 依序取到 size 題，題組不拆開：最後一包放不下也整包放進來（最多多出一組的題數）
- * @param {object[][]} packs
+ * @param {Question[][]} packs
+ * @param {number} size
+ * @returns {Question[]}
  */
 export function takeBundles(packs, size) {
   const out = [];
@@ -69,8 +71,8 @@ export function groupKind(q) {
 
 /**
  * 共用選項的題組裡，這一格以外已經填掉的選項（原始選項索引）
- * @param {object} q 這一格
- * @param {{ q: object, value: number | null }[]} filled 同一輪做過的題目與填的選項（作答畫面是正解，模擬考是自己選的）
+ * @param {Question} q 這一格
+ * @param {{ q: Question, value: number | null }[]} filled 同一輪做過的題目與填的選項（作答畫面是正解，模擬考是自己選的）
  */
 export function usedOptions(q, filled) {
   const used = new Set();

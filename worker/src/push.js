@@ -50,6 +50,9 @@ async function hkdf(salt, ikm, info, bytes) {
 /**
  * RFC 8291：用瀏覽器給的 p256dh、auth 加密推播內容，回傳 aes128gcm 格式的訊息本體。
  * salt、serverKeys 只有測試（對照 RFC 的範例數值）才需要指定。
+ * @param {Uint8Array} plaintext
+ * @param {{ p256dh: string, auth: string }} keys
+ * @param {{ salt?: Uint8Array, serverKeys?: CryptoKeyPair }} [opts]
  */
 export async function encryptPayload(plaintext, { p256dh, auth }, { salt, serverKeys } = {}) {
   const uaPublic = fromB64url(p256dh);

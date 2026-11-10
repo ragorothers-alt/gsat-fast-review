@@ -128,6 +128,7 @@ export function foldLegacy(state, daily, now) {
 
 const pack = (c) => [c.box, c.due, c.seen, c.right, c.wrong, c.parked ? 1 : 0, c.last, everMissed(c) ? 1 : 0];
 // 舊版後端只回 7 欄（沒有 missed）：cleanCard 會從次數與盒子推回來
+/** @param {unknown[]} row 雲端回來的一列（欄位數與內容都還沒檢查，交給 cleanCard） */
 const unpack = ([box, due, seen, right, wrong, parked, last, missed]) => cleanCard({ box, due, seen, right, wrong, parked: !!parked, last, missed });
 
 /**
@@ -145,6 +146,7 @@ export function buildPush(state) {
     .filter(([day]) => day >= fromDay)
     .map(([day, d]) => [c.device, day, d.answered, d.right]);
   if (c.legacyDirty) for (const [day, d] of Object.entries(c.legacy)) daily.push(['', day, d.answered, d.right]);
+  /** @type {{ flags?: Record<string, [number, number]>, stars?: Record<string, [number, number]> }} 題目 id → [時間, 1 標記／0 取消] */
   const marks = {};
   for (const kind of MARKS) {
     const out = (marks[kind] = {});

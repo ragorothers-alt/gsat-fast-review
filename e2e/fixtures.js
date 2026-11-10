@@ -4,9 +4,20 @@ import AxeBuilder from '@axe-core/playwright';
 import { test as base, expect } from '@playwright/test';
 
 export const test = base.extend({
-  page: async ({ page }, use) => {
+  // iPhone 的 Safari 練過一輪後會跳出「加入主畫面」的提醒，蓋住首頁。預設當成已經看過；要測提醒本身的測試用 test.use({ installHint: true })
+  installHint: [false, { option: true }],
+  page: async ({ page, installHint }, use) => {
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
+    if (!installHint) {
+      await page.addInitScript(() => {
+        try {
+          localStorage.setItem('gsat-quiz:install-hint', String(Date.now()));
+        } catch {
+          // 存不了就算了
+        }
+      });
+    }
     // 固定亂數種子：每次跑都出同一批題目、同樣的選項順序，無障礙檢查掃到的畫面一樣，失敗才重現得出來
     await page.addInitScript(() => {
       let seed = 20261104;
@@ -29,6 +40,16 @@ export { expect };
 
 /** 無障礙檢查（axe）：只看嚴重的問題；3D 畫布是裝飾（aria-hidden），不檢查 */
 export async function audit(page, where) {
+  // 剛換深淺色時文字顏色還在過場：繼承來的顏色在 Safari 是一層一層接力換的（html → body → … → 題幹，約 0.2 秒），
+  // 等內文換成這個主題的墨色、而且沒有任何過場還在跑再檢查，不然會量到換到一半的對比
+  await page.waitForFunction(() => {
+    const probe = document.createElement('i');
+    probe.style.cssText = 'color:var(--ink);transition:none;position:absolute;visibility:hidden';
+    document.body.append(probe);
+    const ink = getComputedStyle(probe).color;
+    probe.remove();
+    return getComputedStyle(document.body).color === ink && !document.getAnimations().some((a) => a instanceof CSSTransition);
+  });
   const { violations } = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']).exclude('#world').analyze();
   const serious = violations
     .filter((v) => v.impact === 'serious' || v.impact === 'critical')

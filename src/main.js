@@ -2,6 +2,7 @@ import 'katex/dist/katex.min.css';
 import './styles.css';
 import { BANK_SUBJECTS, loadBank, sortBank } from './data/bank.js';
 import { initErrorReporting, setErrorReporting } from './errors.js';
+import { setQuestionReporting } from './report.js';
 import { KEY, absorbState, loadState, saveState, requestPersistence } from './storage.js';
 import { initAbout } from './ui/about.js';
 import { applyAppearance, watchSystemTheme } from './ui/appearance.js';
@@ -28,6 +29,7 @@ initErrorReporting();
 
 const state = loadState();
 setErrorReporting(state.settings.reportErrors);
+setQuestionReporting(state.settings.reportErrors);
 // 貓咪在各畫面要對齊的位置：首頁書架區、題目卡上緣、成績卡上緣（含模擬考）、學習分析的概況卡上緣、錯題本的說明卡上緣
 const world = lazyWorld(document.querySelector('#world'), {
   home: () => document.querySelector('#home .stage').getBoundingClientRect(),

@@ -20,7 +20,7 @@ export const LEARNED_BOX = 5;
  * 兩者都不算答對次數，所以會留在錯題本，之後隔開時間答對才離開。
  * 還沒到期就又答對（例如連刷好幾輪錯題）不升盒、排程照舊：間隔重複要隔開時間答對才算數。
  * missed：失手過就記 1，之後不再變回 0（同步合併時取較大值，見 everMissed）。
- * @param {object|undefined} card 舊紀錄（沒看過則為 undefined）
+ * @param {Card | undefined} card 舊紀錄（沒看過則為 undefined）
  * @param {'right'|'wrong'|'skip'|'guess'|'unsure'} outcome skip = 不會、直接看解答
  * @param {number} now
  */
@@ -140,9 +140,9 @@ export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
  * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。
  * 新題依學測分量與單元熟練度排（priority.js）：考得多、還不熟的單元先出。
  * 答對過、從沒失手的題目不再出（neverMissed）。
- * @param {object[]} bank
- * @param {Record<string, object>} cards
- * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, size: number, now: number, rng?: () => number }} opts
+ * @param {Question[]} bank
+ * @param {Record<string, Card>} cards
+ * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, examAt?: number | null, size: number, now: number, rng?: () => number }} opts
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
  *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題、閱讀題組和圖表題
  *   streak：這批之前剛連續做了幾題複習。自由練習一批出完再補下一批時接著算，兩批交界才不會一連出 4 題複習
@@ -221,6 +221,13 @@ export function buildQueue(
   return out;
 }
 
+/**
+ * 原地打亂（Fisher–Yates），回傳同一個陣列
+ * @template T
+ * @param {T[]} arr
+ * @param {() => number} [rng]
+ * @returns {T[]}
+ */
 export function shuffle(arr, rng = Math.random) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(rng() * (i + 1));

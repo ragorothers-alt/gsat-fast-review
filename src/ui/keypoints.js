@@ -40,7 +40,7 @@ export function initKeypoints(ctx) {
     $('#kp-body').hidden = true;
     status.hidden = false;
     status.textContent = '載入中…';
-    let card = null;
+    let card;
     try {
       card = (await loadKeypoints(subject))?.find((c) => c.unit === unit) ?? null;
     } catch {

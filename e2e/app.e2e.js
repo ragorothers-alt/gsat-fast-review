@@ -1,5 +1,5 @@
 // 主要流程：首頁、作答到結算、收藏與搜尋、設定、手機橫放、離線開啟
-import { answerFirst, answerToResult, expect, openHome, roundSize, skipToResult, skipToSingle, startMode, test, waitForBoot } from './fixtures.js';
+import { answerFirst, answerToResult, audit, expect, openHome, roundSize, skipToResult, skipToSingle, startMode, test, waitForBoot } from './fixtures.js';
 
 test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await openHome(page);
@@ -23,6 +23,32 @@ test('首頁的「還沒做過」題數作答後減少；「看存量」打開�
   // 展開一科看各單元還剩幾題
   await page.locator('#stock-subjects summary').first().click();
   await expect(page.locator('#stock-subjects details[open] .stock-unit').first()).toContainText(/剩 \d+／\d+/);
+});
+
+test.describe('iPhone 的 Safari', () => {
+  test.use({ installHint: true });
+
+  test('練過一輪回到首頁時提醒加入主畫面；按「知道了」之後這次不再跳出來', async ({ page, browserName, isMobile }) => {
+    test.skip(!(browserName === 'webkit' && isMobile), '只有 iPhone 的 Safari 直接開網頁時才提醒');
+    // 面板是淡入的：關掉動畫，無障礙檢查才不會量到淡入到一半的對比
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await openHome(page);
+    await expect(page.locator('#install-sheet')).toBeHidden();
+    await startMode(page, 'ten');
+    await skipToResult(page);
+    await page.locator('#r-home').click();
+    // 練滿 10 題才提醒；按掉之後記下時間，30 天內不再提醒
+    await expect(page.locator('#install-sheet')).toBeVisible();
+    await audit(page, '加入主畫面的提醒');
+    await page.locator('#install-ok').click();
+    await expect(page.locator('#install-sheet')).toBeHidden();
+    expect(Number(await page.evaluate(() => localStorage.getItem('gsat-quiz:install-hint')))).toBeGreaterThan(Date.now() - 60_000);
+    await startMode(page, 'ten');
+    await skipToResult(page);
+    await page.locator('#r-home').click();
+    await expect(page.locator('#home')).toBeVisible();
+    await expect(page.locator('#install-sheet')).toBeHidden();
+  });
 });
 
 test('10 題一輪：作答到結算，算進今日進度', async ({ page }) => {

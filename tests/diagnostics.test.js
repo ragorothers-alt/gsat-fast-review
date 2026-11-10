@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import worker, { logError } from '../worker/src/index.js';
+import worker, { logError, reportQuestion as reportToServer } from '../worker/src/index.js';
 import { errorEntry, firstFrame } from '../src/errors.js';
+import { reportQuestion, setQuestionReporting } from '../src/report.js';
 import { speechText } from '../src/ui/speech.js';
 import { createD1 } from './helpers/d1.js';
 
@@ -72,5 +73,51 @@ describe('同步後端收錯誤回報', () => {
     const env = { DB: createD1() };
     for (let i = 0; i < 505; i++) await logError(env.DB, { version: 'abc1234', message: `e${i}` }, 1000);
     expect(env.DB.raw.prepare('SELECT count(*) AS n FROM errors').get().n).toBe(500);
+  });
+});
+
+describe('回報題目', () => {
+  const post = (env, body) => worker.fetch(new Request('https://sync.test/v1/report', { method: 'POST', body: JSON.stringify(body) }), env);
+
+  it('後端照題號累計次數，記下最近一次回報的版本；題號或版本格式不對回 400', async () => {
+    const env = { DB: createD1() };
+    expect((await post(env, { id: 'math-0123', version: 'abc1234' })).status).toBe(200);
+    expect((await post(env, { id: 'math-0123', version: 'def5678' })).status).toBe(200);
+    expect((await post(env, { id: 'earth-001', version: 'dev' })).status).toBe(200);
+    for (const bad of [{ id: 'math-1', version: 'abc1234' }, { id: 'nope-001', version: 'abc1234' }, { id: 'math-0123' }, { id: 123, version: 'abc1234' }, {}]) {
+      expect((await post(env, bad)).status).toBe(400);
+    }
+    const rows = await env.DB.prepare('SELECT id, count, version FROM reports ORDER BY count DESC').all();
+    expect(rows.results).toEqual([
+      { id: 'math-0123', count: 2, version: 'def5678' },
+      { id: 'earth-001', count: 1, version: 'dev' },
+    ]);
+  });
+
+  it('最多留 3000 題：留最近被回報的', async () => {
+    const env = { DB: createD1() };
+    for (let i = 0; i < 3005; i++) await reportToServer(env.DB, { id: `math-${String(i + 1).padStart(4, '0')}`, version: 'abc1234' }, 1000 + i);
+    expect(env.DB.raw.prepare('SELECT count(*) AS n FROM reports').get().n).toBe(3000);
+    expect(env.DB.raw.prepare("SELECT count(*) AS n FROM reports WHERE id = 'math-0001'").get().n).toBe(0);
+    expect(env.DB.raw.prepare("SELECT count(*) AS n FROM reports WHERE id = 'math-3005'").get().n).toBe(1);
+  });
+
+  it('前端：正式版才送，同一題開一次 App 只送一次；設定關掉就不送', () => {
+    const calls = [];
+    const send = (url, init) => {
+      calls.push([url, JSON.parse(init.body)]);
+      return Promise.reject(new Error('offline'));
+    };
+    expect(reportQuestion('math-0001', { send, prod: false })).toBe(false);
+    expect(reportQuestion('math-0001', { send, prod: true })).toBe(true);
+    expect(reportQuestion('math-0001', { send, prod: true })).toBe(false);
+    setQuestionReporting(false);
+    expect(reportQuestion('math-0002', { send, prod: true })).toBe(false);
+    setQuestionReporting(true);
+    expect(reportQuestion('math-0002', { send, prod: true })).toBe(true);
+    expect(calls.map(([url, body]) => [url.replace(/^.*\/v1/, '/v1'), body.id, typeof body.version])).toEqual([
+      ['/v1/report', 'math-0001', 'string'],
+      ['/v1/report', 'math-0002', 'string'],
+    ]);
   });
 });

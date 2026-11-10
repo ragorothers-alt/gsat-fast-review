@@ -68,6 +68,7 @@ export default {
       if (pathname === '/v1/push/unsubscribe') return json(await unsubscribe(env.DB, body));
       if (pathname === '/v1/push/progress') return json(await progress(env.DB, body, Date.now()));
       if (pathname === '/v1/log') return json(await logError(env.DB, body, Date.now()));
+      if (pathname === '/v1/report') return json(await reportQuestion(env.DB, body, Date.now()));
       throw new HttpError(404, 'not found');
     } catch (e) {
       if (e instanceof HttpError || e instanceof PushError) return json({ error: e.message }, e.status);
@@ -93,7 +94,7 @@ function json(data, status = 200) {
  */
 async function limit(env, req, pathname) {
   const ip = req.headers.get('cf-connecting-ip') ?? 'unknown';
-  const limiter = pathname === '/v1/create' ? env.CREATE_LIMIT : pathname === '/v1/log' ? env.LOG_LIMIT : env.IP_LIMIT;
+  const limiter = pathname === '/v1/create' ? env.CREATE_LIMIT : pathname === '/v1/log' || pathname === '/v1/report' ? env.LOG_LIMIT : env.IP_LIMIT;
   await take(limiter, ip);
 }
 
@@ -298,6 +299,28 @@ export async function logError(db, body, now) {
            (SELECT version, message, source FROM errors ORDER BY last_at DESC, version, message, source LIMIT ?1)`,
       )
       .bind(MAX_ERRORS),
+  ]);
+  return { ok: true };
+}
+
+const MAX_REPORTS = 3000;
+
+/**
+ * 玩家按旗子回報題目有問題：{ id, version }。只累計每一題被回報幾次，不記是誰、也不需要同步碼；
+ * 取消回報不會扣回來（次數只是讓維護者排優先順序）。和錯誤回報共用每個 IP 的請求上限。
+ * 維護者查看：npx wrangler@4 d1 execute gsat-sync --remote --command "SELECT id, count, version FROM reports ORDER BY count DESC, last_at DESC LIMIT 100"
+ */
+export async function reportQuestion(db, body, now) {
+  const version = clip(body.version, 20);
+  if (typeof body.id !== 'string' || !CARD_ID.test(body.id) || !VERSION.test(version)) throw new HttpError(400, 'bad report');
+  await db.batch([
+    db
+      .prepare(
+        `INSERT INTO reports (id, count, version, first_at, last_at) VALUES (?1, 1, ?2, ?3, ?3)
+         ON CONFLICT (id) DO UPDATE SET count = count + 1, last_at = ?3, version = ?2`,
+      )
+      .bind(body.id, version, now),
+    db.prepare(`DELETE FROM reports WHERE id NOT IN (SELECT id FROM reports ORDER BY last_at DESC, id LIMIT ?1)`).bind(MAX_REPORTS),
   ]);
   return { ok: true };
 }

@@ -2,6 +2,7 @@
 // 出問題時按「複製診斷資訊」貼給開發者，不用描述手機的狀況也看得出原因。
 import { cloudOn } from '../cloud.js';
 import { recentErrors, setErrorReporting } from '../errors.js';
+import { setQuestionReporting } from '../report.js';
 import { BUILT_AT, VERSION } from '../version.js';
 import { copyText } from './clipboard.js';
 import { isIOS, isStandalone } from './install.js';
@@ -63,6 +64,7 @@ export function initAbout(ctx) {
   reportBtn.addEventListener('click', () => {
     settings.reportErrors = !settings.reportErrors;
     setErrorReporting(settings.reportErrors);
+    setQuestionReporting(settings.reportErrors);
     reportBtn.setAttribute('aria-checked', String(settings.reportErrors));
     ctx.save();
   });

@@ -107,7 +107,7 @@ for (const scheme of ['light', 'dark']) {
   });
 }
 
-test('長草稿紙：寫到下半部後可以往下捲，格線跟著捲、捲回頂端字還在；滾輪與兩指拖動也能捲', async ({ page }) => {
+test('長草稿紙：寫到下半部後可以往下捲，格線跟著捲、捲回頂端字還在；滾輪與兩指拖動也能捲', async ({ page, browserName, isMobile }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openHome(page);
   await startMode(page, 'free');
@@ -130,12 +130,14 @@ test('長草稿紙：寫到下半部後可以往下捲，格線跟著捲、捲�
   near(await inked(page, [0, 0, 200, 60]), top);
   expect(await inked(page, [215, height - 40, 90, 20])).toBe(0);
 
-  // 滾輪往下
-  const b = await page.locator('#scratch-canvas').boundingBox();
-  await page.mouse.move(b.x + 100, b.y + 100);
-  await page.mouse.wheel(0, 200);
-  await expect.poll(() => gridY(page)).toBeLessThan(0);
-  await scrollToTop(page);
+  // 滾輪往下（Playwright 的手機版 WebKit 沒有滾輪；iPhone 本來也沒有）
+  if (!(browserName === 'webkit' && isMobile)) {
+    const b = await page.locator('#scratch-canvas').boundingBox();
+    await page.mouse.move(b.x + 100, b.y + 100);
+    await page.mouse.wheel(0, 200);
+    await expect.poll(() => gridY(page)).toBeLessThan(0);
+    await scrollToTop(page);
+  }
 
   // 兩指一起往上拖 90px：紙捲 90px
   await page.locator('#scratch-canvas').evaluate(async (c) => {

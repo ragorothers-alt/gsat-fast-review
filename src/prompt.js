@@ -11,7 +11,7 @@ const KIND = { tf: '是非題', mc: '單選題', ms: '多選題' };
 const blanks = (text) => text.replace(/__(\d+)__/g, '($1)');
 
 /**
- * @param {object} q 題目
+ * @param {Question} q 題目
  * @param {{ order?: number[], outcome?: 'right'|'wrong'|'skip'|'review' | null, chosen?: number | number[] | boolean | null, typed?: string }} [opts]
  *   order：畫面上第 i 個選項 → 原始選項索引，讓 (A)–(E) 跟玩家看到的一致
  *   outcome / chosen：作答後才有（chosen 為原始選項索引、多選題的索引陣列或 true/false），會附上玩家的答案、正解與解析；
