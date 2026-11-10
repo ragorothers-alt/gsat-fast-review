@@ -84,9 +84,10 @@ export function initNotebook(ctx) {
   }
 
   // 閱讀題組：題組代號算在題目裡，文章和解析一樣排在後面（搜文章裡的字找得到整組）
+  // 非選擇題沒有選項：參考答案和評分要點算在題目裡
 const indexEntry = (q) => [
   q.id,
-  [norm([q.id, q.group ?? '', SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? [])].join('\n')), norm(q.passage ? `${q.explain}\n${q.passage}` : q.explain)],
+  [norm([q.id, q.group ?? '', SUBJECT_BY_ID[q.subject].name, q.topic, ...(q.links ?? []), q.q, ...(q.choices ?? []), ...(q.type === 'open' ? [q.answer, ...q.points] : [])].join('\n')), norm(q.passage ? `${q.explain}\n${q.passage}` : q.explain)],
 ];
 
   /**

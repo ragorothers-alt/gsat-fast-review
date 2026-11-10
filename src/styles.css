@@ -1641,6 +1641,110 @@ p {
   font-weight: 700;
 }
 
+/* ── 非選擇題：先自己寫，看了參考答案再對照評分要點，自己勾寫到了哪幾個 ─────── */
+/* 參考答案加幾個要點比四個選項高：矮螢幕放不下時作答區自己捲動，題目卡留得住題幹與解析
+   （做法同篇章結構的長句選項：往外撐開一點，對錯記號和陰影才不會被切掉） */
+.card-wrap:has(~ .answers.open) {
+  min-height: clamp(13rem, 38%, 19rem);
+}
+
+.answers.open {
+  flex: 0 1 auto;
+  grid-auto-rows: max-content;
+  min-height: 6.5rem;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: -12px -10px 0;
+  padding: 12px 10px 6px;
+}
+
+.open-hint,
+.open-ask {
+  margin: 0;
+  color: var(--muted);
+  font-size: calc(0.88rem * var(--fs, 1));
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* 窄螢幕會折成兩行：兩行排得差不多長，不要最後一行只剩一個字 */
+.open-hint {
+  text-align: center;
+  text-wrap: balance;
+}
+
+.open-reveal {
+  min-height: 54px;
+  padding: 9px 14px;
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  border: 2px solid var(--ink);
+  box-shadow: var(--pop);
+  font-size: calc(1.05rem * var(--fs, 1));
+  font-weight: 800;
+}
+
+.open-reveal:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--shadow);
+}
+
+/* 參考答案：紙卡的底、細框，和可以按的要點按鈕（粗框、有陰影）分得出來 */
+.open-ref {
+  padding: 9px 14px 10px;
+  border-radius: var(--hand-sm);
+  border: 1.5px solid var(--line-soft);
+  background: var(--card);
+  color: var(--ink);
+  font-size: calc(1.02rem * var(--fs, 1));
+  line-height: 1.6;
+}
+
+.open-ref:focus-visible {
+  outline: 2.5px dashed var(--accent-2-ink);
+  outline-offset: 2px;
+}
+
+.open-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.open-ref-text {
+  overflow-wrap: anywhere;
+}
+
+/* 結算、錯題本、回看上一題：正解下面列出評分要點 */
+.open-points {
+  margin: 0 0 8px;
+  padding-left: 1.4em;
+  color: var(--ink);
+  font-size: calc(0.9rem * var(--fs, 1));
+  line-height: 1.6;
+}
+
+.open-point {
+  overflow-wrap: anywhere;
+}
+
+.ico.open-got {
+  margin: 0 0 0 0.3em;
+}
+
+/* 回看上一題：自評寫到幾個要點、參考答案 */
+.open-note {
+  margin: 10px 0 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.past-card .open-ref {
+  margin: 10px 0 8px;
+}
+
 /* ── 演算題填答：上面是填好的答案，下面是數字鍵盤 ─────── */
 .answers.fill {
   gap: 8px;
@@ -2437,9 +2541,10 @@ p {
   flex: 1;
 }
 
-/* 選了的答案：作答時不對答案，只標出你選了哪個（練習時的多選題送出前也一樣） */
+/* 選了的答案：作答時不對答案，只標出你選了哪個（練習時的多選題送出前、非選擇題自評勾的要點也一樣） */
 .play.exam .answer[aria-pressed='true'],
-.answers.ms .answer[aria-pressed='true'] {
+.answers.ms .answer[aria-pressed='true'],
+.answers.open .answer[aria-pressed='true'] {
   background: color-mix(in srgb, var(--accent) 30%, var(--card));
   border-width: 3px;
   transform: translate(2px, 2px);
@@ -2447,7 +2552,8 @@ p {
 }
 
 .play.exam .answer[aria-pressed='true'] .key,
-.answers.ms .answer[aria-pressed='true'] .key {
+.answers.ms .answer[aria-pressed='true'] .key,
+.answers.open .answer[aria-pressed='true'] .key {
   background: var(--ink);
   border-color: var(--ink);
   color: var(--card);
@@ -4033,13 +4139,17 @@ p {
   /* 選項按鈕排緊一點，把高度留給題目卡 */
   .answers { gap: 8px; }
   .answers.mc .answer,
-  .answers.ms .answer {
+  .answers.ms .answer,
+  .answers.open .answer {
     min-height: 44px;
     padding: 6px 12px;
     font-size: calc(0.98rem * var(--fs, 1));
     line-height: 1.38;
   }
-  .answers.ms { gap: 6px; }
+  .answers.ms,
+  .answers.open { gap: 6px; }
+  .open-reveal { min-height: 48px; }
+  .open-ref { padding: 6px 12px 7px; font-size: calc(0.98rem * var(--fs, 1)); line-height: 1.5; }
   /* 填答：鍵盤壓矮一點，題目卡才不會被擠到要捲動 */
   .answers.fill { gap: 6px; }
   .fill-box { min-height: 42px; padding: 4px 12px; }

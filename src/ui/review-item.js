@@ -1,5 +1,6 @@
 // 結算畫面與錯題本共用的題目卡：科目、單元、發音／收藏／複製／回報按鈕、題目、正解與解析
 import { reportQuestion } from '../report.js';
+import { openNote } from '../session.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { setFlag, setStar } from '../sync.js';
 import { topicLabel } from '../units.js';
@@ -15,19 +16,42 @@ export const tfLabel = (v) => (v ? `${icon('ok')}對` : `${icon('ng')}錯`);
 export const lvTag = (q) => (q.lv ? `<span class="lv-tag" title="大考中心《高中英文參考詞彙表》第 ${q.lv} 級">詞彙表第 ${q.lv} 級</span>` : '');
 
 /**
- * 一個答案的 HTML：是非題是圈叉、單選題是選項、多選題是選了的幾個選項（照原始順序，用「；」隔開）
- * @param {number | number[] | boolean} value
+ * 一個答案的 HTML：是非題是圈叉、單選題是選項、多選題是選了的幾個選項（照原始順序，用「；」隔開）；
+ * 非選擇題只有參考答案（value 是 q.answer），自評寫到哪幾個要點見 mineHTML
+ * @param {number | number[] | boolean | string} value
  */
 export function answerHTML(q, value) {
+  if (q.type === 'open') return richHTML(value);
   if (q.type === 'tf') return tfLabel(value);
   if (q.type === 'ms') return value?.length ? value.map((i) => richHTML(q.choices[i])).join('；') : '沒有選';
   return richHTML(q.choices[value]);
 }
 
-/** 作答紀錄裡你的答案：演算題填的數不是任何一個選項時，顯示填的數 */
+/** 作答紀錄裡你的答案：演算題填的數不是任何一個選項時，顯示填的數；非選擇題是自評寫到幾個要點 */
 export function mineHTML(q, entry) {
+  if (q.type === 'open') return openNote(q, entry.chosen);
   if (entry.typed !== undefined && (entry.chosen === null || entry.chosen === undefined)) return `你填：${entry.typed}`;
   return `${entry.typed !== undefined ? '你填' : '你選'}：${answerHTML(q, entry.chosen)}`;
+}
+
+/**
+ * 非選擇題的參考答案區塊（作答畫面、回看上一題共用）。
+ * region：作答畫面的作答區放不下時會捲動，作答後要點按鈕都停用了，要留一個鍵盤到得了的地方才捲得動
+ */
+export const openRefHTML = (q, region = false) =>
+  `<div class="open-ref"${region ? ' role="region" tabindex="0" aria-label="參考答案"' : ''}><b class="open-label"${region ? ' aria-hidden="true"' : ''}>參考答案</b><div class="open-ref-text">${richHTML(q.answer)}</div></div>`;
+
+/**
+ * 非選擇題的評分要點清單（結算、錯題本、回看上一題）。
+ * @param {Question} q
+ * @param {number[] | null} [got] 自評寫到的要點索引：有給就在那幾個要點蓋圈（回看上一題）
+ */
+export function openPointsHTML(q, got = null) {
+  const items = q.points.map((p, i) => {
+    const hit = got?.includes(i);
+    return `<li class="open-point">${richHTML(p)}${hit ? `${icon('ok', 'open-got')}<span class="sr-only">（寫到了）</span>` : ''}</li>`;
+  });
+  return `<ul class="open-points" aria-label="評分要點">${items.join('')}</ul>`;
 }
 
 /**
@@ -37,12 +61,13 @@ export function mineHTML(q, entry) {
  */
 export function reviewItem(q, { index, flagged, starred, note }) {
   const subj = SUBJECT_BY_ID[q.subject];
+  const open = q.type === 'open';
   const answer = answerHTML(q, q.answer);
   return `<li class="r-item" style="--c:${subj.color}">
     <div class="card-tag"><span class="tag">${subj.name}</span><button type="button" class="topic topic-link" data-kp="${q.subject}/${q.topic}" title="看這個單元的考前重點">${topicLabel(q)}</button>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="${index}" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${starred}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
     ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
-    <div class="r-ans">${note}<span class="r-right">正解：${answer}</span>${lvTag(q)}</div>
-    <div class="r-explain">${richHTML(q.explain)}</div>
+    <div class="r-ans">${note}<span class="r-right">${open ? '參考答案' : '正解'}：${answer}</span>${lvTag(q)}</div>
+    ${open ? openPointsHTML(q) : ''}<div class="r-explain">${richHTML(q.explain)}</div>
   </li>`;
 }
 

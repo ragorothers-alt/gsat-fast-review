@@ -12,8 +12,8 @@ const KNOWN = 0.6;
 /** 比同一科的平均慢這麼多倍才算慢 */
 const SLOW = 1.4;
 
-/** 這題要不要計時：演算題、多選題、題組（要讀文章）和圖表題本來就久，不和一般題混在一起比 */
-export const isTimed = (q) => !q.scratch && !q.group && !q.fig && q.type !== 'ms';
+/** 這題要不要計時：演算題、多選題、非選擇題（要自己寫出答案）、題組（要讀文章）和圖表題本來就久，不和一般題混在一起比 */
+export const isTimed = (q) => !q.scratch && !q.group && !q.fig && q.type !== 'ms' && q.type !== 'open';
 
 /**
  * 記下這題花的時間（看解答的不算）。state.pace：單元（unitKey）→ { n, t, rn, rt }：

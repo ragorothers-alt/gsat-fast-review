@@ -4,7 +4,7 @@ import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, examStart, isLeech, missCount, neverMissed, schedule, shuffle } from '../srs.js';
 import { recordPace } from '../pace.js';
 import { reportQuestion } from '../report.js';
-import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, submit, tick, multiplier } from '../session.js';
+import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, openNote, submit, tick, multiplier } from '../session.js';
 import { fillUnit, fillable, matchTyped, parseTyped } from '../numeric.js';
 import { currentUnit, followUp, markCleared, pathProgress, pathUnits, resumeRun, settleRuns } from '../path.js';
 import { bundles, isBank, takeBundles, usedOptions } from '../groups.js';
@@ -15,7 +15,7 @@ import { setFlag, setStar } from '../sync.js';
 import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { openKeypointsFrom } from './keypoints.js';
-import { lvTag } from './review-item.js';
+import { lvTag, openRefHTML } from './review-item.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
 import { sfx } from './feedback.js';
@@ -77,6 +77,8 @@ export function initPlay(ctx) {
     status: $('#answer-status'),
   };
   const byId = ctx.byId;
+  // 非選擇題借用多選題的送出按鈕、把字換成「送出自評」，多選題要換回來
+  const sendLabel = el.msSend.textContent;
   initReadFull();
   // 最近是用鍵盤操作（不是點螢幕）：換題後把焦點放回選項上，不會掉回頁首
   let keyboard = false;
@@ -87,7 +89,8 @@ export function initPlay(ctx) {
   let q = null;
   let rounds = 0; // 開過幾輪：草稿區每輪每題一頁（見 ui/scratch.js）
   let order = null; // 單選、多選題：畫面上第 i 個按鈕 → 原始選項索引
-  let picked = new Set(); // 多選題：目前選了畫面上的哪幾個
+  let picked = new Set(); // 多選題：目前選了畫面上的哪幾個；非選擇題：自評勾了哪幾個要點
+  let revealed = false; // 非選擇題：已經看了參考答案（看了才能自評）
   let fill = null; // 演算題填答中：{ text } 是目前填的字；改看選項或作答後為 null
   let useChoices = false; // 這題已經改用選項作答
   let pendingRelated = []; // 這題答錯後可以接著練的類似題
@@ -332,7 +335,7 @@ export function initPlay(ctx) {
     el.topic.innerHTML =
       (where ? `${where}・` : '') +
       (s.extra.has(q.id) ? `${icon('loop')}${topicLabel(q)}・類似題` : topicLabel(q)) +
-      (q.scratch ? '・演算題' : q.type === 'ms' ? '・多選' : '');
+      (q.scratch ? '・演算題' : q.type === 'ms' ? '・多選' : q.type === 'open' ? '・非選' : '');
     useChoices = false;
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
@@ -350,12 +353,13 @@ export function initPlay(ctx) {
     el.card.classList.toggle('swipeable', q.type === 'tf');
     renderMarks();
     stopSpeaking();
-    el.speak.hidden = !canSpeak(q);
+    // 非選擇題（中譯英）念的是參考答案：看了參考答案才給發音按鈕
+    el.speak.hidden = !canSpeak(q) || q.type === 'open';
     resetCardDrag();
     restartAnimation(el.card, 'enter');
     renderAnswers();
     el.status.textContent = '';
-    if (keyboard && !looking) el.answers.querySelector('.answer')?.focus({ preventScroll: true });
+    if (keyboard && !looking) el.answers.querySelector('.answer, .open-reveal')?.focus({ preventScroll: true });
     fitCard();
     ctx.scratch.newPage(q, `play-${s.round}-${s.index}`);
     ctx.world.setFocusSubject(q.subject);
@@ -366,6 +370,8 @@ export function initPlay(ctx) {
     el.answers.innerHTML = '';
     picked = new Set();
     fill = null;
+    revealed = false;
+    if (q.type === 'open') return renderOpen();
     if (q.type === 'tf') {
       el.answers.className = 'answers tf';
       // 與滑動方向一致：左錯右對
@@ -396,16 +402,17 @@ export function initPlay(ctx) {
       btn.setAttribute('aria-pressed', 'false');
       el.answers.append(btn);
     });
+    el.msSend.textContent = sendLabel;
     el.msSend.hidden = false;
     renderMultiSend();
   }
 
-  /** 一個都還沒選時「送出」按不下去 */
+  /** 多選題一個都還沒選時「送出」按不下去；非選擇題的自評一個要點都沒寫到也可以送出 */
   function renderMultiSend() {
-    el.msSend.disabled = !picked.size;
+    el.msSend.disabled = q.type === 'ms' && !picked.size;
   }
 
-  el.msSend.addEventListener('click', submitMulti);
+  el.msSend.addEventListener('click', () => (q?.type === 'open' ? submitOpen() : submitMulti()));
 
   function toggleMulti(value) {
     if (picked.has(value)) picked.delete(value);
@@ -447,6 +454,61 @@ export function initPlay(ctx) {
     }
     const answers = q.answer.map((i) => plainText(buttonFor(order.indexOf(i)).querySelector('.answer-text')));
     el.status.textContent = outcome === 'right' ? '全對！' : `${outcome === 'wrong' ? `${msNote(q, chosen)}。` : ''}正解是：${answers.join('；')}`;
+  }
+
+  // ── 非選擇題：先自己寫，看了參考答案再對照評分要點，自己勾寫到了哪幾個 ───────────
+  function renderOpen() {
+    el.answers.className = 'answers open';
+    el.answers.innerHTML = '<p class="open-hint">先在草稿區或紙上寫出答案，再對照參考答案自己評分</p><button type="button" class="open-reveal">看參考答案</button>';
+    el.answers.querySelector('.open-reveal').addEventListener('click', revealOpen);
+  }
+
+  /** 作答區換成參考答案與評分要點（每個要點一顆按鈕）：按「看參考答案」，或還沒看就按「不會」時 */
+  function showOpenAnswer() {
+    revealed = true;
+    el.answers.innerHTML = `${openRefHTML(q, true)}<p class="open-ask">你寫到了哪幾個要點？</p>`;
+    q.points.forEach((p, i) => el.answers.append(answerButton(richHTML(p), i, String(i + 1), true)));
+    el.speak.hidden = !canSpeak(q);
+  }
+
+  const openRefText = () => plainText(el.answers.querySelector('.open-ref-text'));
+
+  function revealOpen() {
+    if (phase !== 'answering' || q.type !== 'open' || revealed) return;
+    showOpenAnswer();
+    for (const b of el.answers.querySelectorAll('.answer')) b.setAttribute('aria-pressed', 'false');
+    el.msSend.textContent = '送出自評';
+    el.msSend.hidden = false;
+    renderMultiSend();
+    fitCard();
+    el.status.textContent = `參考答案：${openRefText()}。你寫到了哪幾個要點？`;
+    // 「看參考答案」那顆按鈕不見了：用鍵盤操作時焦點接到第一個要點
+    if (keyboard) el.answers.querySelector('.answer').focus({ preventScroll: true });
+  }
+
+  function submitOpen() {
+    if (phase !== 'answering' || q.type !== 'open' || !revealed) return;
+    const chosen = [...picked].sort((a, b) => a - b);
+    resolve(isCorrect(q, chosen) ? 'right' : 'wrong', null, chosen);
+  }
+
+  /** 非選擇題作答後：自評寫到的要點打圈、沒寫到的淡掉；按「不會」時列出參考答案與要點，都不勾 */
+  function markOpen(outcome, chosen) {
+    el.msSend.hidden = true;
+    if (!revealed) showOpenAnswer();
+    el.answers.querySelector('.open-ask').textContent = '評分要點';
+    const mine = new Set(chosen ?? []);
+    for (const b of el.answers.querySelectorAll('.answer')) {
+      b.disabled = true;
+      b.removeAttribute('aria-pressed');
+      if (mine.has(b._value)) {
+        b.classList.add('correct');
+        b.insertAdjacentHTML('beforeend', `${icon('ok', 'mark')}<span class="sr-only">（寫到了）</span>`);
+      } else if (outcome !== 'skip') b.classList.add('dim');
+    }
+    el.answers.scrollTop = 0;
+    updateAnswersMore();
+    el.status.textContent = outcome === 'skip' ? `參考答案：${openRefText()}` : openNote(q, chosen);
   }
 
   // ── 演算題填答：先自己算出答案填進去（像學測選填），不先看選項；算不出來可以改看選項 ──
@@ -590,8 +652,8 @@ export function initPlay(ctx) {
 
   function choose(value) {
     if (phase !== 'answering') return null;
-    // 多選題點選項只是切換選取，按「送出」才作答
-    if (q.type === 'ms') return toggleMulti(value), null;
+    // 多選題點選項只是切換選取，按「送出」才作答；非選擇題的評分要點也是
+    if (q.type === 'ms' || q.type === 'open') return toggleMulti(value), null;
     const chosen = q.type === 'mc' ? order[value] : value;
     const outcome = isCorrect(q, chosen) ? 'right' : 'wrong';
     resolve(outcome, value, chosen);
@@ -600,8 +662,8 @@ export function initPlay(ctx) {
 
   /**
    * @param {'right'|'wrong'|'skip'} outcome
-   * @param displayValue 被點的按鈕值（skip、多選題，以及填的答案不是任何一個選項時為 null）
-   * @param chosen 原始選項索引（多選題是陣列）
+   * @param displayValue 被點的按鈕值（skip、多選題、非選擇題，以及填的答案不是任何一個選項時為 null）
+   * @param chosen 原始選項索引（多選題是陣列；非選擇題是自評寫到的要點索引陣列）
    * @param {string | null} typed 演算題填的答案
    */
   function resolve(outcome, displayValue, chosen, typed = null) {
@@ -615,14 +677,16 @@ export function initPlay(ctx) {
     const card = ctx.state.cards[q.id];
     s.reviewRun = card ? s.reviewRun + 1 : 0;
     ctx.state.cards[q.id] = schedule(card, outcome, now);
-    lastRight = outcome === 'right' ? { id: q.id, before: card, at: now } : null;
+    const open = q.type === 'open';
+    // 非選擇題是自評，寫到幾個要點已經表達了把握，不另外問「猜的／不太確定」
+    lastRight = outcome === 'right' && !open ? { id: q.id, before: card, at: now } : null;
     const before = today(ctx.state, now).answered;
     recordAnswer(ctx.state, outcome, now);
     recordPace(ctx.state, q, outcome, (now - shownAt - pausedMs - (pauseStart ? now - pauseStart : 0)) / 1000);
     const points = submit(s, outcome, chosen);
     // 記下當時的選項順序：回看上一題、複製題目時 (A)–(D) 跟畫面一致
     const entry = s.log[s.log.length - 1];
-    if (q.type !== 'tf') entry.order = order;
+    if (q.type !== 'tf' && !open) entry.order = order;
     if (typed !== null) entry.typed = typed;
     el.back.hidden = true;
     if (s.path) {
@@ -635,8 +699,9 @@ export function initPlay(ctx) {
     const goal = ctx.state.settings.goal;
     if (before < goal && today(ctx.state, now).answered >= goal) ctx.toast(`今日 ${goal} 題目標達成！`);
 
-    const correctValue = q.type === 'tf' ? q.answer : order.indexOf(q.type === 'ms' ? q.answer[0] : q.answer);
-    if (q.type === 'ms') markMulti(outcome, chosen);
+    const correctValue = open ? null : q.type === 'tf' ? q.answer : order.indexOf(q.type === 'ms' ? q.answer[0] : q.answer);
+    if (open) markOpen(outcome, chosen);
+    else if (q.type === 'ms') markMulti(outcome, chosen);
     else {
       // 除了紅綠底色，再像老師批改一樣蓋上圈叉：分不出紅綠的人也看得出對錯；螢幕閱讀器另外念「（正解）」「（你選的）」
       for (const b of el.answers.children) {
@@ -662,11 +727,12 @@ export function initPlay(ctx) {
     ctx.world.react(outcome);
     ctx.scratch.answered();
     if (outcome === 'right') {
-      const rect = buttonFor(correctValue).getBoundingClientRect();
+      // 非選擇題沒有正解按鈕：特效從作答區中間噴出來
+      const rect = (open ? el.answers : buttonFor(correctValue)).getBoundingClientRect();
       ctx.world.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, color, 30 + Math.min(s.combo, 10) * 4);
       sfx.right(s.combo);
       showPop(`+${points}`);
-      showCertainty();
+      if (!open) showCertainty();
       if (!MODES[s.mode].explainAlways) {
         el.skip.hidden = true;
         el.next.hidden = false;
@@ -804,7 +870,7 @@ export function initPlay(ctx) {
     if (!q) return;
     // 作答後附上自己的答案、正解與解析；作答前只給題目，請它教怎麼解
     const entry = phase === 'feedback' ? s.log[s.log.length - 1] : null;
-    copyQuestion(questionPrompt(q, { order: q.type === 'tf' ? undefined : order, ...entry }), ctx.toast);
+    copyQuestion(questionPrompt(q, { order: q.type === 'tf' || q.type === 'open' ? undefined : order, ...entry }), ctx.toast);
   });
 
   el.flag.addEventListener('click', () => {
@@ -970,6 +1036,22 @@ export function initPlay(ctx) {
         e.preventDefault();
         typeKey(k);
       } else if (e.key === '?') el.skip.click();
+      return;
+    }
+    if (q.type === 'open') {
+      if (e.key === '?' || e.key === '0') el.skip.click();
+      else if (!revealed) {
+        // 還沒看參考答案：Enter、空白鍵就是看；焦點在按鈕上（「看參考答案」本身、收藏、回報…）時交給那個按鈕
+        if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest?.('button, a, input, select, textarea')) {
+          e.preventDefault();
+          revealOpen();
+        }
+      } else if (/^[1-4]$/.test(e.key) && Number(e.key) <= q.points.length) choose(Number(e.key) - 1);
+      // 看了之後和多選題一樣：數字鍵或空白鍵勾要點，Enter 送出自評（焦點停在要點上也是）
+      else if (e.key === 'Enter' && (!e.target.closest?.('button') || e.target.closest('#answers .answer'))) {
+        e.preventDefault();
+        submitOpen();
+      }
       return;
     }
     if (q.type === 'ms') {

@@ -61,4 +61,14 @@ describe('題庫猜題線索（scripts/lint-cues.mjs）', () => {
     expect(cuesOf(q)).toContain('explain');
     expect(cuesOf({ ...q, explain: '代入 $x=3$，得 $9=q(3)+5$，故 $q(3)=4$。' })).not.toContain('explain');
   });
+
+  it('非選擇題沒有選項也沒有對錯可猜：不算線索，也不算進英文是非題的語氣比例', () => {
+    const open = { type: 'open', subject: 'english', q: '我們永遠不該把別人的幫助視為理所當然。', answer: 'We should never take help for granted.', points: ['never', 'take … for granted'], explain: '' };
+    expect(cuesOf(open)).toEqual([]);
+    // 30 題是非題：有 never 的都是對的、沒有的都是錯的，照語氣猜全錯（命中 0）
+    const tf = Array.from({ length: 30 }, (_, i) => ({ type: 'tf', subject: 'english', q: i % 2 ? 'Water never boils.' : 'Water boils.', answer: i % 2 === 1, explain: '' }));
+    const m = measure([...tf, ...Array.from({ length: 30 }, () => open)]).english;
+    expect(m.counts.tf).toBe(30);
+    expect(m.tone).toBe(0);
+  });
 });

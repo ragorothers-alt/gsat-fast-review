@@ -1,12 +1,13 @@
 // 把一題整理成可以直接貼給 ChatGPT 等 AI 家教的文字。純邏輯，方便測試。
 import { figureText } from './figure.js';
 import { isBank } from './groups.js';
+import { openNote } from './session.js';
 import { SUBJECT_BY_ID } from './subjects.js';
 import { topicLabel } from './units.js';
 
 // 共用選項的題組（文意選填、篇章結構）最多 8 個選項
 const LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
-const KIND = { tf: '是非題', mc: '單選題', ms: '多選題' };
+const KIND = { tf: '是非題', mc: '單選題', ms: '多選題', open: '非選擇題' };
 /** 克漏字的空格 __3__ → (3)：貼給 AI 時不會被當成 Markdown 的粗體 */
 const blanks = (text) => text.replace(/__(\d+)__/g, '($1)');
 
@@ -14,11 +15,13 @@ const blanks = (text) => text.replace(/__(\d+)__/g, '($1)');
  * @param {Question} q 題目
  * @param {{ order?: number[], outcome?: 'right'|'wrong'|'skip'|'review' | null, chosen?: number | number[] | boolean | null, typed?: string }} [opts]
  *   order：畫面上第 i 個選項 → 原始選項索引，讓 (A)–(E) 跟玩家看到的一致
- *   outcome / chosen：作答後才有（chosen 為原始選項索引、多選題的索引陣列或 true/false），會附上玩家的答案、正解與解析；
- *   typed：演算題自己填的答案；review：從錯題本複製，沒有當時選的答案
+ *   outcome / chosen：作答後才有（chosen 為原始選項索引、多選題的索引陣列或 true/false；非選擇題是自評寫到的要點索引陣列），
+ *   會附上玩家的答案、正解與解析；typed：演算題自己填的答案；review：從錯題本複製，沒有當時選的答案
  */
 export function questionPrompt(q, { order = q.choices?.map((_, i) => i) ?? [], outcome = null, chosen = null, typed } = {}) {
   const subject = SUBJECT_BY_ID[q.subject]?.name ?? q.subject;
+  const head = `這是一題台灣學測（${subject}・${topicLabel(q)}）的${KIND[q.type]}${q.type === 'ms' ? '（選出所有正確的選項）' : ''}：`;
+  if (q.type === 'open') return openPrompt(q, head, outcome, chosen);
   const one = (value) => `(${LETTERS[order.indexOf(value)]}) ${q.choices[value]}`;
   const label = (value) => {
     if (q.type === 'tf') return value ? '正確' : '錯誤';
@@ -26,7 +29,7 @@ export function questionPrompt(q, { order = q.choices?.map((_, i) => i) ?? [], o
     return one(value);
   };
 
-  const lines = [`這是一題台灣學測（${subject}・${topicLabel(q)}）的${KIND[q.type]}${q.type === 'ms' ? '（選出所有正確的選項）' : ''}：`, ''];
+  const lines = [head, ''];
   // 閱讀題組：先附上整篇文章（克漏字的空格 __3__ 寫成 (3)），題目才看得懂
   if (q.group) lines.push(`閱讀下文，回答問題${/__\d+__/.test(q.passage) ? '（文中的 (1)、(2)… 是空格）' : ''}：`, blanks(q.passage), '');
   if (isBank(q)) lines.push(`（這組的 ${q.choices.length} 個選項是每一格共用的，每個選項最多填一格，有的選項用不到。）`);
@@ -58,5 +61,26 @@ export function questionPrompt(q, { order = q.choices?.map((_, i) => i) ?? [], o
   } else {
     lines.push('我不會這題。請一步一步教我怎麼解，說明用到的觀念，再給我一個記住它的方法。');
   }
+  return lines.join('\n');
+}
+
+/** 非選擇題：沒有選項；作答後附上自評（寫到幾個要點、哪幾個沒寫到）、參考答案、評分要點與解析 */
+function openPrompt(q, head, outcome, chosen) {
+  const lines = [head, '', q.q, ''];
+  if (!outcome) {
+    lines.push('請一步一步教我怎麼寫這題：先說明用到的觀念，再帶我寫出答案。');
+    return lines.join('\n');
+  }
+  if (outcome === 'skip') lines.push('我的答案：不會，直接看了解答');
+  else if (outcome !== 'review') {
+    const got = new Set(Array.isArray(chosen) ? chosen : []);
+    const missed = q.points.filter((_, i) => !got.has(i));
+    lines.push(`我的${openNote(q, chosen)}${missed.length ? `（沒寫到：${missed.join('；')}）` : ''}`);
+  }
+  lines.push(`參考答案：${q.answer}`, `評分要點：${q.points.join('；')}`, `題目附的解析：${q.explain}`, '');
+  if (outcome === 'right') lines.push('我自評每個要點都寫到了，但想確定觀念。請解釋這題的關鍵觀念，以及作答時容易漏掉或寫錯的地方。');
+  else if (outcome === 'review') lines.push('這題我之前沒寫好。請一步一步說明參考答案是怎麼寫出來的，每個評分要點為什麼重要，再給我一個記住它的方法。');
+  else if (outcome === 'wrong') lines.push('我有要點沒寫到。請一步一步說明參考答案是怎麼寫出來的，特別是我沒寫到的要點，以及下次怎麼避免漏掉。');
+  else lines.push('我不會這題。請一步一步教我怎麼寫，說明用到的觀念，再給我一個記住它的方法。');
   return lines.join('\n');
 }

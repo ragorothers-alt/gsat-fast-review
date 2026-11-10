@@ -144,7 +144,7 @@ export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
  * @param {Record<string, Card>} cards
  * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, examAt?: number | null, size: number, now: number, rng?: () => number }} opts
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
- *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題、閱讀題組和圖表題
+ *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題、非選擇題、閱讀題組和圖表題
  *   streak：這批之前剛連續做了幾題複習。自由練習一批出完再補下一批時接著算，兩批交界才不會一連出 4 題複習
  *   examAt：考試那天 0 點（examStart）。有給的話，考前衝刺期間把排到考後的複習拉回來（見 dueFor）
  * 閱讀題組（q.group）的題目排在一起出；一輪的最後一組放不下時整組照出，所以最多會比 size 多出一組的題數。
@@ -166,7 +166,7 @@ export function buildQueue(
       (!only || only.has(key)) &&
       !skip.has(q.id) &&
       (!formulaOnly || q.formula) &&
-      !(quickOnly && (q.scratch || q.type === 'ms' || q.group || q.fig)) &&
+      !(quickOnly && (q.scratch || q.type === 'ms' || q.type === 'open' || q.group || q.fig)) &&
       !neverMissed(cards[q.id])
     );
   });

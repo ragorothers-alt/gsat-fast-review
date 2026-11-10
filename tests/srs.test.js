@@ -244,6 +244,14 @@ describe('buildQueue', () => {
     expect(buildQueue(slow, {}, opts).map((x) => x.id)).toEqual(expect.arrayContaining(['m9', 'm8']));
   });
 
+  it('快閃不出要自己寫答案的非選擇題；其他模式照出，公式特訓不出（沒有 formula）', () => {
+    const open = { id: 'm7', subject: 'math', type: 'open', answer: '參考答案', points: ['要點一', '要點二'] };
+    const opts = { subjects: ['math'], size: 10, now: NOW, rng: seeded() };
+    expect(buildQueue([...bank, open], {}, { ...opts, quickOnly: true }).map((x) => x.id)).not.toContain('m7');
+    expect(buildQueue([...bank, open], {}, opts).map((x) => x.id)).toContain('m7');
+    expect(buildQueue([...bank, open], {}, { ...opts, formulaOnly: true }).map((x) => x.id)).toEqual(['m4']);
+  });
+
   it('到期的複習題先出，新題接著出，未到期的排最後', () => {
     const cards = {
       m1: { box: 0, due: NOW - 1 }, // 到期

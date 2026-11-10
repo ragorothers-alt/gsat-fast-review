@@ -137,7 +137,7 @@ export function cuesOf(q) {
     if (rank === 1 || rank === 2) cues.push('numeric-middle');
     if (rank !== null && !explainsAnswer(q)) cues.push('explain');
     if (absoluteGiveaway(q)) cues.push('absolute');
-  } else if (q.subject === 'english' && TONE.test(q.q) && q.answer === false) {
+  } else if (q.type === 'tf' && q.subject === 'english' && TONE.test(q.q) && q.answer === false) {
     // 有 always／never 這類詞而且是錯的：語氣洩漏答案
     cues.push('tone');
   }
@@ -177,7 +177,8 @@ export function measure(bank) {
         if (!explainsAnswer(q)) m.explain.push(q.id);
       }
       m.absHit += eliminationHit(q);
-    } else if (q.subject === 'english') {
+    } else if (q.type === 'tf' && q.subject === 'english') {
+      // 只算是非題：非選擇題（中譯英）沒有對錯可猜，算進來會把語氣的命中率拉高
       m.tfN++;
       // 有語氣詞猜錯、沒有猜對
       if (TONE.test(q.q) !== q.answer) m.toneHit++;

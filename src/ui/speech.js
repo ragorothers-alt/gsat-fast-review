@@ -21,9 +21,10 @@ export const canSpeak = (q) => supported && q.subject === 'english' && !q.group;
 /**
  * 要念的英文。filled：把正解填進唯一的空格（單選題、作答後）。
  * 對話題的「A:」「B:」不念；其他空格念成停頓。
+ * 非選擇題（中譯英）的題幹是中文，念的是英文的參考答案：作答畫面看了參考答案才有發音按鈕。
  */
 export function speechText(q, { filled = false } = {}) {
-  let s = q.q;
+  let s = q.type === 'open' ? q.answer : q.q;
   if (filled && q.type === 'mc' && (s.match(/_{2,}/g) ?? []).length === 1) s = s.replace(/_{2,}/, q.choices[q.answer]);
   return s
     .replace(/_{2,}/g, ' … ')

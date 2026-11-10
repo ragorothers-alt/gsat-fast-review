@@ -14,9 +14,9 @@ describe('recordPace', () => {
     expect(state.pace).toEqual({ 'math/機率': { n: 2, t: 32, rn: 1, rt: 12 } });
   });
 
-  it('演算題、多選題、題組、圖表題不計時；放下手機太久的也不算', () => {
+  it('演算題、多選題、非選擇題、題組、圖表題不計時；放下手機太久的也不算', () => {
     const state = {};
-    for (const extra of [{ scratch: true }, { type: 'ms' }, { group: 'math-g001' }, { fig: { type: 'table' } }]) {
+    for (const extra of [{ scratch: true }, { type: 'ms' }, { type: 'open' }, { group: 'math-g001' }, { fig: { type: 'table' } }]) {
       expect(isTimed(q(extra))).toBe(false);
       recordPace(state, q(extra), 'right', 10);
     }

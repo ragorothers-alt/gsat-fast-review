@@ -72,4 +72,55 @@ describe('questionPrompt', () => {
     expect(text).toContain(mc.explain);
     expect(text).toContain('之前答錯過');
   });
+
+  describe('非選擇題', () => {
+    const open = {
+      id: 'english-9001',
+      subject: 'english',
+      topic: '假設語氣與特殊句構',
+      type: 'open',
+      q: '我當初不該把她的幫助視為理所當然。',
+      answer: 'I should not have taken her help for granted.',
+      points: ['should not have + 過去分詞', '片語 take … for granted', '受詞 her help'],
+      explain: '對過去的事後悔用 should not have + p.p.。',
+    };
+
+    it('作答前：叫非選擇題、只有題幹，沒有選項，也不洩漏參考答案與要點', () => {
+      const text = questionPrompt(open);
+      expect(text).toContain('英文・假設語氣與特殊句構）的非選擇題：');
+      expect(text).toContain(open.q);
+      expect(text).not.toMatch(/\([A-H]\)/);
+      expect(text).not.toContain('參考答案');
+      expect(text).not.toContain(open.answer);
+      expect(text).not.toContain(open.points[0]);
+      // 作答畫面傳進來的是上一題留下的選項順序時也不會出錯
+      expect(questionPrompt(open, { order: [3, 1, 0, 2] })).toBe(text);
+    });
+
+    it('沒全寫到：附上自評寫到幾個要點、沒寫到哪幾個，還有參考答案、評分要點與解析', () => {
+      const text = questionPrompt(open, { outcome: 'wrong', chosen: [1] });
+      expect(text).toContain('我的自評：寫到 1／3 個要點（沒寫到：should not have + 過去分詞；受詞 her help）');
+      expect(text).toContain(`參考答案：${open.answer}`);
+      expect(text).toContain('評分要點：should not have + 過去分詞；片語 take … for granted；受詞 her help');
+      expect(text).toContain(`題目附的解析：${open.explain}`);
+      expect(text).toContain('我有要點沒寫到');
+      expect(text).not.toContain('正確答案');
+      // 一個都沒勾
+      expect(questionPrompt(open, { outcome: 'wrong', chosen: [] })).toContain('我的自評：寫到 0／3 個要點（沒寫到：');
+    });
+
+    it('全寫到、看解答、從錯題本複製', () => {
+      const right = questionPrompt(open, { outcome: 'right', chosen: [0, 1, 2] });
+      expect(right).toContain('我的自評：寫到 3／3 個要點\n');
+      expect(right).not.toContain('沒寫到');
+      const skip = questionPrompt(open, { outcome: 'skip', chosen: null });
+      expect(skip).toContain('我的答案：不會，直接看了解答');
+      expect(skip).not.toContain('自評');
+      expect(skip).toContain(`參考答案：${open.answer}`);
+      const review = questionPrompt(open, { outcome: 'review' });
+      expect(review).not.toContain('自評');
+      expect(review).toContain('評分要點：');
+      expect(review).toContain('之前沒寫好');
+    });
+  });
 });

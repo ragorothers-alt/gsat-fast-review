@@ -4,6 +4,7 @@
 // topic 必須是 src/units.js 列出的單元，且每個單元至少 MIN_PER_UNIT 題。
 // 跨單元綜合的題目必須有 links（結合的 2–3 個同科單元），其他題目不可有；閱讀題組裡的跨單元題可以不寫。
 // 閱讀題組（group + passage）：2–5 題連續排、文章逐字相同，克漏字的空格 __n__ 每格剛好一題。
+// 非選擇題（type: "open"）：answer 是參考答案的字串，points 是 2–4 個評分要點；沒有選項，也沒有 formula。
 // --partial：只檢查格式，不檢查單元題數（用來驗證還沒併入題庫的新題檔，檔名仍須是 <科目>.json）。
 import { readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
@@ -25,7 +26,10 @@ const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 // 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
 const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv', 'fig']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'points', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv', 'fig']);
+/** 非選擇題（open）：參考答案、評分要點的長度與個數；不可有的欄位 */
+const OPEN = { answer: 200, answerWarn: 160, point: 40, min: 2, max: 4 };
+const OPEN_BANNED = ['choices', 'group', 'passage', 'fig', 'scratch', 'lv', 'formula'];
 /** 圖表題（fig）：圖占掉題目卡一大塊，題幹要短 */
 const FIG_Q = 120;
 /** 題幹指著圖表（如圖、如下表、附圖…）：一定要有 fig。「例如表面」「由圖例」「表現」「下表皮」這些不算 */
@@ -82,7 +86,7 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
-  const stats = { mc: 0, tf: 0, ms: 0, formula: 0, scratch: 0, grouped: 0, fig: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
+  const stats = { mc: 0, tf: 0, ms: 0, open: 0, formula: 0, scratch: 0, grouped: 0, fig: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
   /** 題組代號 → 這組的題目（檔案裡的順序） */
   const groups = new Map();
 
@@ -113,15 +117,20 @@ for (const file of files) {
         if (new Set(links).size !== links.length) err('links 有重複的單元');
       }
     } else if (it.links !== undefined) err(`只有${CROSS_UNIT}的題目可以有 links`);
-    if (typeof it.formula !== 'boolean') err('formula 必須是 true/false');
+    const open = it.type === 'open';
+    // 非選擇題沒有選項、不屬於題組，也沒有 formula（其他題型的 formula 必填）
+    if (open) {
+      for (const k of OPEN_BANNED) if (it[k] !== undefined) err(`非選擇題（open）不可有 ${k}`);
+    } else if (typeof it.formula !== 'boolean') err('formula 必須是 true/false');
     else if (it.formula) stats.formula++;
+    if (!open && it.points !== undefined) err('只有非選擇題（open）可以有 points');
     if (![1, 2, 3].includes(it.level)) err('level 必須是 1、2 或 3');
     else stats.level[it.level]++;
-    if (it.lv !== undefined) {
+    if (it.lv !== undefined && !open) {
       if (subject !== 'english' || !LV_TOPICS.includes(it.topic) || it.type !== 'mc') err(`lv 只用在英文${LV_TOPICS.join('、')}的單選題`);
       else if (![1, 2, 3, 4, 5, 6].includes(it.lv)) err('lv 必須是 1–6（參考詞彙表的級數）');
     }
-    if (it.scratch !== undefined) {
+    if (it.scratch !== undefined && !open) {
       if (it.scratch !== true) err('scratch 只能是 true（不是演算題就不要寫這個欄位）');
       else {
         stats.scratch++;
@@ -129,14 +138,18 @@ for (const file of files) {
       }
     }
 
-    checkText(it.q, 'q', LIMITS.q, WARN_Q[subject] ?? WARN.q, err, warn);
-    if (it.scratch || it.type === 'ms') checkText(it.explain, 'explain', SCRATCH_EXPLAIN.max, SCRATCH_EXPLAIN.warn, err, warn);
+    // 英文的非選擇題是中譯英，題幹是中文句子：照一般（中文）題幹的建議長度，不用英文字母計的那個
+    checkText(it.q, 'q', LIMITS.q, (!open && WARN_Q[subject]) || WARN.q, err, warn);
+    // 非選擇題的解析要說明參考答案怎麼來、每個要點為什麼重要，和演算題一樣放寬
+    if (it.scratch || it.type === 'ms' || open) checkText(it.explain, 'explain', SCRATCH_EXPLAIN.max, SCRATCH_EXPLAIN.warn, err, warn);
     else checkText(it.explain, 'explain', LIMITS.explain, WARN.explain, err, warn);
     if (it.type === 'ms' && [it.q, it.explain].some((t) => typeof t === 'string' && LETTER_REF.test(t))) err('多選題的選項會被打亂，題幹與解析不可用 (A)(B) 指稱選項');
     // 英文題沒有公式：沒跳脫的 $ 多半是金額（$8,000），兩個 $ 之間會被排成公式
-    if (subject === 'english' && [it.q, it.explain, it.passage, ...(Array.isArray(it.choices) ? it.choices : [])].some((t) => typeof t === 'string' && /(^|[^\\])\$/.test(t))) err('英文題不用 LaTeX 公式：字面上的錢字號要寫成 \\$（JSON 裡是 "\\\\$"）');
+    const texts = [it.q, it.explain, it.passage, ...(Array.isArray(it.choices) ? it.choices : []), ...(open ? [it.answer, ...(Array.isArray(it.points) ? it.points : [])] : [])];
+    if (subject === 'english' && texts.some((t) => typeof t === 'string' && /(^|[^\\])\$/.test(t))) err('英文題不用 LaTeX 公式：字面上的錢字號要寫成 \\$（JSON 裡是 "\\\\$"）');
 
-    if (it.group !== undefined || it.passage !== undefined) {
+    // 非選擇題不可有 group、passage（上面已經報錯），不再當成題組檢查一次
+    if (!open && (it.group !== undefined || it.passage !== undefined)) {
       stats.grouped++;
       if (typeof it.group !== 'string' || !new RegExp(`^${subject}-g\\d{3,4}$`).test(it.group)) err(`group 必須是 "${subject}-g001" 格式`);
       const lim = PASSAGE[subject] ?? PASSAGE_DEFAULT;
@@ -202,8 +215,17 @@ for (const file of files) {
       stats.tf++;
       if (it.choices !== undefined) err('tf 題不可有 choices');
       if (typeof it.answer !== 'boolean') err('tf 題 answer 必須是 true/false');
+    } else if (open) {
+      stats.open++;
+      // 參考答案是字串（英文的中譯英是英文句子，其他科是中文的簡答）；評分要點是作答後自己對照、逐一勾選的具體項目
+      checkText(it.answer, 'answer', OPEN.answer, OPEN.answerWarn, err, warn);
+      if (!Array.isArray(it.points) || it.points.length < OPEN.min || it.points.length > OPEN.max) err(`open 題的 points 必須是 ${OPEN.min}–${OPEN.max} 個評分要點`);
+      else {
+        it.points.forEach((p, i) => checkText(p, `points[${i}]`, OPEN.point, Infinity, err, warn));
+        if (new Set(it.points.map((p) => String(p).replace(/\s+/g, ''))).size !== it.points.length) err('評分要點有重複');
+      }
     } else {
-      err('type 必須是 "mc"、"tf" 或 "ms"');
+      err('type 必須是 "mc"、"tf"、"ms" 或 "open"');
     }
   });
 
@@ -252,7 +274,7 @@ for (const file of files) {
   }
 
   const n = items.length;
-  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}、公式 ${stats.formula}、演算 ${stats.scratch}${stats.grouped ? `、題組 ${groups.size} 組 ${stats.grouped} 題` : ''}${stats.fig ? `、圖表 ${stats.fig}` : ''}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
+  console.log(`\n${errors.length ? '✗' : '✓'} ${basename(file)}：${n} 題（單選 ${stats.mc}、是非 ${stats.tf}、多選 ${stats.ms}${stats.open ? `、非選 ${stats.open}` : ''}、公式 ${stats.formula}、演算 ${stats.scratch}${stats.grouped ? `、題組 ${groups.size} 組 ${stats.grouped} 題` : ''}${stats.fig ? `、圖表 ${stats.fig}` : ''}；難度 1/2/3 = ${stats.level[1]}/${stats.level[2]}/${stats.level[3]}）`);
   const topics = [...stats.topics].map(([t, c]) => `${t} ${c}`).join('、');
   if (topics) console.log(`  單元：${topics}`);
   if (warnings.length) {

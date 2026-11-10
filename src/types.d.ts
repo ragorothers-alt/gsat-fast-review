@@ -48,14 +48,17 @@ interface Question {
   id: string;
   subject: string;
   topic: string;
-  type: 'mc' | 'tf' | 'ms';
+  type: 'mc' | 'tf' | 'ms' | 'open';
   q: string;
-  /** mc、ms 才有；tf 沒有 */
+  /** mc、ms 才有；tf、open 沒有 */
   choices?: string[];
-  /** mc：正確選項的索引；tf：true／false；ms：正確選項索引的陣列 */
-  answer: number | boolean | number[];
+  /** mc：正確選項的索引；tf：true／false；ms：正確選項索引的陣列；open：參考答案 */
+  answer: number | boolean | number[] | string;
+  /** 非選擇題（open）的評分要點，作答後對照參考答案自己勾 */
+  points?: string[];
   explain: string;
-  formula: boolean;
+  /** open 沒有這個欄位 */
+  formula?: boolean;
   level: 1 | 2 | 3;
   /** 跨單元綜合題結合的單元 */
   links?: string[];

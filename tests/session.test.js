@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { advance, createSession, current, extend, isCorrect, isOver, markLast, msNote, msScore, msWrong, multiplier, submit, tick } from '../src/session.js';
+import { advance, createSession, current, extend, isCorrect, isOver, markLast, msNote, msScore, msWrong, multiplier, openNote, submit, tick } from '../src/session.js';
 import { adjustRight, currentStreak, dayKey, recordAnswer, today } from '../src/stats.js';
 import { freshState } from '../src/storage.js';
 
@@ -97,6 +97,31 @@ describe('session', () => {
     expect(msScore(q, [])).toBe(0);
     expect(msNote(q, [0])).toBe('答錯 1 個選項：學測這題可得 3/5 的分數');
     expect(msNote(q, [1, 3])).toBe('答錯 4 個選項：學測這題 0 分');
+  });
+
+  it('非選擇題：自評每個要點都寫到才算對；一個都沒勾也是有效的作答（答錯）', () => {
+    const q = { type: 'open', answer: 'I should not have taken her help for granted.', points: ['should not have + p.p.', 'take … for granted', '受詞 her help'] };
+    expect(isCorrect(q, [0, 1, 2])).toBe(true);
+    expect(isCorrect(q, [0, 2])).toBe(false);
+    expect(isCorrect(q, [])).toBe(false);
+    expect(isCorrect(q, null)).toBe(false);
+    // 參考答案是字串：不能拿來和作答比
+    expect(isCorrect(q, q.answer)).toBe(false);
+    expect(openNote(q, [0, 2])).toBe('自評：寫到 2／3 個要點');
+    expect(openNote(q, [])).toBe('自評：寫到 0／3 個要點');
+    expect(openNote(q, null)).toBe('自評：寫到 0／3 個要點');
+  });
+
+  it('非選擇題照一般題計分：全寫到加分、接連擊，沒全寫到連擊歸零；自評的要點記在作答紀錄', () => {
+    const s = createSession('ten', [{ id: 'a' }, { id: 'b' }]);
+    expect(submit(s, 'right', [0, 1])).toBe(10);
+    advance(s);
+    expect(submit(s, 'wrong', [1])).toBe(0);
+    expect(s).toMatchObject({ right: 1, wrong: 1, combo: 0 });
+    expect(s.log).toEqual([
+      { id: 'a', outcome: 'right', chosen: [0, 1] },
+      { id: 'b', outcome: 'wrong', chosen: [1] },
+    ]);
   });
 });
 

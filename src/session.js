@@ -3,7 +3,8 @@
 /**
  * endless：題目快用完時由 UI 補下一批，玩家自己按結束才結算
  * explainAlways：答對也停下來看解析，按「繼續」才換題
- * quickOnly：只出幾秒內答得完的題目：不出要動筆算好幾分鐘的演算題（題目的 scratch）和要逐一判斷五個選項的多選題
+ * quickOnly：只出幾秒內答得完的題目：不出要動筆算好幾分鐘的演算題（題目的 scratch）、要逐一判斷五個選項的多選題，
+ *   也不出要自己寫出答案的非選擇題
  */
 export const MODES = {
   blitz: { name: '60 秒快閃', size: 80, timeLimit: 60, quickOnly: true },
@@ -106,11 +107,18 @@ export function tick(s, seconds) {
 
 /**
  * 判斷作答是否正確。mc 的 chosen 是原始選項索引（UI 打亂後要換回來）；tf 為 boolean；
- * ms（多選）是選了的原始選項索引陣列，要和正解完全一樣才算對。
+ * ms（多選）是選了的原始選項索引陣列，要和正解完全一樣才算對；
+ * open（非選擇題）是自評寫到的評分要點索引陣列，每個要點都寫到才算對。
  */
 export function isCorrect(q, chosen) {
+  if (q.type === 'open') return Array.isArray(chosen) && chosen.length === q.points.length;
   if (q.type === 'ms') return Array.isArray(chosen) && chosen.length === q.answer.length && q.answer.every((i) => chosen.includes(i));
   return chosen === q.answer;
+}
+
+/** 非選擇題的自評：寫到幾個評分要點（看解答、沒作答算 0 個） */
+export function openNote(q, chosen) {
+  return `自評：寫到 ${Array.isArray(chosen) ? chosen.length : 0}／${q.points.length} 個要點`;
 }
 
 /** 多選題答錯幾個選項：該選沒選、不該選卻選了，各算一個（學測「各選項獨立判定」） */

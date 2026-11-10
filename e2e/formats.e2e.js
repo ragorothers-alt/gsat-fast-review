@@ -176,8 +176,12 @@ test('作答速度：一般題記下每題花的秒數，學習分析列出各�
   await page.locator('[data-mode="free"]').click();
   await expect(page.locator('#play')).toBeVisible();
   for (let i = 0; i < 30; i++) {
-    await expect(page.locator('#answers .answer, #answers .fill-switch').first()).toBeVisible();
-    const plain = !(await page.locator('#ms-send').isVisible()) && !(await page.locator('#answers .fill-switch').isVisible()) && !(await page.locator('#q-passage').isVisible());
+    await expect(page.locator('#answers .answer, #answers .fill-switch, #answers .open-reveal').first()).toBeVisible();
+    const plain =
+      !(await page.locator('#ms-send').isVisible()) &&
+      !(await page.locator('#answers .fill-switch').isVisible()) &&
+      !(await page.locator('#answers .open-reveal').isVisible()) &&
+      !(await page.locator('#q-passage').isVisible());
     if (plain) break;
     await page.locator('#skip').click();
     await page.locator('#next').click();
@@ -259,4 +263,248 @@ test('圖表題：題幹下面畫出圖或資料表，圖帶文字敘述；深�
   await expect(page.locator('#result')).toBeVisible();
   // 結算列出題目時圖表也在
   await expect(page.locator('#r-list .fig')).toHaveCount(2);
+});
+
+// ── 非選擇題（type: "open"）：題庫還沒有這種題，把英文題庫換成樣本題來測 ──────────
+const openBase = { subject: 'english', type: 'open' };
+const OPEN_SHORT = {
+  ...openBase,
+  id: 'english-9901',
+  topic: '假設語氣與特殊句構',
+  level: 2,
+  q: '我當初不該把她的幫助視為理所當然。',
+  answer: 'I should not have taken her help for granted.',
+  points: ['should not have + 過去分詞', '片語 take … for granted', '受詞是 her help'],
+  explain: '對過去做過的事後悔，用 should not have + 過去分詞；「視為理所當然」是 take … for granted。',
+};
+// 參考答案和要點都接近長度上限、四個要點：小螢幕上作答區放不下、要捲動
+const OPEN_LONG = {
+  ...openBase,
+  id: 'english-9902',
+  topic: '時態與語態',
+  level: 3,
+  q: '他抵達車站時，那班開往台南的火車已經離開十分鐘了，所以他只好改搭客運。',
+  answer: 'By the time he arrived at the station, the train bound for Tainan had already been gone for ten minutes, so he had no choice but to take an intercity bus instead.',
+  points: ['By the time 子句用過去簡單式 arrived', '主要子句用過去完成式 had been gone', '片語 have no choice but to + 原形動詞', '「開往台南的」寫成 bound for Tainan'],
+  explain: '先發生的事（火車離開）用過去完成式，後發生的用過去簡單式；「只好」是 have no choice but to，後面接原形動詞。',
+};
+
+/** 把英文題庫換成這幾題非選擇題，首頁只選英文 */
+async function mockOpen(page, questions) {
+  await page.route('**/assets/english-*.json', async (route) => {
+    const res = await route.fetch();
+    const body = await res.json();
+    // 同樣開頭的還有重點卡的檔案：只換題庫
+    if (Array.isArray(body) && body[0]?.id?.startsWith('english-')) await route.fulfill({ response: res, json: questions });
+    else await route.fulfill({ response: res });
+  });
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { subjects: ['english'] } }));
+  });
+  await openHome(page);
+  await page.locator('[data-mode="ten"]').click();
+  await expect(page.locator('#play')).toBeVisible();
+}
+
+/** 深淺色各檢查一次無障礙 */
+async function auditBoth(page, where) {
+  for (const scheme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
+    await audit(page, `${where}（${scheme}）`);
+  }
+}
+
+/** 畫面上這題是哪一題樣本（出題順序是打亂的） */
+async function shownOpen(page, questions) {
+  const stem = (await page.locator('#q-text').textContent()).trim();
+  const q = questions.find((x) => x.q === stem);
+  expect(q, `畫面上的題幹「${stem}」不是樣本題`).toBeTruthy();
+  return q;
+}
+
+test('非選擇題：先自己寫，看參考答案後勾寫到的要點自評；沒全寫到算答錯，全寫到算答對，結算看得到參考答案與自評', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const samples = [OPEN_SHORT, OPEN_LONG];
+  await mockOpen(page, samples);
+  const points = page.locator('#answers .answer');
+
+  // 一開始只有提示和「看參考答案」：沒有選項、沒有送出，「不會」照常可以按；中文題幹不給英文發音
+  const first = await shownOpen(page, samples);
+  await expect(page.locator('#q-topic')).toContainText('・非選');
+  await expect(page.locator('#answers .open-hint')).toHaveText('先在草稿區或紙上寫出答案，再對照參考答案自己評分');
+  await expect(page.locator('#answers .open-reveal')).toHaveText('看參考答案');
+  await expect(points).toHaveCount(0);
+  await expect(page.locator('#ms-send')).toBeHidden();
+  await expect(page.locator('#skip')).toBeVisible();
+  await expect(page.locator('#speak')).toBeHidden();
+  await auditBoth(page, '非選擇題作答前');
+
+  // 看參考答案：作答區換成參考答案和每個要點一顆按鈕，一個都沒勾也可以送出
+  await page.locator('#answers .open-reveal').click();
+  await expect(page.locator('#answers .open-ref-text')).toHaveText(first.answer);
+  await expect(page.locator('#answers .open-ask')).toHaveText('你寫到了哪幾個要點？');
+  await expect(page.locator('#answers .answer .answer-text')).toHaveText(first.points);
+  await expect(page.locator('#ms-send')).toHaveText('送出自評');
+  await expect(page.locator('#ms-send')).toBeEnabled();
+  await expect(page.locator('#answer-status')).toContainText(`參考答案：${first.answer}`);
+  // 勾第一個；第二個點兩次是取消
+  await points.nth(0).click();
+  await points.nth(1).click();
+  await points.nth(1).click();
+  await expect(page.locator('#answers .answer[aria-pressed="true"]')).toHaveCount(1);
+  await auditBoth(page, '非選擇題自評');
+  await page.locator('#ms-send').click();
+
+  // 沒全寫到：算答錯，寫到的要點打圈、其他淡掉，顯示解析；不問「猜的／不太確定」
+  const n = first.points.length;
+  await expect(page.locator('#ms-send')).toBeHidden();
+  await expect(points.nth(0)).toHaveClass(/correct/);
+  await expect(page.locator('#answers .answer.correct')).toHaveCount(1);
+  await expect(page.locator('#answers .answer.dim')).toHaveCount(n - 1);
+  await expect(page.locator('#answers .answer:disabled')).toHaveCount(n);
+  await expect(page.locator('#answer-status')).toHaveText(`自評：寫到 1／${n} 個要點`);
+  await expect(page.locator('#q-explain')).toContainText(first.explain);
+  await expect(page.locator('#certain')).toBeHidden();
+  await auditBoth(page, '非選擇題作答後');
+  await page.locator('#next').click();
+
+  // 下一題：回看上一題看得到當時的自評、參考答案與要點
+  const second = await shownOpen(page, samples);
+  expect(second).not.toBe(first);
+  await expect(page.locator('#answers .open-reveal')).toBeVisible();
+  await page.locator('#back').click();
+  await expect(page.locator('#past-sheet')).toBeVisible();
+  await expect(page.locator('#past-card .open-note')).toHaveText(`自評：寫到 1／${n} 個要點`);
+  await expect(page.locator('#past-card .open-ref-text')).toHaveText(first.answer);
+  await expect(page.locator('#past-card .open-point')).toHaveCount(n);
+  await expect(page.locator('#past-card .open-point .open-got')).toHaveCount(1);
+  await audit(page, '回看非選擇題');
+  await page.locator('#past-back').click();
+  await expect(page.locator('#past-sheet')).toBeHidden();
+
+  // 每個要點都勾：算答對（10 題一輪答對會自己換題，這是最後一題，直接到結算）
+  await page.locator('#answers .open-reveal').click();
+  await expect(points).toHaveCount(second.points.length);
+  for (let i = 0; i < second.points.length; i++) await points.nth(i).click();
+  await page.locator('#ms-send').click();
+  await expect(page.locator('#result')).toBeVisible();
+  await expect(page.locator('#r-big')).toHaveText('1 / 2');
+  // 作答畫面停在答對那題：要點全部打圈，沒有出現「猜的／不太確定」
+  await expect(page.locator('#answers .answer.correct')).toHaveCount(second.points.length);
+  await expect(page.locator('#certain')).toHaveAttribute('hidden', '');
+
+  // 結算：答錯那題列出自評、參考答案與評分要點
+  await expect(page.locator('#r-list .r-item')).toHaveCount(1);
+  await expect(page.locator('#r-list .r-mine')).toHaveText(`自評：寫到 1／${n} 個要點`);
+  await expect(page.locator('#r-list .r-right')).toHaveText(`參考答案：${first.answer}`);
+  await expect(page.locator('#r-list .open-point')).toHaveText(first.points);
+  await auditBoth(page, '非選擇題結算');
+});
+
+test('非選擇題在小螢幕（360×640）：參考答案加四個要點放不下時作答區自己捲動，題目卡與送出按鈕都留在畫面裡', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.setViewportSize({ width: 360, height: 640 });
+  await mockOpen(page, [OPEN_LONG]);
+  await page.locator('#answers .open-reveal').click();
+  const points = page.locator('#answers .answer');
+  await expect(points).toHaveCount(4);
+
+  const layout = () =>
+    page.evaluate(() => {
+      const box = (sel) => {
+        const r = document.querySelector(sel).getBoundingClientRect();
+        return { top: r.top, bottom: r.bottom, left: r.left, right: r.right, height: r.height };
+      };
+      const play = document.querySelector('#play');
+      const answers = document.querySelector('#answers');
+      return {
+        pageWidth: document.documentElement.scrollWidth,
+        // 整個作答畫面不捲動：多出來的在作答區裡捲
+        screenOverflow: play.scrollHeight - play.clientHeight,
+        answersOverflow: answers.scrollHeight - answers.clientHeight,
+        card: box('#card'),
+        stem: box('#q-text'),
+        answers: box('#answers'),
+        send: box('#ms-send'),
+        next: box('#next'),
+        explain: box('#q-explain'),
+        widest: Math.max(...[...answers.children].map((c) => c.getBoundingClientRect().right)),
+      };
+    });
+
+  const before = await layout();
+  expect(before.pageWidth).toBeLessThanOrEqual(360);
+  expect(before.screenOverflow).toBeLessThanOrEqual(1);
+  expect(before.widest).toBeLessThanOrEqual(360);
+  // 題幹看得到，題目卡沒有被擠扁
+  expect(before.card.height).toBeGreaterThanOrEqual(150);
+  expect(before.stem.top).toBeGreaterThanOrEqual(before.card.top);
+  // 作答區在題目卡下面、送出按鈕上面，送出按鈕在畫面裡
+  expect(before.answers.top).toBeGreaterThanOrEqual(before.card.bottom - 1);
+  expect(before.answers.bottom).toBeLessThanOrEqual(before.send.top + 1);
+  expect(before.send.bottom).toBeLessThanOrEqual(640);
+  await audit(page, '非選擇題（360×640）');
+
+  // 每個要點都按得到（放不下的捲進來再按），送出後算答對
+  for (let i = 0; i < 4; i++) await points.nth(i).click();
+  await expect(page.locator('#answers .answer[aria-pressed="true"]')).toHaveCount(4);
+  await page.locator('#skip').click();
+  // 按了「不會」：勾的不算，參考答案與要點還在、不能按，解析與「繼續」都在畫面裡
+  await expect(page.locator('#answers .answer:disabled')).toHaveCount(4);
+  await expect(page.locator('#answers .answer.correct')).toHaveCount(0);
+  await expect(page.locator('#q-explain')).toBeVisible();
+  const after = await layout();
+  expect(after.pageWidth).toBeLessThanOrEqual(360);
+  expect(after.screenOverflow).toBeLessThanOrEqual(1);
+  expect(after.next.bottom).toBeLessThanOrEqual(640);
+  expect(after.card.height).toBeGreaterThanOrEqual(150);
+  await audit(page, '非選擇題看解答（360×640）');
+});
+
+test('非選擇題的鍵盤操作：Enter 看參考答案、數字鍵勾要點、Enter 送出；還沒看就按 ? 是不會', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', '鍵盤快捷鍵只看桌機');
+  const samples = [OPEN_SHORT, OPEN_LONG];
+  await mockOpen(page, samples);
+  const points = page.locator('#answers .answer');
+  const first = await shownOpen(page, samples);
+  const n = first.points.length;
+
+  // 還沒看參考答案：數字鍵沒有作用，Enter 才是看
+  await page.keyboard.press('1');
+  await expect(page.locator('#answers .open-reveal')).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#answers .open-ref-text')).toHaveText(first.answer);
+  // 「看參考答案」不見了，焦點接到第一個要點
+  await expect(points.first()).toBeFocused();
+
+  // 數字鍵勾要點（再按一次取消）；超過要點數的數字沒有作用
+  await page.keyboard.press('1');
+  await page.keyboard.press('2');
+  await page.keyboard.press('2');
+  await page.keyboard.press('9');
+  await expect(points.nth(0)).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#answers .answer[aria-pressed="true"]')).toHaveCount(1);
+  // Enter 送出自評（焦點停在要點上也是送出，不是再切換一次）
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#answer-status')).toHaveText(`自評：寫到 1／${n} 個要點`);
+  await expect(points.nth(0)).toHaveClass(/correct/);
+  await expect(page.locator('#q-explain')).toBeVisible();
+
+  // Enter 換下一題：焦點在「看參考答案」上，還沒看就按 ? 是不會
+  await page.keyboard.press('Enter');
+  const second = await shownOpen(page, samples);
+  expect(second).not.toBe(first);
+  await expect(page.locator('#answers .open-reveal')).toBeFocused();
+  await page.keyboard.press('?');
+  // 顯示參考答案與要點，都不勾、不能按；解析標「解答」
+  await expect(page.locator('#answers .open-ref-text')).toHaveText(second.answer);
+  await expect(page.locator('#answers .answer:disabled')).toHaveCount(second.points.length);
+  await expect(page.locator('#answers .answer.correct')).toHaveCount(0);
+  await expect(page.locator('#answers .answer.dim')).toHaveCount(0);
+  await expect(page.locator('#q-explain b')).toContainText('解答');
+  await expect(page.locator('#answer-status')).toHaveText(`參考答案：${second.answer}`);
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#result')).toBeVisible();
+  await expect(page.locator('#r-big')).toHaveText('0 / 2');
 });

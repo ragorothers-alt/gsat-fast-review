@@ -1,13 +1,14 @@
 // 回看剛剛的題目：作答時按「上一題」，從底部彈出這輪做過的題目（當時的選項順序、你選的、正解與解析），
 // 可以一路往前翻。看的時候計時暫停、不能作答，關掉就回到原本那題（play.js 負責暫停與恢復）。
 import { questionPrompt } from '../prompt.js';
+import { openNote } from '../session.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { topicLabel } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { icon } from './icons.js';
 import { passageDetails } from './passage.js';
 import { richHTML, stemHTML } from './rich.js';
-import { speakItem, tfLabel, toggleMark } from './review-item.js';
+import { openPointsHTML, openRefHTML, speakItem, tfLabel, toggleMark } from './review-item.js';
 import { canSpeak, stopSpeaking } from './speech.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
@@ -75,7 +76,11 @@ export function initPast(ctx) {
     $('#past-next').disabled = at >= items.length - 1;
 
     const { flags, stars } = ctx.state;
-    const choices = seenChoices(q, entry)
+    // 非選擇題沒有選項：列出參考答案和評分要點，自評寫到的要點蓋圈
+    const open = q.type === 'open';
+    // 看解答時沒有自評
+    const mine = open && Array.isArray(entry.chosen) ? entry.chosen : null;
+    const choices =(open ? [] : seenChoices(q, entry))
       .map(({ value, state }, i) => {
         const label = q.type === 'tf' ? tfLabel(value) : richHTML(q.choices[value]);
         const [mark, said] = STATE_MARK[state] ?? [];
@@ -90,7 +95,7 @@ export function initPast(ctx) {
     const typed = entry.typed !== undefined && (entry.chosen === null || entry.chosen === undefined) ? `<p class="past-typed">你填的答案：${entry.typed}（不是任何一個選項）</p>` : '';
     card.innerHTML = `<div class="card-tag"><span class="tag">${subj.name}</span><span class="topic">${topicLabel(q)}</span>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="0" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${!!stars[q.id]}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${!!flags[q.id]}" aria-label="回報這題有問題">${icon('flag')}</button></div>
       ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
-      ${typed}<ol class="past-choices ${q.type}">${choices}</ol>
+      ${open ? `${mine ? `<p class="open-note">${openNote(q, mine)}</p>` : ''}${openRefHTML(q)}${openPointsHTML(q, mine)}` : `${typed}<ol class="past-choices ${q.type}">${choices}</ol>`}
       <div class="explain"><b>${icon('bulb')}解析</b>${richHTML(q.explain)}</div>`;
     $('#past-scroll').scrollTop = 0;
   }
