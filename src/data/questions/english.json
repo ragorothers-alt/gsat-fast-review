@@ -48994,5 +48994,1896 @@
     "explain": "account for 在此指「解釋原因」：原報告未說明為何接手任務會延誤。它不是「分派責任」；「納入考量」通常用 take into account，應區分兩種搭配。",
     "formula": false,
     "level": 2
+  },
+  {
+    "id": "english-2696",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "自從學校圖書館延長開放時間，我們就常去那裡讀書。",
+    "answer": "We have often studied in the school library since it extended its opening hours.",
+    "points": [
+      "常去讀書：have often studied／gone … to study",
+      "學校圖書館：in／at／to the school library",
+      "自從延長：since it extended",
+      "開放時間：its opening hours"
+    ],
+    "explain": "從過去持續到現在的情況用現在完成式，since 後接過去的起始事件。常見錯誤是把 since 子句也寫成現在完成式；此處 extended 表示延長時間這個已發生的事件。",
+    "level": 2
+  },
+  {
+    "id": "english-2697",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "救援人員昨晚抵達村莊前，河水早已淹過唯一的橋梁。",
+    "answer": "The river had already flooded the only bridge before the rescue workers reached the village last night.",
+    "points": [
+      "早已淹過：had already flooded",
+      "唯一的橋梁：the only bridge",
+      "抵達村莊前：before … reached／arrived at …",
+      "救援人員昨晚抵達：rescue workers … last night"
+    ],
+    "explain": "河水淹橋先於救援人員抵達，用 had 加過去分詞；抵達則用過去簡單式。常見錯誤是兩個動作都用過去完成式。before 引導表示較晚事件的時間子句。",
+    "level": 2
+  },
+  {
+    "id": "english-2698",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "為了找出問題，工程師從早上起就一直在測試這個程式。",
+    "answer": "The engineers have been testing this program since this morning to find the problem.",
+    "points": [
+      "一直在測試：has／have been testing",
+      "這個程式：this program",
+      "從早上起：since this morning",
+      "為了找出問題：to find the problem"
+    ],
+    "explain": "強調測試從早上持續到現在，用 has／have been 加 V-ing。常見錯誤是漏掉 been，寫成 have testing；中文未限定工程師人數，單數用 has，複數用 have。",
+    "level": 2
+  },
+  {
+    "id": "english-2699",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "醫師一公布檢查結果，我就會調整每天的飲食。",
+    "answer": "I will change my daily diet as soon as the doctor announces the test results.",
+    "points": [
+      "一公布就會：will … as soon as + 現在式",
+      "醫師公布：the doctor announces",
+      "調整每天飲食：change／adjust my daily diet",
+      "檢查結果：the test results"
+    ],
+    "explain": "主要子句用 will 表未來，as soon as 引導的時間副詞子句用現在簡單式。常見錯誤是在時間子句也加 will；doctor 是單數，因此用 announces。",
+    "level": 2
+  },
+  {
+    "id": "english-2700",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "這座博物館的參觀規定以三種語言標示在入口處。",
+    "answer": "The rules for visiting this museum are posted in three languages at the entrance.",
+    "points": [
+      "被標示：are posted／displayed",
+      "參觀規定：rules for visiting this museum",
+      "以三種語言：in three languages",
+      "在入口處：at the entrance"
+    ],
+    "explain": "規定是被標示的對象，用 be 加過去分詞。常見錯誤是 rules 為複數卻搭配 is；「以某種語言」用 in，「在入口處」用 at the entrance。",
+    "level": 2
+  },
+  {
+    "id": "english-2701",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "那張受損的全家福已經修復，現在掛在客廳裡。",
+    "answer": "That damaged family photo has been repaired and now hangs in the living room.",
+    "points": [
+      "已經修復：has been repaired（完成式被動）",
+      "那張受損的全家福：that damaged family photo",
+      "現在掛在客廳裡：now hangs in the living room"
+    ],
+    "explain": "照片已被修復且結果與現在有關，用 has been repaired。常見錯誤是漏掉 been；photo 是單數，後面並列的 hangs 也須加 s。",
+    "level": 2
+  },
+  {
+    "id": "english-2702",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "願意和同學分享筆記的學生，往往也能從討論中學到更多。",
+    "answer": "Students who are willing to share notes with classmates often learn more from discussions.",
+    "points": [
+      "願意分享的：who／that are willing to share",
+      "筆記給同學：(their) notes with classmates",
+      "往往能學更多：often／can often learn more",
+      "從討論中：from discussions"
+    ],
+    "explain": "用 who 引導關係子句修飾 Students，也可用 that。常見錯誤是在關係子句多加 they；who 已是主詞，不可寫 who they are willing。",
+    "level": 2
+  },
+  {
+    "id": "english-2703",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "連日大雨導致道路封閉，這也影響了當地居民的生活。",
+    "answer": "Days of heavy rain caused road closures, which also affected the lives of local residents.",
+    "points": [
+      "這也影響了：, which also affected（非限定關係子句）",
+      "連日大雨：days of heavy rain",
+      "導致道路封閉：caused road closures",
+      "當地居民的生活：the lives of local residents"
+    ],
+    "explain": "逗號後的 which 補充說明前面道路封閉的情況及其影響。常見錯誤是改用 that；非限定關係子句不能用 that。caused 與 affected 都表達過去的事件。",
+    "level": 2
+  },
+  {
+    "id": "english-2704",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "這個網站提供一個讓使用者交換二手書的平台。",
+    "answer": "This website provides a platform where users can exchange used books.",
+    "points": [
+      "使用者交換的：where／on which users can exchange",
+      "網站提供平台：this website provides a platform",
+      "二手書：used books／secondhand books"
+    ],
+    "explain": "where 引導關係子句，修飾表示活動空間的 platform，也可寫 on which。常見錯誤是寫 where users can exchange used books on，在句尾多加介系詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2705",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "運動前吃的東西，可能會影響你在球場上的表現。",
+    "answer": "What you eat before exercise may affect your performance on the court.",
+    "points": [
+      "吃的東西：what you eat（名詞子句）",
+      "運動前：before exercise／exercising",
+      "可能影響你的表現：may affect your performance",
+      "在球場上：on the court／field"
+    ],
+    "explain": "What you eat 是名詞子句，整體作為主詞，意為「你吃的東西」。常見錯誤是寫 the things what you eat；what 已包含「東西」的意思，不須再加先行詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2706",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "報名前，我們想先確認這趟導覽是否包含午餐。",
+    "answer": "Before signing up, we want to check first whether this guided tour includes lunch.",
+    "points": [
+      "是否：whether／if + 主詞 + 動詞",
+      "報名前：before signing up／registering",
+      "想先確認：want to check／confirm (first)",
+      "導覽含午餐：this (guided) tour includes lunch"
+    ],
+    "explain": "check 後用 whether 引導名詞子句，也可用 if。常見錯誤是沿用疑問句倒裝，寫 whether does the tour include；名詞子句須用主詞在動詞前的語序。",
+    "level": 2
+  },
+  {
+    "id": "english-2707",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "哥哥記得我生日這件事，讓我在忙碌的一天後感到溫暖。",
+    "answer": "The fact that my older brother remembered my birthday warmed my heart after a busy day.",
+    "points": [
+      "這件事：the fact that …（同位語子句）",
+      "記得我生日：remembered my birthday",
+      "感到溫暖：warmed my heart",
+      "忙碌一天後：after a busy day"
+    ],
+    "explain": "that 引導同位語子句，說明 fact 的具體內容，後面接完整的主詞與動詞。常見錯誤是誤用 which；此處 that 不在子句中作主詞或受詞。older brother 明確表示哥哥。",
+    "level": 2
+  },
+  {
+    "id": "english-2708",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "每天大聲朗讀課文，有助於學生改善英文發音。",
+    "answer": "Reading texts aloud every day helps students improve their English pronunciation.",
+    "points": [
+      "朗讀課文：reading text(s) aloud（動名詞主詞）",
+      "每天：every day",
+      "有助學生改善：helps students (to) improve",
+      "英文發音：their English pronunciation"
+    ],
+    "explain": "動名詞片語 Reading texts aloud every day 當主詞，視為單數，因此用 helps。常見錯誤是把動詞原形 Read 直接放在主詞位置；help 後可接 improve 或 to improve。",
+    "level": 2
+  },
+  {
+    "id": "english-2709",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "對當地居民而言，保護這片濕地是很重要的事。",
+    "answer": "It is important for local residents to protect this wetland.",
+    "points": [
+      "很重要的事：It is important … to protect（虛主詞）",
+      "對當地居民而言：for local residents",
+      "這片濕地：this wetland"
+    ],
+    "explain": "用 It 作虛主詞，真正的主詞是後面的不定詞片語。常見錯誤是寫 important of local residents；此處說明事情對誰重要，須用 for。",
+    "level": 2
+  },
+  {
+    "id": "english-2710",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "這台電腦太老舊，已經無法執行最新的繪圖軟體。",
+    "answer": "This computer is too old to run the latest drawing software.",
+    "points": [
+      "太老舊而無法執行：too old to run",
+      "這台電腦：this computer",
+      "最新的繪圖軟體：the latest drawing software"
+    ],
+    "explain": "too 加形容詞再接 to V，表達程度過高而無法做到。常見錯誤是在 to 後再加 not；too old to run 已包含無法執行的意思。software 是不可數名詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2711",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "為了睡得更好，我妹妹會避免在睡前喝含糖飲料。",
+    "answer": "My younger sister avoids drinking sugary drinks before bed to sleep better.",
+    "points": [
+      "避免喝：avoids drinking（動詞後接動名詞）",
+      "妹妹：my (younger) sister",
+      "睡前喝含糖飲料：sugary drinks before bed",
+      "為了睡得更好：to sleep better"
+    ],
+    "explain": "avoid 後接動名詞，所以用 drinking，不能寫 avoids to drink。句尾的 to sleep better 則是不定詞表目的；主詞 My sister 是單數，avoid 要加 s。",
+    "level": 2
+  },
+  {
+    "id": "english-2712",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "在機場等候登機的旅客，可以先用手機查看目的地的天氣。",
+    "answer": "Passengers waiting to board at the airport can first check the weather at their destination on their phones.",
+    "points": [
+      "等候登機的：waiting to board（現在分詞修飾）",
+      "在機場：at the airport",
+      "目的地天氣：weather at their destination",
+      "先用手機查：first check … on their phones"
+    ],
+    "explain": "waiting to board at the airport 是現在分詞片語，修飾主動等候登機的 Passengers。常見錯誤是把 waiting 寫成 waited；也可用 who are waiting to board 改寫。",
+    "level": 2
+  },
+  {
+    "id": "english-2713",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "祖母親手做的蛋糕，讓這次家庭聚會多了幾分溫馨。",
+    "answer": "The cake made by my grandmother added warmth to this family gathering.",
+    "points": [
+      "祖母做的：made by …／that … made",
+      "祖母：my grandmother／grandma",
+      "蛋糕增添溫馨：the cake … added warmth",
+      "這次家庭聚會：this family gathering"
+    ],
+    "explain": "made by my grandmother 是過去分詞片語，修飾被製作的蛋糕。常見錯誤是用 making；蛋糕不是製作動作的執行者。也可寫 the cake that my grandmother made。",
+    "level": 2
+  },
+  {
+    "id": "english-2714",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "如果我現在有更多空閒時間，就會加入學校的戲劇社。",
+    "answer": "If I had more free time now, I would join the school drama club.",
+    "points": [
+      "如果現在有更多時間：If I had more free time now",
+      "就會加入：would join",
+      "學校的戲劇社：the school drama club"
+    ],
+    "explain": "與現在事實相反的假設，if 子句用過去式，主要子句用 would 加原形動詞。常見錯誤是把 if 子句寫成 If I would have；had 在此表示假設，並非過去真的擁有。",
+    "level": 2
+  },
+  {
+    "id": "english-2715",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "如果我們上次野餐時有分類垃圾，就能減少送去焚燒的廢棄物。",
+    "answer": "If we had sorted the trash at our last picnic, we could have reduced the amount of waste sent to be burned.",
+    "points": [
+      "如果當時有分類：If we had sorted the／our trash",
+      "上次野餐時：at our last picnic",
+      "就能減少：could／would have reduced",
+      "送去焚燒的廢棄物：waste sent to be burned"
+    ],
+    "explain": "與過去事實相反，if 子句用 had 加過去分詞，主要子句用 could／would have 加過去分詞；could 較強調原本能做到。常見錯誤是寫 could reduced。sent to be burned 是修飾 waste 的過去分詞片語。",
+    "level": 3
+  },
+  {
+    "id": "english-2716",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "我真希望當初沒有在未經朋友同意的情況下貼出那張照片。",
+    "answer": "I wish I had not posted that photo without my friend's permission.",
+    "points": [
+      "真希望當初沒有貼出：wish I had not posted",
+      "那張照片：that photo",
+      "未經朋友同意：without my friend's permission"
+    ],
+    "explain": "對過去行為感到後悔，wish 後用過去完成式。常見錯誤是只寫 wish I did not post，無法清楚表達對已發生行為的懊悔；permission 是不可數名詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2717",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "他看起來疲憊不堪，彷彿已經好幾天沒有睡覺了。",
+    "answer": "He looks exhausted, as if he had not slept for days.",
+    "points": [
+      "彷彿：as if／as though",
+      "好幾天沒睡：had／has not slept for days",
+      "看來疲憊：looks exhausted／very tired"
+    ],
+    "explain": "as if／as though 後可用過去完成式表較早的假設情況；若認為他可能真的沒睡，也可用 has not slept。常見錯誤是把 sleep 的過去分詞寫成 sleeped，正確形式是 slept。",
+    "level": 2
+  },
+  {
+    "id": "english-2718",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "地方政府早該修好老街上的路燈，讓夜間通行更安全。",
+    "answer": "It is time the local government repaired the streetlights on the old street to make it safer to walk there at night.",
+    "points": [
+      "早該修好：It is (high) time … repaired",
+      "地方政府：the local government",
+      "老街上的路燈：streetlights on the old street",
+      "讓夜間通行更安全：safer to walk … at night"
+    ],
+    "explain": "It is time 後接主詞與過去式，表示現在早該做某事，repaired 並非描述已修好。常見錯誤是直接用 repairs；也可用 It is high time，或在 time 後加 that。",
+    "level": 3
+  },
+  {
+    "id": "english-2719",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "爸爸建議全家人在晚餐時關掉手機，好好聽彼此說話。",
+    "answer": "Dad suggested that everyone in the family turn off their phones at dinner and listen carefully to each other.",
+    "points": [
+      "建議關掉：suggested that … (should) turn off",
+      "全家人：everyone in the family／whole family",
+      "晚餐時關手機：their phones at dinner",
+      "聽彼此：listen … to each other／one another"
+    ],
+    "explain": "suggest 表建議時，that 子句用原形動詞，也可加 should。常見錯誤是因 everyone 為單數而寫 turns off；此處須用 turn off，並列的 listen 也用原形。好好聽可用 listen carefully，彼此可用 each other 或 one another。",
+    "level": 2
+  },
+  {
+    "id": "english-2720",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "小組報告能順利完成，我們不該把同學的協助視為理所當然。",
+    "answer": "We should not take our classmates' help in successfully completing the group report for granted.",
+    "points": [
+      "不該視為理所當然：should not take … for granted",
+      "同學的協助：our classmates' help",
+      "順利完成：successfully completing／finishing",
+      "小組報告：the group report"
+    ],
+    "explain": "take … for granted 的受詞放在 take 與 for granted 之間。常見錯誤是漏掉 for。in successfully completing the group report 說明同學協助完成報告；多位同學的所有格寫 classmates'。",
+    "level": 2
+  },
+  {
+    "id": "english-2721",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "森林在保護水源方面扮演重要角色，也提供動物棲息地。",
+    "answer": "Forests play an important role in protecting water sources and provide homes for animals.",
+    "points": [
+      "扮演重要角色：play an important role in",
+      "保護水源：protecting water sources",
+      "動物棲息地：provide homes／habitats for animals"
+    ],
+    "explain": "play an important role in 後接名詞或動名詞，這裡用 protecting。常見錯誤是寫 in protect；in 是介系詞，後面不能直接接動詞原形。homes 或 habitats 都可表達動物棲息的地方。",
+    "level": 2
+  },
+  {
+    "id": "english-2722",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "使用社群媒體時，青少年應該留意個人資料外洩的風險。",
+    "answer": "Teenagers should be aware of the risk of personal information leaks when using social media.",
+    "points": [
+      "青少年應留意：teenagers should be aware of",
+      "外洩風險：risk of … leaks／being leaked",
+      "個人資料：personal information",
+      "使用社群媒體時：when using social media"
+    ],
+    "explain": "be aware of 表示察覺或留意，should 後須保留 be。常見錯誤是寫 should aware of。when using 的隱含主詞須與主要子句相同，此處都是 Teenagers。",
+    "level": 2
+  },
+  {
+    "id": "english-2723",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "除了規律運動，充足的睡眠也有助於維持身體健康。",
+    "answer": "In addition to regular exercise, enough sleep also helps us stay healthy.",
+    "points": [
+      "除了：in addition to／besides／as well as",
+      "規律運動：regular exercise",
+      "充足睡眠：enough／sufficient sleep",
+      "有助維持健康：helps us (to) stay healthy"
+    ],
+    "explain": "in addition to 表示「除了……之外還有」，to 是介系詞，後接名詞。常見錯誤是因 exercise 與 sleep 都出現而用 help；句子的主詞只有 enough sleep，所以用 helps。",
+    "level": 2
+  },
+  {
+    "id": "english-2724",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "室友之間缺乏溝通，導致多次爭吵，影響了彼此的關係。",
+    "answer": "A lack of communication between the roommates resulted in repeated arguments and hurt their relationship.",
+    "points": [
+      "導致多次爭吵：resulted in repeated arguments",
+      "缺乏溝通：a lack of communication",
+      "室友之間：between the roommates",
+      "影響彼此關係：hurt their relationship"
+    ],
+    "explain": "result in 後接結果，result from 後接原因。常見錯誤是把兩者混用；此處缺乏溝通是原因，爭吵是結果。也可改寫為 Repeated arguments resulted from a lack of communication。",
+    "level": 2
+  },
+  {
+    "id": "english-2725",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "父母出差期間，弟弟得靠我準備每天的晚餐。",
+    "answer": "My younger brother has to rely on me to prepare dinner every day while our parents are away on business.",
+    "points": [
+      "依靠：rely on／depend on",
+      "弟弟得：my younger brother has to",
+      "我準備每日晚餐：me to prepare dinner every day",
+      "父母出差期間：while … are away on business"
+    ],
+    "explain": "rely on someone to V 表示依靠某人做某事，也可用 depend on。常見錯誤是漏掉 on，直接寫 rely me。on business 是「出差」，younger brother 指弟弟。",
+    "level": 2
+  },
+  {
+    "id": "english-2726",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "明天雨一停，教練就會帶我們到操場練習。",
+    "answer": "As soon as the rain stops tomorrow, the coach will take us to the sports field to practice.",
+    "points": [
+      "雨一停：as soon as the rain stops",
+      "明天：tomorrow",
+      "教練就會帶我們：the coach will take us",
+      "到操場練習：to … field to practice"
+    ],
+    "explain": "表示未來的時間副詞子句用現在式，主要子句才用 will 加原形動詞。常見錯誤是在 as soon as 後也使用 will。",
+    "level": 2
+  },
+  {
+    "id": "english-2727",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "這份社區安全報告每年都由當地居民共同完成。",
+    "answer": "This report on community safety is jointly prepared by local residents every year.",
+    "points": [
+      "完成：is … prepared／completed（被動）",
+      "社區安全報告：report on community safety",
+      "居民共同：local residents；jointly／together",
+      "每年：every year"
+    ],
+    "explain": "報告是被完成的對象，用 is prepared 或 is completed，執行者放在 by 後。jointly 或 together 表示共同；community safety report 也可。every year 表示例行事件，別漏掉被動語態的 be 動詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2728",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "這本介紹臺灣傳統藝術的書已經在海外出版。",
+    "answer": "This book about traditional art in Taiwan has been published overseas.",
+    "points": [
+      "已經出版：has (already) been published",
+      "介紹傳統藝術的書：book about traditional … art",
+      "臺灣的：Taiwanese／in Taiwan",
+      "在海外：overseas／abroad"
+    ],
+    "explain": "出版已完成且與現在有關，用現在完成式被動 has been published；already 可省略。常見錯誤是只寫 has published，變成書主動出版。traditional Taiwanese art 與 traditional art in Taiwan 均可。",
+    "level": 2
+  },
+  {
+    "id": "english-2729",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "所有費用都應該由網路商店在付款前清楚列出。",
+    "answer": "All fees should be clearly listed by online stores before payment.",
+    "points": [
+      "應該列出：should be … listed",
+      "所有費用：all fees／all charges",
+      "網路商店清楚列出：clearly；by online stores",
+      "付款前：before payment／before customers pay"
+    ],
+    "explain": "費用是被列出的對象，用 should be 加過去分詞 listed；副詞 clearly 可放在 be 與 listed 之間。常見錯誤是寫成 should listed，漏掉 be。付款前也可譯為 before customers pay。",
+    "level": 2
+  },
+  {
+    "id": "english-2730",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "車站前的道路目前正在維修，公車因此改道。",
+    "answer": "The road in front of the station is being repaired, so buses are taking a different route.",
+    "points": [
+      "正在維修：is being repaired",
+      "車站前的道路：the road in front of the station",
+      "因此：so",
+      "公車改道：buses are taking a different route"
+    ],
+    "explain": "道路正在被維修，用 is being repaired。常見錯誤是省略 being，變成一般現在式被動，無法表達目前正在進行。",
+    "level": 3
+  },
+  {
+    "id": "english-2731",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "她以前常在週末送餐，現在則負責訓練新志工。",
+    "answer": "She used to deliver meals on weekends, but now she is in charge of training new volunteers.",
+    "points": [
+      "以前常送餐：used to deliver meals",
+      "週末：on weekends／at weekends",
+      "現在負責：now；in charge of／responsible for",
+      "訓練新志工：training new volunteers"
+    ],
+    "explain": "used to 加原形動詞表示過去的習慣，和現在的工作形成對比。不要寫成 is used to deliver；be used to 後接名詞或動名詞，表示習慣於。",
+    "level": 2
+  },
+  {
+    "id": "english-2732",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "這次登山經驗教會我的事，比我原先預期的更多。",
+    "answer": "What this hiking experience taught me was more than I had expected.",
+    "points": [
+      "教會我的事：what … taught me",
+      "這次登山經驗：this hiking experience",
+      "比預期更多：was more than I (had) expected"
+    ],
+    "explain": "what 子句表示「……的事」，整個子句作主詞，搭配單數動詞 was。常見錯誤是改用 that，因為 taught me 後仍缺少所教的內容。",
+    "level": 3
+  },
+  {
+    "id": "english-2733",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "居民想知道這座公共游泳池明年是否會重新開放。",
+    "answer": "Residents want to know whether the public swimming pool will reopen next year.",
+    "points": [
+      "是否會重新開放：whether／if … will reopen",
+      "居民想知道：residents want to know",
+      "這座公共泳池：the／this public swimming pool",
+      "明年：next year"
+    ],
+    "explain": "whether 引導間接問句，也可用 if。子句要用主詞在助動詞前的直述句語序，常見錯誤是寫成 whether will the pool reopen。",
+    "level": 2
+  },
+  {
+    "id": "english-2734",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "紙本書仍然受到歡迎這件事，讓這位作家感到驚訝。",
+    "answer": "The fact that printed books are still popular surprises this writer.",
+    "points": [
+      "這件事：the fact that（同位語子句）",
+      "紙本書仍受歡迎：printed books are still popular",
+      "讓作家驚訝：surprises／surprised … writer"
+    ],
+    "explain": "that 子句補充 fact 的內容，子句本身結構完整。主詞是單數 fact，若用現在式，動詞須用 surprises，不能受 books 影響寫成 surprise；若敘述過去的反應，用 surprised 也可。",
+    "level": 2
+  },
+  {
+    "id": "english-2735",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "雖然這件外套正在特價，她仍決定先比較其他店的價格。",
+    "answer": "Although this coat was on sale, she still decided to compare prices at other stores first.",
+    "points": [
+      "雖然：although／even though",
+      "這件外套特價：this coat is／was on sale",
+      "仍決定先比較：still decides／decided … first",
+      "其他店的價格：compare prices at other stores"
+    ],
+    "explain": "although 引導讓步子句，主要子句可保留 still。敘述已做的決定可用 was、decided；描述眼前情況也可用 is、decides。常見錯誤是同時使用 although 和 but。",
+    "level": 2
+  },
+  {
+    "id": "english-2736",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "昨晚的霧太濃了，以致駕駛幾乎看不見前方的路。",
+    "answer": "The fog was so thick last night that drivers could hardly see the road ahead.",
+    "points": [
+      "太濃以致：so thick … that／such … fog that",
+      "昨晚的霧：fog；last night",
+      "駕駛幾乎看不見：drivers could hardly／barely see",
+      "前方的路：the road ahead"
+    ],
+    "explain": "so 加形容詞再接 that 子句，表達程度造成的結果。常見錯誤是寫成 so thick fog；若改用 such，應寫 such thick fog that。",
+    "level": 2
+  },
+  {
+    "id": "english-2737",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "這群志工不僅清理海灘，也向遊客介紹海洋生物。",
+    "answer": "These volunteers not only clean up beaches but also tell visitors about marine life.",
+    "points": [
+      "不僅也：not only … but also",
+      "這群志工：these volunteers",
+      "清理海灘：clean (up) the beach／beaches",
+      "介紹海洋生物：tell visitors about marine life"
+    ],
+    "explain": "not only 與 but also 後接平行結構，此處都是動詞片語；不能把後半改成 introducing，與 clean 不平行。介紹也可用 introduce marine life to visitors，清理可用 clean 或 clean up。",
+    "level": 2
+  },
+  {
+    "id": "english-2738",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "為了避免受傷，球員在每次練習前都會先暖身。",
+    "answer": "To avoid getting hurt, players warm up before every practice.",
+    "points": [
+      "避免受傷：avoid getting／being hurt／injured",
+      "為了：to（表目的）",
+      "球員暖身：players warm up",
+      "每次練習前：before every／each practice"
+    ],
+    "explain": "avoid 後接動名詞，受傷可用 getting hurt。常見錯誤是寫成 avoid to get hurt；句首的 to 是表示目的，和 avoid 後的形式不同。",
+    "level": 2
+  },
+  {
+    "id": "english-2739",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "在街角排隊的民眾正等著領取免費的健康檢查號碼牌。",
+    "answer": "People standing in line at the street corner are waiting to get numbered tickets for free health checks.",
+    "points": [
+      "排隊的民眾：people standing in line／lining up",
+      "在街角：at the street corner",
+      "領號碼牌：are waiting to get numbered tickets",
+      "免費健康檢查：free health checks"
+    ],
+    "explain": "standing in line 或 lining up 是現在分詞片語，修飾主動排隊的 people；也可用 who are standing in line。numbered tickets 表示號碼牌。常見錯誤是漏掉主句的 are，使 waiting 缺少助動詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2740",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "學生們在美術課完成的作品，下週將在圖書館展出。",
+    "answer": "The works completed by students in art class will be displayed in the library next week.",
+    "points": [
+      "完成的作品：works completed／works … completed",
+      "學生在美術課：students；in art class",
+      "將展出：will be displayed／shown",
+      "下週在圖書館：in／at the library；next week"
+    ],
+    "explain": "completed 是過去分詞，作品是被學生完成的；不能用表示主動的 completing。第一點也接受 works (that) students completed，students 前加 the 亦可。展出可用 be displayed 或 be shown。",
+    "level": 3
+  },
+  {
+    "id": "english-2741",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "仔細比較價格後，她選了一台符合預算的二手電腦。",
+    "answer": "Having carefully compared prices, she chose a used computer that fit her budget.",
+    "points": [
+      "比較後：having … compared／after comparing",
+      "仔細比較價格：carefully；prices",
+      "她選二手電腦：she chose a used computer",
+      "符合預算：that fit／was within her budget"
+    ],
+    "explain": "Having compared 表示比較先於選購，分詞構句的隱含主詞須與 she 相同；after comparing 或 after she compared 也可。carefully 可放在 compared 前或 prices 後。常見錯誤是省掉 having 卻寫 Compared，誤成被動。",
+    "level": 3
+  },
+  {
+    "id": "english-2742",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "由於部分觀眾仍在交談，演員只好暫停演出。",
+    "answer": "With some audience members still talking, the actors had to pause the performance.",
+    "points": [
+      "觀眾仍在交談：with … still talking",
+      "部分觀眾：some audience members",
+      "演員只好：actors had to／had no choice but to",
+      "暫停演出：pause／stop … performance"
+    ],
+    "explain": "with 加受詞再接分詞，可交代主要動作的背景；觀眾主動交談，所以用 talking。常見錯誤是寫成 with some audience members still talked。只好也可用 had no choice but to。",
+    "level": 2
+  },
+  {
+    "id": "english-2743",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "活動開始前，負責人讓每位志工再次確認自己的工作。",
+    "answer": "Before the event began, the person in charge had each volunteer check their own duties again.",
+    "points": [
+      "讓志工確認：had／made／let each volunteer check",
+      "活動開始前：before the event began／begins",
+      "負責人：the person in charge／the leader",
+      "再次確認工作：check their own duties again"
+    ],
+    "explain": "had each volunteer check 表示安排每位志工確認工作，check 前不加 to。若強調要求或允許，也可用 made 或 let；敘述例行安排可用現在式 have。each volunteer 可用 their 指稱，其工作也可用 tasks。",
+    "level": 2
+  },
+  {
+    "id": "english-2744",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "他只是第一次學衝浪，說起話來卻像是經驗豐富的教練。",
+    "answer": "He is learning to surf for the first time, but he talks as if he were an experienced coach.",
+    "points": [
+      "彷彿是：as if／as though he were／was",
+      "初學衝浪：learning to surf for the first time",
+      "他說起話來卻：but he talks",
+      "經驗豐富的教練：an experienced coach"
+    ],
+    "explain": "as if 後用 were 表示與現在事實相反：他其實不是教練。常見錯誤是用 had been，誤把現在的假設寫成對過去的假設；口語用 was 也可。",
+    "level": 3
+  },
+  {
+    "id": "english-2745",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "我們該正視網路霸凌對青少年心理健康的影響了。",
+    "answer": "It is time we faced the effects of online bullying on teenagers' mental health.",
+    "points": [
+      "該正視了：it is time … faced／for us to face",
+      "影響：effects／impact … on",
+      "網路霸凌：online bullying／cyberbullying",
+      "青少年心理健康：teenagers' mental health"
+    ],
+    "explain": "It is time 後接子句時，用過去式表達現在早該做的事；常見錯誤是寫成 we face。第一點也接受 It is time for us to face；online bullying 可用 cyberbullying。effects 或 impact 後接 on，表示對……的影響。",
+    "level": 2
+  },
+  {
+    "id": "english-2746",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "閱讀社的成員建議學校在午休時開放閱讀空間。",
+    "answer": "Members of the reading club suggested that the school open a reading space during the lunch break.",
+    "points": [
+      "建議學校開放：suggested … school (should) open",
+      "閱讀社成員：members of the reading club",
+      "閱讀空間：a reading space",
+      "午休時：during the lunch break"
+    ],
+    "explain": "suggest 表示建議時，that 子句用原形動詞 open，也可用 should open。常見錯誤是因主詞 school 為單數而寫成 opens，或隨 suggested 改成 opened。",
+    "level": 2
+  },
+  {
+    "id": "english-2747",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "直到收到帳單，他才發現自己上個月花了多少錢。",
+    "answer": "Not until he received the bill did he realize how much money he had spent the previous month.",
+    "points": [
+      "直到才：not until … did he realize",
+      "收到帳單：he received the bill",
+      "花了多少錢：how much money he (had) spent",
+      "上個月：the previous month／last month"
+    ],
+    "explain": "Not until 放句首時，主要子句用 did 加主詞與原形動詞，until 子句不倒裝。間接問句 how much … 用直述句語序。had spent 清楚標示花錢在發現之前；時間先後明確時也可用 spent。",
+    "level": 3
+  },
+  {
+    "id": "english-2748",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "只有改善轉乘服務，我們才能吸引更多人搭乘大眾運輸。",
+    "answer": "Only by improving transfer services can we attract more people to public transportation.",
+    "points": [
+      "只有改善才能：only by improving … can we",
+      "轉乘服務：transfer services",
+      "吸引更多人：attract／encourage more people",
+      "大眾運輸：public transportation"
+    ],
+    "explain": "Only 加方式片語放句首，主要子句須把 can 放在 we 前，不能仍寫 we can。by 後接 improving。吸引更多人搭乘也可寫 encourage more people to use public transportation，末項接受此寫法。",
+    "level": 3
+  },
+  {
+    "id": "english-2749",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "正是鄰居們長期的支持，讓這個課後陪讀計畫得以延續。",
+    "answer": "It is the neighbors' long-term support that keeps this after-school tutoring program going.",
+    "points": [
+      "正是支持：it is … support that …",
+      "鄰居們長期的：the neighbors' long-term",
+      "課後陪讀計畫：after-school tutoring program",
+      "得以延續：keeps／has kept … going"
+    ],
+    "explain": "It is … that … 強調使計畫延續的支持。support 是不可數名詞，現在式用 keeps，不可受 neighbors 影響寫成 keep；若強調一路延續至今，可用 has kept。tutoring program 表示提供學習協助的計畫。",
+    "level": 2
+  },
+  {
+    "id": "english-2750",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "除了出租運動器材，這座運動中心也提供初學者課程。",
+    "answer": "In addition to renting out sports equipment, this sports center offers classes for beginners.",
+    "points": [
+      "除了：in addition to／as well as",
+      "出租運動器材：renting out sports equipment",
+      "這座運動中心：this sports center",
+      "提供初學者課程：offers classes for beginners"
+    ],
+    "explain": "in addition to 的 to 是介系詞，後接 renting，不能接原形 rent；也可用 As well as renting out …。rent out 表示出租，equipment 不可數，不能加 s；offers 可用 provides。",
+    "level": 2
+  },
+  {
+    "id": "english-2751",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "長期缺乏睡眠可能導致注意力下降，進而影響工作表現。",
+    "answer": "A long-term lack of sleep may result in reduced concentration and thus affect work performance.",
+    "points": [
+      "可能導致：may／can result in",
+      "長期缺乏睡眠：a long-term lack of sleep",
+      "注意力下降：reduced concentration／attention",
+      "進而影響工作表現：thus／in turn；work performance"
+    ],
+    "explain": "result in 後接結果，result from 後接原因，勿混淆方向。reduced concentration 表示專注力下降。末項須有 affect work performance（也可用 job performance）；and thus affect 可改為 which in turn affects，均表示進而影響。",
+    "level": 2
+  },
+  {
+    "id": "english-2752",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "小型劇團往往仰賴觀眾購票，才能支付演出的費用。",
+    "answer": "Small theater groups often rely on ticket sales to cover the costs of their performances.",
+    "points": [
+      "仰賴：rely on／depend on",
+      "小型劇團往往：small theater groups often",
+      "觀眾購票：ticket sales",
+      "支付演出費用：cover the costs of performances"
+    ],
+    "explain": "rely on 表示依靠，on 後接名詞 ticket sales，再用 to cover 說明用途。常見錯誤是省略 on；此處 cover costs 是支付費用的自然搭配。",
+    "level": 2
+  },
+  {
+    "id": "english-2753",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "為了存錢買腳踏車，他努力減少不必要的日常開銷。",
+    "answer": "To save up for a bicycle, he makes an effort to cut unnecessary daily expenses.",
+    "points": [
+      "努力減少：makes an effort to cut",
+      "為了存錢買腳踏車：to save up for a bicycle",
+      "不必要的日常開銷：unnecessary daily expenses"
+    ],
+    "explain": "make an effort to 後接原形動詞，表示努力做某事。常見錯誤是漏掉 an；save up for 加目標物，表示為購買該物而存錢。",
+    "level": 2
+  },
+  {
+    "id": "english-2754",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "為了跟上城市的變化，市府每年都會更新大眾運輸路線圖。",
+    "answer": "To keep up with changes in the city, the city government updates its transit map every year.",
+    "points": [
+      "跟上變化：keep up with changes",
+      "城市的：in the city",
+      "市府更新路線圖：city government updates … map",
+      "每年：every year"
+    ],
+    "explain": "keep up with 表示持續跟上變化，with 不能省略。catch up with 較強調從落後到追上。transit map 指大眾運輸路線圖，也可用 public transportation map；更新可用現在式，表達每年的例行工作。",
+    "level": 2
+  },
+  {
+    "id": "english-2755",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "透過社區志工的協助，偏鄉長者也能取得所需的醫療資訊。",
+    "answer": "With help from community volunteers, older people in remote areas can also have access to the medical information they need.",
+    "points": [
+      "也能取得：can also have access to",
+      "透過協助：with help from community volunteers",
+      "偏鄉長者：older people in remote areas",
+      "所需醫療資訊：the medical information they need"
+    ],
+    "explain": "have access to 表示能取得或使用，to 後接名詞。常見錯誤是把 information 寫成 informations；information 是不可數名詞，所需資訊可用 they need 修飾。",
+    "level": 2
+  },
+  {
+    "id": "english-2756",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "年輕人的職涯選擇應該受到尊重，而不是由父母決定。",
+    "answer": "Young people's career choices should be respected rather than decided by their parents.",
+    "points": [
+      "應該受到尊重：should be respected",
+      "年輕人的職涯選擇：young people's career choices",
+      "非父母決定：rather than ... by their parents"
+    ],
+    "explain": "「應該被……」用 should be 加過去分詞，不能漏掉 be；rather than 後省略重複的 be，仍用過去分詞 decided。",
+    "level": 2
+  },
+  {
+    "id": "english-2757",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "通往賞鳥區的步道正在整修，遊客暫時無法進入。",
+    "answer": "The trail to the birdwatching area is being repaired, so visitors cannot enter for now.",
+    "points": [
+      "正在整修：is being repaired",
+      "通往賞鳥區的步道：trail to the birdwatching area",
+      "遊客暫時無法進入：visitors cannot enter for now"
+    ],
+    "explain": "步道是被整修的對象，且工程正在進行，用 is being repaired；不可寫成 is repairing，否則變成步道主動修理東西。",
+    "level": 2
+  },
+  {
+    "id": "english-2758",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "祖母以前常在過年前做年糕，現在卻習慣到市場買。",
+    "answer": "Grandma used to make rice cakes before Chinese New Year, but now she is used to buying them at the market.",
+    "points": [
+      "以前常做年糕：used to make rice cakes",
+      "過年前：before Chinese New Year",
+      "現在習慣買：is used to buying them",
+      "到市場：at the market"
+    ],
+    "explain": "used to 加原形動詞表示過去的習慣；be used to 的 to 是介系詞，後接動名詞，因此要寫 buying，不能寫 buy。",
+    "level": 3
+  },
+  {
+    "id": "english-2759",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "編輯打電話來時，我正在查證那張網路照片的來源。",
+    "answer": "I was checking the source of that online photo when the editor called.",
+    "points": [
+      "正在查證時：was checking ... when",
+      "那張網路照片的來源：source of that online photo",
+      "編輯打電話來：the editor called"
+    ],
+    "explain": "過去進行式表示當時正在查證，when 引導打電話這個插入的事件；called 用過去簡單式，不要把兩個動作都寫成現在式。",
+    "level": 2
+  },
+  {
+    "id": "english-2760",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "等到高中畢業時，她將已經克服在眾人面前說話的恐懼。",
+    "answer": "By the time she graduates from high school, she will have overcome her fear of speaking in public.",
+    "points": [
+      "將已經克服：will have overcome",
+      "等到畢業時：by the time she graduates",
+      "高中：from high school",
+      "公開說話的恐懼：fear of speaking in public"
+    ],
+    "explain": "未來某時之前已完成的事用 will have 加過去分詞；by the time 引導的時間子句用現在式 graduates，不用 will graduate。",
+    "level": 3
+  },
+  {
+    "id": "english-2761",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "自從實驗室買了新的顯微鏡以來，已經過了三個月。",
+    "answer": "It has been three months since the laboratory bought a new microscope.",
+    "points": [
+      "自從至今已三個月：It has been three months since",
+      "實驗室：the laboratory",
+      "買了新的顯微鏡：bought a new microscope"
+    ],
+    "explain": "「自從……以來已經多久」可用 It has been 加時間再接 since 子句；since 後描述已發生的購買事件，用 bought，不能用 buy。",
+    "level": 2
+  },
+  {
+    "id": "english-2762",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "雖然這份工作的薪水比較低，他仍選擇做自己有興趣的事。",
+    "answer": "Although this job pays less, he still chooses to do what interests him.",
+    "points": [
+      "雖然：although／even though",
+      "薪水較低：pays／paid less",
+      "仍選擇做：still chooses／chose to do",
+      "有興趣的事：what interests／interested him"
+    ],
+    "explain": "although 引導讓步子句，主要子句不再加 but；what interests him 表示他感興趣的事。中文未限定時間，也可整句採過去式 paid、chose、interested，時態與語境須一致。",
+    "level": 2
+  },
+  {
+    "id": "english-2763",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "昨晚的暴風雨如此猛烈，以致河邊好幾個鳥巢都被摧毀了。",
+    "answer": "The storm last night was so strong that several nests by the river were destroyed.",
+    "points": [
+      "如此猛烈以致：so strong that",
+      "昨晚的暴風雨：the storm last night",
+      "河邊鳥巢：nests／bird nests by the river",
+      "好幾個被摧毀：several ... were destroyed"
+    ],
+    "explain": "so 後接形容詞 strong，再用 that 帶出結果；nests 是複數且承受破壞，應寫 were destroyed，不能寫 was destroyed。",
+    "level": 2
+  },
+  {
+    "id": "english-2764",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "透過聽長輩說故事，孩子不僅了解傳統，也學會尊重不同世代。",
+    "answer": "By listening to elders' stories, children not only learn about traditions but also learn to respect different generations.",
+    "points": [
+      "不僅也：not only ... but also",
+      "聽長輩故事：by listening to elders' stories",
+      "了解傳統：learn about traditions",
+      "尊重不同世代：respect different generations"
+    ],
+    "explain": "not only 與 but also 連接平行的動詞片語，這裡都以 learn 開頭；by 後接動名詞 listening。聽長輩說故事也可寫 listening to elders tell stories；長輩可用 elders 或 their elders。",
+    "level": 3
+  },
+  {
+    "id": "english-2765",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "只要先確認消息來源可靠，你就可以把這則新聞分享給同學。",
+    "answer": "As long as you first make sure the source is reliable, you can share this news with your classmates.",
+    "points": [
+      "只要：as long as",
+      "先確認來源可靠：first make sure ... is reliable",
+      "分享新聞：share this news／this news story",
+      "給同學：with your classmates"
+    ],
+    "explain": "as long as 引導條件子句，表示只要符合條件即可；news 是不可數名詞，可寫 this news，也可用可數的 this news story；不可寫 these news 或 a news。",
+    "level": 2
+  },
+  {
+    "id": "english-2766",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "無論面試時多麼緊張，他都會先深呼吸，讓自己平靜下來。",
+    "answer": "No matter how nervous he feels during an interview, he first takes a deep breath to calm himself down.",
+    "points": [
+      "無論多緊張：no matter how／however nervous",
+      "面試時：during／in an interview",
+      "先深呼吸：first takes a deep breath",
+      "讓自己平靜下來：to calm himself down"
+    ],
+    "explain": "no matter how 或 however 後接形容詞，再接主詞與動詞，如 however nervous he feels；也可用 he is。不可倒裝成 how nervous does he feel；「先」用 first。",
+    "level": 2
+  },
+  {
+    "id": "english-2767",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "科學家用簡單的文字解釋新發現，好讓一般民眾也能理解。",
+    "answer": "Scientists explain new findings in simple words so that the public can understand them too.",
+    "points": [
+      "好讓：so that／in order that",
+      "科學家解釋新發現：scientists explain new findings",
+      "用簡單的文字：in simple words",
+      "民眾也懂：the public can understand them too"
+    ],
+    "explain": "so that 或 in order that 引導目的子句，後接主詞與 can 加原形動詞。them 指複數 findings；「也」可用 too 或 also，如 the public can also understand them。",
+    "level": 2
+  },
+  {
+    "id": "english-2768",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "希望能幫助更多病人，她決定在大學主修護理。",
+    "answer": "Hoping to help more patients, she decided to major in nursing in college.",
+    "points": [
+      "希望能幫助：Hoping to help（分詞構句）",
+      "更多病人：more patients",
+      "決定主修護理：decided to major in nursing",
+      "在大學：in college"
+    ],
+    "explain": "句首的 Hoping 由 she 主動發出，分詞構句與主要子句必須共用主詞；不可改成 Hoped。major in 後接主修的科目。",
+    "level": 2
+  },
+  {
+    "id": "english-2769",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "隨著樹葉一片片飄落，這座森林逐漸換上金黃色的面貌。",
+    "answer": "With leaves falling one by one, the forest is gradually turning golden.",
+    "points": [
+      "隨著樹葉飄落：with leaves falling",
+      "一片片：one by one",
+      "森林逐漸變金黃：is gradually turning golden"
+    ],
+    "explain": "with 後接受詞 leaves 與現在分詞 falling，表示葉子主動飄落；不要寫成 with leaves fall，因為這裡不是完整子句。",
+    "level": 2
+  },
+  {
+    "id": "english-2770",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "為了準備下週的傳統儀式，村民請人修好了那面老鼓。",
+    "answer": "To prepare for next week's traditional ceremony, the villagers had the old drum repaired.",
+    "points": [
+      "請人修好鼓：had the old drum repaired",
+      "為了準備：to prepare for",
+      "下週傳統儀式：next week's traditional ceremony",
+      "村民：the villagers"
+    ],
+    "explain": "have 加物品再接過去分詞表示請人處理某物；鼓被修理，用 repaired，不可用 repair。也可寫 had someone repair the old drum，have 加人後接原形動詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2771",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "打開收音機時，我聽見主持人正在解釋那則新聞的背景。",
+    "answer": "When I turned on the radio, I heard the host explaining the background of that news story.",
+    "points": [
+      "聽見主持人解釋：heard the host explain(ing)",
+      "打開收音機時：when I turned on the radio",
+      "背景：background of that news story／report"
+    ],
+    "explain": "hear 加受詞再接現在分詞，強調正在進行的動作；不可寫 heard the host to explain。原形 explain 強調整個過程，若語境成立也可；主持人可寫 the host 或 the presenter。",
+    "level": 2
+  },
+  {
+    "id": "english-2772",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "她每天晚上花十分鐘記下感恩的事，藉此減輕心中的焦慮。",
+    "answer": "She spends ten minutes every evening writing down things she is grateful for to ease her anxiety.",
+    "points": [
+      "花時間記下：spends ... writing down",
+      "每晚十分鐘：ten minutes every／each evening",
+      "感恩的事：things she is grateful for",
+      "減輕焦慮：to ease／reduce her anxiety"
+    ],
+    "explain": "spend 加時間後接動名詞 writing，不能用 to write；things she is grateful for 中的 for 不可省略，因為 grateful 要搭配 for。",
+    "level": 2
+  },
+  {
+    "id": "english-2773",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "學生藉由比較兩組植物，發現溫度會影響它們的生長速度。",
+    "answer": "By comparing two groups of plants, the students found that temperature affected how fast they grew.",
+    "points": [
+      "藉由比較：by comparing",
+      "兩組植物：two groups of plants",
+      "發現溫度影響：found ... affected／affects",
+      "生長速度：how fast they grew／grow"
+    ],
+    "explain": "by 是介系詞，後接 comparing，不用 compare；敘述過去觀察可用 affected、grew。若強調仍成立的一般現象，也可保留現在式 affects、grow；生長速度也可寫 their growth rate。",
+    "level": 2
+  },
+  {
+    "id": "english-2774",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "即使學習過程並不順利，我也從未考慮放棄成為廚師的夢想。",
+    "answer": "Never have I considered giving up my dream of becoming a chef, even though learning has been difficult.",
+    "points": [
+      "從未考慮：Never have I considered（倒裝）",
+      "放棄夢想：giving up my dream",
+      "成為廚師：of becoming a chef",
+      "即使學習不順：even though ... difficult／hard"
+    ],
+    "explain": "Never 放句首時，have 移到 I 前，considered 用過去分詞；consider 後接 giving，不用 to give。「學習不順」可用 learning has been difficult／hard；即使也可用 even when。",
+    "level": 3
+  },
+  {
+    "id": "english-2775",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "只有在太陽下山之後，這些蝙蝠才會離開洞穴尋找食物。",
+    "answer": "Only after the sun sets do these bats leave the cave to look for food.",
+    "points": [
+      "只有日落後才：Only after ... do（倒裝）",
+      "太陽下山：the sun sets／sunset",
+      "蝙蝠離開洞穴：these bats leave the cave",
+      "尋找食物：to look for food"
+    ],
+    "explain": "Only 加時間片語或子句放句首，主要子句用 do 加主詞再接原形 leave；after 可接 sunset，也可接 the sun sets，時間子句本身維持一般語序。",
+    "level": 3
+  },
+  {
+    "id": "english-2776",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "每年都是祖父教我們製作燈籠，讓這項手藝得以傳承。",
+    "answer": "It is our grandfather that teaches us to make lanterns every year, helping to pass down this skill.",
+    "points": [
+      "是祖父教：It is ... that／who teaches",
+      "祖父教我們：our grandfather ... us",
+      "每年製作燈籠：make lanterns every year",
+      "傳承手藝：pass down this skill／craft"
+    ],
+    "explain": "It is ... that ... 強調教導者；強調人也可用 who。grandfather 是單數，動詞用 teaches。helping to ... 表示促成的結果；也可寫 so that this skill can be passed down。",
+    "level": 3
+  },
+  {
+    "id": "english-2777",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "如果沒有可信的報導，一般民眾就無法了解這起事件的真相。",
+    "answer": "Without reliable reports, the public could not learn the truth about this event.",
+    "points": [
+      "如果沒有：without／but for（假設）",
+      "無法：could not／would not be able to learn",
+      "可信的報導：reliable reports",
+      "事件真相：the truth about this event／incident"
+    ],
+    "explain": "without 或 but for 可表示假設條件，主要子句可用 could not learn 或 would not be able to learn；情態助動詞後接原形動詞，不能寫 could not learned。",
+    "level": 2
+  },
+  {
+    "id": "english-2778",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "妹妹在考試前常常緊張，我也有同樣的情況。",
+    "answer": "My younger sister often feels nervous before exams, and so do I.",
+    "points": [
+      "我也如此：so do I／so am I（依前句動詞）",
+      "妹妹：my younger sister",
+      "常緊張：often feels／gets／is nervous",
+      "考試前：before exams"
+    ],
+    "explain": "so 加助動詞加主詞表示另一人也有同樣情況；前句用 feels 或 gets nervous，後句用 so do I；前句若用 is nervous，後句則用 so am I，須依動詞搭配。",
+    "level": 2
+  },
+  {
+    "id": "english-2779",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "在這門科學課中，這項實驗比其他任何一項實驗都更耗時。",
+    "answer": "This experiment takes more time than any other experiment in this science course.",
+    "points": [
+      "更耗時：more time than any other experiment",
+      "這項實驗耗費：this experiment takes",
+      "在這門科學課中：in this science course"
+    ],
+    "explain": "than any other 加單數名詞，表示同一範圍中比其餘每一個都更耗時；other 不可漏掉，否則比較對象會包含自己。",
+    "level": 2
+  },
+  {
+    "id": "english-2780",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "為了實現到海外工作的夢想，他努力尋找適合自己的機會。",
+    "answer": "To achieve his dream of working abroad, he makes an effort to find opportunities that suit him.",
+    "points": [
+      "努力尋找：makes an effort to find",
+      "實現夢想：achieve／realize his dream",
+      "到海外工作：of working abroad",
+      "適合的機會：opportunities that suit him"
+    ],
+    "explain": "make an effort to 後接原形 find，effort 前的 an 不可漏掉；opportunities 是複數，修飾它的關係子句用 suit，不用 suits。",
+    "level": 2
+  },
+  {
+    "id": "english-2781",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "那隻受傷的雁飛得太慢，無法追上正往南飛的雁群。",
+    "answer": "The injured goose flies too slowly to catch up with the flock heading south.",
+    "points": [
+      "追上雁群：catch up with the flock",
+      "受傷的雁：the injured goose",
+      "太慢而無法：flies／is flying too slowly to",
+      "正往南飛：heading／flying south"
+    ],
+    "explain": "catch up with 表示追上，不能漏掉 with；too 加副詞再接 to V，表示慢到無法追上，不必再加 not。",
+    "level": 2
+  },
+  {
+    "id": "english-2782",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "透過圖書館的數位資料，學生能取得有關傳統節慶的資訊。",
+    "answer": "Through the library's digital resources, students have access to information about traditional festivals.",
+    "points": [
+      "能取得資訊：have access to information",
+      "透過圖書館的：through the library's",
+      "數位資料：digital resources／materials",
+      "有關傳統節慶：about traditional festivals"
+    ],
+    "explain": "have access to 表示能取得或使用，access 在此是名詞，不加 an；information 不可數，不要寫成 informations。",
+    "level": 2
+  },
+  {
+    "id": "english-2783",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "我們應該先讀完整篇報導，而不是只憑標題就下判斷。",
+    "answer": "We should read the whole report first instead of judging it by the headline alone.",
+    "points": [
+      "而非：instead of judging／rather than judge",
+      "應先讀全文：should read the whole report first",
+      "只憑標題：by the headline alone"
+    ],
+    "explain": "instead of 的 of 是介系詞，後接 judging；也可用 rather than judge，judge 與 should 後的 read 保持原形。先讀全文也可寫 read the entire report first。",
+    "level": 2
+  },
+  {
+    "id": "english-2784",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "多虧朋友在我失敗後不斷鼓勵，我才逐漸恢復了信心。",
+    "answer": "Thanks to my friends' constant encouragement after my failure, I gradually regained my confidence.",
+    "points": [
+      "多虧：thanks to",
+      "朋友持續鼓勵：friends' constant encouragement",
+      "在我失敗後：after my failure",
+      "逐漸恢復信心：gradually regained my confidence"
+    ],
+    "explain": "thanks to 後接名詞片語，不能直接接完整子句；friends 是複數，其所有格的撇號放在 s 後，表示多位朋友的鼓勵。",
+    "level": 2
+  },
+  {
+    "id": "english-2785",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "這群學生想出了一種簡單的方法，能測量校園內的空氣汙染。",
+    "answer": "These students came up with a simple way to measure air pollution on campus.",
+    "points": [
+      "想出方法：came up with a simple way",
+      "這群學生：these students",
+      "測量校園空氣汙染：measure air pollution on campus"
+    ],
+    "explain": "come up with 表示想出，描述已完成的事用 came，不能漏掉 with；way 後可接 to measure，說明這個方法的用途。",
+    "level": 2
+  },
+  {
+    "id": "english-2786",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "記者抵達農場時，農夫們正在把蔬菜裝進箱子裡。",
+    "answer": "The farmers were packing vegetables into boxes when the reporter arrived at the farm.",
+    "points": [
+      "正在裝箱時：were packing … when …",
+      "把蔬菜裝進箱子：vegetables into boxes",
+      "記者抵達：the reporter arrived",
+      "抵達農場：arrived at the farm"
+    ],
+    "explain": "正在進行的過去動作用 were packing，when 引出後來發生的抵達事件。農夫是複數，不能用 was；when 子句用一般過去式。",
+    "level": 2
+  },
+  {
+    "id": "english-2787",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "到明天中午，消防員就會清除完道路上所有倒下的樹木。",
+    "answer": "By noon tomorrow, the firefighters will have removed all the fallen trees from the roads.",
+    "points": [
+      "將已清除：will have removed／cleared",
+      "到明天中午：by noon tomorrow",
+      "消防員：the firefighters",
+      "道路上所有倒木：all the fallen trees from …"
+    ],
+    "explain": "by noon tomorrow 表示未來的完成期限，因此用 will have removed。will 後接 have，不能依主詞人數改成 has；remove 後可接 from the roads。",
+    "level": 2
+  },
+  {
+    "id": "english-2788",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "這座傳統市場重新開放至今，已經過了三年。",
+    "answer": "It has been three years since this traditional market reopened.",
+    "points": [
+      "至今已過三年：It has been three years since",
+      "這座傳統市場：this traditional market",
+      "重新開放：reopened"
+    ],
+    "explain": "It has been 加一段時間，再用 since 引出過去的起點。重新開放是三年前完成的事件，所以用 reopened，不能用 reopens。",
+    "level": 2
+  },
+  {
+    "id": "english-2789",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "自從加入國際筆友社團以來，我已經交到好幾位外國朋友。",
+    "answer": "I have made several foreign friends since I joined the international pen pal club.",
+    "points": [
+      "已交到：have made … since（現在完成式）",
+      "加入以來：since I joined／since joining",
+      "好幾位外國朋友：several foreign friends",
+      "國際筆友社團：the international pen pal club"
+    ],
+    "explain": "主句用現在完成式 have made，since 子句用過去式 joined 交代起點。兩邊主詞同為 I，也可用 since joining；不能用 for 取代接事件起點的 since。",
+    "level": 2
+  },
+  {
+    "id": "english-2790",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "那年開學前，她就已經安排好第一週的讀書進度。",
+    "answer": "She had already planned her study schedule for the first week before school started that year.",
+    "points": [
+      "就已安排好：had already planned（過去完成式）",
+      "第一週進度：study schedule for the first week",
+      "開學前：before school started",
+      "那年：that year"
+    ],
+    "explain": "安排進度早於過去的開學時間，用 had planned 表示先發生的動作。had 後接過去分詞，不能寫 had plan；開學可用 school started。",
+    "level": 2
+  },
+  {
+    "id": "english-2791",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "open",
+    "q": "過去一個月，我們一直在研究減少校園用電的方法。",
+    "answer": "We have been studying ways to reduce electricity use on campus for the past month.",
+    "points": [
+      "一直研究：have been studying／researching",
+      "減少用電的方法：ways to reduce electricity use",
+      "在校園：on campus",
+      "過去一個月：for the past month"
+    ],
+    "explain": "have been studying 強調研究從過去持續到現在。表示持續一個月要用 for，不能寫 since the past month；ways 後可接 to reduce 說明方法的用途。",
+    "level": 2
+  },
+  {
+    "id": "english-2792",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "只要把牛奶放在冰箱裡，就能讓它保鮮更久。",
+    "answer": "As long as you keep milk in the refrigerator, it will stay fresh longer.",
+    "points": [
+      "只要：as long as",
+      "把牛奶放在冰箱裡：keep milk in the refrigerator",
+      "保鮮更久：stay fresh／keep it fresh（加 longer）"
+    ],
+    "explain": "as long as 引出條件，本句用現在式 keep；主句可用 will stay fresh longer，或 you can keep it fresh longer。fresh 是形容詞，不要寫成 freshly。",
+    "level": 2
+  },
+  {
+    "id": "english-2793",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "無論情況多麼緊急，救援人員都必須保持冷靜。",
+    "answer": "No matter how urgent the situation is, rescue workers must remain calm.",
+    "points": [
+      "無論多麼緊急：no matter how／however urgent",
+      "情況：the situation is",
+      "救援人員：rescue workers",
+      "必須保持冷靜：must remain／keep／stay calm"
+    ],
+    "explain": "no matter how 後接形容詞，再接主詞與動詞，不能寫成問句語序 how urgent is the situation。也可用 However urgent the situation is 開頭。",
+    "level": 2
+  },
+  {
+    "id": "english-2794",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "廟方在路口設置標示，讓遊客能輕鬆找到入口。",
+    "answer": "The temple put up signs at the intersection so that visitors could easily find the entrance.",
+    "points": [
+      "讓…能：so that／in order that … could",
+      "廟方設置標示：the temple put up signs",
+      "在路口：at the intersection",
+      "輕鬆找到入口：easily find the entrance"
+    ],
+    "explain": "so that 加完整子句表目的；主句用過去式 put，子句配合用 could。不能把 so that 後面直接接原形動詞，必須寫出 visitors 這個主詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2795",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "我們越常閱讀國際新聞，就越能了解不同文化。",
+    "answer": "The more often we read international news, the better we can understand different cultures.",
+    "points": [
+      "越常就越了解：the more often …, the better …",
+      "閱讀國際新聞：read international news",
+      "了解不同文化：understand different cultures"
+    ],
+    "explain": "兩個 the 加比較級的子句表示連動變化；常用 more often，了解得更好用 better。news 是不可數名詞，不能在字尾再加 s。",
+    "level": 2
+  },
+  {
+    "id": "english-2796",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "哥哥和我都不會在考試前一晚熬夜準備功課。",
+    "answer": "Neither my older brother nor I stay up late to study the night before an exam.",
+    "points": [
+      "哥哥和我都不：neither my older brother nor I",
+      "熬夜讀書：stay up late to study／studying",
+      "考試前一天晚上：the night before an exam"
+    ],
+    "explain": "neither A nor B 表示兩者都不，不能再加 not。動詞依較近的主詞 I 使用 stay；stay up late 是熬夜，準備功課可用 to study。",
+    "level": 2
+  },
+  {
+    "id": "english-2797",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "open",
+    "q": "含有貴重金屬的舊手機不應該被隨意丟棄。",
+    "answer": "Old phones that contain valuable metals should not be thrown away carelessly.",
+    "points": [
+      "含有的：that／which contain（關係子句）",
+      "舊手機：old phones／old cell phones",
+      "貴重金屬：valuable／precious metals",
+      "勿亂丟：should not be thrown away carelessly"
+    ],
+    "explain": "that 引導子句修飾 phones，也可用 which。phones 是複數，關係子句用 contain，不能加 s；手機是被丟棄的對象，因此用被動語態。",
+    "level": 2
+  },
+  {
+    "id": "english-2798",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "昨天下午，我看見奶奶在陽臺上曬自己種的水果。",
+    "answer": "Yesterday afternoon, I saw my grandmother drying her home-grown fruit on the balcony.",
+    "points": [
+      "看見奶奶曬：saw my grandmother dry／drying",
+      "自種果：fruit she had grown／home-grown fruit",
+      "昨天下午：yesterday afternoon",
+      "在陽臺上：on the balcony"
+    ],
+    "explain": "see 加受詞與 V-ing 表示看見正在進行的動作，原形 dry 則偏重完整過程；不能寫 saw my grandmother to dry。自己種的水果也可寫 her home-grown fruit。",
+    "level": 2
+  },
+  {
+    "id": "english-2799",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "大雨過後，救難隊很難在山區找到安全的路線。",
+    "answer": "After the heavy rain, the rescue team had difficulty finding a safe route in the mountains.",
+    "points": [
+      "很難找到：had difficulty／trouble finding",
+      "大雨過後：after the heavy rain",
+      "救難隊：the rescue team",
+      "山區的安全路線：a safe route in the mountains"
+    ],
+    "explain": "have difficulty 後接 V-ing，因此「找到」寫 finding，不能接 to find。difficulty 在此表示困難，通常不加 a；山區可用 in the mountains。",
+    "level": 2
+  },
+  {
+    "id": "english-2800",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "在夜市，消費者可以透過掃描條碼來支付餐費。",
+    "answer": "At night markets, customers can pay for their meals by scanning a barcode.",
+    "points": [
+      "透過掃描條碼：by scanning a barcode",
+      "在夜市：at night markets",
+      "消費者：customers",
+      "支付餐費：pay for their meals"
+    ],
+    "explain": "by 加 V-ing 表示方法，不能寫 by scan 或 by to scan。pay for 加購買的物品；若只寫 pay their meals，就少了介系詞 for。",
+    "level": 1
+  },
+  {
+    "id": "english-2801",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "這部介紹臺灣茶葉的紀錄片值得全家一起觀賞。",
+    "answer": "This documentary about Taiwanese tea is worth watching with the whole family.",
+    "points": [
+      "值得觀賞：is worth watching",
+      "這部紀錄片：this documentary",
+      "介紹臺灣茶葉：about Taiwanese tea",
+      "全家一起：with the whole family"
+    ],
+    "explain": "be worth 後接 V-ing，不能寫 worth to watch。紀錄片雖是被觀賞的對象，這裡仍慣用 watching 表達被動意義；with the whole family 表示和全家人一起觀賞。",
+    "level": 2
+  },
+  {
+    "id": "english-2802",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "為了在晚餐前完成報告，他讀書前先把手機關機。",
+    "answer": "In order to finish his report before dinner, he turns off his phone before studying.",
+    "points": [
+      "為了完成：in order to finish／to finish",
+      "晚餐前完成報告：finish his report before dinner",
+      "關手機：turns／turned off his phone",
+      "讀書前：before studying"
+    ],
+    "explain": "in order to 加原形動詞表目的，也可直接用 to finish，不能寫 in order to finishing。before studying 也可寫 before he studies；中文未限定時間，整句改用過去式亦可。",
+    "level": 2
+  },
+  {
+    "id": "english-2803",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "open",
+    "q": "離開教室時隨手關燈，可以節省能源並降低電費。",
+    "answer": "Turning off the lights when leaving the classroom can save energy and lower electricity bills.",
+    "points": [
+      "關燈這件事：turning off the lights（動名詞當主詞）",
+      "離開教室時：when leaving／when you leave …",
+      "節省能源：save energy",
+      "降低電費：lower／reduce electricity bills"
+    ],
+    "explain": "Turning off the lights 整組作主詞，不能用原形 Turn 直接開頭充當主詞。can 後的 save 與 lower 並列，都用原形動詞。",
+    "level": 2
+  },
+  {
+    "id": "english-2804",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "要不是學校有供應午餐，有些學生下午就會餓肚子。",
+    "answer": "Without the lunches provided by the school, some students would go hungry in the afternoon.",
+    "points": [
+      "若沒有就會：without／but for … would go",
+      "供餐：school lunches／lunches provided by …",
+      "有些學生挨餓：some students would go hungry",
+      "在下午：in the afternoon"
+    ],
+    "explain": "without 在此表示與現況相反的條件，主句用 would 加原形動詞。provided 修飾 lunches，表示午餐由學校供應，不可改成主動的 providing。",
+    "level": 3
+  },
+  {
+    "id": "english-2805",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "姊姊從不在颱風天獨自出門，我也一樣。",
+    "answer": "My older sister never goes out alone during typhoons, and neither do I.",
+    "points": [
+      "我也不：neither／nor do I（倒裝）",
+      "姊姊從不獨自出門：older sister … never … alone",
+      "在颱風天：during typhoons／on typhoon days"
+    ],
+    "explain": "前半句用 never 表否定，附和時用 neither 加助動詞再加主詞。原動詞是 goes，配合 I 改用 do；不能寫 neither I do，也不能用 neither am I。",
+    "level": 2
+  },
+  {
+    "id": "english-2806",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "鎮上的老水塔比當地其他任何一棟建築物都高。",
+    "answer": "The old water tower in town is taller than any other building in the town.",
+    "points": [
+      "比其他任何建築高：taller than any other building",
+      "鎮上的老水塔：the old water tower in town",
+      "當地：in the town／in the area"
+    ],
+    "explain": "比較級加 than any other 與單數名詞，可表達同一範圍中最高。水塔本身也屬於建築物，因此 other 不能省略，building 不能改成複數。",
+    "level": 2
+  },
+  {
+    "id": "english-2807",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "這本雙語字典的重量是那本口袋字典的兩倍。",
+    "answer": "This bilingual dictionary is twice as heavy as that pocket dictionary.",
+    "points": [
+      "兩倍重：twice as heavy／twice as much（後接 as）",
+      "這本雙語字典：this bilingual dictionary",
+      "那本口袋字典：that pocket dictionary"
+    ],
+    "explain": "倍數加 as 加形容詞原級，再接 as 比較對象，因此用 heavy，不是 heavier。也可用 This bilingual dictionary weighs twice as much as that pocket dictionary. 表達。",
+    "level": 2
+  },
+  {
+    "id": "english-2808",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "毫無疑問，設定明確的目標能讓學生更有效率地讀書。",
+    "answer": "There is no doubt that setting clear goals helps students study more efficiently.",
+    "points": [
+      "毫無疑問：there is no doubt that",
+      "設定明確目標：setting clear goals",
+      "幫助學生：helps／can help students (to) study",
+      "更有效率地：more efficiently"
+    ],
+    "explain": "There is no doubt that 後接完整子句。setting clear goals 作主詞時用單數動詞 helps，不因 goals 是複數就用 help；也可寫 can help students (to) study，can 後用原形。",
+    "level": 3
+  },
+  {
+    "id": "english-2809",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "open",
+    "q": "如果學校現在有更多經費，就會在屋頂安裝太陽能板。",
+    "answer": "If the school had more money now, it would install solar panels on the roof.",
+    "points": [
+      "若有就會裝：if … had …, … would install",
+      "現在更多經費：more money now",
+      "屋頂裝太陽能板：install solar panels on the roof"
+    ],
+    "explain": "與現在事實相反的條件，用 if 加過去式 had，主句用 would 加原形 install。這裡的 had 不表示過去時間，也不能在 if 子句內寫 would have。",
+    "level": 2
+  },
+  {
+    "id": "english-2810",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "這家餐廳優先選用本地蔬菜，而不是進口蔬菜。",
+    "answer": "This restaurant gives priority to local vegetables rather than imported ones.",
+    "points": [
+      "而不是：rather than／instead of",
+      "優先選用：gives priority to",
+      "本地蔬菜：local vegetables",
+      "進口蔬菜：imported ones／vegetables"
+    ],
+    "explain": "rather than 在此連接兩個名詞片語，表示選擇前者。ones 代替複數的 vegetables，不能用單數 one；give priority to 表示優先考慮。",
+    "level": 2
+  },
+  {
+    "id": "english-2811",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "多虧及早收到警報，村民在洪水來襲前就抵達安全地點。",
+    "answer": "Thanks to the early warning, the villagers reached a safe place before the flood arrived.",
+    "points": [
+      "多虧：thanks to／because of … early warning",
+      "村民抵達：the villagers reached",
+      "安全地點：a safe place／safety",
+      "洪水來襲前：before the flood arrived／hit"
+    ],
+    "explain": "thanks to 後接名詞片語，通常說明正面的原因，也可用 because of。reach 是及物動詞，直接接 a safe place，不能多加介系詞 to。",
+    "level": 2
+  },
+  {
+    "id": "english-2812",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "居民想出了一個新方法，讓老屋也能成為社區的活動空間。",
+    "answer": "The residents came up with a new way to turn old houses into spaces for community activities.",
+    "points": [
+      "想出了：came up with",
+      "一個新方法：a new way",
+      "把老屋變成空間：turn old houses into spaces",
+      "社區活動用：for community activities"
+    ],
+    "explain": "come up with 表示想出主意，過去式是 came up with，with 不可漏掉。turn A into B 表示把 A 變成 B；way 後用不定詞說明方法的內容。",
+    "level": 2
+  },
+  {
+    "id": "english-2813",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "為了防止地方語言消失，研究人員持續記錄長輩的故事。",
+    "answer": "To prevent local languages from disappearing, researchers continue to record older people's stories.",
+    "points": [
+      "防止消失：prevent … from disappearing",
+      "地方語言：local languages",
+      "持續記錄：continue to record／… recording",
+      "長輩故事：older people's／told by older people"
+    ],
+    "explain": "prevent 加受詞再接 from V-ing，不能寫 prevent local languages to disappear。older people 指較年長的人，所有格要寫成 older people's。",
+    "level": 2
+  },
+  {
+    "id": "english-2814",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "她善用每天搭公車的時間，聆聽英文有聲書。",
+    "answer": "She takes advantage of her daily bus ride to listen to English audio books.",
+    "points": [
+      "善用：takes advantage of",
+      "每天搭公車的時間：her daily bus ride／rides",
+      "聆聽：listen to",
+      "英文有聲書：English audio books／audiobooks"
+    ],
+    "explain": "take advantage of 在此表示善用時間，of 不能漏掉。聆聽的 listen 要加 to 才能接書籍；有聲書也可寫成 audiobooks。",
+    "level": 2
+  },
+  {
+    "id": "english-2815",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "open",
+    "q": "經歷長時間缺水後，我們不再把乾淨的自來水視為理所當然。",
+    "answer": "After a long water shortage, we no longer take clean tap water for granted.",
+    "points": [
+      "視為理所當然：take … for granted",
+      "長時間缺水後：after a long water shortage",
+      "不再把乾淨自來水：no longer … clean tap water"
+    ],
+    "explain": "take A for granted 表示把 A 視為理所當然，受詞 clean tap water 放在 take 與 for 之間。no longer 已是否定，不可再加 not；tap water 不可數。",
+    "level": 2
   }
 ]
