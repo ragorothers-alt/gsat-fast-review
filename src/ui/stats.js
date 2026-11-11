@@ -68,7 +68,7 @@ export function initStats(ctx) {
         const m = Math.round(s.mastery * 100);
         return `<li style="--c:${subj.color}">
           <span class="tag">${subj.name}</span>
-          <span class="subject-meta">練過 ${s.practiced}／${s.total} 題・正確率 ${pct(s.accuracy)}</span>
+          <span class="subject-meta"><span class="subject-done">練過 ${s.practiced}／${s.total} 題・正確率 ${pct(s.accuracy)}</span>${s.concepts.total ? `<span class="subject-kp">考點 ${s.concepts.touched}／${s.concepts.total}</span>` : ''}</span>
           <span class="unit-meter" role="img" aria-label="熟練度 ${m}%"><i style="width:${m}%"></i></span>
         </li>`;
       })

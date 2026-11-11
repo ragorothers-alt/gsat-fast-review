@@ -1,5 +1,7 @@
 // 考前重點卡：每個單元的必背重點與易錯陷阱。底部彈出面板，可以前後翻同一科的單元、直接練這個單元。
 // 從錯題本的「重點」分頁、單元面板、學習分析的弱點單元、題目卡上的單元名稱打開。
+import { conceptCoverage, conceptPrefix, conceptProgress } from '../analysis.js';
+import { loadConcepts } from '../data/concepts.js';
 import { loadKeypoints } from '../data/keypoints.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { mastery } from '../srs.js';
@@ -29,7 +31,12 @@ export function initKeypoints(ctx) {
     $('#kp-subject').textContent = subj.name;
     $('#kp-unit').textContent = unit;
     const qs = ctx.bank.filter((q) => q.subject === subject && q.topic === unit);
-    $('#kp-meta').textContent = `第 ${i + 1} / ${list.length} 個單元・${qs.length} 題・熟練 ${Math.round(mastery(qs, ctx.state.cards) * 100)}%`;
+    // 這個單元練過幾個考點（跨單元綜合通常借用別的單元的考點，沒有自己的，就不寫）
+    const progress = conceptProgress(ctx.bank, ctx.state.cards, subject);
+    const cover = conceptCoverage(progress, conceptPrefix(subject, unit));
+    $('#kp-meta').textContent =
+      `第 ${i + 1} / ${list.length} 個單元・${qs.length} 題・熟練 ${Math.round(mastery(qs, ctx.state.cards) * 100)}%` + (cover.total ? `・考點 ${cover.touched}／${cover.total}` : '');
+    renderConcepts(mine, progress, cover);
     $('#kp-prev').disabled = i <= 0;
     $('#kp-next').disabled = i >= list.length - 1;
     $('#kp-train').textContent = `練這個單元（${MODES.weak.size} 題）`;
@@ -56,6 +63,41 @@ export function initKeypoints(ctx) {
     traps.innerHTML = card.traps.map((t) => `<li>${richHTML(t)}</li>`).join('');
     status.hidden = true;
     $('#kp-body').hidden = false;
+  }
+
+  /**
+   * 這個單元的考點：每個考點練過幾題；還沒練過的、還有錯題的各用不同的樣子標出來。
+   * 考點清單另外下載，和重點卡各自顯示（其中一個載不下來不影響另一個）
+   */
+  async function renderConcepts(mine, progress, cover) {
+    const box = $('#kp-concepts');
+    box.hidden = true;
+    if (!cover.total) return;
+    let mineUnit;
+    try {
+      mineUnit = (await loadConcepts(subject))?.find((c) => c.unit === unit);
+    } catch {
+      return; // 離線又還沒快取：上面那行已經寫了練過幾個，名稱就先不列
+    }
+    if (mine !== ticket || !mineUnit) return;
+    const listEl = $('#kp-concept-list');
+    listEl.innerHTML = '';
+    for (const c of mineUnit.concepts) {
+      const p = progress.get(c.id) ?? { size: 0, seen: 0, weak: 0 };
+      const li = document.createElement('li');
+      li.className = `kp-chip ${p.weak ? 'weak' : p.seen ? 'done' : 'todo'}`;
+      li.title = c.scope;
+      const name = document.createElement('span');
+      name.className = 'kp-chip-name';
+      name.textContent = c.name;
+      const n = document.createElement('span');
+      n.className = 'kp-chip-n';
+      n.textContent = p.weak ? `錯題 ${p.weak}・練過 ${p.seen}／${p.size}` : p.seen ? `練過 ${p.seen}／${p.size}` : `還沒練・${p.size} 題`;
+      li.append(name, n);
+      listEl.append(li);
+    }
+    $('#kp-concepts-n').textContent = `練過 ${cover.touched}／${cover.total}`;
+    box.hidden = false;
   }
 
   /** 打開某個單元的重點卡 */

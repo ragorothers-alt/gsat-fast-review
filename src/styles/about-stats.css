@@ -271,6 +271,19 @@
   color: var(--ink-soft);
 }
 
+/* 各科練過幾個考點：接在同一行後面，放不下就整段換到下一行（不從中間斷開）。
+   間隔留在前一段的右邊：換行後考點從行首開始，不會縮排 */
+.subject-done {
+  margin-right: 0.7em;
+}
+
+.subject-kp {
+  display: inline-block;
+  white-space: nowrap;
+  font-weight: 800;
+  color: var(--ink);
+}
+
 .subject-stats .unit-meter {
   grid-column: 2;
   margin-top: 0;

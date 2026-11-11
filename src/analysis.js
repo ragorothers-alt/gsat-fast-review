@@ -57,7 +57,46 @@ export function weakUnits(bank, cards, { subjects, excludedUnits = [], limit = 3
     .slice(0, limit);
 }
 
-/** 各科：練過幾題、正確率（看解答算失誤）、熟練度 */
+/**
+ * 一科的考點練得怎麼樣：每個考點（題目的 kp）在題庫裡有幾題、作答過幾題、其中還在錯題本的有幾題。
+ * 跨單元綜合的題目借用別的單元的考點，所以考點照科目算、不分單元；沒標考點的題目不算。
+ * @returns {Map<string, { size: number, seen: number, weak: number }>} 考點代號 → 題數（照代號排序）
+ */
+export function conceptProgress(bank, cards, subject) {
+  const out = new Map();
+  for (const q of bank) {
+    if (q.subject !== subject || !q.kp) continue;
+    const p = out.get(q.kp) ?? out.set(q.kp, { size: 0, seen: 0, weak: 0 }).get(q.kp);
+    p.size++;
+    const c = cards[q.id];
+    if (!c?.seen) continue;
+    p.seen++;
+    if (isWeak(c)) p.weak++;
+  }
+  return new Map([...out].sort(([a], [b]) => a.localeCompare(b)));
+}
+
+/** 考點代號的前兩碼是單元序號（src/units.js 的順序，從 01 起）：這個單元的考點代號開頭 */
+export const conceptPrefix = (subject, unit) => `${String((UNITS[subject] ?? []).indexOf(unit) + 1).padStart(2, '0')}-`;
+
+/**
+ * 練過幾個考點（作答過至少一題就算）
+ * @param {Map<string, { seen: number }>} progress conceptProgress 的結果
+ * @param {string} [prefix] 只算這個單元的考點（conceptPrefix）；沒給就是整科
+ * @returns {{ total: number, touched: number }}
+ */
+export function conceptCoverage(progress, prefix = '') {
+  let total = 0;
+  let touched = 0;
+  for (const [kp, p] of progress) {
+    if (!kp.startsWith(prefix)) continue;
+    total++;
+    if (p.seen) touched++;
+  }
+  return { total, touched };
+}
+
+/** 各科：練過幾題、正確率（看解答算失誤）、熟練度、練過幾個考點（concepts：{ total, touched }，沒標考點的科目 total 是 0） */
 export function subjectStats(bank, cards, subjects) {
   return subjects.map((subject) => {
     const qs = bank.filter((q) => q.subject === subject);
@@ -71,7 +110,7 @@ export function subjectStats(bank, cards, subjects) {
       seen += c.seen;
       right += c.right;
     }
-    return { subject, total: qs.length, practiced, accuracy: seen ? right / seen : null, mastery: mastery(qs, cards) };
+    return { subject, total: qs.length, practiced, accuracy: seen ? right / seen : null, mastery: mastery(qs, cards), concepts: conceptCoverage(conceptProgress(qs, cards, subject)) };
   });
 }
 

@@ -16,6 +16,7 @@ import { isUnitOff, topicLabel, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { openKeypointsFrom } from './keypoints.js';
 import { lvTag, openRefHTML } from './review-item.js';
+import { conceptOf, loadConcepts } from '../data/concepts.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
 import { sfx } from './feedback.js';
@@ -341,6 +342,8 @@ export function initPlay(ctx) {
     useChoices = false;
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
+    // 作答後要標出這題的考點：考點清單先載好（每科一個小檔，載不下來就不標）
+    loadConcepts(q.subject).catch(() => {});
     el.explain.hidden = true;
     el.next.hidden = true;
     el.msSend.hidden = true;
@@ -659,6 +662,7 @@ export function initPlay(ctx) {
         `<span class="leech-note">這題已經失手 ${missCount(after)} 次。只記答案很快又會忘，先<button type="button" class="link-btn" data-kp="${q.subject}/${q.topic}">看這個單元的重點</button>，或練幾題類似題，換個角度弄懂。</span>`,
       );
     }
+    showConcept();
     el.explain.hidden = false;
     // 題目卡多了解析，需要的高度變了（非選擇題的版面用得到，見 play-card.js）
     updateNeed();
@@ -675,6 +679,29 @@ export function initPlay(ctx) {
     offerRelated(outcome !== 'right');
     el.next.hidden = false;
     el.next.focus({ preventScroll: true });
+  }
+
+  /**
+   * 解析標題旁標出這題的考點。作答前不顯示：考點名稱常常就是解題的提示（「餘式定理」「轉折與讓步」）。
+   * 考點清單還在下載就等它好了再補上（還停在同一題的解析才補）
+   */
+  function showConcept() {
+    const asked = q;
+    const put = () => {
+      const c = conceptOf(asked);
+      const head = el.explain.querySelector('b');
+      if (!c || q !== asked || phase !== 'feedback' || !head || head.querySelector('.kp-tag')) return false;
+      const tag = document.createElement('span');
+      tag.className = 'kp-tag';
+      tag.textContent = `考點：${c.name}`;
+      head.append(tag);
+      return true;
+    };
+    if (put() || conceptOf(asked)) return;
+    loadConcepts(asked.subject).then(
+      () => put() && updateNeed(),
+      () => {},
+    );
   }
 
   /** 答錯、看解答或標成猜的之後，提供「練 3 題類似題」；快閃在計時、闖關會自動補題，都不另外提供 */

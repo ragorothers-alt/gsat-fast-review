@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../src/analysis.js';
+import { LOW_STOCK, accuracyOf, bankStock, conceptCoverage, conceptPrefix, conceptProgress, dailySeries, daysUntil, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../src/analysis.js';
 import { CROSS_UNIT, UNITS } from '../src/units.js';
 
 const [U1, U2, U3] = UNITS.math;
@@ -86,5 +86,36 @@ describe('題庫存量', () => {
       [U1, 0],
       [U2, 0],
     ]);
+  });
+});
+
+describe('考點', () => {
+  // 第 1 單元兩個考點、第 2 單元一個；跨單元綜合的題目借用第 1 單元的考點
+  const kq = (id, topic, kp) => ({ id, subject: 'math', topic, kp });
+  const tagged = [kq('a1', U1, '01-01'), kq('a2', U1, '01-01'), kq('a3', U1, '01-02'), kq('b1', U2, '02-01'), kq('x1', CROSS_UNIT, '01-02'), q('n1', U3)];
+
+  it('conceptProgress：每個考點有幾題、作答過幾題、還在錯題本的幾題；沒標考點的題目和別科不算', () => {
+    const cards = { a1: c(1, 1, { box: 2, missed: 0, wrong: 0 }), x1: c(2, 1), n1: c(1, 1) };
+    const p = conceptProgress([...tagged, { id: 'p1', subject: 'physics', topic: '波動與光', kp: '01-01' }], cards, 'math');
+    expect([...p.keys()]).toEqual(['01-01', '01-02', '02-01']);
+    expect(p.get('01-01')).toEqual({ size: 2, seen: 1, weak: 0 });
+    // 跨單元綜合那題算在它借用的考點上
+    expect(p.get('01-02')).toEqual({ size: 2, seen: 1, weak: 1 });
+    expect(p.get('02-01')).toEqual({ size: 1, seen: 0, weak: 0 });
+  });
+
+  it('conceptCoverage：整科或單一單元練過幾個考點', () => {
+    const p = conceptProgress(tagged, { a1: c(1, 1), x1: c(2, 1) }, 'math');
+    expect(conceptCoverage(p)).toEqual({ total: 3, touched: 2 });
+    expect(conceptPrefix('math', U1)).toBe('01-');
+    expect(conceptCoverage(p, conceptPrefix('math', U1))).toEqual({ total: 2, touched: 2 });
+    expect(conceptCoverage(p, conceptPrefix('math', U2))).toEqual({ total: 1, touched: 0 });
+    // 跨單元綜合沒有自己的考點
+    expect(conceptCoverage(p, conceptPrefix('math', CROSS_UNIT))).toEqual({ total: 0, touched: 0 });
+  });
+
+  it('subjectStats 帶出各科練過幾個考點；沒標考點的題庫是 0／0', () => {
+    expect(subjectStats(tagged, { b1: c(1, 0) }, ['math'])[0].concepts).toEqual({ total: 3, touched: 1 });
+    expect(subjectStats(bank, {}, ['math'])[0].concepts).toEqual({ total: 0, touched: 0 });
   });
 });

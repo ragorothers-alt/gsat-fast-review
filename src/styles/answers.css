@@ -58,8 +58,9 @@
   margin-bottom: 4px;
 }
 
-/* 英文單字題：考的字在參考詞彙表第幾級（解析標題旁、錯題本的正解旁） */
-.lv-tag {
+/* 英文單字題：考的字在參考詞彙表第幾級（解析標題旁、錯題本的正解旁）；這題的考點（解析標題旁） */
+.lv-tag,
+.kp-tag {
   display: inline-block;
   margin-left: 8px;
   padding: 0 7px;

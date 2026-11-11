@@ -466,7 +466,7 @@
           </section>
 
           <section class="stats-block paper">
-            <h3>各科<small>練過題數・正確率・熟練度</small></h3>
+            <h3>各科<small>練過題數・正確率・考點・熟練度</small></h3>
             <ul id="stats-subjects" class="subject-stats"></ul>
           </section>
 
@@ -789,6 +789,12 @@
             <ol id="kp-points" class="kp-list"></ol>
             <h3 class="kp-h trap"><svg class="ico" aria-hidden="true"><use href="#i-flag"/></svg>易錯陷阱</h3>
             <ul id="kp-traps" class="kp-list traps"></ul>
+          </div>
+          <!-- 這個單元的考點：練過的打勾、還有錯題的標出來；新題會先出還沒練過的 -->
+          <div id="kp-concepts" hidden>
+            <h3 class="kp-h concepts"><svg class="ico" aria-hidden="true"><use href="#i-ok"/></svg>考點<small id="kp-concepts-n"></small></h3>
+            <p class="kp-concepts-tip">出新題時，還沒練過的考點會先出。</p>
+            <ul id="kp-concept-list" class="kp-chips"></ul>
           </div>
         </div>
         <nav class="kp-actions">

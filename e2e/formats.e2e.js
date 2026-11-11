@@ -18,6 +18,8 @@ test('英文單字題答錯：解析標出正解在參考詞彙表的級數，�
   await practice(page, 'english-1711');
   await page.locator('#answers .answer').filter({ hasNotText: 'abrupt' }).first().click();
   await expect(page.locator('#q-explain .lv-tag')).toHaveText('詞彙表第 5 級');
+  // 考點和級數兩個標籤並排，各自一個
+  await expect(page.locator('#q-explain .kp-tag')).toHaveText(/^考點：.{2,14}$/);
   for (const scheme of ['light', 'dark']) {
     await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
     await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);

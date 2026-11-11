@@ -76,6 +76,78 @@
   color: var(--bad-ink);
 }
 
+/* 這個單元的考點：一個考點一格，兩欄排（窄螢幕一欄放不下長名稱會自己換行） */
+.kp-h.concepts {
+  margin-top: 18px;
+}
+
+/* 重點卡還沒準備好的單元只有考點：上面不用留那麼多空 */
+#kp-body[hidden] + #kp-concepts .kp-h.concepts {
+  margin-top: 6px;
+}
+
+.kp-h small {
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--ink-soft);
+}
+
+.kp-concepts-tip {
+  margin: 0 0 8px;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.kp-chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.kp-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  background: color-mix(in srgb, var(--c, var(--accent)) 18%, var(--card));
+  overflow-wrap: anywhere;
+}
+
+.kp-chip-name {
+  font-size: calc(0.86rem * var(--fs, 1));
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.kp-chip-n {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+}
+
+/* 還沒練過：虛線、沒有底色 */
+.kp-chip.todo {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--ink) 55%, transparent);
+  background: var(--card);
+}
+
+/* 還有錯題沒複習穩 */
+.kp-chip.weak {
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad-bg) 55%, var(--card));
+}
+
+.kp-chip.weak .kp-chip-n {
+  color: var(--bad-ink);
+  font-weight: 800;
+}
+
 /* 捲動區可以用鍵盤捲（Tab 進來後按方向鍵） */
 #kp-scroll:focus-visible {
   outline: 2.5px dashed var(--accent-2);

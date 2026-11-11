@@ -35,6 +35,8 @@ export const test = base.extend({
       route.fulfill({ status: 503, contentType: 'application/json', body: '{"error":"blocked in e2e"}' }),
     );
     await use(page);
+    // 測試結束時可能還有攔截中的請求在路上（例如看解析時才去下載的考點清單）：放掉，不當成錯誤
+    await page.unrouteAll({ behavior: 'ignoreErrors' }).catch(() => {});
     expect(errors, '頁面上不該有未捕捉的錯誤').toEqual([]);
   },
 });
