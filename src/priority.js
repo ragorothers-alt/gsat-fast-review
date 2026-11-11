@@ -79,15 +79,61 @@ function packUnit(pack) {
   return best;
 }
 
+/** 考點的鍵：科目/考點代號（q.kp）；還沒標考點的題目是 null */
+export const conceptKey = (q) => (q.kp ? `${q.subject}/${q.kp}` : null);
+
 /**
- * 新題的出題順序：每個位置先依單元優先度抽一個單元，再出這個單元排在最前面的題目；
- * 單元裡的題目事先依難度權重做加權隨機排序（每題的鍵是 u^(1/權重)，大的先出）。
+ * 各考點練得怎麼樣：題庫裡有幾題（size）、其中作答過幾題（seen）。
+ * 跨單元綜合的題目標的是別的單元的考點，所以考點照科目算、不分單元。
+ * @returns {Map<string, { size: number, seen: number }>} conceptKey → 題數
+ */
+export function conceptStats(bank, cards, subjects) {
+  const wanted = new Set(subjects);
+  const out = new Map();
+  for (const q of bank) {
+    const key = conceptKey(q);
+    if (!key || !wanted.has(q.subject)) continue;
+    const c = out.get(key) ?? out.set(key, { size: 0, seen: 0 }).get(key);
+    c.size++;
+    if (cards[q.id]?.seen) c.seen++;
+  }
+  return out;
+}
+
+/**
+ * 考點練過的程度（越小越該先出）：沒練過是 0；練過的除以考點大小的平方根——題目多的考點變化也多，
+ * 每個考點都碰過一輪之後，大的考點多分到一些
+ */
+const conceptLoad = (c) => (c ? c.seen / Math.sqrt(c.size) : 0);
+
+/** 題組算在哪個考點：組裡第一題有標的考點 */
+const packConcept = (pack) => pack.map(conceptKey).find(Boolean) ?? null;
+
+/**
+ * 新題的出題順序：每個位置先依單元優先度抽一個單元，再出這個單元裡最該出的題目——
+ * 先看考點：還沒練過的考點先出，同一個考點不連著出好幾題（conceptLoad 最小的；沒標考點的題目不比這一項）；
+ * 考點一樣該出時照難度：單元裡的題目事先依難度權重做加權隨機排序（每題的鍵是 u^(1/權重)，大的先出）。
+ * 一個單元隨機抽 15 題平均只碰到 11 個考點，照考點出就是 15 個：同樣的題數，練到的觀念多兩三成。
  * 閱讀題組整組一起出：一組算一個候選，歸到組裡最多題的單元，難度權重取各題的平均。
  * @param {Question[]} fresh 還沒做過的題目（已依模式篩好）
- * @param {{ shares: Map<string, number>, skill: Map<string, { n: number, p: number }>, size: number, rng?: () => number }} opts
+ * @param {{ shares: Map<string, number>, skill: Map<string, { n: number, p: number }>, concepts?: Map<string, { size: number, seen: number }>, size: number, rng?: () => number }} opts
+ *   concepts：conceptStats 的結果；沒給就不看考點
  * @returns {Question[]} 最多 size 題（最後一個題組放不下時整組照出）；同組的題目排在一起
  */
-export function orderFresh(fresh, { shares, skill, size, rng = Math.random }) {
+export function orderFresh(fresh, { shares, skill, concepts = new Map(), size, rng = Math.random }) {
+  // 這一輪排進去的題目也算練過，同一個考點才不會在同一輪連出
+  const load = new Map([...concepts].map(([key, c]) => [key, { ...c }]));
+  /** 這個單元裡最該出的那一包的位置：考點最沒練過的，一樣就取排在前面的 */
+  const pick = (packs) => {
+    let best = 0;
+    let bestLoad = Infinity;
+    for (let i = 0; i < packs.length && bestLoad > 0; i++) {
+      const key = packConcept(packs[i]);
+      const v = key ? conceptLoad(load.get(key)) : 0;
+      if (v < bestLoad) [best, bestLoad] = [i, v];
+    }
+    return best;
+  };
   const groups = new Map();
   for (const pack of bundles(fresh)) {
     const key = packUnit(pack);
@@ -107,7 +153,12 @@ export function orderFresh(fresh, { shares, skill, size, rng = Math.random }) {
     let i = 0;
     while (i < pools.length - 1 && (r -= pools[i].w) > 0) i++;
     const pool = pools[i];
-    out.push(...pool.packs.shift());
+    const [pack] = pool.packs.splice(pick(pool.packs), 1);
+    for (const key of new Set(pack.map(conceptKey))) {
+      const c = key && load.get(key);
+      if (c) c.seen++;
+    }
+    out.push(...pack);
     if (!pool.packs.length) {
       pools.splice(i, 1);
       total -= pool.w;

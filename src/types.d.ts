@@ -71,6 +71,8 @@ interface Question {
   lv?: number;
   /** 圖表題的資料 */
   fig?: Figure;
+  /** 考點代號（「單元序號-考點序號」，清單在 src/data/concepts/<科目>.json）；還沒標考點的科目沒有 */
+  kp?: string;
 }
 
 /** 一題的作答紀錄與排程（srs.js 的 schedule）。missed、last 是後來才加的欄位，舊紀錄可能沒有 */

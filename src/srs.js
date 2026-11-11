@@ -1,6 +1,6 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
 import { bundles, takeBundles } from './groups.js';
-import { orderFresh, unitShares, unitSkill } from './priority.js';
+import { conceptStats, orderFresh, unitShares, unitSkill } from './priority.js';
 import { isUnitOff, unitKey } from './units.js';
 
 export const MINUTE = 60_000;
@@ -166,7 +166,7 @@ export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
 
 /**
  * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。
- * 新題依學測分量與單元熟練度排（priority.js）：考得多、還不熟的單元先出。
+ * 新題依學測分量與單元熟練度排（priority.js）：考得多、還不熟的單元先出；單元裡還沒練過的考點先出。
  * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {Question[]} bank
  * @param {Record<string, Card>} cards
@@ -227,7 +227,7 @@ export function buildQueue(
   const rest = joining.length ? unseen.filter((q) => !dueGroups.has(q.group)) : unseen;
   // bundles 把同組的題目併到這組第一次出現的位置，也就是到期那題的位置
   const due = bundles([...shuffle(dueList, rng).sort((a, b) => cards[a.id].box - cards[b.id].box), ...joining]);
-  const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), size, rng }));
+  const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), concepts: conceptStats(bank, cards, subjects), size, rng }));
   const later = bundles(shuffle(laterList, rng).sort((a, b) => dueAt.get(a.id) - dueAt.get(b.id)));
 
   // 第 newEvery、2×newEvery…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。

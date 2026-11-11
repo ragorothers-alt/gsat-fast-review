@@ -5,8 +5,9 @@
 // 跨單元綜合的題目必須有 links（結合的 2–3 個同科單元），其他題目不可有；閱讀題組裡的跨單元題可以不寫。
 // 閱讀題組（group + passage）：2–5 題連續排、文章逐字相同，克漏字的空格 __n__ 每格剛好一題。
 // 非選擇題（type: "open"）：answer 是參考答案的字串，points 是 2–4 個評分要點；沒有選項，也沒有 formula。
-// --partial：只檢查格式，不檢查單元題數（用來驗證還沒併入題庫的新題檔，檔名仍須是 <科目>.json）。
-import { readFileSync, readdirSync } from 'node:fs';
+// 考點（kp）：有考點清單的科目（src/data/concepts/<科目>.json）每題都要標，代號要在清單裡；清單本身的格式也在這裡檢查。
+// --partial：只檢查格式，不檢查單元題數，也不要求每題都有考點（用來驗證還沒併入題庫的新題檔，檔名仍須是 <科目>.json）。
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { basename, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { checkFigure } from '../src/figure.js';
@@ -16,6 +17,10 @@ import { checkText } from './text-check.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const QUESTION_DIR = join(ROOT, 'src', 'data', 'questions');
+const CONCEPT_DIR = join(ROOT, 'src', 'data', 'concepts');
+/** 考點代號：單元序號-考點序號（各兩位數，單元序號照 src/units.js 的順序，從 01 起） */
+const KP = /^\d{2}-\d{2}$/;
+const CONCEPT_NAME = { min: 2, max: 14 };
 
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
@@ -26,7 +31,7 @@ const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 // 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
 const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
-const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'points', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv', 'fig']);
+const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'points', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv', 'fig', 'kp']);
 /** 非選擇題（open）：參考答案、評分要點的長度與個數；不可有的欄位 */
 const OPEN = { answer: 200, answerWarn: 160, point: 40, min: 2, max: 4 };
 const OPEN_BANNED = ['choices', 'group', 'passage', 'fig', 'scratch', 'lv', 'formula'];
@@ -86,6 +91,34 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
+  // 考點清單：[{ unit, concepts: [{ id, name, scope }] }]；沒有這個檔的科目還沒標考點
+  /** @type {Map<string, number> | null} 考點代號 → 標了這個考點的題數 */
+  let concepts = null;
+  const conceptFile = join(CONCEPT_DIR, `${subject}.json`);
+  if (existsSync(conceptFile)) {
+    concepts = new Map();
+    const names = new Set();
+    let list = [];
+    try {
+      list = JSON.parse(readFileSync(conceptFile, 'utf8'));
+    } catch (e) {
+      errors.push(`考點清單 ${basename(conceptFile)} 解析失敗 — ${e.message}`);
+    }
+    for (const u of Array.isArray(list) ? list : []) {
+      const no = units.indexOf(u.unit) + 1;
+      if (!no || u.unit === CROSS_UNIT) errors.push(`考點清單的單元「${u.unit}」不是 ${subject} 的一般單元`);
+      for (const c of Array.isArray(u.concepts) ? u.concepts : []) {
+        if (typeof c.id !== 'string' || !KP.test(c.id) || Number(c.id.slice(0, 2)) !== no) errors.push(`考點 ${c.id}：代號要是「${String(no).padStart(2, '0')}-NN」（${u.unit}）`);
+        else if (concepts.has(c.id)) errors.push(`考點 ${c.id} 重複`);
+        else concepts.set(c.id, 0);
+        const len = [...String(c.name ?? '')].length;
+        if (len < CONCEPT_NAME.min || len > CONCEPT_NAME.max) errors.push(`考點 ${c.id} 的 name 要 ${CONCEPT_NAME.min}–${CONCEPT_NAME.max} 字`);
+        else if (names.has(`${u.unit}/${c.name}`)) errors.push(`考點 ${c.id} 的 name「${c.name}」在同一個單元重複`);
+        names.add(`${u.unit}/${c.name}`);
+        if (typeof c.scope !== 'string' || !c.scope.trim()) errors.push(`考點 ${c.id} 缺少 scope`);
+      }
+    }
+  }
   const stats = { mc: 0, tf: 0, ms: 0, open: 0, formula: 0, scratch: 0, grouped: 0, fig: 0, level: { 1: 0, 2: 0, 3: 0 }, topics: new Map(units.map((u) => [u, 0])) };
   /** 題組代號 → 這組的題目（檔案裡的順序） */
   const groups = new Map();
@@ -117,6 +150,16 @@ for (const file of files) {
         if (new Set(links).size !== links.length) err('links 有重複的單元');
       }
     } else if (it.links !== undefined) err(`只有${CROSS_UNIT}的題目可以有 links`);
+    if (it.kp !== undefined) {
+      if (!concepts) err('這一科還沒有考點清單（src/data/concepts），不可有 kp');
+      else if (!concepts.has(it.kp)) err(`kp「${it.kp}」不在考點清單裡`);
+      else {
+        concepts.set(it.kp, concepts.get(it.kp) + 1);
+        // 一般單元的題目只能標自己單元的考點；跨單元綜合標它結合的單元裡最關鍵的那個考點
+        const unitNo = units.indexOf(it.topic) + 1;
+        if (it.topic !== CROSS_UNIT && unitNo && Number(it.kp.slice(0, 2)) !== unitNo) err(`kp「${it.kp}」不是單元「${it.topic}」的考點`);
+      }
+    } else if (concepts && !partial) err('這一科有考點清單，每題都要標 kp');
     const open = it.type === 'open';
     // 非選擇題沒有選項、不屬於題組，也沒有 formula（其他題型的 formula 必填）
     if (open) {
@@ -271,6 +314,8 @@ for (const file of files) {
     for (const [unit, count] of stats.topics) {
       if (count < MIN_PER_UNIT) errors.push(`單元「${unit}」只有 ${count} 題，至少要 ${MIN_PER_UNIT} 題`);
     }
+    // 清單裡的考點都要有題目（沒有題目的考點出不了題，也會讓「練過幾個考點」算不準）
+    for (const [id, count] of concepts ?? []) if (!count) errors.push(`考點 ${id} 沒有任何題目`);
   }
 
   const n = items.length;

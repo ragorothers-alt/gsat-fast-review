@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { subjectWeights } from '../src/blueprint.js';
-import { levelWeight, orderFresh, unitPriority, unitShares, unitSkill } from '../src/priority.js';
+import { conceptStats, levelWeight, orderFresh, unitPriority, unitShares, unitSkill } from '../src/priority.js';
 import { neverMissed, schedule } from '../src/srs.js';
 import { UNITS, unitKey } from '../src/units.js';
 
@@ -83,5 +83,54 @@ describe('新題的出題順序', () => {
     const out = orderFresh(fresh, { shares: unitShares(['physics']), skill: new Map(), size: 20, rng: seeded() });
     expect(new Set(out.map((x) => x.id)).size).toBe(20);
     expect(out.filter((x) => x.topic === '波動與光')).toHaveLength(3);
+  });
+});
+
+describe('考點：還沒練過的考點先出', () => {
+  const shares = unitShares(['physics']);
+  // 一個單元、每個考點 n 題
+  const unit = (sizes) => Object.entries(sizes).flatMap(([kp, n]) => [...Array(n)].map((_, i) => ({ ...q(`${kp}-${i}`, 'physics', '波動與光'), kp })));
+  const kinds = (out) => out.map((x) => x.kp);
+
+  it('conceptStats：各考點在題庫裡有幾題、作答過幾題；沒標考點的題目不算', () => {
+    const bank = [...unit({ a: 3, b: 2 }), q('x1', 'physics', '波動與光'), { ...q('m1', 'math', '機率'), kp: 'a' }];
+    const cards = { 'a-0': schedule(undefined, 'right', NOW), 'a-1': schedule(undefined, 'wrong', NOW), x1: schedule(undefined, 'right', NOW) };
+    const stats = conceptStats(bank, cards, ['physics']);
+    expect(Object.fromEntries(stats)).toEqual({ 'physics/a': { size: 3, seen: 2 }, 'physics/b': { size: 2, seen: 0 } });
+  });
+
+  it('同一輪裡每個考點先各出一題，都出過了才出第二題', () => {
+    const bank = unit({ a: 10, b: 10, c: 10, d: 10 });
+    for (let seed = 1; seed <= 20; seed++) {
+      const out = orderFresh(bank, { shares, skill: new Map(), concepts: conceptStats(bank, {}, ['physics']), size: 8, rng: seeded(seed) });
+      expect(new Set(kinds(out.slice(0, 4))).size).toBe(4);
+      expect(new Set(kinds(out.slice(4))).size).toBe(4);
+    }
+  });
+
+  it('以前練過的考點排後面：先出還沒碰過的', () => {
+    const bank = unit({ a: 10, b: 10, c: 10 });
+    const cards = { 'a-0': schedule(undefined, 'right', NOW), 'b-0': schedule(undefined, 'wrong', NOW), 'b-1': schedule(undefined, 'wrong', NOW) };
+    const fresh = bank.filter((x) => !cards[x.id]);
+    for (let seed = 1; seed <= 20; seed++) {
+      const out = orderFresh(fresh, { shares, skill: new Map(), concepts: conceptStats(bank, cards, ['physics']), size: 3, rng: seeded(seed) });
+      // c 沒練過、a 練過一題、b 練過兩題：先出 c；接著 a、c 一樣多（照難度排序取前面的），還輪不到 b
+      expect(out[0].kp).toBe('c');
+      expect(kinds(out)).not.toContain('b');
+    }
+  });
+
+  it('每個考點都碰過之後，題目多的考點多分到一些', () => {
+    const bank = unit({ big: 40, small: 10 });
+    const out = orderFresh(bank, { shares, skill: new Map(), concepts: conceptStats(bank, {}, ['physics']), size: 6, rng: seeded() });
+    expect(kinds(out).filter((k) => k === 'big').length).toBe(4);
+  });
+
+  it('沒給考點統計、或題目沒標考點：照原本的順序（只看難度）', () => {
+    const tagged = unit({ a: 30, b: 30 });
+    const plain = tagged.map(({ kp: _kp, ...x }) => x);
+    const ids = (list, opts = {}) => orderFresh(list, { shares, skill: new Map(), size: 20, rng: seeded(5), ...opts }).map((x) => x.id);
+    expect(ids(tagged)).toEqual(ids(plain));
+    expect(ids(plain, { concepts: conceptStats(tagged, {}, ['physics']) })).toEqual(ids(plain));
   });
 });
