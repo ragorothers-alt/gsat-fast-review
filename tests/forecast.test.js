@@ -37,16 +37,16 @@ describe('simulate', () => {
     expect(rows.map((r) => r.due)).toEqual([0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0]);
   });
 
-  it('答錯的部分當天重學一次，隔天從第 2 盒再複習', () => {
+  it('答錯的部分不在當天重考，隔天從第 2 盒再複習', () => {
     const rows = simulate(dueBuckets([card(3, 0)], NOW), { days: 5, budget: plenty, fresh: 0, recall: 0.5, first: 1 });
-    // 第 0 天：複習 1 次＋一半答錯重學 1 次；答錯的一半隔天從第 2 盒複習（一樣一半錯、一半升盒），答對的一半升到第 4 盒隔 7 天
-    // 第 4 天：第 1 天答對升到第 3 盒的 0.25 張到期，加上連錯三次的 0.0625 張
-    expect(round(rows).map((r) => r.review)).toEqual([1.5, 0.75, 0.38, 0.19, 0.47]);
+    // 第 0 天：複習 1 次；答錯的一半隔天從第 2 盒複習（一樣一半錯、一半升盒），答對的一半升到第 4 盒隔 7 天
+    // 第 4 天：第 1 天答對升到第 3 盒的 0.25 張到期，加上連錯四次的 0.0625 張
+    expect(round(rows).map((r) => r.review)).toEqual([1, 0.5, 0.25, 0.13, 0.31]);
   });
 
-  it('剛答錯還在第 0、1 盒的卡：當天再答一兩次，隔天到第 2 盒', () => {
-    const rows = simulate(dueBuckets([card(0, 0), card(1, 0)], NOW), { days: 3, budget: plenty, fresh: 0, recall: 1, first: 1 });
-    expect(rows.map((r) => r.review)).toEqual([3, 2, 0]);
+  it('舊紀錄還在第 0、1 盒的卡（以前答錯後等著當天重考）：答一次，答對就排到 3 天後', () => {
+    const rows = simulate(dueBuckets([card(0, 0), card(1, 0)], NOW), { days: 5, budget: plenty, fresh: 0, recall: 1, first: 1 });
+    expect(rows.map((r) => r.review)).toEqual([2, 0, 0, 2, 0]);
   });
 
   it('沒有到期的複習時全部做新題；新題做完就沒有了', () => {
@@ -59,12 +59,12 @@ describe('simulate', () => {
     ]);
   });
 
-  it('新題答錯的當天重學、隔天開始複習，占掉之後的作答量', () => {
+  it('新題答錯的隔天開始複習，占掉之後的作答量', () => {
     const rows = simulate(new Map(), { days: 2, budget: () => 10, fresh: 100, recall: 1, first: 0.5 });
-    // 每題新題平均要答 1 + 0.5×1 = 1.5 次 → 第 0 天 6.67 題新題、重學 3.33 次；第 1 天複習 3.33 次，剩 6.67 次給新題（4.44 題、重學 2.22 次）
+    // 第 0 天 10 題都是新題，一半答錯；第 1 天這 5 題到期要複習，剩 5 題給新題
     expect(round(rows)).toEqual([
-      { review: 3.33, fresh: 6.67 },
-      { review: 5.56, fresh: 4.44 },
+      { review: 0, fresh: 10 },
+      { review: 5, fresh: 5 },
     ]);
   });
 
@@ -85,8 +85,8 @@ describe('reviewForecast', () => {
   it('只預報已經練過的題目：新題答錯的不算回來；今天只剩目標減掉已經做的', () => {
     const rows = reviewForecast(dueBuckets([card(2, 1)], NOW), { days: 3, goal: 10, today: 4, fresh: 100, recall: 1, first: 0 });
     expect(rows.map((r) => r.due)).toEqual([0, 1, 0]);
-    // 今天剩 6 題、新題每題要答 2 次（第一次加上答錯的重學）
-    expect(rows[0].fresh).toBe(3);
+    // 今天剩 6 題，都給新題（答錯的隔天才複習，不占今天的題數）
+    expect(rows[0].fresh).toBe(6);
     const all = simulate(dueBuckets([card(2, 1)], NOW), { days: 3, budget: () => 10, fresh: 100, recall: 1, first: 0 });
     expect(all[1].due).toBeGreaterThan(1);
   });

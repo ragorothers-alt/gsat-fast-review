@@ -2,8 +2,7 @@
 // 純邏輯，不碰 DOM。用期望值逐日推演，所以題數可以是小數，顯示時再四捨五入。
 import { DAY, INTERVALS, MAX_BOX, REVIEW_SHARE, neverMissed } from './srs.js';
 
-/** 答錯（或看解答、標成猜的）後，當天還要再答一次才回到隔天複習：第 1 盒隔 10 分鐘（第 0 盒只剩舊紀錄，要答兩次） */
-const RELEARN = 1;
+// 答錯（或看解答、標成猜的）不在當天重考，隔天從第 2 盒再複習（srs.js 的 RELEARN_BOX）：每張到期的卡、每題新題都只算作答一次
 /** 資料太少時用的預設值：複習時答對的比例、新題第一次就答對（之後不再出）的比例 */
 const DEFAULT_RECALL = 0.75;
 const DEFAULT_FIRST = 0.6;
@@ -57,15 +56,15 @@ export function dueBuckets(cards, now, dueOf = (c) => c.due) {
 /**
  * 逐日推演，照 App 實際的出題方式（srs.js 的 buildQueue）：到期的複習先出，但每 2 題複習配 1 題新題，
  * 一邊不夠時由另一邊補上；當天沒輪到的複習留到隔天，越積越多。
- * 複習答對升一盒、隔那一盒的天數再出；答錯當天重學，隔天從第 2 盒再來。
- * 新題第一次就答對的不再出；答錯的同樣當天重學、隔天開始複習。
+ * 複習答對升一盒、隔那一盒的天數再出；答錯隔天從第 2 盒再來。
+ * 新題第一次就答對的不再出；答錯的隔天開始複習。
  * @param {Map<number, number[]>} buckets dueBuckets 的結果
  * @param {{ days: number, budget: (day: number) => number, fresh: number, recall: number, first: number, newReturns?: boolean }} opts
  *   budget：第幾天能作答幾題；fresh：還沒做過的題目數，做完就沒有新題可做；
  *   newReturns：新題答錯的之後要不要回來複習。預報「已經練過的題目」每天到期幾題時設成 false，
  *   不然新題補滿空檔、答錯的又回來，複習量會跟著每日目標一起變大，看不出現有的複習跟不跟得上
  * @returns {{ due: number, review: number, fresh: number, carry: number }[]}
- *   每天：到期的題數（含之前沒做完的）、複習的作答數（含答錯後的重學）、新題數、沒輪到而留到隔天的題數
+ *   每天：到期的題數（含之前沒做完的）、複習的作答數、新題數、沒輪到而留到隔天的題數
  */
 export function simulate(buckets, { days, budget, fresh, recall, first, newReturns = true }) {
   const due = new Map([...buckets].map(([d, boxes]) => [d, [...boxes]]));
@@ -74,19 +73,15 @@ export function simulate(buckets, { days, budget, fresh, recall, first, newRetur
     const boxes = due.get(d) ?? due.set(d, new Array(MAX_BOX + 1).fill(0)).get(d);
     boxes[box] += n;
   };
-  // 每張到期的卡平均要答幾次：剛答錯還在重學的再答一兩次；其他答一次，答錯再加重學
-  const reviewCost = (box) => (box < 2 ? 2 - box : 1 + (1 - recall) * RELEARN);
-  // 新題平均每題要答幾次：第一次，加上答錯時當天的重學
-  const freshCost = 1 + (1 - first) * RELEARN;
   let left = fresh;
   const out = [];
   for (let d = 0; d < days; d++) {
     const boxes = due.get(d) ?? new Array(MAX_BOX + 1).fill(0);
     const cards = boxes.reduce((a, n) => a + n, 0);
-    const need = boxes.reduce((a, n, box) => a + n * reviewCost(box), 0);
+    const need = cards;
     const b = budget(d);
     // 複習最多占 REVIEW_SHARE，新題做完了就全給複習；複習不夠時剩下的給新題
-    const spend = Math.min(need, Math.max(b * REVIEW_SHARE, b - left * freshCost));
+    const spend = Math.min(need, Math.max(b * REVIEW_SHARE, b - left));
     const done = need ? spend / need : 0;
     let carry = 0;
     boxes.forEach((n, box) => {
@@ -94,19 +89,15 @@ export function simulate(buckets, { days, budget, fresh, recall, first, newRetur
       carry += n * (1 - done);
       add(d + 1, box, n * (1 - done));
       const m = n * done;
-      if (box < 2) {
-        // 剛答錯、還在當天重學的卡：再答對一兩次就到第 2 盒
-        add(d + 1, 2, m);
-        return;
-      }
-      const up = Math.min(MAX_BOX, box + 1);
+      // 舊紀錄還在第 0、1 盒的（以前答錯後等著當天重考）和第 2 盒一樣：答對升到 3 天那一盒
+      const up = Math.min(MAX_BOX, Math.max(box, 2) + 1);
       add(d + INTERVALS[up] / DAY, up, m * recall);
       add(d + 1, 2, m * (1 - recall));
     });
-    const n = Math.min(left, Math.max(0, b - spend) / freshCost);
+    const n = Math.min(left, Math.max(0, b - spend));
     left -= n;
     if (newReturns) add(d + 1, 2, n * (1 - first));
-    out.push({ due: cards, review: spend + n * (1 - first) * RELEARN, fresh: n, carry });
+    out.push({ due: cards, review: spend, fresh: n, carry });
   }
   return out;
 }
