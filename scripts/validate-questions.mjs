@@ -106,7 +106,8 @@ for (const file of files) {
     }
     for (const u of Array.isArray(list) ? list : []) {
       const no = units.indexOf(u.unit) + 1;
-      if (!no || u.unit === CROSS_UNIT) errors.push(`考點清單的單元「${u.unit}」不是 ${subject} 的一般單元`);
+      // 跨單元綜合通常沒有自己的考點（題目借用別的單元的）；以閱讀題組為主的科目（國文）可以有
+      if (!no) errors.push(`考點清單的單元「${u.unit}」不是 ${subject} 的單元`);
       for (const c of Array.isArray(u.concepts) ? u.concepts : []) {
         if (typeof c.id !== 'string' || !KP.test(c.id) || Number(c.id.slice(0, 2)) !== no) errors.push(`考點 ${c.id}：代號要是「${String(no).padStart(2, '0')}-NN」（${u.unit}）`);
         else if (concepts.has(c.id)) errors.push(`考點 ${c.id} 重複`);
