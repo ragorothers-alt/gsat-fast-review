@@ -2,8 +2,8 @@
 // 純邏輯，不碰 DOM。用期望值逐日推演，所以題數可以是小數，顯示時再四捨五入。
 import { DAY, INTERVALS, MAX_BOX, REVIEW_SHARE, neverMissed } from './srs.js';
 
-/** 答錯（或看解答、標成猜的）後，當天還要再答兩次才回到隔天複習：第 0 盒隔 1 分鐘、第 1 盒隔 10 分鐘 */
-const RELEARN = 2;
+/** 答錯（或看解答、標成猜的）後，當天還要再答一次才回到隔天複習：第 1 盒隔 10 分鐘（第 0 盒只剩舊紀錄，要答兩次） */
+const RELEARN = 1;
 /** 資料太少時用的預設值：複習時答對的比例、新題第一次就答對（之後不再出）的比例 */
 const DEFAULT_RECALL = 0.75;
 const DEFAULT_FIRST = 0.6;

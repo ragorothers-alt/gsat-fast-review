@@ -5,7 +5,7 @@ import { PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, lo
 import { usedOptions } from '../groups.js';
 import { questionPrompt } from '../prompt.js';
 import { msNote } from '../session.js';
-import { schedule } from '../srs.js';
+import { needsConfirm, schedule } from '../srs.js';
 import { recordAnswer } from '../stats.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { copyQuestion } from './clipboard.js';
@@ -406,7 +406,7 @@ export function initExam(ctx) {
     for (const it of result.items) {
       const outcome = examOutcome(it);
       if (!outcome) continue;
-      ctx.state.cards[it.id] = schedule(ctx.state.cards[it.id], outcome, now);
+      ctx.state.cards[it.id] = schedule(ctx.state.cards[it.id], outcome, now, { confirm: needsConfirm(byId.get(it.id)) });
       recordAnswer(ctx.state, outcome, now);
     }
     const prev = logExam(ctx.state, paper.id, result, now);

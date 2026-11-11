@@ -7,24 +7,34 @@ export const MINUTE = 60_000;
 export const DAY = 86_400_000;
 // 第 n 盒答對後隔多久再出現。答錯過的題目隔 16 天還答得對，就拉長到 35 天：已經記牢的題目少複習幾次，
 // 時間留給新題與還不熟的題目（以前停在 16 天，失手過的題目越積越多）
+// 第 0 盒（1 分鐘）只剩舊紀錄：以前答錯先隔 1 分鐘再考、再隔 10 分鐘，同一題當天要多答兩次；
+// 模擬到學測那天，一半以上的作答都在重做同一題，新題一多，錯題就卡在前幾盒升不上去。現在答錯直接從第 1 盒（10 分鐘）開始
 export const INTERVALS = [1 * MINUTE, 10 * MINUTE, 1 * DAY, 3 * DAY, 7 * DAY, 16 * DAY, 35 * DAY];
 export const MAX_BOX = INTERVALS.length - 1;
 /** 答錯過的題目隔開時間答對到這一盒（隔 16 天），熟練度就算滿 */
 export const LEARNED_BOX = 5;
+/** 失手（答錯、看解答、標成猜的或不太確定）後回到這一盒：10 分鐘後再考 */
+export const RELEARN_BOX = 1;
+/** 第一次就答對、但還要再確認一次的題目（是非題）放這一盒：3 天後再考 */
+export const CONFIRM_BOX = 3;
+
+/** 第一次答對還不能算會：是非題亂猜也有一半機率對，隔幾天再答對一次才不再出 */
+export const needsConfirm = (q) => q?.type === 'tf';
 
 /**
  * 依作答結果更新一張卡片的排程。
- * 按「不會？看解答」（skip）在排程上等同答錯：回到第 0 盒、1 分鐘後到期；
+ * 按「不會？看解答」（skip）在排程上等同答錯：回到第 1 盒、10 分鐘後到期；
  * 只是不算進答錯次數（wrong），也不打斷畫面的節奏。
- * 答對後自己標「猜的」（guess）等同不會；標「不太確定」（unsure）10 分鐘後再考，
+ * 答對後自己標「猜的」（guess）等同不會；標「不太確定」（unsure）同樣 10 分鐘後再考，
  * 兩者都不算答對次數，所以會留在錯題本，之後隔開時間答對才離開。
  * 還沒到期就又答對（例如連刷好幾輪錯題）不升盒、排程照舊：間隔重複要隔開時間答對才算數。
  * missed：失手過就記 1，之後不再變回 0（同步合併時取較大值，見 everMissed）。
  * @param {Card | undefined} card 舊紀錄（沒看過則為 undefined）
  * @param {'right'|'wrong'|'skip'|'guess'|'unsure'} outcome skip = 不會、直接看解答
  * @param {number} now
+ * @param {{ confirm?: boolean }} [opts] confirm：這題第一次答對還要再確認一次（needsConfirm），先放第 CONFIRM_BOX 盒
  */
-export function schedule(card, outcome, now) {
+export function schedule(card, outcome, now, { confirm = false } = {}) {
   const c = { box: 0, due: 0, seen: 0, right: 0, wrong: 0, parked: false, ...card };
   c.missed = everMissed(card) || outcome !== 'right' ? 1 : 0;
   c.seen++;
@@ -34,19 +44,27 @@ export function schedule(card, outcome, now) {
     c.parked = false;
     // 還沒到期：記下這次答對，但盒子與到期時間不變
     if (card && now < card.due) return c;
-    // 第一次見到就答對：直接跳到隔天再考
-    c.box = c.seen === 1 ? 2 : Math.min(MAX_BOX, c.box + 1);
-  } else if (outcome === 'unsure') {
-    c.box = 1;
-    c.parked = false;
+    // 第一次見到就答對：算會了，之後不再出（neverMissed）；要再確認的先排到 3 天後（awaitingConfirm）
+    if (c.seen === 1) c.box = confirm ? CONFIRM_BOX : 2;
+    else c.box = Math.min(MAX_BOX, c.box + 1);
   } else {
     if (outcome === 'wrong') c.wrong++;
     // parked：最近一次是按「不會」或自己說是猜的
     c.parked = outcome === 'skip' || outcome === 'guess';
-    c.box = 0;
+    c.box = RELEARN_BOX;
   }
   c.due = now + INTERVALS[c.box];
   return c;
+}
+
+/**
+ * 第一次就答對、還在等確認的題目（是非題）：只作答過一次、答對、放在第 CONFIRM_BOX 盒。
+ * 其他題目第一次答對是第 2 盒、之後要作答兩次以上才升得到第 3 盒，所以這個組合只會是它，不必在卡片上多記一個欄位
+ * （同步的格式不變；規則上線前第一次就答對的是非題在第 2 盒，照舊算會了，不會一口氣全部回來要求確認）。
+ * 到期後再答對一次就升到第 4 盒、算會了；答錯就和其他錯題一樣複習。
+ */
+export function awaitingConfirm(card) {
+  return !!card && card.box === CONFIRM_BOX && card.seen === 1 && card.right === 1 && !card.missed && !card.wrong && !card.parked;
 }
 
 /**
@@ -81,13 +99,22 @@ export function everMissed(card) {
 
 /**
  * 答對過、而且從沒失手：已經會了，之後不再出。只要失手過一次，就照間隔重複繼續複習。
+ * 是非題第一次答對還要隔幾天再確認一次（awaitingConfirm），確認前不算。
  */
 export function neverMissed(card) {
-  return !!card && card.seen > 0 && !everMissed(card);
+  return !!card && card.seen > 0 && !everMissed(card) && !awaitingConfirm(card);
 }
 
 /** 考前衝刺的天數：考前這幾天把排到考後的複習拉回來 */
 export const SPRINT_DAYS = 14;
+/**
+ * 考前衝刺期間每幾題才留一題給新題（平常是 NEW_EVERY，自由練習是 2）：這時候才第一次做的題目，
+ * 答錯了也來不及複習穩；先把到期的複習清掉，考試當天才不會還積著幾百題沒輪到。複習出完了照樣全出新題。
+ */
+export const SPRINT_NEW_EVERY = 5;
+
+/** 現在是不是考前衝刺期間（考前 SPRINT_DAYS 天內、還沒考）；examAt 是考試那天 0 點（examStart），沒設定就不是 */
+export const inSprint = (examAt, now) => !!examAt && now < examAt && now >= examAt - SPRINT_DAYS * DAY;
 
 /** 'YYYY-MM-DD'（本地時間）那天 0 點的時間；格式不對時為 null */
 export function examStart(date) {
@@ -207,12 +234,14 @@ export function buildQueue(
   // 但複習最多連續出 newEvery − 1 題就換新題：剛出了一整組新的閱讀題組（一次好幾題新題）時，
   // 光照比例會接著連出一長串複習才補回來。到期的閱讀題組整組一起出，不過剛出過複習、接上整組會超過上限時，
   // 先出一題新題再出這組：連續的複習最多就是 newEvery − 1 題，或一整組題組本身的題數
+  // 考前衝刺：新題讓給複習（SPRINT_NEW_EVERY），不管哪個模式
+  const every = inSprint(examAt, now) ? Math.max(newEvery, SPRINT_NEW_EVERY) : newEvery;
   const out = [];
   let freshCount = 0;
   let inRow = streak;
   while (out.length < size && (due.length || fresh.length)) {
-    const over = inRow > 0 && inRow + (due[0]?.length ?? 0) > newEvery - 1;
-    const wantFresh = out.length - freshCount >= (newEvery - 1) * (freshCount + 1) || over;
+    const over = inRow > 0 && inRow + (due[0]?.length ?? 0) > every - 1;
+    const wantFresh = out.length - freshCount >= (every - 1) * (freshCount + 1) || over;
     const pack = (wantFresh ? fresh.length > 0 : !due.length) ? fresh.shift() : due.shift();
     const added = pack.filter((q) => !cards[q.id]).length;
     freshCount += added;

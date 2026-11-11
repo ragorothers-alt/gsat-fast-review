@@ -1,7 +1,7 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
 import { weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
-import { buildQueue, examStart, isLeech, missCount, neverMissed, schedule, shuffle } from '../srs.js';
+import { buildQueue, examStart, isLeech, missCount, needsConfirm, neverMissed, schedule, shuffle } from '../srs.js';
 import { recordPace } from '../pace.js';
 import { reportQuestion } from '../report.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, openNote, quickOnlyFor, submit, tick, multiplier } from '../session.js';
@@ -585,7 +585,7 @@ export function initPlay(ctx) {
     const now = Date.now();
     const card = ctx.state.cards[q.id];
     s.reviewRun = card ? s.reviewRun + 1 : 0;
-    ctx.state.cards[q.id] = schedule(card, outcome, now);
+    ctx.state.cards[q.id] = schedule(card, outcome, now, { confirm: needsConfirm(q) });
     const open = q.type === 'open';
     // 非選擇題是自評，寫到幾個要點已經表達了把握，不另外問「猜的／不太確定」
     lastRight = outcome === 'right' && !open ? { id: q.id, before: card, at: now } : null;
@@ -708,7 +708,7 @@ export function initPlay(ctx) {
     const was = s.log[s.log.length - 1].mark ?? null;
     const mark = was === kind ? null : kind;
     const now = Date.now();
-    ctx.state.cards[lastRight.id] = schedule(lastRight.before, mark ?? 'right', now);
+    ctx.state.cards[lastRight.id] = schedule(lastRight.before, mark ?? 'right', now, { confirm: needsConfirm(q) });
     if (!was && mark) adjustRight(ctx.state, -1, lastRight.at);
     if (was && !mark) adjustRight(ctx.state, 1, lastRight.at);
     markLast(s, mark);

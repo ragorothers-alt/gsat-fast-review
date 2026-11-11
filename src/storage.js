@@ -4,6 +4,7 @@ import { rebuildDaily } from './cloud.js';
 import { mergeExams } from './exam.js';
 import { cleanPace, mergePace } from './pace.js';
 import { applyPathRows, pathRows } from './path.js';
+import { RELEARN_BOX } from './srs.js';
 import { cleanCard, mergeState } from './sync.js';
 
 export const KEY = 'gsat-quiz:v1';
@@ -71,8 +72,8 @@ export function parseState(raw) {
   for (const [id, c] of Object.entries(saved.cards ?? {})) {
     const card = cleanCard(c);
     if (!card) continue;
-    // 舊版按「不會」不會降盒子；現在等同答錯，舊紀錄一併拉回第 0 盒
-    if (card.parked && card.box > 0) card.box = 0;
+    // 舊版按「不會」不會降盒子；現在等同答錯，舊紀錄一併拉回失手後的那一盒
+    if (card.parked && card.box > RELEARN_BOX) card.box = RELEARN_BOX;
     cards[id] = card;
   }
   const num = (x) => Number.isFinite(x);

@@ -2,7 +2,7 @@
 import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../analysis.js';
 import { dueBuckets, estimateRates, keepUpGoal, keepsUp, planVerdict, reviewForecast, studyPlan } from '../forecast.js';
 import { paceReport } from '../pace.js';
-import { DAY, SPRINT_DAYS, dueFor, examStart, mastery, neverMissed } from '../srs.js';
+import { DAY, SPRINT_DAYS, SPRINT_NEW_EVERY, dueFor, examStart, inSprint, mastery, neverMissed } from '../srs.js';
 import { GOALS, dayKey, shiftDay, today } from '../stats.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { isUnitOff } from '../units.js';
@@ -221,7 +221,9 @@ export function initStats(ctx) {
             ? `照每日目標 ${goal} 題，複習做得完，每天還能做約 ${avgFresh} 題新題。`
             : '選的範圍都練過了，接下來每天都是複習。') +
         // 考前衝刺：失手過、照間隔要到考後才再出的題目，考前兩週各拉回來複習一次
-        (sprint ? `考前 ${SPRINT_DAYS} 天會把失手過、原本排到考後才複習的 ${sprint.toLocaleString('zh-TW')} 題各拉回來再考一次。` : '');
+        (sprint ? `考前 ${SPRINT_DAYS} 天會把失手過、原本排到考後才複習的 ${sprint.toLocaleString('zh-TW')} 題各拉回來再考一次。` : '') +
+        // 衝刺期間新題讓給複習（srs.js 的 SPRINT_NEW_EVERY）
+        (inSprint(examStart(ctx.state.settings.examDate), now) ? `考前 ${SPRINT_DAYS} 天先複習：每 ${SPRINT_NEW_EVERY - 1} 題複習才配 1 題新題，複習做完了再全出新題。` : '');
 
     const max = Math.max(1, ...rows.map((x) => x.due));
     const chart = $('#forecast-chart');

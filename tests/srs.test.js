@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DAY, INTERVALS, MAX_BOX, NEW_EVERY, SPRINT_DAYS, buildQueue, dueFor, everMissed, examStart, isWeak, mastery, neverMissed, schedule } from '../src/srs.js';
+import { CONFIRM_BOX, DAY, INTERVALS, MAX_BOX, NEW_EVERY, RELEARN_BOX, SPRINT_DAYS, SPRINT_NEW_EVERY, awaitingConfirm, buildQueue, dueFor, everMissed, examStart, inSprint, isWeak, mastery, needsConfirm, neverMissed, schedule } from '../src/srs.js';
 
 const NOW = 1_700_000_000_000;
 
@@ -23,7 +23,7 @@ describe('schedule', () => {
   it('到期後答對逐盒上升，最高停在最後一盒', () => {
     let c = schedule(undefined, 'wrong', NOW);
     c = schedule(c, 'right', c.due);
-    expect(c.box).toBe(1);
+    expect(c.box).toBe(2);
     for (let i = 0; i < 10; i++) c = schedule(c, 'right', c.due);
     expect(c.box).toBe(MAX_BOX);
     expect(c.due).toBe(c.last + INTERVALS[MAX_BOX]);
@@ -41,32 +41,40 @@ describe('schedule', () => {
     const wrong = schedule(undefined, 'wrong', NOW);
     let c = wrong;
     for (let i = 1; i <= 3; i++) c = schedule(c, 'right', NOW + i * 1000);
-    expect(c).toMatchObject({ box: 0, due: wrong.due, seen: 4, right: 3, wrong: 1, last: NOW + 3000 });
+    expect(c).toMatchObject({ box: 1, due: wrong.due, seen: 4, right: 3, wrong: 1, last: NOW + 3000 });
     expect(isWeak(c)).toBe(true);
     // 到期之後答對才升盒
-    expect(schedule(c, 'right', wrong.due).box).toBe(1);
+    expect(schedule(c, 'right', wrong.due).box).toBe(2);
   });
 
-  it('答錯回到第 0 盒，很快再出現', () => {
+  it('答錯回到第 1 盒，10 分鐘後再出現（不再先隔 1 分鐘）', () => {
     let c = schedule(undefined, 'right', NOW);
     c = schedule(c, 'wrong', NOW);
-    expect(c.box).toBe(0);
-    expect(c.due).toBe(NOW + INTERVALS[0]);
+    expect(c.box).toBe(RELEARN_BOX);
+    expect(c.due).toBe(NOW + 10 * 60_000);
     expect(c.wrong).toBe(1);
+    // 再答對一次就排到隔天
+    c = schedule(c, 'right', c.due);
+    expect(c.due - c.last).toBe(DAY);
   });
 
-  it('按「不會」等同答錯：回到第 0 盒、進錯題本，但不算答錯次數', () => {
+  it('舊紀錄還在第 0 盒的：答對照樣升到第 1 盒', () => {
+    const c = schedule({ box: 0, due: NOW - 1, seen: 1, right: 0, wrong: 1, missed: 1 }, 'right', NOW);
+    expect(c).toMatchObject({ box: 1, due: NOW + INTERVALS[1] });
+  });
+
+  it('按「不會」等同答錯：回到第 1 盒、進錯題本，但不算答錯次數', () => {
     let c = schedule(undefined, 'right', NOW);
     c = schedule(c, 'right', NOW); // 第 3 盒
     c = schedule(c, 'skip', NOW + 5);
-    expect(c).toMatchObject({ box: 0, parked: true, wrong: 0, due: NOW + 5 + INTERVALS[0] });
+    expect(c).toMatchObject({ box: 1, parked: true, wrong: 0, due: NOW + 5 + INTERVALS[1] });
     expect(isWeak(c)).toBe(true);
   });
 
-  it('答對後標「猜對的」等同不會：回到第 0 盒、進錯題本，答對次數不加', () => {
+  it('答對後標「猜對的」等同不會：回到第 1 盒、進錯題本，答對次數不加', () => {
     const before = schedule(schedule(undefined, 'right', NOW), 'right', NOW); // 第 3 盒
     const c = schedule(before, 'guess', NOW + 5);
-    expect(c).toMatchObject({ box: 0, parked: true, seen: 3, right: 2, wrong: 0, due: NOW + 5 + INTERVALS[0] });
+    expect(c).toMatchObject({ box: 1, parked: true, seen: 3, right: 2, wrong: 0, due: NOW + 5 + INTERVALS[1] });
     expect(isWeak(c)).toBe(true);
   });
 
@@ -82,8 +90,6 @@ describe('schedule', () => {
 
   it('按「不會」之後，答對一次還不能離開錯題本，要升到第 3 盒', () => {
     let c = schedule(undefined, 'skip', NOW);
-    c = schedule(c, 'right', c.due); // 1
-    expect(isWeak(c)).toBe(true);
     c = schedule(c, 'right', c.due); // 2
     expect(isWeak(c)).toBe(true);
     c = schedule(c, 'right', c.due); // 3
@@ -93,7 +99,6 @@ describe('schedule', () => {
   it('答錯後要升到第 3 盒才離開錯題本', () => {
     let c = schedule(undefined, 'wrong', NOW);
     expect(isWeak(c)).toBe(true);
-    c = schedule(c, 'right', c.due); // 1
     c = schedule(c, 'right', c.due); // 2
     expect(isWeak(c)).toBe(true);
     c = schedule(c, 'right', c.due); // 3
@@ -120,7 +125,7 @@ describe('neverMissed', () => {
   it('失手過就記下 missed，之後再答對幾次都不會消失', () => {
     let c = schedule(undefined, 'skip', NOW);
     expect(c.missed).toBe(1);
-    for (let i = 0; i < 6; i++) c = schedule(c, 'right', c.due);
+    for (let i = 0; i < 5; i++) c = schedule(c, 'right', c.due);
     expect(c).toMatchObject({ box: MAX_BOX, missed: 1 });
     expect(neverMissed(c)).toBe(false);
     expect(schedule(undefined, 'right', NOW).missed).toBe(0);
@@ -132,6 +137,61 @@ describe('neverMissed', () => {
     expect(everMissed({ box: 0, seen: 1, right: 1, wrong: 0, parked: true })).toBe(true);
     expect(everMissed({ box: 1, seen: 2, right: 2, wrong: 0, parked: false })).toBe(true);
     expect(everMissed({ box: 3, seen: 3, right: 2, wrong: 0, parked: false })).toBe(true);
+  });
+});
+
+describe('是非題第一次答對要再確認一次', () => {
+  const tf = { id: 'm1', subject: 'math', type: 'tf' };
+  const opts = { confirm: needsConfirm(tf) };
+
+  it('只有是非題要確認', () => {
+    expect(needsConfirm(tf)).toBe(true);
+    expect(needsConfirm({ type: 'mc' })).toBe(false);
+    expect(needsConfirm({})).toBe(false);
+    expect(needsConfirm(undefined)).toBe(false);
+  });
+
+  it('第一次答對：3 天後再考，確認前不算會了、照樣會出', () => {
+    const c = schedule(undefined, 'right', NOW, opts);
+    expect(c).toMatchObject({ box: CONFIRM_BOX, due: NOW + 3 * DAY, seen: 1, right: 1, missed: 0 });
+    expect(awaitingConfirm(c)).toBe(true);
+    expect(neverMissed(c)).toBe(false);
+    expect(everMissed(c)).toBe(false);
+    expect(isWeak(c)).toBe(false);
+    const ids = (now) => buildQueue([tf], { m1: c }, { subjects: ['math'], size: 5, now, rng: seeded() }).map((x) => x.id);
+    expect(ids(c.due)).toEqual(['m1']);
+  });
+
+  it('到期後再答對：算會了，不再出', () => {
+    const c = schedule(schedule(undefined, 'right', NOW, opts), 'right', NOW + 3 * DAY, opts);
+    expect(c).toMatchObject({ box: CONFIRM_BOX + 1, seen: 2, right: 2, missed: 0 });
+    expect(awaitingConfirm(c)).toBe(false);
+    expect(neverMissed(c)).toBe(true);
+    expect(buildQueue([tf], { m1: c }, { subjects: ['math'], size: 5, now: c.due, rng: seeded() })).toEqual([]);
+  });
+
+  it('確認時答錯：和其他錯題一樣回到第 1 盒、進錯題本', () => {
+    const c = schedule(schedule(undefined, 'right', NOW, opts), 'wrong', NOW + 3 * DAY, opts);
+    expect(c).toMatchObject({ box: RELEARN_BOX, missed: 1, wrong: 1 });
+    expect(awaitingConfirm(c)).toBe(false);
+    expect(isWeak(c)).toBe(true);
+  });
+
+  it('第一次就答錯、或答對後標成猜的：照一般錯題，不是等確認', () => {
+    for (const first of ['wrong', 'skip', 'guess', 'unsure']) {
+      const c = schedule(undefined, first, NOW, opts);
+      expect(c.box).toBe(RELEARN_BOX);
+      expect(awaitingConfirm(c)).toBe(false);
+    }
+  });
+
+  it('其他題型第一次答對照舊直接算會了；規則上線前就答對的是非題（第 2 盒）也照舊', () => {
+    const c = schedule(undefined, 'right', NOW);
+    expect(c.box).toBe(2);
+    expect(awaitingConfirm(c)).toBe(false);
+    expect(neverMissed(c)).toBe(true);
+    // 答錯過、後來升到第 3 盒的題目不是等確認
+    expect(awaitingConfirm({ box: 3, seen: 3, right: 2, wrong: 1, missed: 1 })).toBe(false);
   });
 });
 
@@ -182,12 +242,12 @@ describe('考前衝刺（dueFor）', () => {
     expect(dueFor('math-001', far, EXAM, EXAM + DAY)).toBe(far.due);
   });
 
-  it('衝刺時答對：盒子與到期日不變，只記下做過了，之後不會再被拉回來；答錯照常回到第 0 盒', () => {
+  it('衝刺時答對：盒子與到期日不變，只記下做過了，之後不會再被拉回來；答錯照常回到第 1 盒', () => {
     const day = dueFor('math-001', far, EXAM, START);
     const right = schedule(far, 'right', day + 3600_000);
     expect(right).toMatchObject({ box: 5, due: far.due, right: 4 });
     expect(dueFor('math-001', right, EXAM, day + DAY)).toBe(far.due);
-    expect(schedule(far, 'wrong', day + 3600_000).box).toBe(0);
+    expect(schedule(far, 'wrong', day + 3600_000).box).toBe(RELEARN_BOX);
   });
 
   it('buildQueue：衝刺日到了就當成到期的複習出；還沒到或沒給考試日就排在最後', () => {
@@ -326,6 +386,29 @@ describe('buildQueue', () => {
       const lastFresh = out.lastIndexOf('n');
       for (const run of out.slice(0, lastFresh).split('n')) expect(['', 'd', 'ggg'], out).toContain(run);
     }
+  });
+
+  it('考前衝刺：新題讓給複習，每 SPRINT_NEW_EVERY 題才留一題給新題；複習出完了照樣全出新題', () => {
+    const EXAM = examStart('2027-01-22');
+    const many = [...Array(12)].map((_, i) => q(`d${i}`));
+    const fresh = [...Array(12)].map((_, i) => q(`n${i}`));
+    const kinds = (now, list, newEvery) => {
+      const cards = Object.fromEntries(many.map((x) => [x.id, { box: 2, due: now - 1, seen: 2, right: 1, wrong: 1 }]));
+      return buildQueue(list, cards, { subjects: ['math'], size: 10, newEvery, examAt: EXAM, now, rng: seeded() }).map((x) => x.id[0]).join('');
+    };
+    const all = [...many, ...fresh];
+    expect(SPRINT_NEW_EVERY).toBe(5);
+    expect(inSprint(EXAM, EXAM - DAY)).toBe(true);
+    expect(inSprint(EXAM, EXAM - SPRINT_DAYS * DAY - 1)).toBe(false);
+    expect(inSprint(EXAM, EXAM)).toBe(false);
+    expect(inSprint(null, NOW)).toBe(false);
+    // 衝刺期間：自由練習（newEvery = 2）和其他模式都是 4 題複習配 1 題新題
+    expect(kinds(EXAM - DAY, all, 2)).toBe('ddddnddddn');
+    expect(kinds(EXAM - DAY, all, undefined)).toBe('ddddnddddn');
+    expect(kinds(EXAM - DAY, [...many.slice(0, 2), ...fresh], 2)).toBe('ddnnnnnnnn');
+    // 衝刺前、考完後照原本的比例
+    expect(kinds(EXAM - SPRINT_DAYS * DAY - 1, all, 2)).toBe('dndndndndn');
+    expect(kinds(EXAM + DAY, all, 2)).toBe('dndndndndn');
   });
 
   it('剛出過 1 題複習時，到期的閱讀題組先等一題新題再整組出', () => {

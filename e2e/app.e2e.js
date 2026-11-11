@@ -268,7 +268,8 @@ test('自由練習：複習和新題一題一題輪流出，一批出完接著�
     const now = Date.now();
     const card = { box: 2, due: now - 60_000, seen: 2, right: 1, wrong: 1, parked: false, missed: 1, last: now - 2 * 86_400_000 };
     const cards = Object.fromEntries(physics.map((q) => [q.id, card]));
-    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: { subjects: ['math', 'physics'] } }));
+    // 學測日期設得很遠：考前 14 天的衝刺會把新題讓給複習，測試哪一天跑都要是平常的 1:1
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: { subjects: ['math', 'physics'], examDate: '2099-01-22' } }));
   }, physicsJson.source);
   await page.reload();
   await waitForBoot(page);
