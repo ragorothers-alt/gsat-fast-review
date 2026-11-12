@@ -136,6 +136,11 @@ test('重點卡的考點可以點：只練這個考點，錯題先出', async ({
   await expect(page.locator('#keypoints-sheet')).toBeHidden();
   // 第一題就是剛剛不會的那題（錯題先出），接著是同考點的其他題
   await expectConceptRound(page, name);
+  // 結算的標題寫出練的是哪個考點；「再來一輪」還是這個考點
+  await page.locator('#quit').click();
+  await expect(page.locator('#r-mode')).toHaveText(`考點練習・${name}`);
+  await page.locator('#r-again').click();
+  await expectConceptRound(page, name);
 });
 
 test('結算畫面與錯題本：正解旁標出考點，點了只練那個考點', async ({ page }) => {

@@ -1,5 +1,6 @@
 // 結算畫面：分數、正確率、這輪要再看一眼的題目
 import { MODES } from '../session.js';
+import { conceptOf, loadConcepts } from '../data/concepts.js';
 import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
 import { copyQuestion } from './clipboard.js';
@@ -26,6 +27,7 @@ export function initResult(ctx) {
 
     const { path } = s;
     $('#r-mode').textContent = path ? `${MODES.path.name}・${path.unit}` : MODES[s.mode].name;
+    if (s.mode === 'concept') conceptTitle(s.opts.concept);
     $('#r-big').textContent = isBlitz ? `${s.score} 分` : path?.done ? '過關！' : `${s.right} / ${s.log.length}`;
     $('#r-badge').hidden = !record;
     $('#r-acc').textContent = answered ? `${Math.round((s.right / answered) * 100)}%` : '—';
@@ -56,6 +58,17 @@ export function initResult(ctx) {
     ctx.reminder?.sync();
     if (record || (answered && !misses.length)) ctx.world.celebrate();
   };
+
+  /** 考點練習：標題寫出練的是哪個考點（考點清單還沒下載好就等它，期間換了別輪就不改） */
+  function conceptTitle(key) {
+    const [subject, kp] = String(key).split('/');
+    const fill = () => {
+      const c = conceptOf({ subject, kp });
+      if (c && last.mode === 'concept' && last.opts.concept === key) $('#r-mode').textContent = `${MODES.concept.name}・${c.name}`;
+    };
+    fill();
+    loadConcepts(subject).then(fill, () => {});
+  }
 
   $('#r-again').addEventListener('click', () => ctx.startRound(last.mode, last.opts));
   $('#r-related').addEventListener('click', () => ctx.startRound('related', { seeds: misses.map((e) => e.id) }));
