@@ -84,6 +84,33 @@
   color: var(--ink);
 }
 
+/* 考數學 A 還是 B：選單元的數學分頁上方、第一次開啟的設定 */
+.math-exam-box {
+  flex: none;
+}
+
+.math-exam {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.math-exam-label {
+  flex: none;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.math-exam .seg {
+  flex: 1;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.welcome-math {
+  margin-top: 12px;
+}
+
 .unit-list {
   list-style: none;
   margin: 0;

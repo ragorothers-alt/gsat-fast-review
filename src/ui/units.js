@@ -2,13 +2,8 @@
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { mastery } from '../srs.js';
 import { icon } from './icons.js';
-import { UNITS, unitKey } from '../units.js';
+import { MATH_EXAMS, UNITS, mathExamOf, unitKey, withMathExam } from '../units.js';
 import { closeSheet, openSheet } from './sheet.js';
-
-/** 分頁上方的提醒：數學 A、B 的範圍不同 */
-const NOTES = {
-  math: '只考數學 A 可以關掉「數B 專屬主題」；只考數學 B 可以關掉「空間向量與平面直線」。',
-};
 
 /**
  * @param {object} ctx
@@ -86,6 +81,21 @@ export function initUnitSheet(ctx, onChange) {
     commit();
   });
 
+  // 數學分頁上方：考數學 A 還是 B，一次關掉只有另一份才考的單元（這科原本沒選就順便選上）
+  const examBtns = MATH_EXAMS.map((e) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'seg-btn';
+    btn.textContent = e.name;
+    btn.addEventListener('click', () => {
+      setSubject('math', true);
+      settings.excludedUnits = withMathExam(settings.excludedUnits, e.id);
+      commit();
+    });
+    $('#units-math-seg').append(btn);
+    return [e.id, btn];
+  });
+
   function render() {
     tabs.forEach((t, i) => {
       const id = SUBJECTS[i].id;
@@ -93,9 +103,9 @@ export function initUnitSheet(ctx, onChange) {
       t.classList.toggle('on', settings.subjects.includes(id));
     });
     const subj = SUBJECT_BY_ID[current];
-    const note = $('#units-note');
-    note.hidden = !NOTES[current];
-    note.textContent = NOTES[current] ?? '';
+    $('#units-math').hidden = current !== 'math';
+    const exam = mathExamOf(settings.excludedUnits);
+    for (const [id, btn] of examBtns) btn.setAttribute('aria-pressed', String(id === exam));
     listEl.style.setProperty('--c', subj.color);
     listEl.innerHTML = '';
     for (const unit of UNITS[current]) {

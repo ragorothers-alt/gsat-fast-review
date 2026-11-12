@@ -524,7 +524,13 @@
         </header>
         <p class="sheet-tip">只練打勾的單元；全部取消等於不練這一科。</p>
         <div id="units-tabs" class="sheet-tabs" role="group" aria-label="科目"></div>
-        <p id="units-note" class="sheet-tip" hidden></p>
+        <div id="units-math" class="math-exam-box" hidden>
+          <div class="math-exam">
+            <span id="units-math-label" class="math-exam-label">數學考哪一份？</span>
+            <div id="units-math-seg" class="seg" role="group" aria-labelledby="units-math-label" aria-describedby="units-math-note"></div>
+          </div>
+          <p id="units-math-note" class="sheet-tip">數學 A 不出「數B 專屬主題」；<br />數學 B 不出「空間向量與平面直線」。</p>
+        </div>
         <ul id="units-list" class="unit-list"></ul>
         <nav class="sheet-foot">
           <button id="units-all" class="secondary-btn" type="button">全選</button>
@@ -744,6 +750,10 @@
             <h3>考哪些科？</h3>
             <div id="welcome-tracks" class="seg" role="group" aria-label="快速選擇"></div>
             <div id="welcome-subjects" class="chips welcome-chips" role="group" aria-label="選擇科目"></div>
+            <div id="welcome-math" class="math-exam welcome-math" hidden>
+              <span id="welcome-math-label" class="math-exam-label">數學考哪一份？</span>
+              <div id="welcome-math-seg" class="seg" role="group" aria-labelledby="welcome-math-label"></div>
+            </div>
             <p id="welcome-note" class="set-note welcome-note" role="status"></p>
           </section>
           <section class="set-group">

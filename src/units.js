@@ -9,6 +9,8 @@ export const CROSS_UNIT = '跨單元綜合';
 /** 自然科學探究與實作（部定必修）：各科各自用自己的實驗情境出題 */
 const INQUIRY_UNIT = '探究與實作';
 const MATH_B_UNIT = '數B 專屬主題';
+/** 空間向量、三階行列式與空間中的平面、直線：學測數學 B 不考 */
+const MATH_SPACE_UNIT = '空間向量與平面直線';
 
 export const UNITS = {
   chinese: ['字音字形', '成語與詞語運用', '文言字詞', '修辭', '核心古文', '論孟選讀', '詩詞曲', '文學常識', '應用文與語文常識', CROSS_UNIT],
@@ -36,7 +38,7 @@ export const UNITS = {
     '三角函數',
     '指數與對數',
     '平面向量',
-    '空間向量與平面直線',
+    MATH_SPACE_UNIT,
     '矩陣',
     // 學測數學 B 才考的內容（11 年級 B 類），只考數學 A 的人可以關掉
     MATH_B_UNIT,
@@ -116,6 +118,38 @@ export const UNITS = {
 
 /** 單元的唯一鍵，存檔裡用它記住哪些單元被關掉 */
 export const unitKey = (subject, unit) => `${subject}/${unit}`;
+
+/**
+ * 學測數學考哪一份：兩份的範圍差在 11 年級，選了哪一份就關掉只有另一份才考的單元，「都考」兩個都開著。
+ * 數學 A 不考「數B 專屬主題」；數學 B 不考「空間向量與平面直線」。
+ */
+export const MATH_EXAMS = [
+  { id: 'A', name: '數學 A', off: [MATH_B_UNIT] },
+  { id: 'B', name: '數學 B', off: [MATH_SPACE_UNIT] },
+  { id: 'AB', name: '都考', off: [] },
+];
+const MATH_EXAM_KEYS = new Set(MATH_EXAMS.flatMap((e) => e.off.map((u) => unitKey('math', u))));
+
+/**
+ * 關掉的單元對應考哪一份（只看那兩個單元，其他單元關不關都不影響）；兩個都關掉時不是任何一份，回傳 null
+ * @param {string[]} excludedUnits
+ */
+export function mathExamOf(excludedUnits = []) {
+  const off = new Set(excludedUnits.filter((k) => MATH_EXAM_KEYS.has(k)));
+  return MATH_EXAMS.find((e) => e.off.length === off.size && e.off.every((u) => off.has(unitKey('math', u))))?.id ?? null;
+}
+
+/**
+ * 改成考某一份：只動那兩個單元，其他關掉的單元照舊
+ * @param {string[]} excludedUnits
+ * @param {string} id MATH_EXAMS 的 id
+ */
+export function withMathExam(excludedUnits, id) {
+  const list = excludedUnits ?? [];
+  const exam = MATH_EXAMS.find((e) => e.id === id);
+  if (!exam) return list;
+  return list.filter((k) => !MATH_EXAM_KEYS.has(k)).concat(exam.off.map((u) => unitKey('math', u)));
+}
 
 /** 畫面上的單元名稱：跨單元題列出結合了哪幾個單元；閱讀題組裡沒寫 links 的跨單元題考的是整篇的閱讀理解 */
 export const topicLabel = (q) => (q.links?.length ? `跨單元：${q.links.join('＋')}` : q.group && q.topic === CROSS_UNIT ? '閱讀理解' : q.topic);

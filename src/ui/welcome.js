@@ -2,6 +2,7 @@
 // 按「開始練習」就存進設定、直接開始自由練習；「之後再說」（或 Esc）不改設定。兩種都記下看過了，之後不再顯示。
 // 要不要顯示、有哪些選項見 ../welcome.js
 import { SUBJECTS } from '../subjects.js';
+import { MATH_EXAMS, mathExamOf, withMathExam } from '../units.js';
 import { TRACKS, WELCOME_GOALS, WELCOME_KEY, needsWelcome, orderSubjects, trackOf } from '../welcome.js';
 import { closeSheet, openSheet } from './sheet.js';
 
@@ -14,6 +15,8 @@ export function initWelcome(ctx) {
   // 面板上選到一半的：按「開始練習」才寫進設定
   let picked = new Set(settings.subjects);
   let goal = settings.goal;
+  // 數學考哪一份（選了數學才問）；自己在選單元關過那兩個單元時是 null，不動它
+  let mathExam = mathExamOf(settings.excludedUnits);
 
   const button = (parent, cls, label) => {
     const btn = document.createElement('button');
@@ -44,6 +47,15 @@ export function initWelcome(ctx) {
     return [s.id, btn];
   });
 
+  const mathBtns = MATH_EXAMS.map((e) => {
+    const btn = button($('#welcome-math-seg'), 'seg-btn', e.name);
+    btn.addEventListener('click', () => {
+      mathExam = e.id;
+      render();
+    });
+    return [e.id, btn];
+  });
+
   const goalBtns = WELCOME_GOALS.map((n) => {
     const btn = button($('#welcome-goals'), 'seg-btn', `${n} 題`);
     btn.addEventListener('click', () => {
@@ -57,6 +69,8 @@ export function initWelcome(ctx) {
     const track = trackOf([...picked]);
     for (const [id, btn] of trackBtns) btn.setAttribute('aria-pressed', String(id === track));
     for (const [id, btn] of subjectBtns) btn.setAttribute('aria-pressed', String(picked.has(id)));
+    $('#welcome-math').hidden = !picked.has('math');
+    for (const [id, btn] of mathBtns) btn.setAttribute('aria-pressed', String(id === mathExam));
     for (const [n, btn] of goalBtns) btn.setAttribute('aria-pressed', String(n === goal));
     // 至少要選一科
     startBtn.disabled = !picked.size;
@@ -84,6 +98,7 @@ export function initWelcome(ctx) {
   startBtn.addEventListener('click', () => {
     if (!picked.size) return;
     settings.subjects = orderSubjects([...picked]);
+    if (picked.has('math') && mathExam) settings.excludedUnits = withMathExam(settings.excludedUnits, mathExam);
     // 日期欄被清空時保留原本的日期
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateInput.value)) settings.examDate = dateInput.value;
     settings.goal = goal;
@@ -109,6 +124,7 @@ export function initWelcome(ctx) {
       if (!needsWelcome(ctx.state, seen)) return false;
       picked = new Set(settings.subjects);
       goal = settings.goal;
+      mathExam = mathExamOf(settings.excludedUnits);
       dateInput.value = settings.examDate;
       render();
       openSheet(sheet);

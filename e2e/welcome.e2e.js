@@ -83,6 +83,33 @@ test.describe('第一次開啟的設定', () => {
     await expect(page.locator('#subject-chips .chip[aria-pressed="true"]')).toHaveCount(6);
   });
 
+  test('選了數學才問考哪一份；選數學 A 開始後，選單元的數學分頁也是數學 A、不出數B 專屬主題', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('./');
+    await waitForBoot(page);
+    const math = page.locator('#welcome-math');
+    const pressed = page.locator('#welcome-math-seg [aria-pressed="true"]');
+    await expect(math).toBeVisible();
+    await expect(page.locator('#welcome-math-seg .seg-btn')).toHaveText(['數學 A', '數學 B', '都考']);
+    await expect(page.locator('#welcome-math-seg')).toHaveAccessibleName('數學考哪一份？');
+    await expect(pressed).toHaveText('都考');
+    // 沒選數學就不問
+    await page.locator('#welcome-subjects .chip', { hasText: '數學' }).click();
+    await expect(math).toBeHidden();
+    await page.locator('#welcome-tracks button', { hasText: '自然組' }).click();
+    await expect(math).toBeVisible();
+    await page.locator('#welcome-math-seg button', { hasText: '數學 A' }).click();
+    await expect(pressed).toHaveText('數學 A');
+    await audit(page, '第一次開啟的設定：數學考哪一份');
+    await page.locator('#welcome-start').click();
+    await expect(page.locator('#play')).toBeVisible();
+    expect((await saved(page)).settings.excludedUnits).toEqual(['math/數B 專屬主題']);
+    await page.locator('#quit').click();
+    await page.locator('#open-units').click();
+    await page.locator('#units-tabs button', { hasText: '數學' }).click();
+    await expect(page.locator('#units-math-seg [aria-pressed="true"]')).toHaveText('數學 A');
+  });
+
   test('「之後再說」和 Esc 都不改設定，只記下看過了；焦點在面板裡', async ({ page }) => {
     await page.goto('./');
     await waitForBoot(page);
