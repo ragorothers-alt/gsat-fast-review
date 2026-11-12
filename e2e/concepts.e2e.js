@@ -10,11 +10,14 @@ test('考點：作答前不顯示，看解析時標在標題旁；重點卡面�
   await startMode(page, 'free');
   // 跨單元綜合的題目借用別的單元的考點、探究與實作好幾科都有：換到一般單元的題目，等一下才找得到它的重點卡
   let unit = '';
+  // 跳過的跨單元題借用的考點（可能在別的單元）：之後翻到那些單元時會標成有錯題
+  const borrowed = [];
   for (let i = 0; i < 20; i++) {
     await expect(page.locator('#q-text')).toBeVisible();
     unit = (await page.locator('#q-topic .topic-name').textContent()).trim();
     if (!/跨單元|探究與實作/.test(unit)) break;
     await page.locator('#skip').click();
+    borrowed.push((await page.locator('#q-explain .kp-tag').textContent()).replace('考點：', ''));
     await page.locator('#next').click();
   }
   const subject = (await page.locator('#q-subject').textContent()).trim();
@@ -51,10 +54,16 @@ test('考點：作答前不顯示，看解析時標在標題旁；重點卡面�
   await page.locator('#kp-concepts').scrollIntoViewIfNeeded();
   await audit(page, '重點卡面板的考點');
 
-  // 翻到下一個單元：考點跟著換、都還沒練
+  // 翻到下一個單元：考點跟著換；有錯題的只會是前面跳過的跨單元題借用的考點
+  const names = () => page.locator('#kp-concept-list .kp-chip-name').allTextContents();
+  const before = (await names()).join('|');
   await page.locator('#kp-next').click();
   await expect(page.locator('#kp-unit')).not.toHaveText(unit);
-  await expect(page.locator('#kp-concept-list .kp-chip.weak')).toHaveCount(0);
+  // 等清單換成下一個單元的考點再看（不同單元可能有同名的考點，所以比整份清單）；
+  // 下一個單元是沒有自己考點的跨單元綜合時，考點區塊整個收起來
+  const box = page.locator('#kp-concepts');
+  await expect.poll(async () => !(await box.isVisible()) || (await names()).join('|') !== before).toBe(true);
+  if (await box.isVisible()) for (const weak of await page.locator('#kp-concept-list .kp-chip.weak .kp-chip-name').allTextContents()) expect(borrowed).toContain(weak);
 });
 
 test('學習分析：各科寫出練過幾個考點；320 寬也不超出', async ({ page }) => {

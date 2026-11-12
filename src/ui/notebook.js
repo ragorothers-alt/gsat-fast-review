@@ -114,6 +114,11 @@ const indexEntry = (q) => [
   function searchItems(query) {
     const terms = norm(query).split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
+    // 打的剛好是一題的完整題號（例如回報或分享時看到的 math-685）：只列這一題，不連 math-6850 這類也列出來
+    if (terms.length === 1) {
+      const exact = ctx.bank.find((q) => q.id === terms[0]);
+      if (exact) return [exact];
+    }
     // 索引還沒建完（打字很快，或題庫剛補上其他科）：剩下的直接補完
     if (!hay || hay.size < ctx.bank.length) {
       hay ??= new Map();
