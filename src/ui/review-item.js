@@ -1,4 +1,5 @@
-// 結算畫面與錯題本共用的題目卡：科目、單元、發音／收藏／複製／回報按鈕、題目、正解與解析
+// 結算畫面與錯題本共用的題目卡：科目、單元、發音／收藏／複製／回報按鈕、題目、正解（與考點）與解析
+import { conceptOf, loadConcepts } from '../data/concepts.js';
 import { reportQuestion } from '../report.js';
 import { openNote } from '../session.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
@@ -14,6 +15,44 @@ export const tfLabel = (v) => (v ? `${icon('ok')}對` : `${icon('ng')}錯`);
 
 /** 英文單字題：考的字在大考中心《高中英文參考詞彙表》第幾級（學測詞彙題的正解多在第 3–5 級） */
 export const lvTag = (q) => (q.lv ? `<span class="lv-tag" title="大考中心《高中英文參考詞彙表》第 ${q.lv} 級">詞彙表第 ${q.lv} 級</span>` : '');
+
+const escapeHTML = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]);
+
+/**
+ * 這題的考點（正解旁邊）：點了只練這個考點。考點清單還沒下載好時先藏起來，畫好之後用 fillConceptTags 補上名稱
+ */
+export function conceptTagHTML(q) {
+  if (!q.kp) return '';
+  const c = conceptOf(q);
+  return `<button type="button" class="kp-tag kp-link" data-practice="${q.subject}/${q.kp}" title="只練這個考點"${c ? '' : ' hidden'}>考點：${c ? escapeHTML(c.name) : ''}</button>`;
+}
+
+/** 畫面裡還沒有名稱的考點按鈕：下載那科的考點清單後填上名稱再顯示（下載不了就維持藏著） */
+export function fillConceptTags(root) {
+  const pending = [...root.querySelectorAll('.kp-link[hidden]')];
+  for (const subject of new Set(pending.map((b) => b.dataset.practice.split('/')[0]))) {
+    loadConcepts(subject).then(
+      () => {
+        for (const b of pending) {
+          const [s, kp] = b.dataset.practice.split('/');
+          const c = s === subject && conceptOf({ subject: s, kp });
+          if (!c || !b.isConnected) continue;
+          b.textContent = `考點：${c.name}`;
+          b.hidden = false;
+        }
+      },
+      () => {},
+    );
+  }
+}
+
+/** 題目卡上的考點按鈕：開一輪只練這個考點；點到的不是考點按鈕就回傳 false */
+export function practiceConceptFrom(ctx, target) {
+  const btn = target.closest('[data-practice]');
+  if (!btn) return false;
+  ctx.startRound('concept', { concept: btn.dataset.practice });
+  return true;
+}
 
 /**
  * 一個答案的 HTML：是非題是圈叉、單選題是選項、多選題是選了的幾個選項（照原始順序，用「；」隔開）；
@@ -66,7 +105,7 @@ export function reviewItem(q, { index, flagged, starred, note }) {
   return `<li class="r-item" style="--c:${subj.color}">
     <div class="card-tag"><span class="tag">${subj.name}</span><button type="button" class="topic topic-link" data-kp="${q.subject}/${q.topic}" title="看這個單元的考前重點">${topicLabel(q)}</button>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="${index}" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${starred}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
     ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
-    <div class="r-ans">${note}<span class="r-right">${open ? '參考答案' : '正解'}：${answer}</span>${lvTag(q)}</div>
+    <div class="r-ans">${note}<span class="r-right">${open ? '參考答案' : '正解'}：${answer}</span>${lvTag(q)}${conceptTagHTML(q)}</div>
     ${open ? openPointsHTML(q) : ''}<div class="r-explain">${richHTML(q.explain)}</div>
   </li>`;
 }

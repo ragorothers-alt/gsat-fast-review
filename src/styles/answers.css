@@ -59,6 +59,25 @@
 }
 
 /* 英文單字題：考的字在參考詞彙表第幾級（解析標題旁、錯題本的正解旁）；這題的考點（解析標題旁） */
+/* 結算、錯題本、模擬考成績單上的考點是按鈕：點了只練這個考點 */
+.kp-link {
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.kp-link:hover,
+.kp-link:active {
+  border-color: var(--ink);
+  border-style: solid;
+  text-decoration: underline;
+}
+
+.kp-link:focus-visible {
+  outline: 2.5px dashed var(--accent-2);
+  outline-offset: 2px;
+}
+
 .lv-tag,
 .kp-tag {
   display: inline-block;

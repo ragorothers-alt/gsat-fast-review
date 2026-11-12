@@ -138,6 +138,25 @@ test('重點卡的考點可以點：只練這個考點，錯題先出', async ({
   await expectConceptRound(page, name);
 });
 
+test('結算畫面與錯題本：正解旁標出考點，點了只練那個考點', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const { name } = await missOne(page);
+  // 這輪只做了這幾題就結束：結算畫面列出不會的題目，正解旁有考點
+  await page.locator('#quit').click();
+  await expect(page.locator('#result')).toBeVisible();
+  const tag = page.locator('#r-list .kp-link').last();
+  await expect(tag).toHaveText(`考點：${name}`);
+  await audit(page, '結算畫面的考點');
+  // 錯題本裡也有，點了開一輪只練這個考點
+  await page.locator('#r-home').click();
+  await page.locator('#open-notebook').click();
+  await page.locator('#notebook-views [data-view="wrong"]').click();
+  const nb = page.locator('#notebook-list .kp-link', { hasText: `考點：${name}` }).first();
+  await expect(nb).toBeVisible();
+  await nb.click();
+  await expectConceptRound(page, name);
+});
+
 test('學習分析的弱點考點：列出有錯題的考點，點了只練那個考點', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const { name } = await missOne(page);

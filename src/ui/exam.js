@@ -13,7 +13,7 @@ import { sfx } from './feedback.js';
 import { openKeypointsFrom } from './keypoints.js';
 import { choicesClass, groupPosition, markUsed, showPassage } from './passage.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
-import { mineHTML, reviewItem, speakItem, toggleMark } from './review-item.js';
+import { fillConceptTags, mineHTML, practiceConceptFrom, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
 /** 剩這麼多秒時，時間標紅並念一次（螢幕閱讀器） */
@@ -489,6 +489,7 @@ export function initExam(ctx) {
       : '全對！這份卷沒有錯題';
     const { flags, stars } = ctx.state;
     $('#x-list').innerHTML = misses.map((it, i) => reviewItem(it.q, { index: i, flagged: !!flags[it.id], starred: !!stars[it.id], note: mine(it) })).join('');
+    fillConceptTags($('#x-list'));
     const train = misses.filter((it) => !it.right);
     $('#x-train').textContent = train.length ? '練這份的錯題' : '再考一份';
 
@@ -522,7 +523,7 @@ export function initExam(ctx) {
   $('#x-list').addEventListener('click', (e) => {
     if (!report) return;
     const items = missed();
-    if (openKeypointsFrom(ctx, e.target) || speakItem(e.target, items.map((it) => it.q))) return;
+    if (openKeypointsFrom(ctx, e.target) || practiceConceptFrom(ctx, e.target) || speakItem(e.target, items.map((it) => it.q))) return;
     const copy = e.target.closest('[data-copy]');
     if (copy) {
       const it = items[Number(copy.dataset.copy)];

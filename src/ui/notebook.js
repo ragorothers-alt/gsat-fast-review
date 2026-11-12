@@ -11,7 +11,7 @@ import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
 import { UNITS, unitKey } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { openKeypointsFrom } from './keypoints.js';
-import { reviewItem, speakItem, toggleMark } from './review-item.js';
+import { fillConceptTags, practiceConceptFrom, reviewItem, speakItem, toggleMark } from './review-item.js';
 
 /** 一次畫幾題（題目多時公式排版很花時間，捲到底再按「再顯示」） */
 const PAGE = 20;
@@ -216,6 +216,7 @@ const indexEntry = (q) => [
       'beforeend',
       next.map((q, i) => reviewItem(q, { index: shown + i, flagged: !!flags[q.id], starred: !!stars[q.id], note: note(q, now) })).join(''),
     );
+    fillConceptTags(list);
     shown += next.length;
     const left = items.length - shown;
     more.hidden = left <= 0;
@@ -269,7 +270,7 @@ const indexEntry = (q) => [
   more.addEventListener('click', renderMore);
 
   list.addEventListener('click', (e) => {
-    if (openKeypointsFrom(ctx, e.target) || speakItem(e.target, items)) return;
+    if (openKeypointsFrom(ctx, e.target) || practiceConceptFrom(ctx, e.target) || speakItem(e.target, items)) return;
     const copy = e.target.closest('[data-copy]');
     if (copy) {
       const q = items[Number(copy.dataset.copy)];

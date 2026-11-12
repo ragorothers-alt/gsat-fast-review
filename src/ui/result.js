@@ -4,7 +4,7 @@ import { questionPrompt } from '../prompt.js';
 import { today } from '../stats.js';
 import { copyQuestion } from './clipboard.js';
 import { openKeypointsFrom } from './keypoints.js';
-import { mineHTML, reviewItem, speakItem, toggleMark } from './review-item.js';
+import { fillConceptTags, mineHTML, practiceConceptFrom, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { sfx } from './feedback.js';
 
 export function initResult(ctx) {
@@ -40,6 +40,7 @@ export function initResult(ctx) {
     $('#r-list').innerHTML = misses
       .map((e, i) => reviewItem(byId.get(e.id), { index: i, flagged: !!flags[e.id], starred: !!stars[e.id], note: mine(byId.get(e.id), e) }))
       .join('');
+    fillConceptTags($('#r-list'));
     $('#r-related').hidden = !misses.length;
 
     // 這輪出現最多的科目，牠們的貓會趴在成績卡上
@@ -66,7 +67,7 @@ export function initResult(ctx) {
 
   // 錯題清單裡也能念英文、收藏、複製、回報題目
   $('#r-list').addEventListener('click', (e) => {
-    if (openKeypointsFrom(ctx, e.target) || speakItem(e.target, misses.map((m) => byId.get(m.id)))) return;
+    if (openKeypointsFrom(ctx, e.target) || practiceConceptFrom(ctx, e.target) || speakItem(e.target, misses.map((m) => byId.get(m.id)))) return;
     const copy = e.target.closest('[data-copy]');
     if (copy) {
       const entry = misses[Number(copy.dataset.copy)];
