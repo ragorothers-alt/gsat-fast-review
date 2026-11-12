@@ -53700,5 +53700,2024 @@
     "explain": "take A for granted 表示把 A 視為理所當然，受詞 clean tap water 放在 take 與 for 之間。no longer 已是否定，不可再加 not；tap water 不可數。",
     "level": 2,
     "kp": "03-20"
+  },
+  {
+    "id": "english-2816",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The job pays little, but trainees can ____ practical skills by working beside experienced workers.",
+    "choices": [
+      "borrow",
+      "exchange",
+      "purchase",
+      "acquire"
+    ],
+    "answer": 3,
+    "explain": "acquire 是「習得、獲得」，在實作中學會技能。purchase 是「購買」、borrow 是「借入」、exchange 是「交換」，都不表示逐步學會技能。",
+    "formula": false,
+    "level": 2,
+    "kp": "01-14",
+    "lv": 4
+  },
+  {
+    "id": "english-2817",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "q": "The new guide hopes to ____ the hikers’ trust by checking every route carefully before each trip.",
+    "choices": [
+      "charge",
+      "earn",
+      "rent",
+      "owe"
+    ],
+    "answer": 1,
+    "explain": "earn 除了「賺取」也可指以努力「贏得」信任；仔細確認路線是爭取信任的行動。charge 是「收費」、owe 是「欠」、rent 是「租用」。",
+    "formula": false,
+    "level": 2,
+    "kp": "01-14",
+    "lv": 2
+  },
+  {
+    "id": "english-2818",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "group": "english-g276",
+    "passage": "At the school costume room, students used to leave borrowed jackets on a table. The helpers then had to guess which play each jacket belonged to. To solve the problem, Mina introduced paper tags with the names of the plays. Students attached them to the jackets before returning the clothes. The tags helped the helpers sort the clothes, but some fell off during washing.\nThe drama teacher suggested putting each play’s clothes in a separate bag. Mina worried that this arrangement would hide wet clothes from view, so she asked students to hang damp items on a rail first. Dry ones could go straight into the bags. The teacher agreed to try the plan for a week.\nOn Friday, the helpers found every jacket without opening all the bags. They still checked the rail before leaving, since anything hanging there needed more time to dry. Mina kept a few paper tags for unusual items that did not belong to a particular play.",
+    "q": "What does “them” in paragraph 1 refer to?",
+    "choices": [
+      "The students’ names",
+      "The borrowed jackets",
+      "The returned clothes",
+      "The new paper tags"
+    ],
+    "answer": 3,
+    "explain": "them 指 paper tags（紙標籤）；attach A to B 是「把 A 附在 B 上」。學生把標籤掛到外套上，因此不是把外套掛到外套上。",
+    "formula": false,
+    "level": 2,
+    "kp": "01-22"
+  },
+  {
+    "id": "english-2819",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "group": "english-g276",
+    "passage": "At the school costume room, students used to leave borrowed jackets on a table. The helpers then had to guess which play each jacket belonged to. To solve the problem, Mina introduced paper tags with the names of the plays. Students attached them to the jackets before returning the clothes. The tags helped the helpers sort the clothes, but some fell off during washing.\nThe drama teacher suggested putting each play’s clothes in a separate bag. Mina worried that this arrangement would hide wet clothes from view, so she asked students to hang damp items on a rail first. Dry ones could go straight into the bags. The teacher agreed to try the plan for a week.\nOn Friday, the helpers found every jacket without opening all the bags. They still checked the rail before leaving, since anything hanging there needed more time to dry. Mina kept a few paper tags for unusual items that did not belong to a particular play.",
+    "q": "What does “this arrangement” in paragraph 2 refer to?",
+    "choices": [
+      "Sorting returned jackets by their paper tags",
+      "Keeping each play’s clothes in a separate bag",
+      "Checking the costume room at the end of the week",
+      "Hanging all returned jackets on the same rail"
+    ],
+    "answer": 1,
+    "explain": "this arrangement（這項安排）回指老師提出的分袋存放方式。Mina 擔心袋子會遮住濕衣物，才另提先晾乾的步驟。",
+    "formula": false,
+    "level": 3,
+    "kp": "01-22"
+  },
+  {
+    "id": "english-2820",
+    "subject": "english",
+    "topic": "核心單字",
+    "type": "mc",
+    "group": "english-g276",
+    "passage": "At the school costume room, students used to leave borrowed jackets on a table. The helpers then had to guess which play each jacket belonged to. To solve the problem, Mina introduced paper tags with the names of the plays. Students attached them to the jackets before returning the clothes. The tags helped the helpers sort the clothes, but some fell off during washing.\nThe drama teacher suggested putting each play’s clothes in a separate bag. Mina worried that this arrangement would hide wet clothes from view, so she asked students to hang damp items on a rail first. Dry ones could go straight into the bags. The teacher agreed to try the plan for a week.\nOn Friday, the helpers found every jacket without opening all the bags. They still checked the rail before leaving, since anything hanging there needed more time to dry. Mina kept a few paper tags for unusual items that did not belong to a particular play.",
+    "q": "What does “ones” in “Dry ones” refer to?",
+    "choices": [
+      "The separate bags",
+      "The school plays",
+      "Items of clothing",
+      "The old paper tags"
+    ],
+    "answer": 2,
+    "explain": "ones 代替前句的 items，指衣物。damp items（潮濕衣物）先掛起，dry ones（乾衣物）則直接入袋；不是指乾燥的袋子。",
+    "formula": false,
+    "level": 2,
+    "kp": "01-22"
+  },
+  {
+    "id": "english-2821",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The disease is ____, so patients need years of care rather than a single short course of treatment.",
+    "choices": [
+      "fatal",
+      "chronic",
+      "inherited",
+      "contagious"
+    ],
+    "answer": 1,
+    "explain": "chronic 是「慢性的」，years of care 是長期病程的線索。contagious 是「會傳染的」、fatal 是「致命的」、inherited 是「遺傳的」，皆未必需要多年照護。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-06",
+    "lv": 5
+  },
+  {
+    "id": "english-2822",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The chemical is ____ even in small amounts; workers must prevent it from entering their bodies.",
+    "choices": [
+      "toxic",
+      "artificial",
+      "beneficial",
+      "harmless"
+    ],
+    "answer": 0,
+    "explain": "toxic 是「有毒的」，少量進入人體也有危害。artificial 是「人造的」、harmless 是「無害的」、beneficial 是「有益的」，都不能說明此健康危害。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-06",
+    "lv": 5
+  },
+  {
+    "id": "english-2823",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "After recovering, she was ____ to that strain of the virus; later exposure did not make her ill.",
+    "choices": [
+      "indifferent",
+      "immune",
+      "vulnerable",
+      "hostile"
+    ],
+    "answer": 1,
+    "explain": "immune to 是「對……有免疫力的」，此處康復後再次接觸同一病毒株仍未生病。vulnerable 是「易受傷害的」、indifferent 是「不在意的」、hostile 是「敵視的」。",
+    "formula": false,
+    "level": 3,
+    "kp": "02-06",
+    "lv": 5
+  },
+  {
+    "id": "english-2824",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The board will ____ the safety policy: the same rules will remain, but the wording will be made clearer.",
+    "choices": [
+      "abolish",
+      "suspend",
+      "revise",
+      "enforce"
+    ],
+    "answer": 2,
+    "explain": "revise 是「修訂」，此處保留規則內容而改清楚措辭。abolish 是「廢除」、suspend 是「暫停」、enforce 是「強制執行」，不表示修改文字。",
+    "formula": false,
+    "level": 3,
+    "kp": "02-13",
+    "lv": 4
+  },
+  {
+    "id": "english-2825",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Staffing problems forced the hospital to ____ its training program for a month; sessions will resume in June.",
+    "choices": [
+      "abolish",
+      "suspend",
+      "implement",
+      "expand"
+    ],
+    "answer": 1,
+    "explain": "suspend 是「暫停」，一個月後 resume（恢復）是關鍵。abolish 是「廢除」、implement 是「實施」、expand 是「擴大」，皆不符合暫時中止。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-13",
+    "lv": 5
+  },
+  {
+    "id": "english-2826",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Posting a rule was not enough; guards were hired to ____ it by checking every visitor’s bag at the gate.",
+    "choices": [
+      "abolish",
+      "enforce",
+      "propose",
+      "revise"
+    ],
+    "answer": 1,
+    "explain": "enforce 是「強制執行」；聘人逐一檢查，讓公告的規定落實。revise 是「修訂」、propose 是「提出」、abolish 是「廢除」，都不是實際查驗的動作。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-13",
+    "lv": 4
+  },
+  {
+    "id": "english-2827",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Before publishing the students’ photographs, the magazine sought their parents’ ____ in writing.",
+    "choices": [
+      "obligation",
+      "attendance",
+      "privilege",
+      "consent"
+    ],
+    "answer": 3,
+    "explain": "consent 是「同意、允許」，刊登照片前先取得家長書面同意。obligation 是「義務」、privilege 是「特權」、attendance 是「出席」，都不是刊登授權。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-17",
+    "lv": 5
+  },
+  {
+    "id": "english-2828",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Senior members can use the private lounge, a ____ that is not included in the basic membership.",
+    "choices": [
+      "procedure",
+      "privilege",
+      "petition",
+      "obligation"
+    ],
+    "answer": 1,
+    "explain": "privilege 是「特權、特殊待遇」，較高會籍才有休息室使用權。procedure 是「程序」、obligation 是「義務」、petition 是「請願書」，並非會員享有的待遇。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-17",
+    "lv": 4
+  },
+  {
+    "id": "english-2829",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Giving one team the answers before a contest was treated as ____, and the judge was removed from office.",
+    "choices": [
+      "misconduct",
+      "negotiation",
+      "competition",
+      "cooperation"
+    ],
+    "answer": 0,
+    "explain": "misconduct 是「不當行為」，裁判事先洩漏答案違反職責，因此遭撤職。competition 是「競爭」、negotiation 是「協商」、cooperation 是「合作」。",
+    "formula": false,
+    "level": 3,
+    "kp": "02-17",
+    "lv": 5
+  },
+  {
+    "id": "english-2830",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Residents signed a ____ asking the council to save the old theater; the document was delivered on Monday.",
+    "choices": [
+      "license",
+      "receipt",
+      "contract",
+      "petition"
+    ],
+    "answer": 3,
+    "explain": "petition 是「請願書」，由居民簽署並提交訴求。license 是「執照」、receipt 是「收據」、contract 是「契約」，不符合向議會請求保留戲院的文件功能。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-17",
+    "lv": 5
+  },
+  {
+    "id": "english-2831",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Passengers check in at the airport ____ before buses take them from this building to their planes.",
+    "choices": [
+      "basement",
+      "terminal",
+      "corridor",
+      "warehouse"
+    ],
+    "answer": 1,
+    "explain": "terminal 是「航廈、終點站」，此處指候機建築。warehouse 是「倉庫」、corridor 是「走廊」、basement 是「地下室」，皆非候機建築的名稱。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-21",
+    "lv": 5
+  },
+  {
+    "id": "english-2832",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "The factory installed filters to reduce the ____ of harmful gases into the air around nearby homes.",
+    "choices": [
+      "conservation",
+      "absorption",
+      "emission",
+      "consumption"
+    ],
+    "answer": 2,
+    "explain": "emission 是「排放」，此處指氣體排入周邊空氣。consumption 是「消耗」、absorption 是「吸收」、conservation 是「保育、節約」。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-22",
+    "lv": 5
+  },
+  {
+    "id": "english-2833",
+    "subject": "english",
+    "topic": "進階單字",
+    "type": "mc",
+    "q": "Water leaked onto the stairs overnight, creating a ____ that staff removed before anyone slipped.",
+    "choices": [
+      "hazard",
+      "resource",
+      "shelter",
+      "symptom"
+    ],
+    "answer": 0,
+    "explain": "hazard 是「危險因素」，樓梯上的水會使人滑倒。symptom 是「症狀」、shelter 是「庇護處」、resource 是「資源」，不是此處待排除的環境危害。",
+    "formula": false,
+    "level": 2,
+    "kp": "02-22",
+    "lv": 5
+  },
+  {
+    "id": "english-2834",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "After losing a day to rain, the crew worked on Saturday to ____ the lost time and finish on schedule.",
+    "choices": [
+      "keep track of",
+      "make room for",
+      "catch up with",
+      "make up for"
+    ],
+    "answer": 3,
+    "explain": "make up for（彌補）指補回損失的時間。keep track of（追蹤）、make room for（騰空間）不合；catch up with（追上）接領先者，不接 lost time。",
+    "formula": false,
+    "level": 3,
+    "kp": "03-09"
+  },
+  {
+    "id": "english-2835",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "____ having little experience, the new team passed a test that even skilled workers found difficult.",
+    "choices": [
+      "As a result of",
+      "In spite of",
+      "In addition to",
+      "In preparation for"
+    ],
+    "answer": 1,
+    "explain": "In spite of（儘管）表經驗少卻通過難關的讓步。As a result of（由於）、In addition to（除……還）、In preparation for（為……準備）不合語意。",
+    "formula": false,
+    "level": 2,
+    "kp": "03-18"
+  },
+  {
+    "id": "english-2836",
+    "subject": "english",
+    "topic": "片語與搭配詞",
+    "type": "mc",
+    "q": "____ the lock, which requires a small key, every part of the machine can be adjusted without tools.",
+    "choices": [
+      "in addition to",
+      "in place of",
+      "other than",
+      "along with"
+    ],
+    "answer": 2,
+    "explain": "other than（除了……之外）排除需要鑰匙的鎖。in addition to、along with 表增補，會把鎖也算入免工具的部分；in place of（代替）不合語意。",
+    "formula": false,
+    "level": 3,
+    "kp": "03-18"
+  },
+  {
+    "id": "english-2837",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "For the camping trip, we need ____; we already have enough tents.",
+    "choices": [
+      "some new equipment",
+      "several new equipments",
+      "one new equipment",
+      "a few new equipments"
+    ],
+    "answer": 0,
+    "explain": "equipment（裝備）是不可數名詞，可用 some 修飾，不加 a 或複數 s。若要計數，須說 pieces of equipment。不是所有看似一件件的物品名詞都可數。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-01"
+  },
+  {
+    "id": "english-2838",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "At the packing station, workers put the eggs into empty ____ before sending them to stores.",
+    "choices": [
+      "eggs boxes",
+      "eggs box",
+      "egg boxes",
+      "egg box"
+    ],
+    "answer": 2,
+    "explain": "egg box 是「蛋盒」，前面的 egg 作名詞修飾語，通常保持單數；多個蛋盒把核心名詞 box 改為 boxes。不能因內容有多顆蛋就把 egg 也加 s。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-01"
+  },
+  {
+    "id": "english-2839",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Three ____ attended the family meeting; each was married to one of the host’s sons.",
+    "choices": [
+      "daughter-ins-law",
+      "daughters-in-laws",
+      "daughter-in-laws",
+      "daughters-in-law"
+    ],
+    "answer": 3,
+    "explain": "daughter-in-law 是「媳婦」，複數加在核心名詞 daughter 上，成為 daughters-in-law；in-law 是後面的關係修飾語，不在 law 或 in 加 s。",
+    "formula": false,
+    "level": 3,
+    "kp": "04-01"
+  },
+  {
+    "id": "english-2840",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The hotel can store two large ____ per guest while rooms are being cleaned.",
+    "choices": [
+      "piece of luggage",
+      "pieces of luggages",
+      "piece of luggages",
+      "pieces of luggage"
+    ],
+    "answer": 3,
+    "explain": "luggage（行李）不可數，計數用 piece of luggage；two 後須把 piece 改成 pieces，但 luggage 不加 s。large 是「大型的」。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-01"
+  },
+  {
+    "id": "english-2841",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The director asked us to show our ID at the gate. What does “ID” stand for here?",
+    "choices": [
+      "Identification",
+      "Instruction",
+      "Information",
+      "Introduction"
+    ],
+    "answer": 0,
+    "explain": "ID 是 identification（身分證明）的縮略形式。information 是「資訊」、instruction 是「指示」、introduction 是「介紹」，都不是門口要查驗的證件。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-01"
+  },
+  {
+    "id": "english-2842",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "A weather service hopes to foresee problems. The prefix in \"foresee\" suggests knowing about them ____.",
+    "choices": [
+      "after they happen",
+      "from nearby",
+      "before they happen",
+      "at the same time"
+    ],
+    "answer": 2,
+    "explain": "fore- 表「在……之前」，foresee 是「預見」，表示問題發生前就知道可能出現。不是事情發生後、從附近，或與事情同時發生。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-05"
+  },
+  {
+    "id": "english-2843",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The museum is collecting postwar letters. Which letters fit that description?",
+    "choices": [
+      "Letters sent during a war",
+      "Letters sent before a war",
+      "Letters sent after a war",
+      "Letters sent to prevent a war"
+    ],
+    "answer": 2,
+    "explain": "post- 表「在……之後」，postwar 是「戰後的」，所以是戰後寄出的信。戰前用 prewar；戰時或為阻止戰爭而寄的信，都不是 post- 所表的時間。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-05"
+  },
+  {
+    "id": "english-2844",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "A map marks an underground passage. The prefix in \"underground\" places the passage ____ the surface.",
+    "choices": [
+      "beneath",
+      "beyond",
+      "alongside",
+      "across"
+    ],
+    "answer": 0,
+    "explain": "under- 表「在……下面」，underground 是「地下的」，所以選 beneath（在下方）。beyond 是「超出」、alongside 是「在旁」、across 是「橫越」。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-05"
+  },
+  {
+    "id": "english-2845",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The coach called a player overconfident. What does the prefix suggest about the player's confidence?",
+    "choices": [
+      "Less than is needed",
+      "Equal to someone else",
+      "Repeated a second time",
+      "More than is sensible"
+    ],
+    "answer": 3,
+    "explain": "over- 在此表「過度」，overconfident 是「過度自信的」，即自信超出合理程度。不是不足、與別人相等或再次發生。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-06"
+  },
+  {
+    "id": "english-2846",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The prefix \"tri-\" in \"triangle\" tells us how many angles it has. How many does it indicate?",
+    "choices": [
+      "One",
+      "Four",
+      "Three",
+      "Two"
+    ],
+    "answer": 2,
+    "explain": "tri- 表「三」，triangle 是「三角形」，有三個角。One（一）、Two（二）、Four（四）都不是 tri- 表示的數量。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-06"
+  },
+  {
+    "id": "english-2847",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Which noun formed from \"accept\" means agreeing to take an offer or join a program?",
+    "choices": [
+      "access",
+      "agreement",
+      "approval",
+      "acceptance"
+    ],
+    "answer": 3,
+    "explain": "accept（接受）加 -ance 形成 acceptance（接受）。agreement（協議）、approval（批准）意思相關，卻不是同根名詞；access 是「使用權」。",
+    "formula": false,
+    "level": 3,
+    "kp": "04-09"
+  },
+  {
+    "id": "english-2848",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The office permits visitors only with advance notice. Please ask for ____ before bringing a friend.",
+    "choices": [
+      "promise",
+      "permit",
+      "proposal",
+      "permission"
+    ],
+    "answer": 3,
+    "explain": "permit（允許）變抽象名詞為 permission。名詞 permit 是可數的「許可證」，此處少了冠詞；promise 是「承諾」、proposal 是「提案」。",
+    "formula": false,
+    "level": 3,
+    "kp": "04-09"
+  },
+  {
+    "id": "english-2849",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "A witness described the robber in detail. Which noun formed from \"describe\" names the account she gave?",
+    "choices": [
+      "description",
+      "explanation",
+      "statement",
+      "report"
+    ],
+    "answer": 0,
+    "explain": "describe 轉為 description（描述內容），-ibe 改為 -iption。explanation、statement、report 雖語意相關，皆非同根名詞。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-09"
+  },
+  {
+    "id": "english-2850",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Which noun formed from \"choose\" completes \"We must make a ____ between the two designs\"?",
+    "choices": [
+      "choice",
+      "charge",
+      "change",
+      "chance"
+    ],
+    "answer": 0,
+    "explain": "choose（選擇）變為 choice（選擇），oo 變 oi、字尾變 -ce。make a choice 是「做選擇」；charge（費用）、change（改變）、chance（機會）非同根名詞。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-09"
+  },
+  {
+    "id": "english-2851",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "Builders will ____ the pool by adding ten meters at one end; its width will stay the same.",
+    "choices": [
+      "strengthen",
+      "loosen",
+      "lengthen",
+      "widen"
+    ],
+    "answer": 2,
+    "explain": "length（長度）加 -en 形成 lengthen（加長），符合只增加池長。strengthen 是「加強」、loosen 是「鬆開」、widen 是「加寬」，都不表示此處的尺寸變化。",
+    "formula": false,
+    "level": 3,
+    "kp": "04-10"
+  },
+  {
+    "id": "english-2852",
+    "subject": "english",
+    "topic": "詞性與構詞",
+    "type": "mc",
+    "q": "The larger text will ____ older readers to use the app without changing its content.",
+    "choices": [
+      "ensure",
+      "enable",
+      "enlarge",
+      "enclose"
+    ],
+    "answer": 1,
+    "explain": "en- 與 able 構成 enable，enable someone to V 表「使某人能夠……」。ensure 是「確保」、enlarge 是「放大」、enclose 是「圍住」，搭配皆不合。",
+    "formula": false,
+    "level": 2,
+    "kp": "04-10"
+  },
+  {
+    "id": "english-2853",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "By next June, I ____ at this shelter for a year, and I plan to stay longer.",
+    "choices": [
+      "have been volunteering",
+      "had been volunteering",
+      "will have been volunteering",
+      "would have been volunteering"
+    ],
+    "answer": 2,
+    "explain": "By next June（到明年六月）是未來參照點，用 will have been volunteering 表「將已持續擔任志工」。for a year 是累積期間，其他完成進行式的參照點不合。",
+    "formula": false,
+    "level": 3,
+    "kp": "05-04"
+  },
+  {
+    "id": "english-2854",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "The painting was gone when we returned at noon; someone ____ it while we were away.",
+    "choices": [
+      "has stolen",
+      "had stolen",
+      "will have stolen",
+      "would steal"
+    ],
+    "answer": 1,
+    "explain": "先偷畫，後在中午回來發現畫不見；had stolen（早已偷走）把偷畫放在過去參照點 returned 之前。has stolen 以現在為參照，另外兩項則表未來。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-05"
+  },
+  {
+    "id": "english-2855",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "In which sentence is the subject affected by a change even though the verb is active?",
+    "choices": [
+      "The clerk closed the shop.",
+      "The students opened their books.",
+      "The balloon burst in the heat.",
+      "The cook melted some butter."
+    ],
+    "answer": 2,
+    "explain": "burst（爆裂）在此是不及物動詞，氣球是發生變化的事物，動詞仍用主動形式。其餘句子的主詞是關店、翻書或融化奶油的動作執行者。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-11"
+  },
+  {
+    "id": "english-2856",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "Which sentence can complete the report in standard English: “After the storm, ____”?",
+    "choices": [
+      "a serious problem arose",
+      "a serious problem had been arisen",
+      "a serious problem was arose",
+      "a serious problem was arisen"
+    ],
+    "answer": 0,
+    "explain": "arise（出現、產生）是不及物動詞，不用被動。過去式為 arose，過去分詞為 arisen；problem 是「問題」，不是某人施加 arise 動作的受詞。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-11"
+  },
+  {
+    "id": "english-2857",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "Which sentence describes a state rather than an action of seating someone?",
+    "choices": [
+      "The host seated the late guests.",
+      "The staff are seating the guests.",
+      "The guide seated us near the door.",
+      "The guests stayed seated during the speech."
+    ],
+    "answer": 3,
+    "explain": "stayed seated 表「保持坐著的狀態」，seated 是分詞形容詞。其餘句子的 seat 是「安排……入座」的動詞：host、staff、guide 都是安排別人入座的人。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-11"
+  },
+  {
+    "id": "english-2858",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "This suitcase ____ ten kilograms when empty, so I need a lighter one for the flight.",
+    "choices": [
+      "weighs",
+      "is weighed",
+      "has been weighed",
+      "is being weighed"
+    ],
+    "answer": 0,
+    "explain": "weigh 表「重達……」時用主動形式，接重量 ten kilograms（十公斤）。其餘被動形式表示行李「被秤重」，不能直接以這裡的重量受詞表達本身有多重。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-11"
+  },
+  {
+    "id": "english-2859",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "This soup ____ salty; add some water before serving it.",
+    "choices": [
+      "is tasted",
+      "has been tasted",
+      "tastes",
+      "was being tasted"
+    ],
+    "answer": 2,
+    "explain": "taste 作連綴動詞表「嚐起來」，用主動形式接形容詞 salty（鹹的），描述湯的味道。被動的 tasted 表「被品嚐」，不能在此接 salty 表達湯的味道。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-11"
+  },
+  {
+    "id": "english-2860",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "Not only the driver but also the passengers ____ required to wear seat belts on every trip.",
+    "choices": [
+      "has been",
+      "was",
+      "are",
+      "is"
+    ],
+    "answer": 2,
+    "explain": "not only A but also B 連接主詞時，動詞依較近的 B；passengers（乘客）為複數，所以用 are required（被要求）。不能只依 driver（駕駛）選單數。",
+    "formula": false,
+    "level": 3,
+    "kp": "05-13"
+  },
+  {
+    "id": "english-2861",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "The editor and the photographer ____ both approved the final page; they work in different offices.",
+    "choices": [
+      "is",
+      "has",
+      "was",
+      "have"
+    ],
+    "answer": 3,
+    "explain": "兩個身分各有 the，且後文 they（他們）在不同辦公室工作，指兩人；現在完成式用 have approved（已核准），而非 has。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-13"
+  },
+  {
+    "id": "english-2862",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "The volunteers, as well as their leader, ____ been given keys so they can open the center themselves.",
+    "choices": [
+      "have",
+      "has",
+      "is",
+      "was"
+    ],
+    "answer": 0,
+    "explain": "as well as（以及）後的附加成分不改變主要主詞 volunteers（志工們）的複數性，用 have been given（已獲發）。不能受單數 leader 影響。",
+    "formula": false,
+    "level": 3,
+    "kp": "05-13"
+  },
+  {
+    "id": "english-2863",
+    "subject": "english",
+    "topic": "時態與語態",
+    "type": "mc",
+    "q": "Either the two assistants or the manager ____ to sign this form before payment can be made.",
+    "choices": [
+      "were",
+      "has",
+      "are",
+      "have"
+    ],
+    "answer": 1,
+    "explain": "either A or B 連接主詞，依較近的 manager（經理）用單數 has；has to sign 表「必須簽署」。不能受前面 two assistants（兩位助理）影響。",
+    "formula": false,
+    "level": 2,
+    "kp": "05-13"
+  },
+  {
+    "id": "english-2864",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The theater sold all its tickets in an hour, ____ surprised even its manager.",
+    "choices": [
+      "which",
+      "what",
+      "that",
+      "who"
+    ],
+    "answer": 0,
+    "explain": "which 回指「一小時內票全售完」這整件事，補充它令人驚訝。非限定關係子句不能用 that；what 已包含先行詞，也不能這樣接在逗號後。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-04"
+  },
+  {
+    "id": "english-2865",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "We stayed with my aunt, ____ garden supplied most of the vegetables for our meals.",
+    "choices": [
+      "which",
+      "whose",
+      "whom",
+      "who"
+    ],
+    "answer": 1,
+    "explain": "whose 是「……的」，whose garden 表示姑姑的花園；garden 已是 supplied 的主詞，空格須表示所有關係，不能只用 who 或 whom。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-04"
+  },
+  {
+    "id": "english-2866",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "One concern is ____ the new gate will block wheelchair access; that is why the design must change.",
+    "choices": [
+      "that",
+      "which",
+      "who",
+      "what"
+    ],
+    "answer": 0,
+    "explain": "that 引出 concern（擔憂）的內容，作 be 後的名詞子句。「新門會擋住輪椅通道」已是完整敘述，that 不擔任子句內的主詞或受詞。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-05"
+  },
+  {
+    "id": "english-2867",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "Which sentence keeps its meaning and remains grammatical when “that” is removed?",
+    "choices": [
+      "That the back window was open worried me.",
+      "The window that faces the street was open.",
+      "That the back window was open was clear.",
+      "I noticed that the back window was open."
+    ],
+    "answer": 3,
+    "explain": "notice（注意到）後受詞名詞子句的 that 可省略。句首主詞子句的 that 須保留；that faces the street（面向街道）中的 that 是關係子句主詞，不能省略。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-05"
+  },
+  {
+    "id": "english-2868",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "Please record ____ remains after the sale; we need an exact list of the unsold items.",
+    "choices": [
+      "whatever",
+      "whoever",
+      "whether",
+      "whomever"
+    ],
+    "answer": 0,
+    "explain": "whatever 是「任何……的東西」，兼作 remains 的主詞，整個子句作 record（記錄）的受詞。whether 是「是否」，不能補主詞；whoever 與 whomever 指人。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-06"
+  },
+  {
+    "id": "english-2869",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The repair cost much more than ____ we had saved, so we had to borrow money.",
+    "choices": [
+      "whether",
+      "what",
+      "that",
+      "which"
+    ],
+    "answer": 1,
+    "explain": "what we had saved 是「我們先前存下的錢」，what 兼作 saved 的受詞；前面沒有先行詞，不能直接用 which，that 也不能補上缺少的受詞。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-06"
+  },
+  {
+    "id": "english-2870",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "We know the trip lasts two hours, but please check ____; we still need to arrange a meeting time.",
+    "choices": [
+      "when does the boat leave",
+      "when the boat leaves",
+      "how long does the boat take",
+      "how long the boat takes"
+    ],
+    "answer": 1,
+    "explain": "要安排集合時間，需問 when（何時）出發；航程兩小時已知，無須再問 how long（多久）。check 後為間接問句，用直述語序 the boat leaves，不倒裝加 does。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-07"
+  },
+  {
+    "id": "english-2871",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The host asked if Mia needed a ride. Which sentence reports the same question?",
+    "choices": [
+      "The host asked what Mia would do if she needed a ride.",
+      "The host asked why Mia needed a ride.",
+      "The host asked whether Mia needed a ride.",
+      "The host asked when Mia would need a ride."
+    ],
+    "answer": 2,
+    "explain": "asked if 在此是「詢問是否」，等同 asked whether；what ... if 則問假設需要接送時會怎麼做，why 與 when 分別問原因與時間。ride＝搭便車、接送。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-08"
+  },
+  {
+    "id": "english-2872",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "Lena wonders whether to repair her bike. Which rewrite keeps both the meaning and the decision-maker?",
+    "choices": [
+      "Lena wonders whether she should repair her bike.",
+      "Lena wonders whether her brother should repair his bike.",
+      "Lena knows that she should repair her bike.",
+      "Lena wonders why she should repair her bike."
+    ],
+    "answer": 0,
+    "explain": "whether to repair 表「是否要修理」，省略的動作執行者是 Lena，可還原為 whether she should repair；換成哥哥、已知道或詢問原因都改變原意。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-08"
+  },
+  {
+    "id": "english-2873",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "Which sentence treats the claim's truth as a question to investigate?",
+    "choices": [
+      "The debate shows that the claim is true.",
+      "The debate explains why the claim is true.",
+      "The debate assumes that the claim is true.",
+      "The debate examines whether the claim is true."
+    ],
+    "answer": 3,
+    "explain": "examines whether 表「探討是否」，尚未認定主張為真；其餘分別表顯示為真、解釋為真的原因及假設為真。claim＝主張；examine＝探討、檢視。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-08"
+  },
+  {
+    "id": "english-2874",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The coach repeated the plan so that nobody would miss a step. What does the so that clause express?",
+    "choices": [
+      "What made the coach repeat the plan.",
+      "What the coach intended to achieve.",
+      "How often the coach repeated the plan.",
+      "How clearly the coach explained the plan."
+    ],
+    "answer": 1,
+    "explain": "so that 引出目的「以便沒有人漏掉步驟」，說明教練想達成什麼；不是解釋重複的原因或清楚程度。intend＝打算。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-13"
+  },
+  {
+    "id": "english-2875",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The bread took longer ____ I expected, although I baked it exactly ____ the recipe instructed.",
+    "choices": [
+      "than / as",
+      "as / than",
+      "than / as if",
+      "as if / as"
+    ],
+    "answer": 0,
+    "explain": "longer than I expected 表「比我預期久」；as the recipe instructed 表「按照食譜指示」。as if 是「彷彿」，不表實際照指示操作。recipe＝食譜。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-14"
+  },
+  {
+    "id": "english-2876",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The tent held fewer people than we had expected, but more than the cabin did. Which comparison follows?",
+    "choices": [
+      "The cabin held more people than the tent did.",
+      "The tent held as many people as we had expected.",
+      "The cabin held fewer people than we expected for the tent.",
+      "The cabin held as many people as we expected for the tent."
+    ],
+    "answer": 2,
+    "explain": "預期帳篷人數＞帳篷實際人數＞小屋人數，因此預期帳篷人數也多於小屋人數。fewer ... than＝比……少；cabin＝小屋。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-14"
+  },
+  {
+    "id": "english-2877",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The floor shakes as if a train were passing below. The speaker is describing ____.",
+    "choices": [
+      "a movement known to be caused by a train",
+      "a movement resembling the shaking caused by a train",
+      "a movement unlike that caused by a train",
+      "a movement intended to stop a passing train"
+    ],
+    "answer": 1,
+    "explain": "as if 表「彷彿」，用火車經過造成的震動作類比，未證實真有火車。resemble＝像；unlike＝不像。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-14"
+  },
+  {
+    "id": "english-2878",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The hall is as wide as it is long. Which description matches?",
+    "choices": [
+      "Its length exceeds its width.",
+      "Its width exceeds its length.",
+      "Its height equals its length.",
+      "Its width equals its length."
+    ],
+    "answer": 3,
+    "explain": "as wide as it is long 表「寬度和長度相同」，第二個 as 後接子句 it is long；未比較高度。width＝寬度；length＝長度。",
+    "formula": false,
+    "level": 2,
+    "kp": "06-14"
+  },
+  {
+    "id": "english-2879",
+    "subject": "english",
+    "topic": "子句與連接詞",
+    "type": "mc",
+    "q": "The app is not as easy to use as the guide suggests. The guide makes it sound ____ than it is.",
+    "choices": [
+      "harder",
+      "easier",
+      "slower",
+      "safer"
+    ],
+    "answer": 1,
+    "explain": "not as easy ... as 表實際沒有指南所說的容易，因此指南把操作說得更容易。suggest＝暗示；easy to use＝容易使用。",
+    "formula": false,
+    "level": 3,
+    "kp": "06-14"
+  },
+  {
+    "id": "english-2880",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Nora's arriving early ____ a surprise yesterday, since she usually kept us waiting.",
+    "choices": [
+      "were",
+      "have been",
+      "are",
+      "was"
+    ],
+    "answer": 3,
+    "explain": "Nora’s arriving early「Nora 提早抵達」是一整件事，作單數主詞；yesterday 表過去，故用 was。Nora’s 標示抵達的人，不是與其他人並列。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-01"
+  },
+  {
+    "id": "english-2881",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "His job is testing water samples. What does testing water samples describe here?",
+    "choices": [
+      "The work he is responsible for.",
+      "The work he has already finished.",
+      "The work he hopes to avoid.",
+      "The work he will assign to others."
+    ],
+    "answer": 0,
+    "explain": "testing water samples 作主詞補語，說明工作內容「檢驗水樣」；不是完成式，也沒有表示想逃避或交辦。responsible for＝負責。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-01"
+  },
+  {
+    "id": "english-2882",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "It was careless ____ Max to post the password; it was then easy ____ strangers to read it.",
+    "choices": [
+      "for / of",
+      "for / for",
+      "of / for",
+      "of / of"
+    ],
+    "answer": 2,
+    "explain": "careless「粗心的」評價 Max 的行為，用 of Max；easy「容易的」評價讀取密碼這件事，用 for strangers 標示讀取的人。password＝密碼。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-02"
+  },
+  {
+    "id": "english-2883",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "It took two weeks for the team to repair the roof. What took two weeks?",
+    "choices": [
+      "The team's waiting to use the roof.",
+      "The roof's falling onto the team.",
+      "The team's planning to repair the roof.",
+      "The team's repair of the roof."
+    ],
+    "answer": 3,
+    "explain": "It 是虛主詞，承接 for the team to repair the roof「團隊修理屋頂」；花兩週的是修繕這件事，不是等待或規劃。roof＝屋頂。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-02"
+  },
+  {
+    "id": "english-2884",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The wide doors make ____ possible for wheelchair users to enter without help.",
+    "choices": [
+      "them",
+      "it",
+      "that",
+      "what"
+    ],
+    "answer": 1,
+    "explain": "make it possible for 人 to V 中 it 是虛受詞，真正內容是讓輪椅使用者自行進入。wide doors＝寬門；wheelchair＝輪椅。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-02"
+  },
+  {
+    "id": "english-2885",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "I think it unfair for Ken to do all the cleaning. What is judged unfair?",
+    "choices": [
+      "Ken refusing to do any cleaning.",
+      "Everyone sharing the cleaning with Ken.",
+      "Ken having to do all the cleaning.",
+      "Everyone asking Ken to judge their work."
+    ],
+    "answer": 2,
+    "explain": "it 指後面的 for Ken to do all the cleaning，評為不公平的是由 Ken 包辦清潔；沒有說他拒做。unfair＝不公平的。",
+    "formula": false,
+    "level": 3,
+    "kp": "07-02"
+  },
+  {
+    "id": "english-2886",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Visitors came to buy local goods, but some objected to ____ extra for a bag.",
+    "choices": [
+      "paying",
+      "to pay",
+      "paid",
+      "pay"
+    ],
+    "answer": 0,
+    "explain": "came to buy 的 to 引導不定詞；object to「反對」的 to 是介系詞，後接 paying。extra＝額外的費用；local goods＝當地商品。",
+    "formula": false,
+    "level": 3,
+    "kp": "07-05"
+  },
+  {
+    "id": "english-2887",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The team is committed to ____ food waste, even when sorting leftovers takes extra time.",
+    "choices": [
+      "reduce",
+      "reduced",
+      "reducing",
+      "have reduced"
+    ],
+    "answer": 2,
+    "explain": "be committed to 表「致力於」，to 是介系詞，後接 reducing，不是不定詞 to reduce。food waste＝食物浪費；leftovers＝剩菜。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-05"
+  },
+  {
+    "id": "english-2888",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "After months of training, Eva finally succeeded in ____ across the bay without stopping.",
+    "choices": [
+      "to swim",
+      "swam",
+      "swim",
+      "swimming"
+    ],
+    "answer": 3,
+    "explain": "succeed in 表「成功做到」，in 是介系詞，後接動名詞 swimming。across the bay＝橫越海灣；without stopping＝不停下。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-05"
+  },
+  {
+    "id": "english-2889",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Keep your voice down. Dad appears ____; his eyes are closed and his breathing is slow.",
+    "choices": [
+      "to have slept",
+      "to be sleeping",
+      "to sleep every evening",
+      "to have been woken"
+    ],
+    "answer": 1,
+    "explain": "閉眼、呼吸緩慢及要求放低音量，指向爸爸「正在睡覺」，用 to be sleeping；完成式只表先前睡過或被叫醒，習慣式也不表此刻狀態。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-08"
+  },
+  {
+    "id": "english-2890",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "When interviewed on Monday, Ada claimed ____ the missing bag the day before.",
+    "choices": [
+      "to have found",
+      "to find",
+      "to be finding",
+      "to be found"
+    ],
+    "answer": 0,
+    "explain": "找到包包在週日，早於週一聲稱的時間，用完成式不定詞 to have found；to be found 是「被找到」，會把 Ada 當成被找到的人。claim＝聲稱。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-08"
+  },
+  {
+    "id": "english-2891",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "At fifteen, Maya hoped to win an Olympic medal. The winning was presented as ____.",
+    "choices": [
+      "a future possibility relative to her hope",
+      "an event completed before she began to hope",
+      "an activity in progress while she was hoping",
+      "a victory she remembered from her childhood"
+    ],
+    "answer": 0,
+    "explain": "hoped to win「希望贏得」中，to win 指相對於當時希望而言的未來可能；hoped 雖是過去式，仍不表示當時已獲獎。medal＝獎牌。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-08"
+  },
+  {
+    "id": "english-2892",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "In 'I regret having ignored her warning,' which event is presented as earlier?",
+    "choices": [
+      "Feeling regret.",
+      "Ignoring the warning.",
+      "Expressing the regret.",
+      "Discussing future warnings."
+    ],
+    "answer": 1,
+    "explain": "having ignored 是完成式動名詞，將忽視警告放在後悔之前。regret＝後悔；ignore＝忽視；warning＝警告。",
+    "formula": false,
+    "level": 3,
+    "kp": "07-08"
+  },
+  {
+    "id": "english-2893",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Ben claims to have been painting for hours. The painting is presented as ____.",
+    "choices": [
+      "an activity planned to begin after the claim",
+      "a habit starting at the moment of the claim",
+      "an activity completed just as the claim begins",
+      "an activity continuing over a period before the claim"
+    ],
+    "answer": 3,
+    "explain": "to have been painting 是完成進行式不定詞，強調說話前已持續一段時間的作畫過程；不保證已畫完。claim＝聲稱。",
+    "formula": false,
+    "level": 3,
+    "kp": "07-08"
+  },
+  {
+    "id": "english-2894",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "No machines are needed: these delicate cups require ____ by hand.",
+    "choices": [
+      "to wash",
+      "being washing",
+      "washing",
+      "to be washing"
+    ],
+    "answer": 2,
+    "explain": "require 後用動名詞可表被動：require washing＝require to be washed，杯子是被洗的。delicate＝易損的；by hand＝用手。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-09"
+  },
+  {
+    "id": "english-2895",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The road ____ by volunteers, the rescue truck could finally reach the village.",
+    "choices": [
+      "having cleared",
+      "having been cleared",
+      "clearing",
+      "to have cleared"
+    ],
+    "answer": 1,
+    "explain": "road 是另列主詞，by volunteers 表道路由志工清理；清理先完成，救援車才抵達，用 having been cleared。rescue＝救援；volunteer＝志工。",
+    "formula": false,
+    "level": 3,
+    "kp": "07-14"
+  },
+  {
+    "id": "english-2896",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "With the child ____ her hand tightly, Mei crossed the busy street.",
+    "choices": [
+      "holding",
+      "held",
+      "to be held",
+      "having been held"
+    ],
+    "answer": 0,
+    "explain": "child 是 holding 的主詞，孩子主動「緊握她的手」；held 或被動形式無法在此再接 her hand 作受詞。tightly＝緊緊地。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-14"
+  },
+  {
+    "id": "english-2897",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "The last bus having left, the hikers called a taxi. Why did they call?",
+    "choices": [
+      "The final bus was about to arrive.",
+      "The hikers had missed their taxi.",
+      "The final bus had already departed.",
+      "The hikers were driving the final bus."
+    ],
+    "answer": 2,
+    "explain": "the last bus 是 having left 的主詞；完成分詞表公車先離開，才有叫車的行動。depart＝離開；hiker＝健行者。",
+    "formula": false,
+    "level": 3,
+    "kp": "07-14"
+  },
+  {
+    "id": "english-2898",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "With two seats reserved for late arrivals, dinner began. What was the situation of those seats?",
+    "choices": [
+      "They had already been removed.",
+      "They were occupied by early guests.",
+      "They were still waiting to be brought into the dining room.",
+      "They were being kept available."
+    ],
+    "answer": 3,
+    "explain": "with 後的 seats 是 reserved 的主詞，表示席位被預留給晚到者，仍保留可用；不是移走或已坐滿。reserve＝預留；available＝可用的。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-14"
+  },
+  {
+    "id": "english-2899",
+    "subject": "english",
+    "topic": "不定詞、動名詞與分詞",
+    "type": "mc",
+    "q": "Other conditions being equal, we would choose the cheaper room. The opening assumes that ____.",
+    "choices": [
+      "the cheaper room has better service",
+      "we know the prices but nothing else about the rooms",
+      "the prices are equal but the rooms differ in size",
+      "the rooms are alike in other relevant ways"
+    ],
+    "answer": 3,
+    "explain": "Other conditions 是 being equal 的主詞，表「其他條件相同的話」，在相同條件下比較房價。relevant＝相關的；alike＝相同、相似的。",
+    "formula": false,
+    "level": 2,
+    "kp": "07-14"
+  },
+  {
+    "id": "english-2900",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Without the sea breeze, this room would feel much hotter. What is implied about the breeze now?",
+    "choices": [
+      "It is making the room hotter.",
+      "It has stopped reaching the room.",
+      "It helps keep the room cool.",
+      "It will start only after sunset."
+    ],
+    "answer": 2,
+    "explain": "Without ... would 假設現在沒有海風的結果；實際有海風，讓房間沒那麼熱。breeze＝微風；imply＝暗示。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-01"
+  },
+  {
+    "id": "english-2901",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Jill cannot reach the shelf. If she ____ a little taller, she could get the jar herself.",
+    "choices": [
+      "were",
+      "is",
+      "has been",
+      "will be"
+    ],
+    "answer": 0,
+    "explain": "與現在身高不夠的事實相反，if 子句用 were，主句用 could get。jar＝罐子；herself＝她自己。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-01"
+  },
+  {
+    "id": "english-2902",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "It is high time we replaced these locks. What does the speaker mean?",
+    "choices": [
+      "Replacing them has just become possible.",
+      "They should already have been replaced.",
+      "They were replaced long before now.",
+      "They will need replacing in several years."
+    ],
+    "answer": 1,
+    "explain": "It is high time 加過去式表「早該做了」，含應做而尚未做的意思；replaced 不是報告以前已換過。lock＝鎖。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-04"
+  },
+  {
+    "id": "english-2903",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Tom missed yesterday's match but describes it as if he ____ every minute.",
+    "choices": [
+      "sees",
+      "will see",
+      "had seen",
+      "has seen"
+    ],
+    "answer": 2,
+    "explain": "他沒看昨天的比賽，卻講得像親眼看過；假設與過去事實相反，as if 子句用過去完成式 had seen。miss＝錯過；describe＝描述。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-04"
+  },
+  {
+    "id": "english-2904",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Ana whispers as if the baby were asleep, but he is playing. Why is were used?",
+    "choices": [
+      "To report a state that ended before she arrived.",
+      "To present an unreal state at the present time.",
+      "To predict a state that will begin tonight.",
+      "To confirm the baby is sleeping while she speaks."
+    ],
+    "answer": 1,
+    "explain": "寶寶正在玩，並沒睡；were 表與現在事實相反，並非敘述過去睡著。whisper＝低聲說話；asleep＝睡著的。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-04"
+  },
+  {
+    "id": "english-2905",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Which advice correctly warns Leo against sharing a story that has not been checked?",
+    "choices": [
+      "You had better not sharing it yet.",
+      "You had better not to share it yet.",
+      "You had better do not share it yet.",
+      "You had better not share it yet."
+    ],
+    "answer": 3,
+    "explain": "had better not 加原形動詞表示「最好不要」，not 放在 better 後，不加 to 或 do。checked＝查證過的；share＝分享。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-05"
+  },
+  {
+    "id": "english-2906",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "I prefer discussing plans face to face ____ exchanging dozens of messages.",
+    "choices": [
+      "to",
+      "than",
+      "with",
+      "rather"
+    ],
+    "answer": 0,
+    "explain": "prefer A to B 表「比起 B 更喜歡 A」，兩端都可用動名詞；此處 to 是介系詞。face to face＝面對面；dozens of＝數十個。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-05"
+  },
+  {
+    "id": "english-2907",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "I'd rather you ____ the ending when we meet tomorrow; I haven't finished the novel.",
+    "choices": [
+      "did not reveal",
+      "not revealed",
+      "had not revealed",
+      "will not reveal"
+    ],
+    "answer": 0,
+    "explain": "would rather 加另一主詞時，對現在或未來的偏好用過去式；tomorrow 排除過去完成式。reveal＝透露；ending＝結局。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-05"
+  },
+  {
+    "id": "english-2908",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The nurse requested that the patient's name ____ from the public list to protect his privacy.",
+    "choices": [
+      "be removing",
+      "to be removed",
+      "been removed",
+      "be removed"
+    ],
+    "answer": 3,
+    "explain": "request 表要求，that 子句用原形；名字被移除，故用 be removed。privacy＝隱私；remove＝移除。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-06"
+  },
+  {
+    "id": "english-2909",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The rule requires that each visitor ____ a name tag throughout the tour.",
+    "choices": [
+      "wore",
+      "will wear",
+      "wear",
+      "has worn"
+    ],
+    "answer": 2,
+    "explain": "require 表要求時，that 子句用原形 wear，即使 each visitor 為單數也不加 s。name tag＝名牌；throughout＝全程。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-06"
+  },
+  {
+    "id": "english-2910",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "It is vital that the extra copy ____ before the files are checked.",
+    "choices": [
+      "be not deleting",
+      "not be deleted",
+      "not to be deleted",
+      "do not be deleted"
+    ],
+    "answer": 1,
+    "explain": "必要性形容詞 vital 後的 that 子句用原形假設語氣；否定被動為 not be deleted。extra copy＝額外的副本；delete＝刪除。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-06"
+  },
+  {
+    "id": "english-2911",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The guide's suggestion was that everyone ____ the marked path, even in clear weather.",
+    "choices": [
+      "to stay on",
+      "stay on",
+      "staying on",
+      "has stay on"
+    ],
+    "answer": 1,
+    "explain": "suggestion 的內容子句表建議，用原形 stay；不定詞或動名詞不能直接取代子句動詞。marked path＝有標示的步道。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-06"
+  },
+  {
+    "id": "english-2912",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "____ the river to rise overnight, the lower road would be closed tomorrow.",
+    "choices": [
+      "Had",
+      "Did",
+      "Were",
+      "Have"
+    ],
+    "answer": 2,
+    "explain": "Were the river to rise＝If the river were to rise，假設未來河水上漲；had 不能接 to rise。overnight＝一夜之間。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-07"
+  },
+  {
+    "id": "english-2913",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "Choose the conditional opening: ____ a mistake in your booking, please contact us.",
+    "choices": [
+      "Should you notice",
+      "Should notice you",
+      "You should notice",
+      "Notice should you"
+    ],
+    "answer": 0,
+    "explain": "Should you notice＝If you should notice「如果你發現」，should 移到主詞前，notice 留在主詞後。booking＝預約。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-07"
+  },
+  {
+    "id": "english-2914",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The cafe has little space, but a few tables are still available. What can a visitor expect?",
+    "choices": [
+      "Plenty of room, with some tables free.",
+      "Limited room, with no tables free.",
+      "Plenty of room, with no tables free.",
+      "Limited room, with some tables free."
+    ],
+    "answer": 3,
+    "explain": "little space 表「空間很少」，space 不可數；a few tables 表「有幾張桌子」，tables 可數。available 表可用，因此是空間有限但仍有空桌。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-12"
+  },
+  {
+    "id": "english-2915",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The notice says, 'Not all rooms have sea views.' Which statement must be true?",
+    "choices": [
+      "Every room faces away from the sea.",
+      "Most rooms have no view of the sea.",
+      "Exactly half the rooms face the sea.",
+      "At least one room has no sea view."
+    ],
+    "answer": 3,
+    "explain": "Not all 表「並非全部」，只保證至少一間沒有海景，不能推知大多數、剛好一半或全部房間沒有海景。sea view＝海景。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-12"
+  },
+  {
+    "id": "english-2916",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "A natural product is not necessarily harmless. Which claim matches this warning?",
+    "choices": [
+      "Being natural does not guarantee safety.",
+      "Being natural guarantees some harm.",
+      "Being harmless rules out being natural.",
+      "Being harmful proves a product is artificial."
+    ],
+    "answer": 0,
+    "explain": "not necessarily 是「不一定」，天然不保證無害，但也沒說天然必定有害。harmless＝無害的；artificial＝人工的。",
+    "formula": false,
+    "level": 2,
+    "kp": "08-12"
+  },
+  {
+    "id": "english-2917",
+    "subject": "english",
+    "topic": "假設語氣與特殊句構",
+    "type": "mc",
+    "q": "The print is too small for Dad to read without glasses. Which statement follows?",
+    "choices": [
+      "Dad can read this print without glasses.",
+      "Dad needs glasses to read this print.",
+      "Dad finds the print too large with glasses.",
+      "Dad has already read the print without glasses."
+    ],
+    "answer": 1,
+    "explain": "too small ... to read without glasses 表字太小，爸爸不戴眼鏡就看不清；print＝印刷字體。未交代是否已閱讀。",
+    "formula": false,
+    "level": 3,
+    "kp": "08-13"
+  },
+  {
+    "id": "english-2918",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A: May I borrow your bike? B: ____ I need it until noon, but you can have it after that.",
+    "choices": [
+      "Of course, take it right away.",
+      "You should have returned it.",
+      "Not right now, I am afraid.",
+      "I thought you had lent it to me."
+    ],
+    "answer": 2,
+    "explain": "後句說中午前要用，故先委婉拒絕現在借車；I am afraid 在此是「恐怕」，不是害怕。after that＝那之後。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-01"
+  },
+  {
+    "id": "english-2919",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A: Let's remove all the benches. B: ____ Some visitors need a place to rest.",
+    "choices": [
+      "I agree; we can use that space for plants.",
+      "I'm with you; let's ask workers to clear them.",
+      "I see your point, but I'd keep a few benches.",
+      "Good idea; we can add some standing tables."
+    ],
+    "answer": 2,
+    "explain": "先表示理解，再用 but 提出保留部分長椅，符合後句有人需要休息。I see your point＝我了解你的想法；bench＝長椅。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-01"
+  },
+  {
+    "id": "english-2920",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A: I'm sorry I spilled tea on your notes. B: ____ I have another copy.",
+    "choices": [
+      "Don't worry about it. These things happen.",
+      "You're welcome. I'm glad they were useful.",
+      "Thanks for offering. I'd love some tea.",
+      "Please go ahead. You can read them now."
+    ],
+    "answer": 0,
+    "explain": "打翻茶後道歉，對方有副本，可說 Don’t worry about it「別擔心」接受道歉；You’re welcome 回應道謝，其餘分別接受邀請及給予許可。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-01"
+  },
+  {
+    "id": "english-2921",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The battery life of this laptop is longer than that of my old one. What does that replace?",
+    "choices": [
+      "The old laptop.",
+      "The new laptop.",
+      "The difference in weight.",
+      "The battery life."
+    ],
+    "answer": 3,
+    "explain": "that 替代 battery life「電池續航力」，比較兩台筆電的續航時間；one 才替代 laptop「筆電」，兩者不可混淆。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-12"
+  },
+  {
+    "id": "english-2922",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "A: Has the parcel arrived? B: I believe so. What does so stand for?",
+    "choices": [
+      "That the parcel will be sent.",
+      "That the parcel has arrived.",
+      "That the parcel belongs to B.",
+      "That the parcel was returned."
+    ],
+    "answer": 1,
+    "explain": "believe so 的 so 替代前句整個肯定內容「包裹已抵達」，表相信如此，並非確定證實。parcel＝包裹。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-12"
+  },
+  {
+    "id": "english-2923",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "Eli wanted to apologize but was too nervous to. What follows the final to in the full meaning?",
+    "choices": [
+      "Apologize.",
+      "Want to.",
+      "Be nervous.",
+      "Make Eli nervous."
+    ],
+    "answer": 0,
+    "explain": "句尾 to 保留不定詞標記，省略前面已出現的 apologize「道歉」；完整為 too nervous to apologize「緊張得無法道歉」。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-12"
+  },
+  {
+    "id": "english-2924",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "The old printer used more ink than the new one does. What action does does replace?",
+    "choices": [
+      "Buys a printer.",
+      "Uses ink.",
+      "Replaces the ink.",
+      "Prints something new."
+    ],
+    "answer": 1,
+    "explain": "does 替代動詞片語 uses ink「使用墨水」，新印表機用現在式；one 則替代 printer，不能把兩者的替代內容混淆。",
+    "formula": false,
+    "level": 3,
+    "kp": "09-12"
+  },
+  {
+    "id": "english-2925",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "As cold air enters, Jo says, 'It's rather chilly in here,' looking at the open window. Jo likely wants someone to ____.",
+    "choices": [
+      "keep the window open",
+      "turn the heating down",
+      "close the window",
+      "open another window"
+    ],
+    "answer": 2,
+    "explain": "冷空氣進來，又望著開窗，說 chilly「有點冷」暗含希望關窗的請求；rather 在此是「頗、有點」。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-18"
+  },
+  {
+    "id": "english-2926",
+    "subject": "english",
+    "topic": "轉折語與篇章",
+    "type": "mc",
+    "q": "After a long delay, May says, 'Could this line move any slower?' She most likely ____.",
+    "choices": [
+      "wants an estimate of the total waiting time",
+      "asks the staff to serve people more slowly",
+      "is pleased with the steady pace of service",
+      "feels impatient with the slow service"
+    ],
+    "answer": 3,
+    "explain": "Could this line move any slower? 字面問「還能更慢嗎」，在久候情境中是反問，表抱怨服務太慢，並非真的要求減速。impatient＝不耐煩的。",
+    "formula": false,
+    "level": 2,
+    "kp": "09-18"
   }
 ]
