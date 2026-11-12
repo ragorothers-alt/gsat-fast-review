@@ -1,5 +1,5 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
-import { weakUnits } from '../analysis.js';
+import { conceptTodo, weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
 import { buildQueue, examStart, isLeech, missCount, needsConfirm, neverMissed, schedule, shuffle } from '../srs.js';
 import { recordPace } from '../pace.js';
@@ -151,11 +151,18 @@ export function initPlay(ctx) {
     return takeBundles(bundles(shuffle(qs)), MODES[mode].size);
   }
 
+  /** 「練這個考點」：錯題本裡的先出、再出沒做過的（conceptTodo）；同一個閱讀題組的排在一起 */
+  function conceptQueue(key) {
+    const list = conceptTodo(ctx.bank, ctx.state.cards, key, { flags: ctx.state.flags, excludedUnits: ctx.state.settings.excludedUnits });
+    return takeBundles(bundles(list), MODES.concept.size);
+  }
+
   /**
    * @param {string} mode
-   * @param {{ units?: string[], seeds?: string[], subjects?: string[], ids?: string[] }} [opts]
+   * @param {{ units?: string[], seeds?: string[], subjects?: string[], ids?: string[], concept?: string }} [opts]
    *   units：指定要練的單元（從學習分析點單元進來時）；seeds：錯題延伸要從哪幾題錯題找類似題；
-   *   subjects：只出這幾科、而且不管首頁關掉的單元（從錯題本進來時）；ids：只出這幾題（收藏、搜尋結果）
+   *   subjects：只出這幾科、而且不管首頁關掉的單元（從錯題本進來時）；ids：只出這幾題（收藏、搜尋結果）；
+   *   concept：只練這個考點（「科目/考點代號」，從重點卡或學習分析的弱點考點進來時）
    */
   ctx.startRound = (mode, opts = {}) => {
     if (mode === 'path') return startPath(opts);
@@ -168,14 +175,15 @@ export function initPlay(ctx) {
         return;
       }
     }
-    let queue = opts.ids
-      ? pickedQueue(mode, opts.ids)
-      : mode === 'related'
-        ? relatedQueue(ctx.bank, opts.seeds.map((id) => byId.get(id)).filter(Boolean), {
-            size: MODES.related.size,
-            exclude: avoidIds(Date.now()),
-          })
-        : queueFor(mode, opts.subjects ? { units, subjects: opts.subjects, allUnits: true } : { units });
+    let queue;
+    if (opts.ids) queue = pickedQueue(mode, opts.ids);
+    else if (mode === 'concept') queue = conceptQueue(opts.concept);
+    else if (mode === 'related') {
+      queue = relatedQueue(ctx.bank, opts.seeds.map((id) => byId.get(id)).filter(Boolean), {
+        size: MODES.related.size,
+        exclude: avoidIds(Date.now()),
+      });
+    } else queue = queueFor(mode, opts.subjects ? { units, subjects: opts.subjects, allUnits: true } : { units });
     if (!queue.length && mode === 'formula') {
       queue = queueFor(mode, { subjects: SUBJECTS.map((x) => x.id) });
       if (queue.length) ctx.toast('選的科目沒有公式題，改出全部科目的公式題');
@@ -188,7 +196,9 @@ export function initPlay(ctx) {
             ? '目前沒有待練的錯題，太穩了！'
             : mode === 'related'
               ? '類似的題目剛剛練過或答對過了'
-              : '選到的單元沒有可以出的題目（答對過的不再出）',
+              : mode === 'concept'
+                ? '這個考點的題目都答對過了'
+                : '選到的單元沒有可以出的題目（答對過的不再出）',
       );
       return;
     }

@@ -1,5 +1,7 @@
 // 錯題延伸：找出跟某一題最像的題目。純邏輯，不碰 DOM，方便測試。
-// 只在同科同單元裡找，比較題幹與解析的字詞重疊（中文取相鄰兩字、英文取單字），
+// 在同科同單元裡找，同一個考點（題目的 kp）的題目排前面：考的是同一個觀念，最適合答錯後馬上再練；
+// 跨單元綜合題借用別的單元的考點時，那個單元裡同考點的題目也找得到。
+// 同考點（或都不同考點）的題目之間，比較題幹與解析的字詞重疊（中文取相鄰兩字、英文取單字），
 // 單元裡到處都有的詞（「下列」「何者」）權重低，真正的關鍵詞權重高。
 
 const cache = new WeakMap();
@@ -26,8 +28,9 @@ function grams(q) {
 export function relatedQuestions(bank, q, { count = 3, exclude = [] } = {}) {
   const skip = new Set(exclude);
   skip.add(q.id);
+  const sameConcept = (c) => !!q.kp && c.kp === q.kp;
   // 閱讀題組的題目要先讀整篇文章，不拿來當「類似題」（題組的題目答錯時，找的是同單元的單題）
-  const unit = bank.filter((c) => c.subject === q.subject && c.topic === q.topic && (!c.group || c === q));
+  const unit = bank.filter((c) => c.subject === q.subject && (c.topic === q.topic || sameConcept(c)) && (!c.group || c === q));
   const df = new Map();
   for (const c of unit) for (const g of grams(c)) df.set(g, (df.get(g) || 0) + 1);
   const weight = (g) => Math.log((unit.length + 1) / (df.get(g) || 1));
@@ -45,7 +48,8 @@ export function relatedQuestions(bank, q, { count = 3, exclude = [] } = {}) {
       if (theirs.has(g)) shared += w;
     }
     for (const g of theirs) if (!mine.has(g)) total += weight(g);
-    scored.push({ c, score: total ? shared / total : 0 });
+    // 字詞相似度在 0–1 之間：同考點加 1，一定排在不同考點的前面
+    scored.push({ c, score: (total ? shared / total : 0) + (sameConcept(c) ? 1 : 0) });
   }
   return scored
     .sort((a, b) => b.score - a.score)

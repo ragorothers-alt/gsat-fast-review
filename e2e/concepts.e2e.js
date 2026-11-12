@@ -93,3 +93,63 @@ test('學習分析：各科寫出練過幾個考點；320 寬也不超出', asyn
     await expect(page.locator('#home')).toBeVisible();
   }
 });
+
+/** 自由練習：跳過跨單元題，對第一道一般單元的題目按「不會」，回傳它的科目、單元與考點名稱 */
+async function missOne(page) {
+  await openHome(page);
+  await startMode(page, 'free');
+  for (let i = 0; i < 20; i++) {
+    await expect(page.locator('#q-text')).toBeVisible();
+    const unit = (await page.locator('#q-topic .topic-name').textContent()).trim();
+    await page.locator('#skip').click();
+    const name = (await page.locator('#q-explain .kp-tag').textContent()).replace('考點：', '');
+    if (!/跨單元|探究與實作/.test(unit)) return { unit, name, subject: (await page.locator('#q-subject').textContent()).trim() };
+    await page.locator('#next').click();
+  }
+  throw new Error('連續 20 題都是跨單元題');
+}
+
+/** 「練這個考點」這一輪：前兩題（按「不會」看解答）都標著同一個考點 */
+async function expectConceptRound(page, name) {
+  await expect(page.locator('#play')).toBeVisible();
+  for (let i = 0; i < 2; i++) {
+    await expect(page.locator('#q-text')).toBeVisible();
+    await page.locator('#skip').click();
+    await expect(page.locator('#q-explain .kp-tag')).toHaveText(`考點：${name}`);
+    await page.locator('#next').click();
+  }
+}
+
+test('重點卡的考點可以點：只練這個考點，錯題先出', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const { unit, name, subject } = await missOne(page);
+  await page.reload();
+  await waitForBoot(page);
+  await page.locator('#open-units').click();
+  await page.locator('#units-tabs button', { hasText: subject }).click();
+  await page.locator(`#units-list .kp-btn[aria-label="${unit}：考前重點"]`).click();
+  const chip = page.locator('#kp-concept-list .kp-chip.weak');
+  // 螢幕閱讀器念的名稱：「練這個考點：名稱，進度」（區塊之間瀏覽器會補空白）
+  await expect(chip).toHaveAccessibleName(new RegExp(`^練這個考點：\\s*${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*，\\s*錯題 1`));
+  await audit(page, '考點按鈕');
+  await chip.click();
+  await expect(page.locator('#keypoints-sheet')).toBeHidden();
+  // 第一題就是剛剛不會的那題（錯題先出），接著是同考點的其他題
+  await expectConceptRound(page, name);
+});
+
+test('學習分析的弱點考點：列出有錯題的考點，點了只練那個考點', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const { name } = await missOne(page);
+  await page.reload();
+  await waitForBoot(page);
+  await page.locator('#daily').click();
+  const box = page.locator('#stats-weak-kp');
+  await expect(box).toBeVisible({ timeout: 30_000 });
+  await expect(box.locator('.weak-name')).toHaveText([name]);
+  await expect(box.locator('.weak-meta')).toHaveText('錯題 1 題・失誤 100%');
+  await box.scrollIntoViewIfNeeded();
+  await audit(page, '弱點考點');
+  await box.locator('.weak-kp').click();
+  await expectConceptRound(page, name);
+});

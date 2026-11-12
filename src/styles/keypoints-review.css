@@ -108,7 +108,14 @@
   gap: 6px;
 }
 
+.kp-chips li {
+  display: flex;
+}
+
+/* 每個考點是一個按鈕：點了只練這個考點 */
 .kp-chip {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -116,7 +123,29 @@
   border: 1.5px solid var(--ink);
   border-radius: var(--hand-sm);
   background: color-mix(in srgb, var(--c, var(--accent)) 18%, var(--card));
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
   overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.kp-chip:hover,
+.kp-chip:active {
+  border-style: solid;
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.kp-chip:focus-visible {
+  outline: 2.5px dashed var(--accent-2);
+  outline-offset: 2px;
+}
+
+/* 題目都答對過、沒有可以練的：按不了 */
+.kp-chip:disabled {
+  cursor: default;
+  box-shadow: none;
+  opacity: 0.6;
 }
 
 .kp-chip-name {

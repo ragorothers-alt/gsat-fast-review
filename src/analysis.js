@@ -58,20 +58,22 @@ export function weakUnits(bank, cards, { subjects, excludedUnits = [], limit = 3
 }
 
 /**
- * 一科的考點練得怎麼樣：每個考點（題目的 kp）在題庫裡有幾題、作答過幾題、其中還在錯題本的有幾題。
+ * 一科的考點練得怎麼樣：每個考點（題目的 kp）在題庫裡有幾題、作答過幾題、其中還在錯題本的有幾題、
+ * 答對過從沒失手（不再出）的有幾題。
  * 跨單元綜合的題目借用別的單元的考點，所以考點照科目算、不分單元；沒標考點的題目不算。
- * @returns {Map<string, { size: number, seen: number, weak: number }>} 考點代號 → 題數（照代號排序）
+ * @returns {Map<string, { size: number, seen: number, weak: number, done: number }>} 考點代號 → 題數（照代號排序）
  */
 export function conceptProgress(bank, cards, subject) {
   const out = new Map();
   for (const q of bank) {
     if (q.subject !== subject || !q.kp) continue;
-    const p = out.get(q.kp) ?? out.set(q.kp, { size: 0, seen: 0, weak: 0 }).get(q.kp);
+    const p = out.get(q.kp) ?? out.set(q.kp, { size: 0, seen: 0, weak: 0, done: 0 }).get(q.kp);
     p.size++;
     const c = cards[q.id];
     if (!c?.seen) continue;
     p.seen++;
     if (isWeak(c)) p.weak++;
+    if (neverMissed(c)) p.done++;
   }
   return new Map([...out].sort(([a], [b]) => a.localeCompare(b)));
 }
@@ -94,6 +96,75 @@ export function conceptCoverage(progress, prefix = '') {
     if (p.seen) touched++;
   }
   return { total, touched };
+}
+
+/** 考點代號所屬的單元（代號前兩碼是單元序號，見 conceptPrefix）；對不到就是 null */
+export const conceptUnit = (subject, kp) => UNITS[subject]?.[Number(String(kp).slice(0, 2)) - 1] ?? null;
+
+/**
+ * 「練這個考點」一輪要出的題目：這個考點（科目/考點代號）裡還沒學會的題目，依序是
+ * 錯題本裡的（還沒複習穩）、沒做過的、其他失手過但已經隔開時間答對過的；答對過從沒失手的不出。
+ * 跨單元綜合題借用這個考點的也算，但結合了關掉的單元就不出（isUnitOff）；被回報的不出。
+ * 各段裡打亂，免得每次都從同一題開始。
+ * @param {Question[]} bank
+ * @param {Record<string, Card>} cards
+ * @param {string} key 「科目/考點代號」，例如 math/06-10
+ * @param {{ flags?: Record<string, unknown>, excludedUnits?: string[], rng?: () => number }} [opts]
+ * @returns {Question[]}
+ */
+export function conceptTodo(bank, cards, key, { flags = {}, excludedUnits = [], rng = Math.random } = {}) {
+  const [subject, kp] = key.split('/');
+  const off = new Set(excludedUnits);
+  const weak = [];
+  const fresh = [];
+  const rest = [];
+  for (const q of bank) {
+    if (q.subject !== subject || q.kp !== kp || flags[q.id] || isUnitOff(q, off)) continue;
+    const c = cards[q.id];
+    if (!c) fresh.push(q);
+    else if (isWeak(c)) weak.push(q);
+    else if (!neverMissed(c)) rest.push(q);
+  }
+  return [...shuffleCopy(weak, rng), ...shuffleCopy(fresh, rng), ...shuffleCopy(rest, rng)];
+}
+
+function shuffleCopy(list, rng) {
+  const a = [...list];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/**
+ * 弱點考點：錯題本裡還有題目的考點，錯題多的排前面，一樣多時失誤率（平滑過）高的排前面。
+ * 考點照科目算（跨單元綜合題借用的考點也算進那個考點）；選的科目以外、關掉的單元不算。
+ * @param {Question[]} bank
+ * @param {Record<string, Card>} cards
+ * @param {{ subjects: string[], excludedUnits?: string[], limit?: number }} opts
+ * @returns {{ key: string, subject: string, kp: string, unit: string | null, size: number, seen: number, misses: number, weak: number, rate: number }[]}
+ */
+export function weakConcepts(bank, cards, { subjects, excludedUnits = [], limit = 5 }) {
+  const want = new Set(subjects);
+  const off = new Set(excludedUnits);
+  const by = new Map();
+  for (const q of bank) {
+    if (!q.kp || !want.has(q.subject) || isUnitOff(q, off)) continue;
+    const key = `${q.subject}/${q.kp}`;
+    const e = by.get(key) ?? by.set(key, { key, subject: q.subject, kp: q.kp, unit: conceptUnit(q.subject, q.kp), size: 0, seen: 0, misses: 0, weak: 0 }).get(key);
+    e.size++;
+    const c = cards[q.id];
+    if (!c?.seen) continue;
+    e.seen += c.seen;
+    e.misses += Math.max(0, c.seen - c.right);
+    if (isWeak(c)) e.weak++;
+  }
+  return [...by.values()]
+    .filter((e) => e.weak > 0 && !(e.unit && off.has(unitKey(e.subject, e.unit))))
+    .map((e) => ({ ...e, rate: e.misses / e.seen }))
+    .sort((a, b) => b.weak - a.weak || (b.misses + 1) / (b.seen + 4) - (a.misses + 1) / (a.seen + 4) || a.key.localeCompare(b.key))
+    .slice(0, limit);
 }
 
 /** 各科：練過幾題、正確率（看解答算失誤）、熟練度、練過幾個考點（concepts：{ total, touched }，沒標考點的科目 total 是 0） */

@@ -1,5 +1,6 @@
 // 學習分析：整體概況、考前規劃、複習預報、題庫存量、弱點單元、近 14 天走勢、各科熟練度。從首頁今日進度卡右半的「分析 ›」進來。
-import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakUnits } from '../analysis.js';
+import { LOW_STOCK, accuracyOf, bankStock, dailySeries, daysUntil, isLowStock, lowStock, subjectStats, vocabLevelStats, weakConcepts, weakUnits } from '../analysis.js';
+import { conceptOf, loadConcepts } from '../data/concepts.js';
 import { dueBuckets, estimateRates, keepUpGoal, keepsUp, planVerdict, reviewForecast, studyPlan } from '../forecast.js';
 import { paceReport } from '../pace.js';
 import { DAY, SPRINT_DAYS, SPRINT_NEW_EVERY, dueFor, examStart, inSprint, mastery, neverMissed } from '../srs.js';
@@ -10,6 +11,8 @@ import { icon } from './icons.js';
 
 const pct = (x) => (x === null ? '—' : `${Math.round(x * 100)}%`);
 const TRAIN_UNITS = 3;
+/** 學習分析最多列幾個弱點考點 */
+const WEAK_CONCEPTS = 5;
 /** 複習預報看幾天（含今天） */
 const FORECAST_DAYS = 14;
 /** 題庫存量上方最多列幾個新題快用完的單元，其餘展開各科看 */
@@ -58,6 +61,7 @@ export function initStats(ctx) {
     renderStock();
     weak = weakUnits(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, limit: 5 });
     renderWeak();
+    renderWeakConcepts(weakConcepts(ctx.bank, cards, { subjects: settings.subjects, excludedUnits: settings.excludedUnits, limit: WEAK_CONCEPTS }));
     renderPace();
 
     renderChart(dailySeries(daily, now, 14), accuracyOf(week), accuracyOf(prev));
@@ -338,6 +342,47 @@ export function initStats(ctx) {
       li.querySelector('.weak-unit').addEventListener('click', () => ctx.startRound('weak', { units: [u.key] }));
       li.querySelector('.kp-btn').addEventListener('click', () => ctx.openKeypoints(u.subject, u.unit));
       list.append(li);
+    }
+  }
+
+  /**
+   * 弱點考點：錯題本裡題目最多的幾個考點，點了只練那個考點。考點名稱要等這科的考點清單下載好才填上；
+   * 下載不了（離線又沒快取）就寫單元名稱與代號
+   */
+  let conceptTicket = 0;
+  function renderWeakConcepts(list) {
+    const box = $('#stats-weak-kp');
+    const ol = $('#weak-kp-list');
+    box.hidden = !list.length;
+    ol.innerHTML = '';
+    if (!list.length) return;
+    const mine = ++conceptTicket;
+    for (const k of list) {
+      const subj = SUBJECT_BY_ID[k.subject];
+      const rate = Math.round(k.rate * 100);
+      const li = document.createElement('li');
+      li.className = 'unit-row';
+      li.innerHTML = `<button type="button" class="weak-unit weak-kp" style="--c:${subj.color}" data-concept="${k.key}">
+        <span class="tag">${subj.name}</span>
+        <span class="weak-name"></span>
+        <span class="weak-meta">錯題 ${k.weak} 題・失誤 ${rate}%</span>
+        <span class="weak-go" aria-hidden="true">練 ›</span>
+        <span class="unit-meter" aria-hidden="true"><i style="width:${rate}%"></i></span>
+      </button>${k.unit ? `<button type="button" class="kp-btn" aria-label="${k.unit}：考前重點">${icon('card')}重點</button>` : ''}`;
+      const name = li.querySelector('.weak-name');
+      const label = () => conceptOf(k)?.name ?? null;
+      name.textContent = label() ?? `${k.unit ?? ''} ${k.kp}`.trim();
+      if (!label()) {
+        loadConcepts(k.subject).then(
+          () => {
+            if (mine === conceptTicket && label()) name.textContent = label();
+          },
+          () => {},
+        );
+      }
+      li.querySelector('.weak-kp').addEventListener('click', () => ctx.startRound('concept', { concept: k.key }));
+      li.querySelector('.kp-btn')?.addEventListener('click', () => ctx.openKeypoints(k.subject, k.unit));
+      ol.append(li);
     }
   }
 

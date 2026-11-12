@@ -83,17 +83,30 @@ export function initKeypoints(ctx) {
     const listEl = $('#kp-concept-list');
     listEl.innerHTML = '';
     for (const c of mineUnit.concepts) {
-      const p = progress.get(c.id) ?? { size: 0, seen: 0, weak: 0 };
+      const p = progress.get(c.id) ?? { size: 0, seen: 0, weak: 0, done: 0 };
       const li = document.createElement('li');
-      li.className = `kp-chip ${p.weak ? 'weak' : p.seen ? 'done' : 'todo'}`;
-      li.title = c.scope;
+      // 點一個考點就只練這個考點（錯題本裡的先出）；題目全都答對過、不再出的考點按不了
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = `kp-chip ${p.weak ? 'weak' : p.seen ? 'done' : 'todo'}`;
+      btn.title = c.scope;
+      btn.dataset.concept = `${subject}/${c.id}`;
+      btn.disabled = p.size > 0 && p.done >= p.size;
       const name = document.createElement('span');
       name.className = 'kp-chip-name';
       name.textContent = c.name;
       const n = document.createElement('span');
       n.className = 'kp-chip-n';
-      n.textContent = p.weak ? `錯題 ${p.weak}・練過 ${p.seen}／${p.size}` : p.seen ? `練過 ${p.seen}／${p.size}` : `還沒練・${p.size} 題`;
-      li.append(name, n);
+      n.textContent = btn.disabled ? `全部答對過・${p.size} 題` : p.weak ? `錯題 ${p.weak}・練過 ${p.seen}／${p.size}` : p.seen ? `練過 ${p.seen}／${p.size}` : `還沒練・${p.size} 題`;
+      // 螢幕閱讀器念「練這個考點：名稱、進度」；看得到的字要包含在念出來的名稱裡，所以不用 aria-label
+      const say = document.createElement('span');
+      say.className = 'sr-only';
+      say.textContent = '練這個考點：';
+      const sep = document.createElement('span');
+      sep.className = 'sr-only';
+      sep.textContent = '，';
+      btn.append(say, name, sep, n);
+      li.append(btn);
       listEl.append(li);
     }
     $('#kp-concepts-n').textContent = `練過 ${cover.touched}／${cover.total}`;
@@ -119,6 +132,12 @@ export function initKeypoints(ctx) {
 
   const close = () => closeSheet(sheet);
 
+  $('#kp-concept-list').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-concept]');
+    if (!btn || btn.disabled) return;
+    closeAllSheets();
+    ctx.startRound('concept', { concept: btn.dataset.concept });
+  });
   $('#kp-prev').addEventListener('click', () => step(-1));
   $('#kp-next').addEventListener('click', () => step(1));
   $('#kp-train').addEventListener('click', () => {
