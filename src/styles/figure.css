@@ -172,3 +172,14 @@
   font-weight: 600;
 }
 
+/* 題目卡放不下而縮小字級時，表格也縮一點（字小一級、格子內距收窄），和上面的圖一樣把高度留給選項 */
+.q-text.compact .fig-table {
+  font-size: calc(0.78rem * var(--fs, 1));
+  line-height: 1.3;
+}
+
+.q-text.compact .fig-table th,
+.q-text.compact .fig-table td {
+  padding: 2px 6px;
+}
+
