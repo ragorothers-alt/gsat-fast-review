@@ -21,8 +21,8 @@ test('考點：作答前不顯示，看解析時標在標題旁；重點卡面�
     await page.locator('#next').click();
   }
   const subject = (await page.locator('#q-subject').textContent()).trim();
-  // 作答前不透露考點（考點名稱常常就是解題的提示）
-  await expect(page.locator('.kp-tag')).toHaveCount(0);
+  // 作答前不透露考點（考點名稱常常就是解題的提示）；前面跳過的題目的解析還留在藏起來的解析框裡，只看畫面上看得到的
+  await expect(page.locator('.kp-tag:visible')).toHaveCount(0);
   await page.locator('#skip').click();
   const tag = page.locator('#q-explain .kp-tag');
   await expect(tag).toHaveText(/^考點：.{2,14}$/);
@@ -141,16 +141,21 @@ test('學習分析：各科寫出練過幾個考點；320 寬也不超出', asyn
   }
 });
 
-/** 自由練習：跳過跨單元題，對第一道一般單元的題目按「不會」，回傳它的科目、單元與考點名稱 */
+/**
+ * 自由練習：跳過跨單元題，對第一道一般單元的題目按「不會」，回傳它的科目、單元與考點名稱；
+ * borrowed 是前面跳過的跨單元題的考點（「不會」也算錯，這些考點同樣會有錯題）
+ */
 async function missOne(page) {
   await openHome(page);
   await startMode(page, 'free');
+  const borrowed = [];
   for (let i = 0; i < 20; i++) {
     await expect(page.locator('#q-text')).toBeVisible();
     const unit = (await page.locator('#q-topic .topic-name').textContent()).trim();
     await page.locator('#skip').click();
     const name = (await page.locator('#q-explain .kp-tag').textContent()).replace('考點：', '');
-    if (!/跨單元|探究與實作/.test(unit)) return { unit, name, subject: (await page.locator('#q-subject').textContent()).trim() };
+    if (!/跨單元|探究與實作/.test(unit)) return { unit, name, borrowed, subject: (await page.locator('#q-subject').textContent()).trim() };
+    borrowed.push(name);
     await page.locator('#next').click();
   }
   throw new Error('連續 20 題都是跨單元題');
@@ -213,16 +218,19 @@ test('結算畫面與錯題本：正解旁標出考點，點了只練那個考�
 
 test('學習分析的弱點考點：列出有錯題的考點，點了只練那個考點', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  const { name } = await missOne(page);
+  const { name, borrowed } = await missOne(page);
   await page.reload();
   await waitForBoot(page);
   await page.locator('#daily').click();
   const box = page.locator('#stats-weak-kp');
   await expect(box).toBeVisible({ timeout: 30_000 });
-  await expect(box.locator('.weak-name')).toHaveText([name]);
-  await expect(box.locator('.weak-meta')).toHaveText('錯題 1 題・失誤 100%');
+  // 列出的就是這幾題的考點（跳過的跨單元題借用的考點也算）
+  const expected = [...new Set([name, ...borrowed])].sort();
+  await expect.poll(async () => (await box.locator('.weak-name').allTextContents()).sort()).toEqual(expected);
+  const row = box.locator('.weak-kp', { has: page.locator('.weak-name').getByText(name, { exact: true }) });
+  if (!borrowed.includes(name)) await expect(row.locator('.weak-meta')).toHaveText('錯題 1 題・失誤 100%');
   await box.scrollIntoViewIfNeeded();
   await audit(page, '弱點考點');
-  await box.locator('.weak-kp').click();
+  await row.click();
   await expectConceptRound(page, name);
 });

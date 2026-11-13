@@ -33,6 +33,11 @@ const SCRATCH_EXPLAIN = { max: 220, warn: 180 };
 // 解析與題幹不能用 (A)(B) 指稱選項：選項會被打亂
 const LETTER_REF = /[（(][A-E][)）]|選項\s*[A-E]\b/;
 const BANNED_CHOICES = /以上皆(是|非)|以上都(對|不對|是|不是)|all of the above|none of the above/i;
+/**
+ * 不是台灣高中課本的說法（出題的模型常寫成大陸用語）：題目、考點重點都不可用。
+ * 刻意保留的：單質子酸、達伽馬（人名）、電視頻道、網絡、花岡岩、等位基因、群落、方程組、酶
+ */
+const MAINLAND = /(?<!達)伽馬|應變量|自變量|因變量|發展中國家|單質(?!子)|勻加速|勻速|信息|質量分數|阿伏加德羅|(?<!電)視頻|軟件|硬件|數據庫|激光/;
 const KEYS = new Set(['id', 'subject', 'topic', 'type', 'q', 'choices', 'answer', 'points', 'explain', 'formula', 'level', 'links', 'scratch', 'group', 'passage', 'lv', 'fig', 'kp']);
 /** 非選擇題（open）：參考答案、評分要點的長度與個數；不可有的欄位 */
 const OPEN = { answer: 200, answerWarn: 160, point: 40, min: 2, max: 4 };
@@ -123,6 +128,7 @@ for (const file of files) {
         else if ([...c.note].length > CONCEPT_NOTE_MAX) errors.push(`考點 ${c.id} 的 note 超過 ${CONCEPT_NOTE_MAX} 字`);
         else if (/[\x00-\x1f]/.test(c.note)) errors.push(`考點 ${c.id} 的 note 不要換行或有控制字元（JSON 裡 LaTeX 的反斜線要寫兩個，"\\\\times" 才不會變成 tab）`);
         else if (/\$[^$]*(?<!\\)(Delta|times|frac|sqrt|cdot)(?![A-Za-z])[^$]*\$/.test(c.note)) errors.push(`考點 ${c.id} 的 note 裡 LaTeX 指令少了反斜線`);
+        else if (MAINLAND.test(c.note)) errors.push(`考點 ${c.id} 的 note 用了不是台灣的說法「${c.note.match(MAINLAND)[0]}」`);
         else if ((c.note.match(/(?<!\\)\$/g) ?? []).length % 2) errors.push(`考點 ${c.id} 的 note 的 $ 沒有成對`);
       }
     }
@@ -198,6 +204,8 @@ for (const file of files) {
     // 英文題沒有公式：沒跳脫的 $ 多半是金額（$8,000），兩個 $ 之間會被排成公式
     const texts = [it.q, it.explain, it.passage, ...(Array.isArray(it.choices) ? it.choices : []), ...(open ? [it.answer, ...(Array.isArray(it.points) ? it.points : [])] : [])];
     if (subject === 'english' && texts.some((t) => typeof t === 'string' && /(^|[^\\])\$/.test(t))) err('英文題不用 LaTeX 公式：字面上的錢字號要寫成 \\$（JSON 裡是 "\\\\$"）');
+    const mainland = texts.find((t) => typeof t === 'string' && MAINLAND.test(t));
+    if (mainland) err(`用了不是台灣的說法「${mainland.match(MAINLAND)[0]}」`);
 
     // 非選擇題不可有 group、passage（上面已經報錯），不再當成題組檢查一次
     if (!open && (it.group !== undefined || it.passage !== undefined)) {
