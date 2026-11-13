@@ -680,6 +680,31 @@
   margin: 0 3px;
 }
 
+/* 考點重點：答錯或看解答時，解析後面一句這個考點該記住的規則、公式或事實（錯題本、結算畫面的題目卡也有） */
+.kp-note {
+  display: block;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1.5px dashed var(--line-soft);
+  font-size: calc(0.88rem * var(--fs, 1));
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.explain .kp-note-h,
+.kp-note-h {
+  display: inline-block;
+  margin: 0 6px 0 0;
+  padding: 0 6px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--accent-2) 22%, var(--card));
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1.6;
+  vertical-align: 1px;
+}
+
 /* 作答速度：會但花得久的單元，秒數不用警示的紅色 */
 .pace-slow b {
   color: var(--ink-soft);

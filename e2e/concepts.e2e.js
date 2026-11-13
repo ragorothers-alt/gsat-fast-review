@@ -1,5 +1,5 @@
-// 考點：作答後標在解析旁、重點卡面板列出單元的考點與練過的狀態、學習分析各科練過幾個
-import { audit, expect, openHome, startMode, test, waitForBoot } from './fixtures.js';
+// 考點：作答後標在解析旁（答錯或看解答再加一句考點重點）、重點卡面板列出單元的考點與練過的狀態、各考點的重點、學習分析各科練過幾個
+import { audit, expect, openHome, skipToSingle, startMode, test, waitForBoot } from './fixtures.js';
 
 /** el 有沒有整個在 box 裡面（左右） */
 const inside = (a, b) => a.x >= b.x - 0.5 && a.x + a.width <= b.x + b.width + 0.5;
@@ -28,6 +28,12 @@ test('考點：作答前不顯示，看解析時標在標題旁；重點卡面�
   await expect(tag).toHaveText(/^考點：.{2,14}$/);
   const name = (await tag.textContent()).replace('考點：', '');
   expect(inside(await tag.boundingBox(), await page.locator('#q-explain').boundingBox()), '考點標籤不超出解析框').toBe(true);
+  // 看解答：解析後面多一句這個考點的重點
+  const note = page.locator('#q-explain .kp-note');
+  await expect(note).toHaveCount(1);
+  await expect(note).toHaveText(/^考點重點.{12,}/);
+  expect(inside(await note.boundingBox(), await page.locator('#q-explain').boundingBox()), '考點重點不超出解析框').toBe(true);
+  const noteText = (await note.textContent()).replace(/^考點重點/, '');
   await audit(page, '解析上的考點');
 
   // 重新整理後從單元面板打開這個單元的重點卡
@@ -54,6 +60,23 @@ test('考點：作答前不顯示，看解析時標在標題旁；重點卡面�
   await page.locator('#kp-concepts').scrollIntoViewIfNeeded();
   await audit(page, '重點卡面板的考點');
 
+  // 各考點的重點：預設收著，展開後每個考點一行；剛剛不會的考點標「有錯題」，重點和解析下面那句一樣
+  const notes = page.locator('#kp-notes');
+  await expect(notes).toBeVisible();
+  await expect(notes).not.toHaveAttribute('open', '');
+  await expect(page.locator('#kp-notes-n')).toHaveText(`${total} 個`);
+  await notes.locator('summary').click();
+  const rows = page.locator('#kp-note-list li');
+  await expect(rows).toHaveCount(total);
+  const weakRow = page.locator('#kp-note-list li.weak');
+  await expect(weakRow).toHaveCount(1);
+  await expect(weakRow.locator('.kp-note-name')).toHaveText(`${name}有錯題`);
+  expect((await weakRow.textContent()).endsWith(noteText)).toBe(true);
+  const sheetBox = await page.locator('#kp-scroll').boundingBox();
+  for (const box of await rows.evaluateAll((els) => els.map((el) => el.getBoundingClientRect().toJSON()))) expect(inside(box, sheetBox)).toBe(true);
+  await weakRow.scrollIntoViewIfNeeded();
+  await audit(page, '各考點的重點');
+
   // 翻到下一個單元：考點跟著換；有錯題的只會是前面跳過的跨單元題借用的考點
   const names = () => page.locator('#kp-concept-list .kp-chip-name').allTextContents();
   const before = (await names()).join('|');
@@ -63,7 +86,31 @@ test('考點：作答前不顯示，看解析時標在標題旁；重點卡面�
   // 下一個單元是沒有自己考點的跨單元綜合時，考點區塊整個收起來
   const box = page.locator('#kp-concepts');
   await expect.poll(async () => !(await box.isVisible()) || (await names()).join('|') !== before).toBe(true);
-  if (await box.isVisible()) for (const weak of await page.locator('#kp-concept-list .kp-chip.weak .kp-chip-name').allTextContents()) expect(borrowed).toContain(weak);
+  if (await box.isVisible()) {
+    for (const weak of await page.locator('#kp-concept-list .kp-chip.weak .kp-chip-name').allTextContents()) expect(borrowed).toContain(weak);
+    // 展開過的「各考點的重點」翻單元後還是展開的，列的是這個單元的考點
+    await expect(notes).toHaveAttribute('open', '');
+    await expect(rows).toHaveCount(await chips.count());
+  }
+});
+
+test('答對時解析只標考點，不加考點重點', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openHome(page);
+  await startMode(page, 'free');
+  for (let i = 0; i < 30; i++) {
+    await skipToSingle(page);
+    const first = page.locator('#answers .answer').first();
+    await first.click();
+    await expect(page.locator('#q-explain .kp-tag')).toBeVisible();
+    if (await first.evaluate((el) => el.classList.contains('correct'))) {
+      await expect(page.locator('#q-explain .kp-note')).toHaveCount(0);
+      return;
+    }
+    await expect(page.locator('#q-explain .kp-note')).toHaveCount(1);
+    await page.locator('#next').click();
+  }
+  throw new Error('連續 30 題第一個選項都不是正解');
 });
 
 test('學習分析：各科寫出練過幾個考點；320 寬也不超出', async ({ page }) => {
@@ -151,6 +198,8 @@ test('結算畫面與錯題本：正解旁標出考點，點了只練那個考�
   await expect(page.locator('#result')).toBeVisible();
   const tag = page.locator('#r-list .kp-link').last();
   await expect(tag).toHaveText(`考點：${name}`);
+  // 解析下面有這個考點的重點
+  await expect(page.locator('#r-list .r-item').last().locator('.r-kp-note')).toHaveText(/^考點重點.{12,}/);
   await audit(page, '結算畫面的考點');
   // 錯題本裡也有，點了開一輪只練這個考點
   await page.locator('#r-home').click();

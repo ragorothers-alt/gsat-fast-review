@@ -21,6 +21,8 @@ const CONCEPT_DIR = join(ROOT, 'src', 'data', 'concepts');
 /** 考點代號：單元序號-考點序號（各兩位數，單元序號照 src/units.js 的順序，從 01 起） */
 const KP = /^\d{2}-\d{2}$/;
 const CONCEPT_NAME = { min: 2, max: 14 };
+/** 考點重點（note）：一兩句該記住的規則、公式或事實，答錯後顯示在解析下面，太長會擠掉題目卡的高度 */
+const CONCEPT_NOTE_MAX = 100;
 
 const LIMITS = { q: 180, choice: 60, explain: 150 };
 const WARN = { q: 120, explain: 100 };
@@ -91,7 +93,7 @@ for (const file of files) {
 
   const seenQ = new Map();
   const units = UNITS[subject] || [];
-  // 考點清單：[{ unit, concepts: [{ id, name, scope }] }]；沒有這個檔的科目還沒標考點
+  // 考點清單：[{ unit, concepts: [{ id, name, scope, note }] }]；沒有這個檔的科目還沒標考點
   /** @type {Map<string, number> | null} 考點代號 → 標了這個考點的題數 */
   let concepts = null;
   const conceptFile = join(CONCEPT_DIR, `${subject}.json`);
@@ -117,6 +119,11 @@ for (const file of files) {
         else if (names.has(`${u.unit}/${c.name}`)) errors.push(`考點 ${c.id} 的 name「${c.name}」在同一個單元重複`);
         names.add(`${u.unit}/${c.name}`);
         if (typeof c.scope !== 'string' || !c.scope.trim()) errors.push(`考點 ${c.id} 缺少 scope`);
+        if (typeof c.note !== 'string' || !c.note.trim()) errors.push(`考點 ${c.id} 缺少 note（一句考點重點）`);
+        else if ([...c.note].length > CONCEPT_NOTE_MAX) errors.push(`考點 ${c.id} 的 note 超過 ${CONCEPT_NOTE_MAX} 字`);
+        else if (/[\x00-\x1f]/.test(c.note)) errors.push(`考點 ${c.id} 的 note 不要換行或有控制字元（JSON 裡 LaTeX 的反斜線要寫兩個，"\\\\times" 才不會變成 tab）`);
+        else if (/\$[^$]*(?<!\\)(Delta|times|frac|sqrt|cdot)(?![A-Za-z])[^$]*\$/.test(c.note)) errors.push(`考點 ${c.id} 的 note 裡 LaTeX 指令少了反斜線`);
+        else if ((c.note.match(/(?<!\\)\$/g) ?? []).length % 2) errors.push(`考點 ${c.id} 的 note 的 $ 沒有成對`);
       }
     }
   }

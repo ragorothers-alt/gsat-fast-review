@@ -16,9 +16,15 @@ export function initKeypoints(ctx) {
   const points = $('#kp-points');
   const traps = $('#kp-traps');
   const status = $('#kp-status');
+  const notes = $('#kp-notes');
   let subject = null;
   let unit = null;
   let ticket = 0;
+  // 「各考點的重點」展開了就一直展開（翻單元、下次打開都照舊），直到再收起來
+  let notesOpen = false;
+  notes.addEventListener('toggle', () => {
+    notesOpen = notes.open;
+  });
 
   const units = () => UNITS[subject];
 
@@ -82,6 +88,7 @@ export function initKeypoints(ctx) {
     if (mine !== ticket || !mineUnit) return;
     const listEl = $('#kp-concept-list');
     listEl.innerHTML = '';
+    renderNotes(mineUnit.concepts, progress);
     for (const c of mineUnit.concepts) {
       const p = progress.get(c.id) ?? { size: 0, seen: 0, weak: 0, done: 0 };
       const li = document.createElement('li');
@@ -111,6 +118,33 @@ export function initKeypoints(ctx) {
     }
     $('#kp-concepts-n').textContent = `練過 ${cover.touched}／${cover.total}`;
     box.hidden = false;
+  }
+
+  /** 考點清單下面可以展開的「各考點的重點」：考點名稱加一句重點，還有錯題的考點標出來；一個重點都沒寫就整個收起來 */
+  function renderNotes(concepts, progress) {
+    const withNote = concepts.filter((c) => c.note);
+    notes.hidden = !withNote.length;
+    notes.open = notesOpen;
+    $('#kp-notes-n').textContent = `${withNote.length} 個`;
+    $('#kp-note-list').replaceChildren(
+      ...withNote.map((c) => {
+        const li = document.createElement('li');
+        const name = document.createElement('b');
+        name.className = 'kp-note-name';
+        name.textContent = c.name;
+        // 還有錯題：除了紅框，名稱後面也寫出來（不只靠顏色分）
+        if (progress.get(c.id)?.weak) {
+          li.className = 'weak';
+          const mark = document.createElement('span');
+          mark.className = 'kp-note-weak';
+          mark.textContent = '有錯題';
+          name.append(mark);
+        }
+        li.append(name);
+        li.insertAdjacentHTML('beforeend', richHTML(c.note));
+        return li;
+      }),
+    );
   }
 
   /** 打開某個單元的重點卡 */

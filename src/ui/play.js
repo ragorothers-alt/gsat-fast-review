@@ -672,7 +672,7 @@ export function initPlay(ctx) {
         `<span class="leech-note">這題已經失手 ${missCount(after)} 次。只記答案很快又會忘，先<button type="button" class="link-btn" data-kp="${q.subject}/${q.topic}">看這個單元的重點</button>，或練幾題類似題，換個角度弄懂。</span>`,
       );
     }
-    showConcept();
+    showConcept(outcome !== 'right');
     el.explain.hidden = false;
     // 題目卡多了解析，需要的高度變了（非選擇題的版面用得到，見 play-card.js）
     updateNeed();
@@ -693,9 +693,11 @@ export function initPlay(ctx) {
 
   /**
    * 解析標題旁標出這題的考點。作答前不顯示：考點名稱常常就是解題的提示（「餘式定理」「轉折與讓步」）。
+   * 答錯或看解答時，解析後面再加一句這個考點的重點（該記住的規則、公式或事實），放在補題、卡關提示之前。
    * 考點清單還在下載就等它好了再補上（還停在同一題的解析才補）
+   * @param {boolean} missed 答錯或看解答
    */
-  function showConcept() {
+  function showConcept(missed) {
     const asked = q;
     const put = () => {
       const c = conceptOf(asked);
@@ -705,6 +707,12 @@ export function initPlay(ctx) {
       tag.className = 'kp-tag';
       tag.textContent = `考點：${c.name}`;
       head.append(tag);
+      if (missed && c.note) {
+        const note = document.createElement('span');
+        note.className = 'kp-note';
+        note.innerHTML = `<b class="kp-note-h">考點重點</b>${richHTML(c.note)}`;
+        el.explain.insertBefore(note, el.explain.querySelector('.path-note, .leech-note'));
+      }
       return true;
     };
     if (put() || conceptOf(asked)) return;

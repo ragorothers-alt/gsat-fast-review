@@ -177,6 +177,88 @@
   font-weight: 800;
 }
 
+/* 各考點的重點：考點清單下面可以展開，一個考點一行（名稱加一句重點），還有錯題的考點用紅框標出來 */
+.kp-notes {
+  margin-top: 10px;
+}
+
+.kp-notes > summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 4px 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  font-size: calc(0.88rem * var(--fs, 1));
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.kp-notes > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 箭頭：看得出可以展開，展開後轉向下 */
+.kp-notes > summary::before {
+  content: '▸';
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+  transition: transform 0.15s ease-out;
+}
+
+.kp-notes[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.kp-notes > summary small {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.kp-notes > summary:focus-visible {
+  outline: 2.5px dashed var(--accent-2);
+  outline-offset: 2px;
+}
+
+.kp-note-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.kp-note-list li {
+  padding: 6px 10px;
+  border-left: 3px solid color-mix(in srgb, var(--c, var(--accent)) 70%, var(--ink));
+  background: color-mix(in srgb, var(--c, var(--accent)) 10%, var(--card));
+  border-radius: 0 var(--hand-sm) var(--hand-sm) 0;
+  font-size: calc(0.86rem * var(--fs, 1));
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.kp-note-list li.weak {
+  border-left-color: var(--bad);
+  background: color-mix(in srgb, var(--bad-bg) 45%, var(--card));
+}
+
+.kp-note-name {
+  display: block;
+  font-weight: 800;
+}
+
+.kp-note-weak {
+  margin-left: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--bad-ink);
+}
+
 /* 捲動區可以用鍵盤捲（Tab 進來後按方向鍵） */
 #kp-scroll:focus-visible {
   outline: 2.5px dashed var(--accent-2);

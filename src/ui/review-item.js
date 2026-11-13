@@ -1,4 +1,4 @@
-// 結算畫面與錯題本共用的題目卡：科目、單元、發音／收藏／複製／回報按鈕、題目、正解（與考點）與解析
+// 結算畫面與錯題本共用的題目卡：科目、單元、發音／收藏／複製／回報按鈕、題目、正解（與考點）、解析與考點重點
 import { conceptOf, loadConcepts } from '../data/concepts.js';
 import { reportQuestion } from '../report.js';
 import { openNote } from '../session.js';
@@ -27,18 +27,35 @@ export function conceptTagHTML(q) {
   return `<button type="button" class="kp-tag kp-link" data-practice="${q.subject}/${q.kp}" title="只練這個考點"${c ? '' : ' hidden'}>考點：${c ? escapeHTML(c.name) : ''}</button>`;
 }
 
-/** 畫面裡還沒有名稱的考點按鈕：下載那科的考點清單後填上名稱再顯示（下載不了就維持藏著） */
+/** 考點重點那一行（解析下面）的內容 */
+const noteInner = (note) => `<b class="kp-note-h">考點重點</b>${richHTML(note)}`;
+
+/**
+ * 這題考點的重點（解析下面一句該記住的規則、公式或事實）。考點清單還沒下載好時先藏起來，
+ * 由 fillConceptTags 補上；這個考點沒寫重點就不放
+ */
+export function conceptNoteHTML(q) {
+  if (!q.kp) return '';
+  const c = conceptOf(q);
+  if (c && !c.note) return '';
+  return `<p class="kp-note r-kp-note" data-kpnote="${q.subject}/${q.kp}"${c ? '' : ' hidden'}>${c ? noteInner(c.note) : ''}</p>`;
+}
+
+/** 畫面裡還沒有名稱的考點按鈕、還沒有內容的考點重點：下載那科的考點清單後填上再顯示（下載不了就維持藏著） */
 export function fillConceptTags(root) {
-  const pending = [...root.querySelectorAll('.kp-link[hidden]')];
-  for (const subject of new Set(pending.map((b) => b.dataset.practice.split('/')[0]))) {
+  const pending = [...root.querySelectorAll('.kp-link[hidden], .r-kp-note[hidden]')];
+  const keyOf = (el) => (el.dataset.practice ?? el.dataset.kpnote).split('/');
+  for (const subject of new Set(pending.map((el) => keyOf(el)[0]))) {
     loadConcepts(subject).then(
       () => {
-        for (const b of pending) {
-          const [s, kp] = b.dataset.practice.split('/');
+        for (const el of pending) {
+          const [s, kp] = keyOf(el);
           const c = s === subject && conceptOf({ subject: s, kp });
-          if (!c || !b.isConnected) continue;
-          b.textContent = `考點：${c.name}`;
-          b.hidden = false;
+          if (!c || !el.isConnected) continue;
+          if (el.dataset.practice) el.textContent = `考點：${c.name}`;
+          else if (c.note) el.innerHTML = noteInner(c.note);
+          else continue; // 這個考點沒寫重點：維持藏著
+          el.hidden = false;
         }
       },
       () => {},
@@ -106,7 +123,7 @@ export function reviewItem(q, { index, flagged, starred, note }) {
     <div class="card-tag"><span class="tag">${subj.name}</span><button type="button" class="topic topic-link" data-kp="${q.subject}/${q.topic}" title="看這個單元的考前重點">${topicLabel(q)}</button>${canSpeak(q) ? `<button type="button" class="speak-btn" data-speak="${index}" aria-label="念出這句英文">${icon('speaker')}</button>` : ''}<button type="button" class="star-btn" data-star="${q.id}" aria-pressed="${starred}" aria-label="收藏這題">${icon('star')}</button><button type="button" class="copy-btn" data-copy="${index}" aria-label="複製題目（可以貼給 ChatGPT 問）">${icon('copy')}</button><button type="button" class="flag-btn" data-flag="${q.id}" aria-pressed="${flagged}" aria-label="回報這題有問題">${icon('flag')}</button></div>
     ${passageDetails(q)}<div class="r-q">${stemHTML(q)}</div>
     <div class="r-ans">${note}<span class="r-right">${open ? '參考答案' : '正解'}：${answer}</span>${lvTag(q)}${conceptTagHTML(q)}</div>
-    ${open ? openPointsHTML(q) : ''}<div class="r-explain">${richHTML(q.explain)}</div>
+    ${open ? openPointsHTML(q) : ''}<div class="r-explain">${richHTML(q.explain)}</div>${conceptNoteHTML(q)}
   </li>`;
 }
 
