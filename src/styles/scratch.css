@@ -342,3 +342,25 @@
   animation: flash 0.45s ease-out;
 }
 
+
+/* 平板橫放的閱讀題組：文章要讀的字多，作答欄放寬到約六成、草稿約四成（不支援 :has 的瀏覽器照原本的比例） */
+.play[data-dock='side'].scratch-open:not([hidden]):has(.card.grouped) {
+  grid-template-columns: minmax(340px, 3fr) minmax(320px, 2fr);
+}
+
+/* 平板：草稿工具不必像 360 寬的手機那樣擠，按鈕放大到 44px（手指、筆都好按） */
+@media (pointer: coarse) {
+  .play:is([data-dock='side'], [data-dock='bottom']) .tool {
+    width: 44px;
+    height: 44px;
+  }
+
+  .play:is([data-dock='side'], [data-dock='bottom']) .tool-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .play:is([data-dock='side'], [data-dock='bottom']) .tool-btn.icon {
+    width: 44px;
+  }
+}

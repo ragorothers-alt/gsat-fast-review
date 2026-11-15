@@ -47,6 +47,29 @@ export function visible(page) {
   return shown.filter((e) => !e.erase && !gone.has(e));
 }
 
+/**
+ * 要存起來的頁（模擬考的草稿，見 scratch-store.js）：只留看得到的筆劃（復原、擦掉的歷史不留），
+ * 座標與筆寬取到小數一位，點存成 [x, y, w]
+ */
+export function packPage(page) {
+  const r = (v) => Math.round(v * 10) / 10;
+  const strokes = visible(page).map((s) => ({ tool: s.tool, ...(s.straight ? { straight: true } : {}), pts: s.pts.map((p) => [r(p.x), r(p.y), r(p.w)]) }));
+  return { v: 1, scroll: page.scroll, strokes };
+}
+
+/** 讀回 packPage 存的頁（格式不對的筆劃略過；整個不對就是 null）：沒有復原的歷史 */
+export function unpackPage(data) {
+  if (!data || data.v !== 1 || !Array.isArray(data.strokes)) return null;
+  const entries = [];
+  for (const s of data.strokes) {
+    if (!s || typeof s.tool !== 'string' || !Array.isArray(s.pts)) continue;
+    const pts = s.pts.filter((p) => Array.isArray(p) && p.length === 3 && p.every(Number.isFinite)).map(([x, y, w]) => ({ x, y, w }));
+    if (pts.length < (s.straight ? 2 : 1)) continue;
+    entries.push({ tool: s.tool, pts, done: true, ...(s.straight ? { straight: true } : {}) });
+  }
+  return { entries, redo: [], scroll: Number.isFinite(data.scroll) && data.scroll > 0 ? data.scroll : 0 };
+}
+
 /** 畫完一筆：之前復原掉的就不能再重做 */
 export function addStroke(page, stroke) {
   page.entries.push(stroke);

@@ -1,5 +1,5 @@
 // 草稿區：復原與重做、長草稿紙往下捲、停住拉直線、模擬考每題一頁
-import { audit, expect, openHome, startMode, test } from './fixtures.js';
+import { audit, expect, openHome, startMode, test, waitForBoot } from './fixtures.js';
 
 const KEY = 'gsat-quiz:v1';
 
@@ -357,6 +357,56 @@ test('模擬考每題一頁：選了答案換到下一題是新的一頁，回�
   await openScratch(page);
   near(await inked(page), first);
   await expect(page.locator('#scratch-undo')).toBeEnabled();
+});
+
+/** IndexedDB 裡存了幾頁模擬考草稿（資料庫還沒建時照 App 的方式建，免得 App 之後開不到那個 store） */
+const savedPages = (page) =>
+  page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        const req = indexedDB.open('gsat-scratch', 1);
+        req.onupgradeneeded = () => req.result.createObjectStore('pages');
+        req.onerror = () => resolve(-1);
+        req.onsuccess = () => {
+          const db = req.result;
+          const count = db.transaction('pages', 'readonly').objectStore('pages').count();
+          count.onsuccess = () => {
+            db.close();
+            resolve(count.result);
+          };
+        };
+      }),
+  );
+
+test('模擬考的草稿存起來：重新整理後接著考，那題的草稿還在；交卷後清掉', async ({ page }) => {
+  await openHome(page);
+  await page.locator('#open-exam').click();
+  await page.locator('[data-paper="social"]').click();
+  await expect(page.locator('#play')).toHaveClass(/exam/);
+  await openScratch(page);
+  await draw(page, [30, 40], [220, 120]);
+  const first = await inked(page);
+  expect(first).toBeGreaterThan(0);
+  await expect.poll(() => savedPages(page)).toBe(1);
+
+  await page.reload();
+  await waitForBoot(page);
+  await page.locator('#open-exam').click();
+  await page.locator('#exam-continue').click();
+  await expect(page.locator('#play-progress')).toHaveText('1 / 40');
+  await openScratch(page);
+  await expect.poll(() => inked(page)).toBeGreaterThan(0);
+  near(await inked(page), first);
+  // 讀回來的頁只有筆劃、沒有復原的歷史以外的東西：照樣能清空
+  await expect(page.locator('#scratch-clear')).toBeEnabled();
+
+  // 交卷：存起來的草稿清掉
+  await backToAnswers(page);
+  await page.locator('#exam-index-btn').click();
+  await page.locator('#exam-submit').click();
+  await page.locator('#exam-submit').click();
+  await expect(page.locator('#exam-report')).toBeVisible();
+  await expect.poll(() => savedPages(page)).toBe(0);
 });
 
 test('手機：中途離開時草稿區開著，下一輪仍從收起開始，不會蓋住選項', async ({ page }, info) => {

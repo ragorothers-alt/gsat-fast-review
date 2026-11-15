@@ -289,6 +289,13 @@
   font-size: 0.82rem;
 }
 
+/* 觸控螢幕：成績單「花最久的題目」每列至少 44px 高 */
+@media (pointer: coarse) {
+  .x-slow-item {
+    min-height: 44px;
+  }
+}
+
 .x-slow-n {
   font-weight: 800;
 }

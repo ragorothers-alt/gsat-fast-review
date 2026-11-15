@@ -31,6 +31,16 @@
   inset: -5px -2px;
 }
 
+/* 觸控螢幕：點得到的範圍再往上下各撐 2px，到 44px 高（左右不撐，相鄰的按鈕才不會重疊） */
+@media (pointer: coarse) {
+  .speak-btn::before,
+  .star-btn::before,
+  .copy-btn::before,
+  .flag-btn::before {
+    inset: -7px -2px;
+  }
+}
+
 .speak-btn:hover,
 .speak-btn:active,
 .star-btn:hover,

@@ -84,6 +84,21 @@
   color: var(--ink);
 }
 
+/* 觸控螢幕：分頁按鈕至少 44px 高 */
+@media (pointer: coarse) {
+  .sheet-tab {
+    min-height: 44px;
+  }
+}
+
+/* 平板、桌機：十個科目排成兩排，一眼就看到全部（橫捲的捲軸是藏起來的，看不出右邊還有公民） */
+@media (min-width: 600px) and (min-height: 600px) {
+  .sheet-tabs {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+}
+
 /* 考數學 A 還是 B：選單元的數學分頁上方、第一次開啟的設定 */
 .math-exam-box {
   flex: none;

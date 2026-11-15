@@ -8,6 +8,7 @@ import {
   inkBottom,
   maxScroll,
   openPage,
+  packPage,
   pathLength,
   STROKE_ERASE_R,
   eraseStrokes,
@@ -16,8 +17,45 @@ import {
   segmentDistance,
   snapLine,
   undo,
+  unpackPage,
   visible,
 } from '../src/scratch-pad.js';
+
+describe('存起來的頁（模擬考的草稿）', () => {
+  it('只存看得到的筆劃：擦掉的、清空前的、復原掉的都不存；讀回來的筆劃一樣、捲動位置一樣', () => {
+    const page = { entries: [], redo: [], scroll: 0 };
+    const gone = stroke(1);
+    addStroke(page, gone);
+    clearPage(page);
+    const kept = { tool: 'red', pts: [{ x: 1.234, y: 2.25, w: 2.4 }, { x: 3, y: 4, w: 2.4 }], done: true };
+    const erased = stroke(30);
+    const line = { tool: 'ink', pts: [{ x: 0, y: 50, w: 2 }, { x: 80, y: 50, w: 2 }], straight: true, done: true };
+    for (const s of [kept, erased, line, stroke(70), stroke(90)]) addStroke(page, s);
+    undo(page);
+    eraseStrokes(page, [erased]);
+    page.scroll = 12;
+    const data = JSON.parse(JSON.stringify(packPage(page)));
+    expect(data.strokes.map((s) => s.tool)).toEqual(['red', 'ink', 'ink']);
+    expect(data.strokes[0].pts[0]).toEqual([1.2, 2.3, 2.4]);
+    const back = unpackPage(data);
+    expect(back.redo).toEqual([]);
+    expect(back.scroll).toBe(12);
+    expect(visible(back)).toHaveLength(3);
+    expect(back.entries[1]).toMatchObject({ straight: true, pts: [{ x: 0, y: 50, w: 2 }, { x: 80, y: 50, w: 2 }] });
+    // 讀回來的頁照樣能畫、能復原
+    addStroke(back, stroke(90));
+    expect(undo(back)).toBe(true);
+    expect(visible(back)).toHaveLength(3);
+  });
+
+  it('格式不對：整個不對是 null，壞掉的筆劃略過', () => {
+    expect(unpackPage(null)).toBeNull();
+    expect(unpackPage({ v: 2, strokes: [] })).toBeNull();
+    const back = unpackPage({ v: 1, scroll: -5, strokes: [{ tool: 'ink', pts: [[1, 2, 'x']] }, { tool: 'ink', straight: true, pts: [[1, 2, 3]] }, null, { tool: 'ink', pts: [[1, 2, 3]] }] });
+    expect(back.entries).toHaveLength(1);
+    expect(back.scroll).toBe(0);
+  });
+});
 
 /** 一筆從 (x, y0) 畫到 (x, y1) 的直線，筆寬 w */
 const stroke = (y0, y1 = y0, { tool = 'ink', w = 2, x = 10 } = {}) => ({ tool, pts: [{ x, y: y0, w }, { x: x + 5, y: y1, w }], done: true });

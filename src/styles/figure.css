@@ -33,9 +33,22 @@
   color: var(--ink);
 }
 
-/* 題目卡放不下而縮小字級時，圖也縮一點，留高度給選項 */
+/* 平板、桌機：整張圖放大到 480px 寬（刻度、軸標題跟著放大到約 14px 以上；整張一起縮放，字和線不會擠在一起） */
+@media (min-width: 700px) and (min-height: 700px) {
+  .fig-svg {
+    max-width: 480px;
+  }
+}
+
+/* 題目卡放不下而縮小字級時，圖也縮一點，留高度給選項；縮小後卡片還有空，play-card.js 照剩下的高度放大一些（--fig-fit），不超過原本的大小 */
 .q-text.compact .fig-svg {
-  max-width: 272px;
+  max-width: min(var(--fig-fit, 272px), 400px);
+}
+
+@media (min-width: 700px) and (min-height: 700px) {
+  .q-text.compact .fig-svg {
+    max-width: min(var(--fig-fit, 272px), 480px);
+  }
 }
 
 .fig-svg text {

@@ -117,6 +117,7 @@ export function initExam(ctx) {
   $('#exam-drop').addEventListener('click', () => {
     ctx.state.exam = null;
     ctx.save();
+    ctx.scratch.forgetExams();
     renderPicker();
     ctx.refreshHome?.();
     ctx.toast('已放棄這份考卷，作答不會記錄');
@@ -136,6 +137,8 @@ export function initExam(ctx) {
       return;
     }
     if (picked.ids.length < paper.size) ctx.toast(`題目不夠，這份只有 ${picked.ids.length} 題`);
+    // 之前沒考完就換卷的草稿不要了
+    ctx.scratch.forgetExams();
     ctx.state.exam = newExam(paper, picked, Date.now());
     ctx.save();
     closeSheet(sheet);
@@ -412,6 +415,7 @@ export function initExam(ctx) {
     const prev = logExam(ctx.state, paper.id, result, now);
     ctx.state.exam = null;
     ctx.save();
+    ctx.scratch.forgetExams();
     leave();
     showReport(paper, result, prev, timeUp);
     ctx.cloudSync?.();

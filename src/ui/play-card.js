@@ -28,13 +28,32 @@ export function initCardFit(el, active) {
     wrap.style.setProperty('--card-need', `${Math.ceil(el.card.scrollHeight + frame + pad)}px`);
   }
 
+  /**
+   * 縮小字級後圖表題的圖先縮到最小（272px）；卡片下面還有空的話，照剩下的高度把圖放大回去一些（--fig-fit，
+   * 樣式裡不超過原本的大小），刻度和軸標題才不會小到看不清楚。放大後反而放不下就維持最小
+   */
+  function fitFigure() {
+    el.text.style.removeProperty('--fig-fit');
+    const svg = el.text.querySelector('.fig-svg');
+    const wrap = el.card.parentElement;
+    if (!svg || !wrap || overflowing()) return;
+    const pad = parseFloat(getComputedStyle(wrap).paddingTop) || 0;
+    const room = wrap.clientHeight - pad - el.card.offsetHeight - 4;
+    const { width, height } = svg.getBoundingClientRect();
+    if (room < 8 || !width || !height) return;
+    el.text.style.setProperty('--fig-fit', `${Math.floor(width + (room * width) / height)}px`);
+    if (overflowing()) el.text.style.removeProperty('--fig-fit');
+  }
+
   function fitCard() {
     el.card.scrollTop = 0;
     el.text.classList.remove('compact');
+    el.text.style.removeProperty('--fig-fit');
     el.card.classList.remove('tight');
     updateNeed();
     if (overflowing()) {
       el.text.classList.add('compact');
+      fitFigure();
       updateNeed();
     }
     // 閱讀題組還是放不下：文章框再壓矮（剩兩三行，可以按「展開文章」看全文），題目一定要看得到

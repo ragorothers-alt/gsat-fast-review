@@ -18,12 +18,20 @@ import {
   hitStrokes,
   maxScroll,
   openPage,
+  packPage,
   pathLength,
   redo,
   snapLine,
   undo,
+  unpackPage,
   visible,
 } from '../scratch-pad.js';
+import { dropPages, loadPage, savePage } from '../scratch-store.js';
+
+/** 頁名是這個開頭的（模擬考每題一頁）存進 IndexedDB，重新整理或關掉 App 後接著考還在 */
+const KEPT = 'exam-';
+/** 畫完一筆、復原、清空、捲動後隔這麼久才存（ms）：連續畫的時候不會一直寫 */
+const SAVE_DELAY = 400;
 
 const COLORS = { ink: '#3b2f2a', red: '#d9473c' };
 const PEN = 2.4;
@@ -91,6 +99,38 @@ export function initScratch(ctx) {
   let viewH = 0;
 
   const docked = () => play.dataset.dock !== '';
+
+  // ── 模擬考的草稿存起來 ─────────────────────────────────
+  /** 還沒存的那一頁 */
+  let pending = null;
+  let saveTimer = 0;
+  function flush() {
+    clearTimeout(saveTimer);
+    if (pending) savePage(pending.key, packPage(pending.page));
+    pending = null;
+  }
+  /** 這頁有改動（畫、擦、復原、清空、捲動）：模擬考的頁過一下存起來 */
+  function persist() {
+    if (!book.key?.startsWith(KEPT)) return;
+    if (pending && pending.page !== page) flush();
+    pending = { key: book.key, page };
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(flush, SAVE_DELAY);
+  }
+  // 切到背景、關掉分頁前先存（手機切走 App 之後可能就不會回來了）
+  addEventListener('pagehide', flush);
+  document.addEventListener('visibilitychange', () => document.visibilityState === 'hidden' && flush());
+
+  /** 翻到模擬考的一頁、這頁還是空的：讀存起來的草稿（讀到時還在這頁、也還沒動筆才放上去） */
+  function restore(key, target) {
+    if (!key.startsWith(KEPT) || target.entries.length || target.redo.length) return;
+    loadPage(key).then((data) => {
+      const saved = unpackPage(data);
+      if (!saved?.entries.length || page !== target || live || target.entries.length || target.redo.length) return;
+      Object.assign(target, saved);
+      redraw();
+    });
+  }
 
   function applyDock() {
     play.dataset.dock = side.matches ? 'side' : bottom.matches ? 'bottom' : '';
@@ -244,6 +284,7 @@ export function initScratch(ctx) {
     const next = clampScroll(page, y, viewH);
     if (next === page.scroll) return;
     page.scroll = next;
+    persist();
     redraw();
   }
 
@@ -263,6 +304,7 @@ export function initScratch(ctx) {
       page.scroll = from + (to - from) * (1 - (1 - k) ** 3);
       redraw();
       if (k < 1) glide = requestAnimationFrame(step);
+      else persist();
     };
     glide = requestAnimationFrame(step);
   }
@@ -383,10 +425,11 @@ export function initScratch(ctx) {
     live = null;
     base = null;
     if (s.sweep) {
-      if (!discard) eraseStrokes(page, [...s.removed]);
+      if (!discard && eraseStrokes(page, [...s.removed])) persist();
       return redraw();
     }
     if (discard) return redraw();
+    persist();
     if (s.straight) {
       addStroke(page, { tool: s.tool, pts: [s.a, s.b], straight: true, done: true });
       return redraw();
@@ -518,9 +561,9 @@ export function initScratch(ctx) {
   new ResizeObserver(resize).observe(canvas);
 
   // ── 工具列 ───────────────────────────────────────────
-  const doUndo = () => !live && undo(page) && redraw();
-  const doRedo = () => !live && redo(page) && redraw();
-  const doClear = () => !live && clearPage(page) && redraw();
+  const doUndo = () => !live && undo(page) && (persist(), redraw());
+  const doRedo = () => !live && redo(page) && (persist(), redraw());
+  const doClear = () => !live && clearPage(page) && (persist(), redraw());
 
   for (const btn of toolBtns) {
     btn.addEventListener('click', (e) => {
@@ -606,8 +649,17 @@ export function initScratch(ctx) {
       pan = null;
       touches.clear();
       stopGlide();
+      flush();
       page = openPage(book, key);
+      restore(key, page);
       redraw();
+    },
+    /** 交卷、放棄或開新卷：存起來的模擬考草稿都不要了（這台記著的頁也清掉，同一個頁名不會再用到） */
+    forgetExams() {
+      clearTimeout(saveTimer);
+      pending = null;
+      for (const k of [...book.pages.keys()]) if (k.startsWith(KEPT) && k !== book.key) book.pages.delete(k);
+      dropPages(KEPT);
     },
     /** 作答後：手機上收起草稿，露出解析與「繼續」 */
     answered() {
