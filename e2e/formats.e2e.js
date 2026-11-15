@@ -421,7 +421,7 @@ test('小螢幕按「不會」看解答的長題：三個錯誤選項都收成�
   await expect(page.locator('#answers .answer:disabled')).toHaveCount(0);
 });
 
-// ── 非選擇題（type: "open"）：題庫還沒有這種題，把英文題庫換成樣本題來測 ──────────
+// ── 非選擇題（type: "open"）：把題庫換成長度、要點個數固定的樣本題來測 ──────────
 const openBase = { subject: 'english', type: 'open' };
 const OPEN_SHORT = {
   ...openBase,
@@ -477,6 +477,32 @@ async function shownOpen(page, questions) {
   expect(q, `畫面上的題幹「${stem}」不是樣本題`).toBeTruthy();
   return q;
 }
+
+test('數學非選題：草稿區收著時鉛筆按鈕亮起黃框，提示這題要動筆算', async ({ page }) => {
+  const sample = {
+    id: 'math-9901',
+    subject: 'math',
+    topic: '數與式',
+    type: 'open',
+    level: 2,
+    q: '解不等式 $|x-3|<5$，寫出 $x$ 的範圍。',
+    answer: '$-5<x-3<5$，所以 $-2<x<8$。',
+    points: ['寫成 $-5<x-3<5$', '得到 $-2<x<8$'],
+    explain: '$|x-3|<5$ 表示 $x$ 和 3 的距離小於 5。',
+  };
+  await page.route('**/assets/math-*.json', async (route) => {
+    const res = await route.fetch();
+    const body = await res.json();
+    if (Array.isArray(body) && body[0]?.id?.startsWith('math-')) await route.fulfill({ response: res, json: [sample] });
+    else await route.fulfill({ response: res });
+  });
+  await seedVeteran(page, { subjects: ['math'] });
+  await openHome(page);
+  await page.locator('[data-mode="ten"]').click();
+  await expect(page.locator('#q-topic')).toContainText('・非選');
+  await expect(page.locator('#scratch-toggle')).toHaveClass(/nudge/);
+  await expect(page.locator('#scratch-toggle')).toHaveAttribute('aria-label', '草稿區（這題要動筆算）');
+});
 
 test('非選擇題：先自己寫，看參考答案後勾寫到的要點自評；沒全寫到算答錯，全寫到算答對，結算看得到參考答案與自評', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });

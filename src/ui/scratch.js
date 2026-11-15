@@ -635,7 +635,7 @@ export function initScratch(ctx) {
   applyDock();
   refresh();
 
-  /** 演算題：草稿區收著時讓鉛筆按鈕顯眼一點，提示這題要動筆算 */
+  /** 演算題與數學非選題：草稿區收著時讓鉛筆按鈕顯眼一點，提示這題要動筆算 */
   function nudge(on) {
     toggleBtn.classList.toggle('nudge', on);
     toggleBtn.setAttribute('aria-label', on ? '草稿區（這題要動筆算）' : '草稿區');
@@ -644,7 +644,7 @@ export function initScratch(ctx) {
   ctx.scratch = {
     /** 換題：翻到這一題的頁。key 每題不同；模擬考回到同一題是同一個 key，草稿還在 */
     newPage(q, key = q?.id ?? 'start') {
-      nudge(Boolean(q?.scratch));
+      nudge(Boolean(q?.scratch || (q?.type === 'open' && q.subject === 'math')));
       if (live) endStroke(false);
       pan = null;
       touches.clear();
