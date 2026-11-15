@@ -139,13 +139,9 @@ export function absorbState(state, raw) {
   }
   lastRaw = raw;
   const merged = mergeState(state, other).state;
-  // 闖關進度、模擬考成績跟線上同步用同一套規則合併（重新闖、做到一半的關都比時間）
-  const path = state.path ?? {};
-  applyPathRows(path, pathRows(other.path));
-  mergeExams(merged, other.examLog);
+  mergeExtras(merged, other);
   Object.assign(state, merged, {
     settings: Object.assign(state.settings, other.settings),
-    path,
     pathLast: other.pathLast,
     pace: mergePace(state.pace, other.pace),
     cloud: mergeCloud(state.cloud, other.cloud),
@@ -153,6 +149,21 @@ export function absorbState(state, raw) {
   // 開了同步時，每日題數由各台的紀錄加總而來
   if (state.cloud?.code) rebuildDaily(state, Date.now());
   return true;
+}
+
+/** 別的分頁、備份檔裡的闖關進度：格式不對的科目整科略過（pathRows 要 cleared 是陣列、runs 是物件） */
+function cleanPath(path) {
+  if (!path || typeof path !== 'object' || Array.isArray(path)) return {};
+  return Object.fromEntries(Object.entries(path).filter(([, p]) => p && Array.isArray(p.cleared) && p.runs && typeof p.runs === 'object' && !Array.isArray(p.runs)));
+}
+
+/**
+ * 闖關進度、模擬考成績：跟線上同步用同一套規則併進 state（重新闖、做到一半的關都比時間；同一筆成績不重複），
+ * 重複併同一份不會變。另一個分頁存檔、匯入備份檔時用；回傳改變了幾個單元加幾筆成績
+ */
+export function mergeExtras(state, incoming) {
+  const path = (state.path ||= {});
+  return applyPathRows(path, pathRows(cleanPath(incoming?.path))) + mergeExams(state, incoming?.examLog);
 }
 
 /** 兩個分頁的同步狀態：同一組同步碼時，各台裝置的每日題數取較大值（同一台的兩個分頁各記了一部分） */

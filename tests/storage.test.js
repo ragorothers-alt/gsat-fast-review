@@ -106,6 +106,23 @@ describe('同時開兩個分頁', () => {
     expect(stateB.examLog.map((e) => e.paper)).toEqual(['math', 'science']);
   });
 
+  it('匯入備份檔的闖關進度與成績（mergeExtras）：格式不對的略過，重複匯入同一份不會變', async () => {
+    const { freshState, mergeExtras } = await tab();
+    const s = freshState();
+    s.path = { math: { cleared: ['A'], clearedAt: { A: NOW }, runs: {} } };
+    const incoming = {
+      path: { physics: { cleared: ['力學'], clearedAt: { 力學: NOW + 1 }, runs: {} }, chemistry: { cleared: 'oops', runs: {} }, biology: null, earth: { cleared: [], runs: null } },
+      examLog: [{ paper: 'math', at: NOW, total: 25, right: 10, points: 10, blank: 0, secs: 900 }, { paper: 'math', at: 'x', total: 25, right: 1 }],
+    };
+    expect(mergeExtras(s, incoming)).toBe(2);
+    expect(Object.keys(s.path).sort()).toEqual(['math', 'physics']);
+    expect(s.examLog).toHaveLength(1);
+    expect(mergeExtras(s, incoming)).toBe(0);
+    // 舊版的備份檔沒有這兩項
+    expect(mergeExtras(s, {})).toBe(0);
+    expect(mergeExtras(s, { path: [1, 2], examLog: 'no' })).toBe(0);
+  });
+
   it('設定沿用同一個物件（各畫面拿著它的參照），內容換成對方較新的', async () => {
     const a = await tab();
     const stateA = a.loadState();

@@ -4,6 +4,7 @@ import {
   MS_SHARE,
   PAPERS,
   PAPER_BY_ID,
+  TRIED_SECS,
   UNIT_SHARE,
   allocate,
   buildPaper,
@@ -167,12 +168,15 @@ describe('對答案與紀錄', () => {
     expect(order).toEqual([...order].sort((a, b) => a - b));
   });
 
-  it('寫進排程：答對但標記過算不太確定；沒作答的不記', () => {
+  it('寫進排程：答對但標記過算不太確定；沒作答但想過（看了一陣子或標記過）的算看解答，只瞄一眼的不記', () => {
     const { items } = gradeExam(sat(), byId);
     expect(examOutcome(items[0])).toBe('unsure');
     expect(examOutcome(items[1])).toBe('right');
     expect(examOutcome(items[12])).toBe('wrong');
-    expect(examOutcome(items[24])).toBeNull();
+    // 最後 5 題沒作答，各看了 60 秒
+    expect(examOutcome(items[24])).toBe('skip');
+    expect(examOutcome({ ...items[24], secs: TRIED_SECS - 1 })).toBeNull();
+    expect(examOutcome({ ...items[24], secs: 0, marked: true })).toBe('skip');
   });
 
   it('validExam：格式不對或題目不在題庫裡就不接著考', () => {

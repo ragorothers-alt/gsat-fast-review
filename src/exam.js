@@ -174,12 +174,16 @@ export function validExam(exam, byId) {
   );
 }
 
+/** 沒作答的題目看了這麼多秒以上，算是想過但做不出來 */
+export const TRIED_SECS = 20;
+
 /**
- * 交卷後寫進排程的結果：答錯就是答錯；答對但標記過的（沒把握、想回頭看）算「不太確定」；沒作答的不記
- * @returns {'right' | 'wrong' | 'unsure' | null}
+ * 交卷後寫進排程的結果：答錯就是答錯；答對但標記過的（沒把握、想回頭看）算「不太確定」；
+ * 沒作答的：想過做不出來（看了 TRIED_SECS 秒以上，或標記過）當成看了解答、進錯題複習，只瞄一眼或時間到還沒看到的不記
+ * @returns {'right' | 'wrong' | 'unsure' | 'skip' | null}
  */
 export function examOutcome(item) {
-  if (item.blank) return null;
+  if (item.blank) return item.marked || item.secs >= TRIED_SECS ? 'skip' : null;
   if (!item.right) return 'wrong';
   return item.marked ? 'unsure' : 'right';
 }

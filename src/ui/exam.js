@@ -401,7 +401,7 @@ export function initExam(ctx) {
     const done = exam;
     const paper = PAPER_BY_ID[done.paper];
     const result = gradeExam(done, byId);
-    // 作答寫進排程與每日題數：答錯的進錯題複習；答對但標記過的算不太確定；沒作答的不記
+    // 作答寫進排程與每日題數：答錯的、想過但沒作答的進錯題複習；答對但標記過的算不太確定（見 examOutcome）
     const now = Date.now();
     for (const it of result.items) {
       const outcome = examOutcome(it);
@@ -484,8 +484,9 @@ export function initExam(ctx) {
       .join('');
 
     const misses = missed();
+    const tried = result.items.some((it) => it.blank && examOutcome(it));
     $('#x-review-title').textContent = misses.length
-      ? `答錯、沒作答與標記過的題目（${misses.length} 題；答錯的已加入錯題複習）`
+      ? `答錯、沒作答與標記過的題目（${misses.length} 題；答錯的${tried ? '和想過但沒作答的' : ''}已加入錯題複習）`
       : '全對！這份卷沒有錯題';
     const { flags, stars } = ctx.state;
     $('#x-list').innerHTML = misses.map((it, i) => reviewItem(it.q, { index: i, flagged: !!flags[it.id], starred: !!stars[it.id], note: mine(it) })).join('');

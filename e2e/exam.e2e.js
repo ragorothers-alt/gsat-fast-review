@@ -73,7 +73,7 @@ test('模擬考：作答時不對答案，可以標記、跳題、回頭改；�
   // 答錯、沒作答、標記過的都列出來（至少沒作答的 35 題）
   expect(await page.locator('#x-list .r-item').count()).toBeGreaterThanOrEqual(35);
 
-  // 作答的 5 題寫進排程與今日題數；沒作答的不記；考卷不再存著，成績記下來
+  // 作答的 5 題寫進排程與今日題數；沒作答又只瞄一眼的不記；考卷不再存著，成績記下來
   const s = await saved(page);
   expect(s.exam).toBeNull();
   expect(s.examLog).toHaveLength(1);

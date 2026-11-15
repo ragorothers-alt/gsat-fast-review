@@ -4,9 +4,13 @@ import { shiftDay } from './stats.js';
 
 const APP = 'gsat-quiz';
 
+/**
+ * 匯出的進度：作答、每日題數、標記，以及闖關進度與模擬考成績（匯入時由 storage.js 的 mergeExtras 併入）。
+ * 作答速度（pace）只屬於這台裝置（見 pace.js），不匯出
+ */
 export function exportBackup(state, now) {
-  const { cards, daily, streak, best, flags, flagsOff, stars, starsOff } = state;
-  return JSON.stringify({ app: APP, version: 1, exportedAt: now, state: { cards, daily, streak, best, flags, flagsOff, stars, starsOff } });
+  const { cards, daily, streak, best, flags, flagsOff, stars, starsOff, path, examLog } = state;
+  return JSON.stringify({ app: APP, version: 1, exportedAt: now, state: { cards, daily, streak, best, flags, flagsOff, stars, starsOff, path, examLog } });
 }
 
 /** 讀出備份裡的進度；不是這個遊戲的備份就丟出 Error，訊息直接給玩家看 */

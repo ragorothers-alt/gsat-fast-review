@@ -2,7 +2,7 @@
 import { daysUntil } from '../analysis.js';
 import { foldLegacy } from '../cloud.js';
 import { GOALS, dayKey } from '../stats.js';
-import { DEFAULT_EXAM_DATE } from '../storage.js';
+import { DEFAULT_EXAM_DATE, mergeExtras } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { exportBackup, mergeState, parseBackup, setFlag } from '../sync.js';
 import { topicLabel } from '../units.js';
@@ -131,11 +131,14 @@ export function initSettings(ctx, onChange) {
       const incoming = parseBackup(await file.text());
       const { state, added, updated } = mergeState(ctx.state, incoming);
       Object.assign(ctx.state, state);
+      // 闖關進度、模擬考成績（舊版的備份檔沒有這兩項）
+      const extras = mergeExtras(ctx.state, incoming);
       // 開過線上同步時，每日作答量由同步紀錄重算：匯入的當成開始同步前的舊紀錄
       foldLegacy(ctx.state, incoming.daily, Date.now());
       commit();
       ctx.cloudSync?.();
-      ctx.toast(added || updated ? `匯入完成：新增 ${added} 題、更新 ${updated} 題的紀錄` : '匯入完成：沒有比這台更新的紀錄');
+      const also = extras ? '，也併入了闖關進度與模擬考成績' : '';
+      ctx.toast(added || updated ? `匯入完成：新增 ${added} 題、更新 ${updated} 題的紀錄${also}` : extras ? '匯入完成：併入了闖關進度與模擬考成績' : '匯入完成：沒有比這台更新的紀錄');
     } catch (e) {
       ctx.toast(e instanceof Error && e.message.includes('進度備份') ? e.message : '讀不到這個檔案，請再試一次');
     }

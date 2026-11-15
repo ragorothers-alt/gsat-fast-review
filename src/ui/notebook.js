@@ -137,8 +137,9 @@ const indexEntry = (q) => [
   function note(q, now) {
     const c = ctx.state.cards[q.id];
     if (view === 'wrong') {
-      const skips = c.seen - c.right - c.wrong;
-      const parts = [c.wrong ? `答錯 ${c.wrong} 次` : '', skips > 0 ? `看解答 ${skips} 次` : '', ago(now - c.last)].filter(Boolean);
+      // 卡片只記答對、答錯的次數：其餘是按「不會」看解答，或答對了但說是猜的、不太確定，分不出是哪一種
+      const unsure = c.seen - c.right - c.wrong;
+      const parts = [c.wrong ? `答錯 ${c.wrong} 次` : '', unsure > 0 ? `不會或沒把握 ${unsure} 次` : '', ago(now - c.last)].filter(Boolean);
       return `<span class="r-mine">${parts.join('・')}</span>`;
     }
     const record = c?.seen ? `答過 ${c.seen} 次、答對 ${c.right} 次` : '還沒答過';
@@ -160,7 +161,8 @@ const indexEntry = (q) => [
     const searching = view === 'search';
     const query = input.value.trim();
     $('#notebook-search-box').hidden = !searching;
-    $('#notebook-count').textContent = all.length;
+    // 選了某一科時是這一科的題數（「全部」與各科的題數在下面的分頁上）
+    $('#notebook-count').textContent = items.length;
     $('#notebook-count-label').textContent = v.label;
     $('#notebook-count').parentElement.hidden = searching && !query;
     $('#notebook-note').textContent = v.note;
