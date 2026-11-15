@@ -143,6 +143,88 @@ test('模擬考的多選題：題目卡標「多選題」，點選項切換、�
   expect(s.examLog[0].points).toBeLessThanOrEqual(1);
 });
 
+test('模擬考的選填題：不給選項，用數字鍵填數值、填好了換下一題，回頭看填的還在；交卷後照填的值對答案', async ({ page }) => {
+  // 數學題庫換成 30 題能填答的演算題（選項 1、2、3、4，正解 1）：這份卷每題都是選填題
+  const samples = Array.from({ length: 30 }, (_, i) => ({
+    id: `math-${9001 + i}`,
+    subject: 'math',
+    topic: '數與式',
+    type: 'mc',
+    scratch: true,
+    level: 2,
+    q: `求 $${i + 3}-${i + 2}$ 的值。`,
+    choices: ['1', '2', '3', '4'],
+    answer: 0,
+    explain: `$${i + 3}-${i + 2}=1$。`,
+  }));
+  await page.route('**/assets/math-*.json', async (route) => {
+    const res = await route.fetch();
+    const body = await res.json();
+    // 同樣開頭的還有重點卡的檔案：只換題庫
+    if (Array.isArray(body) && body[0]?.id?.startsWith('math-')) await route.fulfill({ response: res, json: samples });
+    else await route.fulfill({ response: res });
+  });
+  await openHome(page);
+  await page.locator('#open-exam').click();
+  await expect(page.locator('li:has([data-paper="math"]) .exam-paper-meta')).toContainText('有選填題');
+  await expect(page.locator('li:has([data-paper="science"]) .exam-paper-meta')).not.toContainText('選填');
+  await page.locator('[data-paper="math"]').click();
+  await expect(page.locator('#play')).toHaveClass(/exam/);
+
+  // 題目卡標「選填題」：沒有選項、也不能改看選項，草稿區的鉛筆按鈕提示要動筆算
+  await expect(page.locator('#q-topic')).toHaveText('選填題');
+  await expect(page.locator('#answers .answer')).toHaveCount(0);
+  await expect(page.locator('#answers .fill-switch')).toHaveCount(0);
+  await expect(page.locator('#answers .fill-send')).toHaveText('填好了');
+  await expect(page.locator('#answers .fill-value')).toHaveText('算出答案後填入');
+  await expect(page.locator('#scratch-toggle')).toHaveClass(/nudge/);
+  await audit(page, '模擬考的選填題');
+
+  // 點數字鍵填 1、按「填好了」：存起來、換下一題
+  await page.locator('#answers .fill-key[data-k="1"]').click();
+  await expect(page.locator('#answers .fill-value')).toHaveText('1');
+  await page.locator('#answers .fill-send').click();
+  await expect(page.locator('#play-progress')).toHaveText('2 / 25');
+
+  // 實體鍵盤：還沒填完（7/）按 Enter 只提示格式、不換題；改好再按 Enter 才換題
+  await page.keyboard.press('7');
+  await page.keyboard.press('/');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#answer-status')).toHaveText('先填入答案：整數、小數或分數，例如 -3、2.5、7/4');
+  await expect(page.locator('#play-progress')).toHaveText('2 / 25');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.press('2');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#play-progress')).toHaveText('3 / 25');
+  // 第 3 題填一個不是任何選項的數，直接用右鍵換題（填的照樣存著）
+  await page.keyboard.press('-');
+  await page.keyboard.press('5');
+  await expect(page.locator('#answers .fill-value')).toHaveText('-5');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#play-progress')).toHaveText('4 / 25');
+
+  // 回頭看：填的都還在，題號一覽算已作答
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.locator('#answers .fill-value')).toHaveText('-5');
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.locator('#answers .fill-value')).toHaveText('2');
+  expect((await saved(page)).exam.answers.slice(0, 4)).toEqual(['1', '2', '-5', null]);
+  await page.locator('#exam-index-btn').click();
+  await expect(page.locator('#exam-grid .cell.done')).toHaveCount(3);
+  await page.locator('#exam-submit').click();
+  await page.locator('#exam-submit').click();
+
+  // 成績單：填 1 的答對；填 2（等於另一個選項）與 -5（不是任何選項）答錯，列出你填的
+  await expect(page.locator('#exam-report')).toBeVisible();
+  await expect(page.locator('#x-big')).toHaveText('1 / 25');
+  await expect(page.locator('#x-list .r-mine').filter({ hasText: '你填：-5' })).toHaveCount(1);
+  await expect(page.locator('#x-list .r-mine').filter({ hasText: /^你填：2$/ })).toHaveCount(1);
+  const s = await saved(page);
+  expect(s.examLog[0]).toMatchObject({ paper: 'math', total: 25, right: 1, blank: 22 });
+  expect(Object.keys(s.cards)).toHaveLength(3);
+});
+
 test('模擬考：先離開之後接著考，作答和剩餘時間都還在；時間到自動交卷', async ({ page }) => {
   await openHome(page);
   await startPaper(page, 'english');

@@ -72,4 +72,13 @@ describe('演算題填答：鍵盤的 HTML', () => {
     expect(html).toContain('class="fill-value"');
     expect(html).toContain('class="fill-switch"');
   });
+
+  it('模擬考的選填題：同一組按鍵，但沒有「改用選項作答」，送出鍵寫「填好了」', () => {
+    const html = fillHTML({ exam: true });
+    const keys = [...html.matchAll(/data-k="([^"]+)"/g)].map((m) => m[1]);
+    expect([...keys].sort()).toEqual([...'0123456789', '.', '-', '/', 'back', 'ok'].sort());
+    expect(html).not.toContain('fill-switch');
+    expect(html).toContain('data-k="ok">填好了<');
+    expect(fillHTML()).toContain('data-k="ok">送出<');
+  });
 });

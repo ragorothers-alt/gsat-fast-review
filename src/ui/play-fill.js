@@ -11,11 +11,15 @@ const FILL_KEYS = [
 /** 填答最多幾個字 */
 export const FILL_MAX = 12;
 
-/** 作答區的內容：上面是填好的答案與單位，下面是數字鍵盤、「送出」和「改用選項作答」 */
-export function fillHTML() {
+/**
+ * 作答區的內容：上面是填好的答案與單位，下面是數字鍵盤、「送出」和「改用選項作答」。
+ * 模擬考的選填題（exam）和學測一樣沒有選項可以改看，送出鍵是「填好了」（填的字隨時存著，按了只是換下一題）
+ */
+export function fillHTML({ exam = false } = {}) {
   return `<div class="fill-box"><output class="fill-value" aria-label="你填的答案"></output><span class="fill-unit"></span></div>
-      <div class="fill-keys">${FILL_KEYS.map(([k, label, name]) => `<button type="button" class="fill-key" data-k="${k}"${name ? ` aria-label="${name}"` : ''}>${label}</button>`).join('')}<button type="button" class="fill-key fill-send" data-k="ok">送出</button></div>
-      <button type="button" class="fill-switch">算不出來？改用選項作答</button>`;
+      <div class="fill-keys">${FILL_KEYS.map(([k, label, name]) => `<button type="button" class="fill-key" data-k="${k}"${name ? ` aria-label="${name}"` : ''}>${label}</button>`).join('')}<button type="button" class="fill-key fill-send" data-k="ok">${exam ? '填好了' : '送出'}</button></div>${
+        exam ? '' : '\n      <button type="button" class="fill-switch">算不出來？改用選項作答</button>'
+      }`;
 }
 
 /**

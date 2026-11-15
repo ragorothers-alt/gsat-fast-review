@@ -1,6 +1,7 @@
 // 模擬考：依 111–115 學測各單元的出題占比抽一份卷，整卷計時，交卷後才對答案。純邏輯，不碰 DOM。
 import { SUBJECT_ITEMS, UNIT_SHARE } from './blueprint.js';
 import { bundles, groupKind, isBank } from './groups.js';
+import { fillable, matchTyped, parseTyped } from './numeric.js';
 import { isCorrect, msScore } from './session.js';
 import { shuffle } from './srs.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
@@ -27,6 +28,22 @@ export const PAPER_BY_ID = Object.fromEntries(PAPERS.map((p) => [p.id, p]));
 
 /** 各張考卷裡多選題約占幾成（111–115 學測的選擇題裡多選的比例）；題庫的多選題不夠時用單選補 */
 export const MS_SHARE = { chinese: 0.2, math: 0.3, science: 0.4 };
+
+/**
+ * 各張考卷裡選填題約占幾成：學測數學的選擇（填）題除了單選、多選，還有不給選項、自己算出數值填進去的選填題。
+ * 題庫裡能填答的演算題（選項都是同單位的數值，見 numeric.js 的 fillable）在這張卷上一律不給選項；其他科沒有選填題
+ */
+export const FILL_SHARE = { math: 0.25 };
+
+/** 選填題填的字換成選項：填的數值等於哪個選項的值就當成選了那個（原始索引）；不是完整的數、或不等於任何選項是 null */
+export function fillChoice(q, text) {
+  const value = parseTyped(text);
+  const m = value === null ? -1 : matchTyped(q, value);
+  return m >= 0 ? m : null;
+}
+
+/** 選填題存下來的作答：只用填答鍵打得出來的字，至少有一個數字（只按了負號不算作答） */
+const isFillText = (a) => typeof a === 'string' && a.length <= 16 && /^-?[\d./]+$/.test(a) && /\d/.test(a);
 
 /**
  * 把 n 題依權重分給各項（最大餘數法）：先給整數部分，剩下的依小數部分由大到小補一題
@@ -90,16 +107,18 @@ function pickGroups(questions, count, rng) {
 
 /**
  * 抽一份考卷：先抽 paper.groups 組題組（題庫沒有題組時就全出單題）；其餘題數依各單元占比分配，
- * 每個單元的配額裡約 MS_SHARE 出多選題、其餘出單選題；單元題目不夠時從同一張卷的其他單元補。
+ * 每個單元的配額裡約 MS_SHARE 出多選題、FILL_SHARE 出選填題、其餘出單選題；單元題目不夠時從同一張卷的其他單元補。
  * 題目照科目排（合科試卷先物理再化學…），同一科裡單題打亂、題組整組排在單題後面；每題的選項順序也先打亂、整場固定。
  * @param {Question[]} bank
  * @param {Paper} paper PAPERS 裡的一張考卷
  * @param {{ excludedUnits?: string[], flags?: Record<string, unknown>, rng?: () => number }} [opts] 被回報的題目不出
- * @returns {{ ids: string[], orders: number[][] }}
+ * @returns {{ ids: string[], orders: number[][], fills: boolean[] }} fills：這題是不是選填題（不給選項，自己填數值）
  */
 export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = Math.random } = {}) {
   const off = new Set(excludedUnits);
   const usable = (q) => (q.type === 'mc' || q.type === 'ms') && !flags[q.id] && !isUnitOff(q, off);
+  const fillShare = FILL_SHARE[paper.id] ?? 0;
+  const asFill = (q) => fillShare > 0 && fillable(q);
   const groups = pickGroups(
     bank.filter((q) => q.group && paper.subjects.includes(q.subject) && usable(q)),
     paper.groups ?? 0,
@@ -108,10 +127,11 @@ export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = 
   const grouped = groups.reduce((a, p) => a + p.length, 0);
   const counts = allocate(paperWeights(paper, excludedUnits), Math.max(0, paper.size - grouped));
   const share = MS_SHARE[paper.id] ?? 0;
-  const pools = new Map(Object.keys(counts).map((k) => [k, { mc: [], ms: [] }]));
+  // 有選填題的卷：能填答的單選題另外一堆（fill），單選題那堆只剩要看選項的
+  const pools = new Map(Object.keys(counts).map((k) => [k, { mc: [], ms: [], fill: [] }]));
   for (const q of bank) {
     if (q.group || !usable(q)) continue;
-    pools.get(unitKey(q.subject, q.topic))?.[q.type].push(q);
+    pools.get(unitKey(q.subject, q.topic))?.[asFill(q) ? 'fill' : q.type].push(q);
   }
   const picked = [];
   const spare = [];
@@ -119,27 +139,34 @@ export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = 
     const n = counts[key];
     shuffle(pool.mc, rng);
     shuffle(pool.ms, rng);
-    // 多選題的題數是 n × MS_SHARE，小數部分用亂數進位，整份卷平均下來才會接近 MS_SHARE
+    shuffle(pool.fill, rng);
+    // 多選題的題數是 n × MS_SHARE，小數部分用亂數進位，整份卷平均下來才會接近 MS_SHARE；選填題也一樣
     const ms = share ? pool.ms.splice(0, Math.floor(n * share + rng())) : [];
-    const mc = pool.mc.splice(0, n - ms.length);
-    // 單選題不夠時用這個單元其他的多選題補
-    if (share) ms.push(...pool.ms.splice(0, n - ms.length - mc.length));
-    picked.push(...ms, ...mc);
-    spare.push(...pool.mc, ...(share ? pool.ms : []));
+    const fill = fillShare ? pool.fill.splice(0, Math.min(n - ms.length, Math.floor(n * fillShare + rng()))) : [];
+    const mc = pool.mc.splice(0, n - ms.length - fill.length);
+    // 單選題不夠時用這個單元其他的多選題、選填題補
+    if (share) ms.push(...pool.ms.splice(0, n - ms.length - fill.length - mc.length));
+    fill.push(...pool.fill.splice(0, n - ms.length - fill.length - mc.length));
+    picked.push(...ms, ...fill, ...mc);
+    spare.push(...pool.mc, ...(share ? pool.ms : []), ...pool.fill);
   }
   picked.push(...shuffle(spare, rng).slice(0, Math.max(0, paper.size - grouped - picked.length)));
   const ordered = paper.subjects.flatMap((s) => [...shuffle(picked.filter((q) => q.subject === s), rng), ...groups.filter((p) => p[0].subject === s).flat()]);
   // 共用選項（文意選填、篇章結構）整組固定順序，像試卷上的 (A)–(H)
   const orderOf = (q) => (isBank(q) ? q.choices.map((_, i) => i) : shuffle(q.choices.map((_, i) => i), rng));
-  return { ids: ordered.map((q) => q.id), orders: ordered.map(orderOf) };
+  return { ids: ordered.map((q) => q.id), orders: ordered.map(orderOf), fills: ordered.map(asFill) };
 }
 
-/** 開考：作答（原始選項索引；多選題是選了的索引、由小到大；沒作答是 null）、標記稍後回看、每題花的秒數都從空白開始 */
-export function newExam(paper, { ids, orders }, now) {
+/**
+ * 開考：作答（原始選項索引；多選題是選了的索引、由小到大；選填題是填的字；沒作答是 null）、標記稍後回看、每題花的秒數都從空白開始。
+ * fills：哪幾題是選填題（沒給就是都看選項作答）
+ */
+export function newExam(paper, { ids, orders, fills = ids.map(() => false) }, now) {
   return {
     paper: paper.id,
     ids,
     orders,
+    fills,
     answers: ids.map(() => null),
     marks: ids.map(() => false),
     spent: ids.map(() => 0),
@@ -157,15 +184,21 @@ export function validExam(exam, byId) {
   const qs = exam.ids.map((id) => byId.get(id));
   const isPerm = (o, k) => Array.isArray(o) && o.length === k && [...Array(k).keys()].every((i) => o.includes(i));
   const isChoice = (q, i) => Number.isInteger(i) && i >= 0 && i < q.choices.length;
-  // 單選題答一個選項；多選題答幾個不重複的選項（取消到一個都不選就是沒作答 null）
-  const isAnswer = (q, a) =>
-    a === null || (q.type === 'ms' ? Array.isArray(a) && a.length > 0 && new Set(a).size === a.length && a.every((i) => isChoice(q, i)) : isChoice(q, a));
+  // 選填題的功能上線前存的卷沒有 fills：都是看選項作答
+  const fills = exam.fills ?? exam.ids.map(() => false);
+  // 單選題答一個選項；多選題答幾個不重複的選項（取消到一個都不選就是沒作答 null）；選填題是填的字
+  const isAnswer = (q, a, fill) =>
+    a === null ||
+    (fill ? isFillText(a) : q.type === 'ms' ? Array.isArray(a) && a.length > 0 && new Set(a).size === a.length && a.every((i) => isChoice(q, i)) : isChoice(q, a));
   return (
     n > 0 &&
     ['orders', 'answers', 'marks', 'spent'].every((k) => Array.isArray(exam[k]) && exam[k].length === n) &&
     qs.every((q) => q?.type === 'mc' || q?.type === 'ms') &&
+    Array.isArray(fills) &&
+    fills.length === n &&
+    fills.every((f, i) => f === false || (f === true && qs[i].type === 'mc')) &&
     exam.orders.every((o, i) => isPerm(o, qs[i].choices.length)) &&
-    exam.answers.every((a, i) => isAnswer(qs[i], a)) &&
+    exam.answers.every((a, i) => isAnswer(qs[i], a, fills[i])) &&
     Number.isFinite(exam.elapsed) &&
     Number.isFinite(exam.limit) &&
     Number.isInteger(exam.index) &&
@@ -193,20 +226,24 @@ const round2 = (x) => Math.round(x * 100) / 100;
 
 /**
  * 對答案：每題的結果與得分、各單元的得分與用時、答對與答錯的題平均花幾秒。
- * 每題 1 分：單選題答對得分；多選題照學測規則部分給分（n 個選項錯 k 個得 (n−2k)/n，最低 0 分），全對才算答對
+ * 每題 1 分：單選題答對得分；多選題照學測規則部分給分（n 個選項錯 k 個得 (n−2k)/n，最低 0 分），全對才算答對；
+ * 選填題填的數值等於正解的值才得分（typed 是填的字，answer 是填的值對到的選項，都對不到是 null）
  * @returns {{ total: number, right: number, wrong: number, blank: number, points: number, secs: number, limit: number,
- *   items: { id: string, q: Question, answer: number | number[] | null, right: boolean, blank: boolean, score: number, marked: boolean, secs: number, order: number[], n: number }[],
+ *   items: { id: string, q: Question, answer: number | number[] | null, typed?: string, right: boolean, blank: boolean, score: number, marked: boolean, secs: number, order: number[], n: number }[],
  *   units: { subject: string, unit: string, total: number, right: number, points: number, secs: number }[],
  *   avgRight: number | null, avgWrong: number | null }}
  */
 export function gradeExam(exam, byId) {
   const items = exam.ids.map((id, i) => {
     const q = byId.get(id);
-    const answer = exam.answers[i];
-    const blank = answer === null;
-    const right = !blank && isCorrect(q, answer);
+    const raw = exam.answers[i];
+    const blank = raw === null;
+    const typed = exam.fills?.[i] && !blank ? raw : undefined;
+    const answer = typed === undefined ? raw : fillChoice(q, typed);
+    const right = !blank && answer !== null && isCorrect(q, answer);
     const score = q.type === 'ms' ? msScore(q, answer) : right ? 1 : 0;
-    return { id, q, answer, right, blank, score, marked: !!exam.marks[i], secs: exam.spent[i], order: exam.orders[i], n: i + 1 };
+    const item = { id, q, answer, right, blank, score, marked: !!exam.marks[i], secs: exam.spent[i], order: exam.orders[i], n: i + 1 };
+    return typed === undefined ? item : { ...item, typed };
   });
   const units = new Map();
   for (const it of items) {

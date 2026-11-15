@@ -13,6 +13,14 @@ export const RECENT_DAYS = 7;
 /** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
 export const NEWS = [
   {
+    id: '2026-11-15-8',
+    title: '模擬考的選填題',
+    items: [
+      '數學模擬考約四分之一是選填題：和學測一樣不給選項，自己算出數值、用數字鍵填進去。',
+      '填的隨時存著、可以回頭改；按「填好了」換下一題，交卷後成績單列出你填的數。',
+    ],
+  },
+  {
     id: '2026-11-15-7',
     title: '數學與自然的非選擇題',
     items: [

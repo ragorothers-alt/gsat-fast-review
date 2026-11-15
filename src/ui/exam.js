@@ -1,8 +1,9 @@
 // 模擬考：選考卷、作答、題號一覽與交卷、成績單。
 // 作答時借用作答畫面（#play 加上 .exam）：題目卡、選項、草稿區與橫放版面都一樣，只是不對答案，
 // 可以跳題、標記、回頭改，整卷計時。考到一半的卷存在 state.exam，離開後可以接著考。
-import { PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, logExam, newExam, validExam } from '../exam.js';
+import { FILL_SHARE, PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, logExam, newExam, validExam } from '../exam.js';
 import { usedOptions } from '../groups.js';
+import { fillUnit, parseTyped } from '../numeric.js';
 import { questionPrompt } from '../prompt.js';
 import { msNote } from '../session.js';
 import { needsConfirm, schedule } from '../srs.js';
@@ -12,6 +13,7 @@ import { copyQuestion } from './clipboard.js';
 import { sfx } from './feedback.js';
 import { openKeypointsFrom } from './keypoints.js';
 import { choicesClass, groupPosition, markUsed, showPassage } from './passage.js';
+import { fillHTML, fillKeyFor, typeFillKey } from './play-fill.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
 import { fillConceptTags, mineHTML, practiceConceptFrom, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
@@ -65,6 +67,7 @@ export function initExam(ctx) {
   let lastT = 0;
   let sinceSave = 0;
   let confirmSubmit = false;
+  let fillText = ''; // 選填題：目前這題填的字（只按了負號這種還不算作答的也在這裡）
   let report = null; // 成績單：{ result, paper }
 
   // ── 選考卷 ───────────────────────────────────────────
@@ -98,7 +101,7 @@ export function initExam(ctx) {
       const subjects = p.subjects.map((s) => SUBJECT_BY_ID[s]);
       return `<li style="--c:${subjects[0].color}">
         <span class="exam-paper-name">${p.name}</span>
-        <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}${p.groups ? `・含 ${p.groups} 組${p.groupName}` : ''}</span>
+        <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}${p.groups ? `・含 ${p.groups} 組${p.groupName}` : ''}${FILL_SHARE[p.id] ? '・有選填題' : ''}</span>
         <span class="exam-paper-last">${last ? `上次 ${pct(examPoints(last), last.total)}%（${md(last.at)}）` : '還沒考過'}</span>
         <button type="button" class="secondary-btn exam-start" data-paper="${p.id}"${saved ? ' disabled' : ''} aria-label="開始${p.name}模擬考">開始</button>
       </li>`;
@@ -170,6 +173,8 @@ export function initExam(ctx) {
   }
 
   const current = () => byId.get(exam.ids[exam.index]);
+  /** 目前這題是選填題：不給選項，用數字鍵填數值 */
+  const isFill = () => !!exam?.fills?.[exam.index];
 
   function showQuestion() {
     clearTimeout(autoNext);
@@ -179,14 +184,17 @@ export function initExam(ctx) {
     const subj = SUBJECT_BY_ID[q.subject];
     el.card.style.setProperty('--c', subj.color);
     el.subject.textContent = subj.name;
-    // 學測不會告訴你考哪個單元：不顯示單元名稱，只標出多選題（試卷上單選、多選分開標）與題組
+    // 學測不會告訴你考哪個單元：不顯示單元名稱，只標出多選題、選填題（試卷上分開標）與題組
     const pos = groupPosition(
       exam.ids.map((id) => byId.get(id)),
       i,
     );
     const where = pos ? `題組 ${pos.k}／${pos.n}` : '';
     // 兩段各自不換行（和作答畫面一樣，題型的標記不會被拆成兩行）
-    el.topic.innerHTML = [q.type === 'ms' ? '多選題' : '', where].filter(Boolean).map((t) => `<span class="topic-fixed">${t}</span>`).join('・');
+    el.topic.innerHTML = [q.type === 'ms' ? '多選題' : isFill() ? '選填題' : '', where]
+      .filter(Boolean)
+      .map((t) => `<span class="topic-fixed">${t}</span>`)
+      .join('・');
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
     el.progress.textContent = `${i + 1} / ${n}`;
@@ -208,6 +216,7 @@ export function initExam(ctx) {
   const isOn = (answer, orig) => (Array.isArray(answer) ? answer.includes(orig) : answer === orig);
 
   function renderAnswers(q) {
+    if (isFill()) return renderFill(q);
     const order = exam.orders[exam.index];
     const chosen = exam.answers[exam.index];
     el.answers.className = q.type === 'mc' ? choicesClass(q) : `answers ${q.type}`;
@@ -257,6 +266,58 @@ export function initExam(ctx) {
     el.status.textContent = now === null ? '已取消作答' : `已選第 ${nth(multi ? now : [now])} 個選項`;
     ctx.save();
     if (!multi && was === null && now !== null && i < exam.ids.length - 1) {
+      clearTimeout(autoNext);
+      autoNext = setTimeout(() => go(1), AUTO_NEXT);
+    }
+  }
+
+  // ── 選填題：和學測一樣不給選項，算出數值用數字鍵填進去；填的字隨時存著，可以回頭改 ─────
+  function renderFill(q) {
+    fillText = exam.answers[exam.index] ?? '';
+    el.answers.className = 'answers fill';
+    el.answers.innerHTML = fillHTML({ exam: true });
+    el.answers.querySelector('.fill-unit').textContent = fillUnit(q);
+    const keys = el.answers.querySelector('.fill-keys');
+    keys.addEventListener('click', (e) => {
+      const key = e.target.closest('[data-k]');
+      if (key) typeKey(key.dataset.k);
+    });
+    // 用滑鼠點數字鍵不搶焦點：接著按實體鍵盤的 Enter 是「填好了」，不會重按剛剛點的那顆鍵
+    keys.addEventListener('mousedown', (e) => e.preventDefault());
+    renderFillValue();
+  }
+
+  function renderFillValue() {
+    const out = el.answers.querySelector('.fill-value');
+    out.textContent = fillText || '算出答案後填入';
+    out.classList.toggle('empty', !fillText);
+  }
+
+  /** 按一個填答鍵（字串怎麼變見 play-fill.js）：有數字就算作答、馬上存；刪到沒有數字就是沒作答 */
+  function typeKey(k) {
+    if (!exam || !isFill()) return;
+    if (k === 'ok') return fillDone();
+    const t = typeFillKey(fillText, k);
+    if (t === null) return;
+    fillText = t;
+    exam.answers[exam.index] = /\d/.test(t) ? t : null;
+    renderFillValue();
+    ctx.save();
+  }
+
+  /** 「填好了」（或 Enter）：填的是完整的數就換下一題（最後一題不換）；還沒填好時提示格式 */
+  function fillDone() {
+    const text = exam.answers[exam.index];
+    if (text === null || parseTyped(text) === null) {
+      el.status.textContent = '先填入答案：整數、小數或分數，例如 -3、2.5、7/4';
+      const box = el.answers.querySelector('.fill-box');
+      box.classList.remove('shake');
+      void box.offsetWidth;
+      box.classList.add('shake');
+      return;
+    }
+    el.status.textContent = `已填 ${text}`;
+    if (exam.index < exam.ids.length - 1) {
       clearTimeout(autoNext);
       autoNext = setTimeout(() => go(1), AUTO_NEXT);
     }
@@ -385,10 +446,17 @@ export function initExam(ctx) {
   $('#exam-pause').addEventListener('click', pause);
   $('#exam-quit').addEventListener('click', pause);
 
-  // 鍵盤：1–4（多選題 1–5）選答案、←／→ 換題、M 標記、Esc 打開題號一覽
+  // 鍵盤：1–4（多選題 1–5）選答案、←／→ 換題、M 標記、Esc 打開題號一覽；
+  // 選填題直接打數字、小數點、負號、分數線，Backspace 刪除、Enter 填好了（焦點在按鈕上時 Enter 交給那個按鈕）
   document.addEventListener('keydown', (e) => {
     if (!exam || play.hidden || topSheet() || e.isComposing || e.ctrlKey || e.metaKey || e.altKey) return;
+    const k = isFill() ? fillKeyFor(e.key) : null;
+    if (k && !(k === 'ok' && e.target.closest?.('button'))) {
+      e.preventDefault();
+      return typeKey(k);
+    }
     const order = exam.orders[exam.index];
+    if (k) return;
     if (/^[1-9]$/.test(e.key) && Number(e.key) <= order.length) choose(order[Number(e.key) - 1]);
     else if (e.key === 'ArrowLeft') go(-1);
     else if (e.key === 'ArrowRight') go(1);
@@ -515,8 +583,13 @@ export function initExam(ctx) {
     return `<span class="r-mine">${mineHTML(it.q, entryOf(it))}</span>${note}`;
   }
 
-  /** 這題在成績單上的作答紀錄（回看、複製題目用；選項照當時的順序） */
-  const entryOf = (it) => ({ outcome: it.blank ? 'blank' : it.right ? 'right' : 'wrong', chosen: it.answer, order: it.order });
+  /** 這題在成績單上的作答紀錄（回看、複製題目用；選項照當時的順序；選填題附上填的字） */
+  const entryOf = (it) => ({
+    outcome: it.blank ? 'blank' : it.right ? 'right' : 'wrong',
+    chosen: it.answer,
+    order: it.order,
+    ...(it.typed === undefined ? {} : { typed: it.typed }),
+  });
 
   $('#x-slow').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-at]');

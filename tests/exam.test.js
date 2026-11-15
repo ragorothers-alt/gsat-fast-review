@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  FILL_SHARE,
   KEEP_EXAMS,
   MS_SHARE,
   PAPERS,
@@ -16,6 +17,7 @@ import {
   paperWeights,
   validExam,
 } from '../src/exam.js';
+import { fillable } from '../src/numeric.js';
 import { UNITS, unitKey } from '../src/units.js';
 
 function seeded(seed = 1) {
@@ -131,6 +133,30 @@ describe('buildPaper', () => {
     }
   });
 
+  it('數學卷約 FILL_SHARE 是選填題（選項都是數值的演算題，不給選項），其他卷沒有；能填答的題在數學卷一律是選填', () => {
+    const big = fakeBank(20, 10);
+    // 每個單元另有 10 題能填答的演算題
+    for (const [subject, units] of Object.entries(UNITS)) {
+      units.forEach((topic, u) => {
+        for (let i = 0; i < 10; i++) big.push({ id: `${subject}-${u * 100 + 150 + i}`, subject, topic, type: 'mc', scratch: true, choices: ['2', '4', '6', '8'], answer: i % 4 });
+      });
+    }
+    const byId = new Map(big.map((q) => [q.id, q]));
+    for (const paper of PAPERS) {
+      let fills = 0;
+      let total = 0;
+      for (let seed = 1; seed <= 20; seed++) {
+        const picked = buildPaper(big, paper, { rng: seeded(seed) });
+        expect(picked.fills).toHaveLength(picked.ids.length);
+        picked.ids.forEach((id, i) => expect(picked.fills[i], id).toBe(Boolean(FILL_SHARE[paper.id]) && fillable(byId.get(id))));
+        fills += picked.fills.filter(Boolean).length;
+        total += picked.ids.length;
+      }
+      expect(fills / total, paper.id).toBeCloseTo(FILL_SHARE[paper.id] ?? 0, 1);
+    }
+    expect(FILL_SHARE).toEqual({ math: expect.any(Number) });
+  });
+
   it('單元的單選題不夠時用同單元的多選題補，題數照樣湊滿', () => {
     const thin = fakeBank(1, 6);
     const byId = new Map(thin.map((q) => [q.id, q]));
@@ -218,6 +244,50 @@ describe('對答案與紀錄', () => {
     expect(answers([2, null, 1])).toBe(false);
     expect(answers([[0], null, [1]])).toBe(false);
     expect(validExam({ ...exam, orders: [[0, 1, 2, 3], ...exam.orders.slice(1)] }, byId)).toBe(false);
+  });
+
+  /** 數學卷的五題選填題：選項是 3/4、1/2、2、−1，正解 3/4 */
+  function fills() {
+    const qs = [0, 1, 2, 3, 4].map((i) => ({ id: `math-${i + 1}`, subject: 'math', topic: UNITS.math[0], type: 'mc', scratch: true, choices: ['$\\frac{3}{4}$', '$\\frac{1}{2}$', '2', '$-1$'], answer: 0 }));
+    const byId = new Map(qs.map((q) => [q.id, q]));
+    const exam = newExam(PAPER_BY_ID.math, { ids: qs.map((q) => q.id), orders: qs.map(() => [3, 2, 1, 0]), fills: qs.map(() => true) }, 0);
+    return { byId, exam };
+  }
+
+  it('gradeExam：選填題填的數值等於正解才得分；等於別的選項、不是任何選項、沒填完都是答錯', () => {
+    const { byId, exam } = fills();
+    exam.answers = ['0.75', '1/2', '5', '3/', null];
+    exam.spent = [10, 10, 10, 10, 30];
+    const r = gradeExam(exam, byId);
+    expect(r).toMatchObject({ total: 5, right: 1, wrong: 3, blank: 1, points: 1 });
+    expect(r.items.map((it) => [it.answer, it.typed, it.right])).toEqual([
+      [0, '0.75', true],
+      [1, '1/2', false],
+      [null, '5', false],
+      [null, '3/', false],
+      [null, undefined, false],
+    ]);
+    expect(r.items.map(examOutcome)).toEqual(['right', 'wrong', 'wrong', 'wrong', 'skip']);
+  });
+
+  it('validExam：選填題的作答是填的字（至少一個數字）；以前存的卷沒有 fills，照選項作答接著考', () => {
+    const { byId, exam } = fills();
+    exam.answers = ['0.75', '-3/4', null, '3/', '12'];
+    expect(validExam(exam, byId)).toBe(true);
+    const answers = (a) => validExam({ ...exam, answers: a }, byId);
+    expect(answers([0, null, null, null, null])).toBe(false);
+    expect(answers(['-', null, null, null, null])).toBe(false);
+    expect(answers(['abc', null, null, null, null])).toBe(false);
+    expect(answers(['', null, null, null, null])).toBe(false);
+    // 沒有 fills 的舊卷：作答是選項索引
+    const { fills: _, ...old } = { ...exam, answers: [0, 1, null, null, 3] };
+    expect(validExam(old, byId)).toBe(true);
+    expect(validExam({ ...old, answers: ['0.75', null, null, null, null] }, byId)).toBe(false);
+    expect(validExam({ ...exam, fills: [true, true] }, byId)).toBe(false);
+    expect(validExam({ ...exam, fills: [1, true, true, true, true] }, byId)).toBe(false);
+    // 多選題不會是選填題
+    const { byId: mixedById, exam: m } = mixed();
+    expect(validExam({ ...m, fills: [true, false, false] }, mixedById)).toBe(false);
   });
 
   it('logExam：記下成績、回傳上一次同一張卷的成績，只留最近幾次', () => {
