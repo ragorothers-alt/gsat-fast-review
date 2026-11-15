@@ -558,7 +558,7 @@ export function initPlay(ctx) {
 
   // ── 小螢幕：題目卡放不下時縮小字級、提示「往下還有」（play-card.js） ─────────────
   const { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim } = initCardFit(
-    { card: el.card, text: el.text, answers: el.answers, more: el.more },
+    { card: el.card, text: el.text, answers: el.answers, more: el.more, answersMore: $('#answers-more') },
     () => !!q && !$('#play').hidden,
   );
   // 模擬考借用同一張題目卡（ui/exam.js）

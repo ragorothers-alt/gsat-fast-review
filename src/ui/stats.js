@@ -66,7 +66,13 @@ export function initStats(ctx) {
 
     renderChart(dailySeries(daily, now, 14), accuracyOf(week), accuracyOf(prev));
 
-    $('#stats-subjects').innerHTML = subjectStats(ctx.bank, cards, SUBJECTS.map((s) => s.id))
+    // 各科的題數不算關掉的單元（例如考數學 A 時的「數B 專屬主題」），和規劃、存量的範圍一致
+    const off = new Set(settings.excludedUnits);
+    $('#stats-subjects').innerHTML = subjectStats(
+      ctx.bank.filter((q) => !isUnitOff(q, off)),
+      cards,
+      SUBJECTS.map((s) => s.id),
+    )
       .map((s) => {
         const subj = SUBJECT_BY_ID[s.subject];
         const m = Math.round(s.mastery * 100);
@@ -147,9 +153,15 @@ export function initStats(ctx) {
     const left = daysUntil(settings.examDate, now);
     $('#stats-plan').hidden = left <= 0;
     if (left <= 0) return;
-    // 這 7 天幾乎沒練的話，改用每日目標推估
-    const recent = week.reduce((a, d) => a + d.answered, 0) / 7;
-    const byGoal = recent < 1;
+    // 近 7 天每天平均幾題：這 7 天裡才開始用的，只除以開始用以來的天數（第一天常常一口氣做很多題，不到 3 天先照每日目標）；
+    // 這 7 天幾乎沒練的話，也改用每日目標推估
+    const { daily } = ctx.state;
+    const before = Object.keys(daily).some((k) => k < week[0].key && daily[k]?.answered > 0);
+    const firstDay = week.findIndex((d) => d.answered > 0);
+    const span = before ? 7 : firstDay < 0 ? 0 : week.length - firstDay;
+    const recent = span ? week.reduce((a, d) => a + d.answered, 0) / span : 0;
+    const fresh3 = span > 0 && span < 3;
+    const byGoal = recent < 1 || fresh3;
     const p = studyPlan({ buckets, total, fresh, daysLeft: left, pace: byGoal ? settings.goal : recent, goals: GOALS, ...rates, sprint: sprintWin });
     const n = (x) => x.toLocaleString('zh-TW');
     const goalBtn = $('#plan-goal');
@@ -167,7 +179,7 @@ export function initStats(ctx) {
       .map(([v, k]) => `<div class="plan-tile"><b>${v}</b><span>${k}</span></div>`)
       .join('');
 
-    const pace = byGoal ? `照每日目標 ${settings.goal} 題` : `照近 7 天每天約 ${Math.round(recent)} 題`;
+    const pace = byGoal ? `${fresh3 ? '剛開始用，先' : ''}照每日目標 ${settings.goal} 題` : `照近 ${span} 天每天約 ${Math.round(recent)} 題`;
     const text = {
       empty: '先在首頁選要練的科目。',
       done: `距學測 ${left} 天。選的範圍已經全部練過了！接下來靠錯題複習和弱點加強，把還不熟的練到熟。`,

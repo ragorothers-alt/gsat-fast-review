@@ -533,12 +533,35 @@
 }
 
 .play-foot {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   row-gap: 8px;
   min-height: 56px;
   flex: none;
+}
+
+/* 選項（非選題的評分要點）放不下：選項區底部淡出，上面浮一顆「還有 N 個選項 ↓」（play-card.js），點了捲下去 */
+.answers-more {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  z-index: 2;
+  transform: translateX(-50%);
+  padding: 3px 12px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--card);
+  box-shadow: 2px 2px 0 var(--shadow);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: fade-in 0.2s ease-out;
+}
+
+.answers-more[hidden] {
+  display: none;
 }
 
 /* 旁邊有「猜對的」「練類似題」時縮窄，真的擠不下才換到下一行 */

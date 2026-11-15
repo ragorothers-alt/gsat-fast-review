@@ -6,8 +6,8 @@ const SWIPE_THRESHOLD = 80;
 /**
  * 小螢幕：題目卡放不下。
  * 先把題目字縮小一級；還是放不下就在卡片底部提示「往下還有」，免得沒看完題目就作答
- * @param {{ card: HTMLElement, text: HTMLElement, answers: HTMLElement, more: HTMLElement }} el
- *   card：題目卡；text：題幹；answers：選項區；more：「往下還有」的按鈕
+ * @param {{ card: HTMLElement, text: HTMLElement, answers: HTMLElement, more: HTMLElement, answersMore?: HTMLElement }} el
+ *   card：題目卡；text：題幹；answers：選項區；more：「往下還有」的按鈕；answersMore：選項區下面還有幾個選項的提示
  * @param {() => boolean} active 作答畫面上現在有題目（視窗大小改變時才需要重算提示）
  */
 export function initCardFit(el, active) {
@@ -47,6 +47,7 @@ export function initCardFit(el, active) {
 
   function fitCard() {
     el.card.scrollTop = 0;
+    stackTopic();
     el.text.classList.remove('compact');
     el.text.style.removeProperty('--fig-fit');
     el.card.classList.remove('tight');
@@ -63,10 +64,37 @@ export function initCardFit(el, active) {
     updateAnswersMore();
   }
 
-  // 篇章結構的長句選項在矮螢幕上自己捲動：下面還有選項時底部淡出
+  // 選項區在矮螢幕上自己捲動（篇章結構的長句選項、小手機上多選題的第五個選項、非選題的評分要點）：
+  // 下面還有選項時底部淡出，另外浮一顆「還有 N 個選項 ↓」——只露出一點點的選項很容易沒看到就送出
   function updateAnswersMore() {
     const a = el.answers;
-    a.classList.toggle('more-below', a.scrollHeight - a.clientHeight - a.scrollTop > 4);
+    const below = a.scrollHeight - a.clientHeight - a.scrollTop > 4;
+    a.classList.toggle('more-below', below);
+    if (!el.answersMore) return;
+    let n = 0;
+    if (below) {
+      const bottom = a.getBoundingClientRect().bottom;
+      for (const b of a.querySelectorAll('.answer')) {
+        const r = b.getBoundingClientRect();
+        if (r.height && r.top + r.height / 2 > bottom) n++;
+      }
+    }
+    el.answersMore.hidden = !n;
+    if (n) el.answersMore.textContent = `還有 ${n} 個${a.classList.contains('open') ? '要點' : '選項'} ↓`;
+  }
+
+  /**
+   * 題目卡第一行的單元名稱被右邊的按鈕（發音、收藏、複製、回報）擠到只剩兩三個字（360 寬的手機、英文題）：
+   * 整個單元名稱移到下一行（.card-tag.stack），看得出現在練的是哪個單元
+   */
+  function stackTopic() {
+    const tag = el.card.querySelector('.card-tag');
+    if (!tag) return;
+    tag.classList.remove('stack');
+    const name = tag.querySelector('.topic-name');
+    if (!name) return;
+    const cut = name.scrollHeight > name.clientHeight + 1 || name.scrollWidth > name.clientWidth + 1;
+    if (cut && name.clientWidth < 5 * (parseFloat(getComputedStyle(name).fontSize) || 13)) tag.classList.add('stack');
   }
 
   /** 選項區會捲動時，把這個選項捲進看得到的地方（作答後的正解） */
@@ -108,6 +136,10 @@ export function initCardFit(el, active) {
 
   el.card.addEventListener('scroll', updateMore, { passive: true });
   el.answers.addEventListener('scroll', updateAnswersMore, { passive: true });
+  el.answersMore?.addEventListener('click', () => {
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.answers.scrollTo({ top: el.answers.scrollHeight, behavior: still ? 'auto' : 'smooth' });
+  });
   window.addEventListener('resize', () => {
     if (active()) {
       updateNeed();

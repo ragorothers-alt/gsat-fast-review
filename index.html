@@ -305,6 +305,8 @@
 
         <div id="answers" class="answers"></div>
         <footer class="play-foot">
+          <!-- 小螢幕上選項（非選題的評分要點）放不下：寫出下面還有幾個，點了捲下去（play-card.js） -->
+          <button id="answers-more" class="answers-more" type="button" hidden></button>
           <!-- 回看這輪剛做過的題目（作答時才有） -->
           <button id="back" class="ghost-btn" type="button" hidden>‹ 上一題</button>
           <!-- 閱讀題組：先收起選項，讓文章占滿題目卡（小手機讀長文用）；換題時自動收回 -->
@@ -423,6 +425,18 @@
         <div class="stats-scroll">
           <div class="stats-head" id="stats-tiles"></div>
 
+          <section class="stats-block paper">
+            <h3>弱點單元<small>學測考得多又常錯的排前面；看解答也算失誤，錯題補穩了就不算</small></h3>
+            <ol id="stats-weak" class="weak-list"></ol>
+            <button id="stats-train" class="primary-btn" type="button">練最弱的 3 個單元</button>
+          </section>
+
+          <!-- 弱點考點：錯題本裡題目最多的考點，點了只練那個考點 -->
+          <section id="stats-weak-kp" class="stats-block paper" hidden>
+            <h3>弱點考點<small>錯題本裡題目最多的考點；點了只練那個考點，錯題先出</small></h3>
+            <ol id="weak-kp-list" class="weak-list"></ol>
+          </section>
+
           <section id="stats-plan" class="stats-block paper">
             <h3><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg>考前規劃<small>依首頁選的科目與單元</small></h3>
             <div id="plan-tiles" class="plan-tiles"></div>
@@ -447,18 +461,6 @@
             <ul id="stock-subjects" class="stock-list"></ul>
           </section>
 
-          <section class="stats-block paper">
-            <h3>弱點單元<small>學測考得多又常錯的排前面；看解答也算失誤，錯題補穩了就不算</small></h3>
-            <ol id="stats-weak" class="weak-list"></ol>
-            <button id="stats-train" class="primary-btn" type="button">練最弱的 3 個單元</button>
-          </section>
-
-          <!-- 弱點考點：錯題本裡題目最多的考點，點了只練那個考點 -->
-          <section id="stats-weak-kp" class="stats-block paper" hidden>
-            <h3>弱點考點<small>錯題本裡題目最多的考點；點了只練那個考點，錯題先出</small></h3>
-            <ol id="weak-kp-list" class="weak-list"></ol>
-          </section>
-
           <section id="stats-pace" class="stats-block paper" hidden>
             <h3>作答速度<small>點一下就作答的單選與是非題；只記在這台裝置</small></h3>
             <p id="pace-text" class="plan-text"></p>
@@ -472,7 +474,7 @@
           </section>
 
           <section class="stats-block paper">
-            <h3>各科<small>練過題數・正確率・考點・熟練度</small></h3>
+            <h3>各科<small>練過題數・正確率・考點・熟練度；不算關掉的單元</small></h3>
             <ul id="stats-subjects" class="subject-stats"></ul>
           </section>
 

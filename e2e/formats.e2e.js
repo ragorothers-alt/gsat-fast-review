@@ -610,6 +610,23 @@ test('非選擇題在小螢幕（360×640）：參考答案加四個要點放不
   expect(before.send.bottom).toBeLessThanOrEqual(640);
   await audit(page, '非選擇題（360×640）');
 
+  // 作答區在捲：沒露出一半的要點有幾個，底部的提示就寫幾個；點了捲到底，提示收起來
+  const hiddenPoints = () =>
+    page.locator('#answers').evaluate((a) => {
+      const bottom = a.getBoundingClientRect().bottom;
+      return [...a.querySelectorAll('.answer')].filter((b) => {
+        const r = b.getBoundingClientRect();
+        return r.top + r.height / 2 > bottom;
+      }).length;
+    });
+  const unseen = await hiddenPoints();
+  if (unseen) {
+    await expect(page.locator('#answers-more')).toHaveText(`還有 ${unseen} 個要點 ↓`);
+    await page.locator('#answers-more').click();
+    await expect.poll(hiddenPoints).toBe(0);
+    await expect(page.locator('#answers-more')).toBeHidden();
+  } else await expect(page.locator('#answers-more')).toBeHidden();
+
   // 每個要點都按得到（放不下的捲進來再按），送出後算答對
   for (let i = 0; i < 4; i++) await points.nth(i).click();
   await expect(page.locator('#answers .answer[aria-pressed="true"]')).toHaveCount(4);

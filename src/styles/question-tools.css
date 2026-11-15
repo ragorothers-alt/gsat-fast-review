@@ -5,6 +5,22 @@
   margin-right: auto;
 }
 
+/* 單元名稱被右邊的按鈕擠到只剩兩三個字：整個移到科目與按鈕的下一行（play-card.js 的 stackTopic） */
+.card-tag.stack {
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.card-tag.stack .tag {
+  margin-right: auto;
+}
+
+.card .card-tag.stack .topic {
+  order: 9;
+  flex: 1 0 100%;
+  margin-right: 0;
+}
+
 .speak-btn,
 .star-btn,
 .copy-btn,
