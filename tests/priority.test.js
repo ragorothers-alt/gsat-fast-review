@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { subjectWeights } from '../src/blueprint.js';
 import { conceptStats, levelWeight, orderFresh, unitPriority, unitShares, unitSkill } from '../src/priority.js';
-import { neverMissed, schedule } from '../src/srs.js';
+import { DAY, cardSkill, neverMissed, schedule } from '../src/srs.js';
 import { UNITS, unitKey } from '../src/units.js';
 
 const NOW = 1_800_000_000_000;
@@ -37,10 +37,23 @@ describe('單元熟練度與優先度', () => {
 
   it('練過的題目裡第一次就答對、沒失手的比例越高，熟練度越高', () => {
     const cards = { p1: schedule(undefined, 'right', NOW), p2: schedule(undefined, 'right', NOW), p3: schedule(undefined, 'wrong', NOW) };
-    const skill = unitSkill(bank, cards, ['physics'], neverMissed);
+    const skill = unitSkill(bank, cards, ['physics'], cardSkill);
     expect(skill.get('physics/波動與光')).toMatchObject({ n: 3, known: 2 });
     expect(skill.get('physics/波動與光').p).toBeCloseTo(3 / 5);
     expect(skill.has('physics/克卜勒定律與萬有引力')).toBe(false);
+  });
+
+  it('失手過的題目隔開時間答對、補穩了也算會：單元的熟練度跟著回升', () => {
+    // p3 答錯後，隔天、3 天後、7 天後各答對一次：第 2 → 3 → 4 → 5 盒
+    let p3 = schedule(undefined, 'wrong', NOW);
+    const at = [1, 4, 11].map((d) => NOW + d * DAY);
+    const steps = at.map((t) => (p3 = schedule(p3, 'right', t)));
+    expect(steps.map((c) => cardSkill(c))).toEqual([1 / 3, 2 / 3, 1]);
+    expect(neverMissed(p3)).toBe(false);
+    const cards = { p1: schedule(undefined, 'right', NOW), p2: schedule(undefined, 'right', NOW), p3 };
+    expect(unitSkill(bank, cards, ['physics'], cardSkill).get('physics/波動與光')).toMatchObject({ n: 3, known: 3 });
+    // 再失手一次就掉回 0
+    expect(cardSkill(schedule(p3, 'wrong', NOW + 40 * DAY))).toBe(0);
   });
 
   it('同樣分量：還不熟的單元比熟的優先；沒練過的有探索加成', () => {

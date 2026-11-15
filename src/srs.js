@@ -125,6 +125,20 @@ export function neverMissed(card) {
   return !!card && card.seen > 0 && !everMissed(card) && !awaitingConfirm(card);
 }
 
+/**
+ * 這題會到什麼程度（0–1），給單元熟練度（priority.js 的 unitSkill）與弱點單元（analysis.js）用：
+ * 答對過從沒失手是 1；第一次就答對、還在等確認的是非題算一半；失手過的照複習答對到哪一盒算——
+ * 剛失手（第 RELEARN_BOX 盒）是 0，之後隔開時間每答對一次升一盒，到 LEARNED_BOX（隔 16 天還答得對）是 1。
+ * 這樣補穩的題目就不再拖著這個單元，一直被當成還不熟。沒作答過的是 0
+ */
+export function cardSkill(card) {
+  if (!card?.seen) return 0;
+  if (neverMissed(card)) return 1;
+  if (awaitingConfirm(card)) return 0.5;
+  if (card.parked) return 0;
+  return Math.min(1, Math.max(0, (card.box - RELEARN_BOX) / (LEARNED_BOX - RELEARN_BOX)));
+}
+
 /** 考前衝刺的天數：考前這幾天把排到考後的複習拉回來 */
 export const SPRINT_DAYS = 14;
 /**
@@ -247,7 +261,7 @@ export function buildQueue(
   const rest = joining.length ? unseen.filter((q) => !dueGroups.has(q.group)) : unseen;
   // bundles 把同組的題目併到這組第一次出現的位置，也就是到期那題的位置
   const due = bundles([...shuffle(dueList, rng).sort((a, b) => cards[a.id].box - cards[b.id].box), ...joining]);
-  const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, neverMissed), concepts: conceptStats(bank, cards, subjects), size, rng }));
+  const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, cardSkill), concepts: conceptStats(bank, cards, subjects), size, rng }));
   const later = bundles(shuffle(laterList, rng).sort((a, b) => dueAt.get(a.id) - dueAt.get(b.id)));
 
   // 第 newEvery、2×newEvery…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。

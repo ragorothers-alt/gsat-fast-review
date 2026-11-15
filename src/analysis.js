@@ -2,7 +2,7 @@
 import { UNIT_SHARE } from './blueprint.js';
 import { PATH_SIZE } from './path.js';
 import { unitShares } from './priority.js';
-import { isWeak, mastery, neverMissed } from './srs.js';
+import { cardSkill, isWeak, mastery, neverMissed } from './srs.js';
 import { dayKey, shiftDay } from './stats.js';
 import { UNITS, isUnitOff, unitKey } from './units.js';
 
@@ -11,7 +11,8 @@ export const MIN_SEEN = 4;
 
 /**
  * 每個單元的統計。失誤 = 答錯 + 看解答（seen − right）。
- * @returns {{ subject: string, unit: string, key: string, total: number, seen: number, misses: number, weak: number, mastery: number }[]}
+ * open：還沒補起來的失誤——每題的失誤乘上這題還不會的程度（1 − cardSkill），失手後隔開時間答對、補穩了的題目就不算
+ * @returns {{ subject: string, unit: string, key: string, total: number, seen: number, misses: number, open: number, weak: number, mastery: number }[]}
  */
 export function unitStats(bank, cards, subjects) {
   const out = [];
@@ -20,22 +21,25 @@ export function unitStats(bank, cards, subjects) {
       const qs = bank.filter((q) => q.subject === subject && q.topic === unit);
       let seen = 0;
       let right = 0;
+      let open = 0;
       let weak = 0;
       for (const q of qs) {
         const c = cards[q.id];
         if (!c) continue;
         seen += c.seen;
         right += c.right;
+        open += Math.max(0, c.seen - c.right) * (1 - cardSkill(c));
         if (isWeak(c)) weak++;
       }
-      out.push({ subject, unit, key: unitKey(subject, unit), total: qs.length, seen, misses: seen - right, weak, mastery: mastery(qs, cards) });
+      out.push({ subject, unit, key: unitKey(subject, unit), total: qs.length, seen, misses: seen - right, open, weak, mastery: mastery(qs, cards) });
     }
   }
   return out;
 }
 
 /**
- * 弱點單元：作答夠多、有失誤的單元，依「失誤率 × 學測分量」由高到低排——學測考得多又常錯的單元最該先補。
+ * 弱點單元：作答夠多、還有沒補起來的失誤的單元，依「失誤率 × 學測分量」由高到低排——學測考得多又常錯的單元最該先補。
+ * 失誤率只算還沒補起來的（unitStats 的 open）：錯過的題目後來隔開時間答對、升到 16 天那一盒，就不再把這個單元留在弱點裡。
  * 失誤率先做平滑 (失誤 + 1) / (作答 + 4)，免得只答過幾題、錯一兩題的單元就排到最前面。
  * share 是這個單元在歷屆學測該科的出題占比（%），給畫面顯示。
  * @param {Question[]} bank
@@ -46,12 +50,13 @@ export function weakUnits(bank, cards, { subjects, excludedUnits = [], limit = 3
   const off = new Set(excludedUnits);
   const shares = unitShares(subjects);
   return unitStats(bank, cards, subjects)
-    .filter((u) => !off.has(u.key) && u.seen >= MIN_SEEN && u.misses > 0)
+    // 小數點後的零頭（快補穩的題目剩下的一點點）不算還有失誤
+    .filter((u) => !off.has(u.key) && u.seen >= MIN_SEEN && u.open >= 0.5)
     .map((u) => ({
       ...u,
-      rate: u.misses / u.seen,
+      rate: u.open / u.seen,
       share: UNIT_SHARE[u.subject]?.[u.unit] ?? 0,
-      score: ((u.misses + 1) / (u.seen + 4)) * (shares.get(u.key) ?? 0),
+      score: ((u.open + 1) / (u.seen + 4)) * (shares.get(u.key) ?? 0),
     }))
     .sort((a, b) => b.score - a.score || b.weak - a.weak)
     .slice(0, limit);

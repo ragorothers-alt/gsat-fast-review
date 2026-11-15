@@ -1,7 +1,7 @@
 // 新題的出題順序：學測考得多、而且你還不熟的單元先出，每天的新題花在最有用的地方。
 //   單元的優先度 = 學測裡的分量 ×（還要加強的程度 + 探索加成）
 //   分量：各科照考卷分（每張考卷一樣重，見 blueprint.js），科內照各單元在歷屆學測的出題占比；
-//   還要加強的程度：這個單元練過的題目裡，第一次就答對、之後也沒失手的比例越低，越要加強；
+//   還要加強的程度：這個單元練過的題目裡，會的比例越低，越要加強（答對過從沒失手的算會；失手過的照複習到哪一盒算，補穩了也算會）；
 //   探索加成：練得少的單元先多試幾題，才知道熟不熟。
 // 單元裡再依熟練度挑難度：還不熟先出基礎題，熟了改出難題與演算題。純邏輯，不碰 DOM。
 import { UNIT_SHARE, subjectWeights } from './blueprint.js';
@@ -34,11 +34,11 @@ export function unitShares(subjects) {
 }
 
 /**
- * 各單元練得怎麼樣：練過幾題（n）、其中第一次就答對而且之後沒失手的有幾題（known），估計的熟練度 p（0–1）
- * @param {(card: Card | undefined) => boolean} isKnown 答對過、從沒失手（srs.js 的 neverMissed）
+ * 各單元練得怎麼樣：練過幾題（n）、其中會的有幾題（known：每題會到什麼程度的加總），估計的熟練度 p（0–1）
+ * @param {(card: Card) => number} skillOf 一題會到什麼程度，0–1（srs.js 的 cardSkill）
  * @returns {Map<string, { n: number, known: number, p: number }>}
  */
-export function unitSkill(bank, cards, subjects, isKnown) {
+export function unitSkill(bank, cards, subjects, skillOf) {
   const wanted = new Set(subjects);
   const out = new Map();
   for (const q of bank) {
@@ -47,7 +47,7 @@ export function unitSkill(bank, cards, subjects, isKnown) {
     const key = unitKey(q.subject, q.topic);
     const u = out.get(key) ?? out.set(key, { n: 0, known: 0, p: 0.5 }).get(key);
     u.n++;
-    if (isKnown(c)) u.known++;
+    u.known += Number(skillOf(c));
   }
   for (const u of out.values()) u.p = (u.known + PRIOR / 2) / (u.n + PRIOR);
   return out;

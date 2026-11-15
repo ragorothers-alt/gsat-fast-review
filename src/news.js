@@ -13,6 +13,14 @@ export const RECENT_DAYS = 7;
 /** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
 export const NEWS = [
   {
+    id: '2026-11-15-3',
+    title: '補起來的弱點會退場',
+    items: [
+      '錯過的題目後來隔開時間答對、升到隔 16 天那一盒，就算補穩了：弱點單元不再算它的失誤，單元的熟練度也跟著回升。',
+      '補穩的單元新題會改出難一點的題目，時間留給還沒補起來的單元。',
+    ],
+  },
+  {
     id: '2026-11-15-2',
     title: '複習量看得更清楚',
     items: [

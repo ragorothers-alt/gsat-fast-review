@@ -325,7 +325,7 @@ export function initStats(ctx) {
     list.innerHTML = '';
     train.hidden = !weak.length;
     if (!weak.length) {
-      list.innerHTML = '<li class="weak-empty">作答紀錄還不夠。每個單元作答 4 次以上才會列入比較，先多練幾輪吧！</li>';
+      list.innerHTML = '<li class="weak-empty">還沒有弱點單元：每個單元作答 4 次以上才會列入比較；錯過的題目隔開時間答對、補穩了就不算。</li>';
       return;
     }
     train.textContent = `練最弱的 ${Math.min(TRAIN_UNITS, weak.length)} 個單元`;

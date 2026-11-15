@@ -40,6 +40,21 @@ describe('weakUnits', () => {
   it('全部答對時沒有弱點單元', () => {
     expect(weakUnits(bank, { a1: c(6, 6) }, { subjects: ['math'] })).toEqual([]);
   });
+
+  it('錯過的題目後來隔開時間答對、補穩了（升到 16 天那一盒）就不再算失誤；補到一半的算一部分', () => {
+    // 兩題各錯 3 次，之後複習答對 4 次
+    const recovered = (box) => c(7, 4, { box, missed: 1 });
+    const healed = weakUnits(bank, { a1: recovered(5), a2: recovered(6) }, { subjects: ['math'] });
+    expect(healed).toEqual([]);
+    // 只補到第 3 盒（失手後答對一次）：還有三分之二的失誤沒補起來
+    const [half] = weakUnits(bank, { a1: recovered(3), a2: recovered(5) }, { subjects: ['math'] });
+    expect(half).toMatchObject({ unit: U1, seen: 14, misses: 6 });
+    expect(half.open).toBeCloseTo(2);
+    expect(half.rate).toBeCloseTo(2 / 14);
+    // 看解答、標成猜的（parked）不管在哪一盒都還沒補起來
+    const [parked] = weakUnits(bank, { a1: c(7, 4, { box: 5, parked: true }), a2: recovered(5) }, { subjects: ['math'] });
+    expect(parked.open).toBeCloseTo(3);
+  });
 });
 
 describe('統計', () => {
