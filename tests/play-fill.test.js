@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FILL_MAX, fillHTML, fillKeyFor, typeFillKey } from '../src/ui/play-fill.js';
+import { FILL_MAX, fillHTML, fillKeyFor, fillProblem, typeFillKey } from '../src/ui/play-fill.js';
 
 /** 從空白開始依序按這些鍵；超過字數的那一鍵不算 */
 const type = (...keys) => keys.reduce((t, k) => typeFillKey(t, k) ?? t, '');
@@ -48,6 +48,18 @@ describe('演算題填答：按鍵之後的答案字串', () => {
   it('不認得的鍵不改變內容', () => {
     expect(typeFillKey('12', 'ok')).toBe('12');
     expect(typeFillKey('12', 'a')).toBe('12');
+  });
+});
+
+describe('演算題填答：沒填完時缺什麼', () => {
+  it('空的、只有負號、完整的數都不提示；分數少分母、小數點後沒數字、分母是 0 各有說法', () => {
+    for (const t of [null, '', '-', '3', '-2.5', '7/4', '0.5/2']) expect(fillProblem(t)).toBeNull();
+    expect(fillProblem('1/')).toBe('分數還缺分母');
+    expect(fillProblem('-7/')).toBe('分數還缺分母');
+    expect(fillProblem('2.')).toBe('小數點後面還沒填');
+    expect(fillProblem('1/2.')).toBe('小數點後面還沒填');
+    expect(fillProblem('3/0')).toBe('分母不能是 0');
+    expect(fillProblem('3/0.0')).toBe('分母不能是 0');
   });
 });
 

@@ -378,10 +378,12 @@ test('只選一科時先載入那一科就能開始玩，其他科在背景補�
   await page.locator('#quit').click();
   await expect(page.locator('#home')).toBeVisible();
   release();
-  // 學習分析要用到每一科：數學載完後各科都有題數
+  // 學習分析要用到每一科：等數學載完才開（各科清單只列選了的英文，其他沒選也沒練過的不列）
   await page.locator('#daily').click();
   await expect(page.locator('#stats')).toBeVisible();
-  await expect(page.locator('#stats-subjects')).toContainText('數學');
+  await expect(page.locator('#stats-subjects li')).toHaveCount(1);
+  await expect(page.locator('#stats-subjects')).toContainText('英文');
+  await expect(page.locator('#stats-subjects-note')).toHaveText(/^另外 9 科沒選/);
 });
 
 test('背景動畫關閉：不載入背景場景的程式', async ({ page }) => {

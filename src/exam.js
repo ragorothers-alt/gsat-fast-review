@@ -121,14 +121,17 @@ export function buildPaper(bank, paper, { excludedUnits = [], flags = {}, rng = 
   const usable = (q) => (q.type === 'mc' || q.type === 'ms') && !flags[q.id] && !isUnitOff(q, off);
   const fillShare = FILL_SHARE[paper.id] ?? 0;
   const asFill = (q) => fillShare > 0 && fillable(q);
+  const share = MS_SHARE[paper.id] ?? 0;
+  const inPaper = bank.filter((q) => q.group && paper.subjects.includes(q.subject));
+  // 英文、社會卷只有單選：有多選題的題組整組不出（只拿掉那一題，組裡「第幾題」的說法會對不上），留著自由練習用
+  const msGroups = share ? new Set() : new Set(inPaper.filter((q) => q.type === 'ms').map((q) => q.group));
   const groups = pickGroups(
-    bank.filter((q) => q.group && paper.subjects.includes(q.subject) && usable(q)),
+    inPaper.filter((q) => usable(q) && !msGroups.has(q.group)),
     paper.groups ?? 0,
     rng,
   );
   const grouped = groups.reduce((a, p) => a + p.length, 0);
   const counts = allocate(paperWeights(paper, excludedUnits), Math.max(0, paper.size - grouped));
-  const share = MS_SHARE[paper.id] ?? 0;
   // 有選填題的卷：能填答的單選題另外一堆（fill），單選題那堆只剩要看選項的
   const pools = new Map(Object.keys(counts).map((k) => [k, { mc: [], ms: [], fill: [] }]));
   for (const q of bank) {
@@ -310,7 +313,8 @@ export function keepPaper(state, exam, byId, now) {
     answers: exam.answers,
     marks: exam.marks,
     spent: exam.spent.map((s) => Math.round(s * 10) / 10),
-    elapsed: Math.round(exam.elapsed),
+    // 和每題用時一樣留到 0.1 秒：成績單的用時是無條件進位到秒，存成整數秒的話重開時可能少 1 秒（9.2 秒交卷是 0:10，存成 9 就變 0:09）
+    elapsed: Math.round(exam.elapsed * 10) / 10,
     limit: exam.limit,
     hashes: exam.ids.map((id) => questionHash(byId.get(id))),
   });

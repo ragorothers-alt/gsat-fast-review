@@ -13,8 +13,9 @@ import { copyQuestion } from './clipboard.js';
 import { sfx } from './feedback.js';
 import { openKeypointsFrom } from './keypoints.js';
 import { choicesClass, groupPosition, markUsed, showPassage } from './passage.js';
-import { fillHTML, fillKeyFor, typeFillKey } from './play-fill.js';
+import { fillHTML, fillKeyFor, fillProblem, typeFillKey } from './play-fill.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
+import { addFigZoom } from './fig-zoom.js';
 import { fillConceptTags, mineHTML, practiceConceptFrom, reviewItem, speakItem, toggleMark } from './review-item.js';
 import { closeSheet, openSheet, topSheet } from './sheet.js';
 
@@ -96,23 +97,35 @@ export function initExam(ctx) {
       $('#exam-resume-text').textContent = `${paper.name}考到一半：已作答 ${answered}／${saved.ids.length} 題，還剩 ${clock(saved.limit - saved.elapsed)}。`;
     }
     const log = ctx.state.examLog ?? [];
-    $('#exam-papers').innerHTML = PAPERS.map((p) => {
+    $('#exam-papers').innerHTML = orderedPapers().map(({ p, mine }) => {
       const last = [...log].reverse().find((e) => e.paper === p.id);
       const subjects = p.subjects.map((s) => SUBJECT_BY_ID[s]);
-      return `<li style="--c:${subjects[0].color}">
+      return `<li style="--c:${subjects[0].color}"${mine ? '' : ' class="other"'}>
         <span class="exam-paper-name">${p.name}</span>
         <span class="exam-paper-meta">${p.size} 題・${p.minutes} 分鐘${p.subjects.length > 1 ? `・${subjects.map((s) => s.name).join('、')}` : ''}${p.groups ? `・含 ${p.groups} 組${p.groupName}` : ''}${FILL_SHARE[p.id] ? '・有選填題' : ''}</span>
-        <span class="exam-paper-last">${last ? `上次 ${pct(examPoints(last), last.total)}%（${md(last.at)}）` : '還沒考過'}</span>
+        <span class="exam-paper-last">${last ? `上次 ${pct(examPoints(last), last.total)}%（${md(last.at)}）` : mine ? '還沒考過' : '沒選這科・還沒考過'}</span>
         <button type="button" class="secondary-btn exam-start" data-paper="${p.id}"${saved ? ' disabled' : ''} aria-label="開始${p.name}模擬考">開始</button>
       </li>`;
     }).join('');
     renderHistory();
   }
 
+  /** 考卷的順序：設定裡主攻的卷先列，再來是有選到科目的，都沒選的排最後（照樣可以考） */
+  function orderedPapers() {
+    const { subjects = [], focus = [] } = ctx.state.settings;
+    const rank = (p) => (focus.includes(p.id) ? 0 : p.subjects.some((s) => subjects.includes(s)) ? 1 : 2);
+    return PAPERS.map((p, i) => ({ p, i, r: rank(p) }))
+      .sort((a, b) => a.r - b.r || a.i - b.i)
+      .map(({ p, r }) => ({ p, mine: r < 2 }));
+  }
+
   /** 考過的卷（新的在上）：點了重開那一份的成績單；題目已經不在題庫裡的不能重開 */
   function renderHistory() {
     const papers = [...(ctx.state.examPapers ?? [])].reverse();
     $('#exam-history').hidden = !papers.length;
+    const jump = $('#exam-history-jump');
+    jump.hidden = !papers.length;
+    jump.textContent = `考過的卷（${papers.length}）↓`;
     $('#exam-past').innerHTML = papers
       .map((p) => {
         const paper = PAPER_BY_ID[p.paper];
@@ -129,6 +142,12 @@ export function initExam(ctx) {
       })
       .join('');
   }
+
+  $('#exam-history-jump').addEventListener('click', () => {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    $('#exam-history').scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+    $('#exam-past button:not(:disabled)')?.focus({ preventScroll: true });
+  });
 
   $('#exam-past').addEventListener('click', (e) => {
     const btn = e.target.closest('[data-at]');
@@ -235,6 +254,7 @@ export function initExam(ctx) {
       .join('・');
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
+    addFigZoom(el.text, q.fig);
     el.progress.textContent = `${i + 1} / ${n}`;
     el.prev.disabled = i === 0;
     el.next.textContent = i === n - 1 ? '檢查並交卷' : '下一題 ›';
@@ -323,6 +343,8 @@ export function initExam(ctx) {
     // 用滑鼠點數字鍵不搶焦點：接著按實體鍵盤的 Enter 是「填好了」，不會重按剛剛點的那顆鍵
     keys.addEventListener('mousedown', (e) => e.preventDefault());
     renderFillValue();
+    // 回到一題上次沒填完的（例如只填了「1/」）：直接說缺什麼
+    showFillHint(fillProblem(fillText));
   }
 
   function renderFillValue() {
@@ -330,6 +352,21 @@ export function initExam(ctx) {
     out.textContent = fillText || '算出答案後填入';
     out.classList.toggle('empty', !fillText);
   }
+
+  /** 填答框下面看得到的提示（沒填完時說缺什麼）；null 是收起來 */
+  function showFillHint(text) {
+    let hint = el.answers.querySelector('.fill-hint');
+    if (!text) return hint?.remove();
+    if (!hint) {
+      hint = document.createElement('p');
+      hint.className = 'fill-hint';
+      el.answers.querySelector('.fill-box').after(hint);
+    }
+    hint.textContent = text;
+  }
+
+  /** 選填題填了字但不是完整的數（「1/」「2.」）：算已作答但會是答錯，題號一覽與交卷時另外提醒 */
+  const unfinished = (i) => !!exam.fills?.[i] && fillProblem(exam.answers[i]) !== null;
 
   /** 按一個填答鍵（字串怎麼變見 play-fill.js）：有數字就算作答、馬上存；刪到沒有數字就是沒作答 */
   function typeKey(k) {
@@ -340,6 +377,7 @@ export function initExam(ctx) {
     fillText = t;
     exam.answers[exam.index] = /\d/.test(t) ? t : null;
     renderFillValue();
+    showFillHint(null);
     ctx.save();
   }
 
@@ -347,6 +385,8 @@ export function initExam(ctx) {
   function fillDone() {
     const text = exam.answers[exam.index];
     if (text === null || parseTyped(text) === null) {
+      const problem = fillProblem(text);
+      showFillHint(problem ? `${problem}：填整數、小數或分數，例如 -3、2.5、7/4` : '先填入答案：整數、小數或分數，例如 -3、2.5、7/4');
       el.status.textContent = '先填入答案：整數、小數或分數，例如 -3、2.5、7/4';
       const box = el.answers.querySelector('.fill-box');
       box.classList.remove('shake');
@@ -369,7 +409,12 @@ export function initExam(ctx) {
     exam.index = to;
     ctx.save();
     showQuestion();
-    if (document.activeElement?.closest?.('#answers') || document.activeElement === document.body) el.answers.querySelector('.answer')?.focus({ preventScroll: true });
+    // 選填題沒有選項可以聚焦：移到題目（數字直接用鍵盤打），不讓焦點掉回頁首
+    if (document.activeElement?.closest?.('#answers') || document.activeElement === document.body) {
+      const target = el.answers.querySelector('.answer') ?? document.querySelector('#q-text');
+      if (target && !target.matches('.answer') && !target.hasAttribute('tabindex')) target.tabIndex = -1;
+      target?.focus({ preventScroll: true });
+    }
   }
 
   function renderMark() {
@@ -427,22 +472,27 @@ export function initExam(ctx) {
 
   function renderIndex() {
     const n = exam.ids.length;
-    const answered = exam.answers.filter((a) => a !== null).length;
+    const half = exam.ids.map((_, i) => unfinished(i));
+    const halves = half.filter(Boolean).length;
+    const answered = exam.answers.filter((a) => a !== null).length - halves;
     const marked = exam.marks.filter(Boolean).length;
-    const blank = n - answered;
+    const blank = n - answered - halves;
     $('#exam-index-sum').textContent =
       `已作答 ${answered}／${n} 題${marked ? `，標記 ${marked} 題` : ''}，還剩 ${clock(exam.limit - exam.elapsed)}。` +
-      (blank ? `還有 ${blank} 題沒作答。` : '全部都作答了。') +
+      (blank ? `還有 ${blank} 題沒作答。` : halves ? '' : '全部都作答了。') +
+      (halves ? `${halves} 題選填沒填完（像是分數少了分母），照這樣交卷算答錯。` : '') +
       '點題號可以跳過去。';
     $('#exam-grid').innerHTML = exam.ids
       .map((_, i) => {
-        const done = exam.answers[i] !== null;
+        const done = exam.answers[i] !== null && !half[i];
         const mark = exam.marks[i];
-        const label = `第 ${i + 1} 題，${done ? '已作答' : '沒作答'}${mark ? '，標記' : ''}${i === exam.index ? '，目前這題' : ''}`;
-        return `<li><button type="button" class="cell${done ? ' done' : ''}${mark ? ' marked' : ''}${i === exam.index ? ' current' : ''}" data-at="${i}" aria-label="${label}">${i + 1}</button></li>`;
+        const label = `第 ${i + 1} 題，${half[i] ? '沒填完' : done ? '已作答' : '沒作答'}${mark ? '，標記' : ''}${i === exam.index ? '，目前這題' : ''}`;
+        return `<li><button type="button" class="cell${done ? ' done' : ''}${half[i] ? ' half' : ''}${mark ? ' marked' : ''}${i === exam.index ? ' current' : ''}" data-at="${i}" aria-label="${label}">${i + 1}</button></li>`;
       })
       .join('');
-    $('#exam-submit').textContent = confirmSubmit ? `還有 ${blank} 題沒作答，確定交卷` : '交卷';
+    $('#exam-legend-half').hidden = !halves;
+    const left = [blank ? `${blank} 題沒作答` : '', halves ? `${halves} 題沒填完` : ''].filter(Boolean).join('、');
+    $('#exam-submit').textContent = confirmSubmit ? `還有 ${left}，確定交卷` : '交卷';
   }
 
   $('#exam-grid').addEventListener('click', (e) => {
@@ -461,8 +511,8 @@ export function initExam(ctx) {
   });
   $('#exam-submit').addEventListener('click', () => {
     if (!exam) return;
-    const blank = exam.answers.filter((a) => a === null).length;
-    // 還有沒作答的：按第二次才交卷
+    const blank = exam.answers.filter((a, i) => a === null || unfinished(i)).length;
+    // 還有沒作答（或選填沒填完）的：按第二次才交卷
     if (blank && !confirmSubmit) {
       confirmSubmit = true;
       renderIndex();
@@ -545,6 +595,8 @@ export function initExam(ctx) {
     $('#x-big').textContent = `${fmt(points)} / ${total}`;
     $('#x-acc').textContent = `${pct(points, total)}%`;
     $('#x-acc-label').textContent = hasMs ? '得分率' : '答對率';
+    // 多選部分給分會出現 0.2 這種分數：欄名寫得分，不寫答對題數
+    $('#x-units-label').textContent = hasMs ? '得分／滿分・平均每題秒數' : '答對／題數・平均每題秒數';
     $('#x-time').textContent = clock(secs);
     $('#x-time-label').textContent = `用時／${paper.minutes} 分`;
     $('#x-blank').textContent = String(blank);
@@ -609,8 +661,8 @@ export function initExam(ctx) {
     const { flags, stars } = ctx.state;
     $('#x-list').innerHTML = misses.map((it, i) => reviewItem(it.q, { index: i, flagged: !!flags[it.id], starred: !!stars[it.id], note: mine(it) })).join('');
     fillConceptTags($('#x-list'));
-    const train = misses.filter((it) => !it.right);
-    $('#x-train').textContent = train.length ? '練這份的錯題' : '再考一份';
+    // 練的就是上面列的那些：答錯、沒作答，以及答對但標記過（沒把握）的
+    $('#x-train').textContent = misses.length ? `練這份的錯題（${misses.length} 題）` : '再考一份';
 
     ctx.world.setCast(paper.subjects);
     ctx.show('exam-report');
@@ -663,7 +715,7 @@ export function initExam(ctx) {
 
   $('#x-home').addEventListener('click', () => ctx.goHome());
   $('#x-train').addEventListener('click', () => {
-    const ids = report ? missed().filter((it) => !it.right).map((it) => it.id) : [];
+    const ids = report ? missed().map((it) => it.id) : [];
     if (ids.length) ctx.startRound('exam', { ids });
     else {
       ctx.goHome();

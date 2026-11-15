@@ -253,6 +253,14 @@
   background: color-mix(in srgb, var(--accent) 45%, var(--card));
 }
 
+/* 選填沒填完：虛線框、不塗滿（看起來介於作答與沒作答之間） */
+.exam-grid .cell.half,
+.exam-grid-legend .cell.half {
+  border-style: dashed;
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, var(--card));
+}
+
 .exam-grid .cell.marked::after,
 .exam-grid-legend .cell.marked::after {
   content: '';
@@ -287,6 +295,19 @@
 
 .exam-grid-legend .cell:not(:first-child) {
   margin-left: 8px;
+}
+
+#exam-legend-half:not([hidden]) {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+/* 模擬考面板最上面「考過的卷 ↓」：小手機上舊卷排在五張新卷下面，一進來看不到 */
+.exam-history-jump {
+  align-self: flex-start;
+  margin: -4px 0 6px;
 }
 
 /* 成績單：各單元得分與每題秒數、花最久的幾題 */

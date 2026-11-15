@@ -6,7 +6,7 @@ import { loadKeypoints } from '../data/keypoints.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { mastery } from '../srs.js';
 import { MODES } from '../session.js';
-import { UNITS, unitKey } from '../units.js';
+import { UNITS, unitKey, unitOutOfScope } from '../units.js';
 import { richHTML } from './rich.js';
 import { closeAllSheets, closeSheet, openSheet, topSheet } from './sheet.js';
 
@@ -45,7 +45,12 @@ export function initKeypoints(ctx) {
     renderConcepts(mine, progress, cover);
     $('#kp-prev').disabled = i <= 0;
     $('#kp-next').disabled = i >= list.length - 1;
-    $('#kp-train').textContent = `練這個單元（${MODES.weak.size} 題）`;
+    // 不在目前範圍的單元（沒選的科、數 B 不考的空間向量…）照樣能看能練，但先講清楚
+    const off = unitOutOfScope(ctx.state.settings, subject, unit);
+    $('#kp-train').textContent = `練這個單元（${MODES.weak.size} 題${off ? `・${off}` : ''}）`;
+    const offNote = $('#kp-off');
+    offNote.hidden = !off;
+    offNote.textContent = off ? `${off}：這個單元不在你選的範圍，平常出題不會出；想看想練都可以。` : '';
     $('#kp-scroll').scrollTop = 0;
 
     points.innerHTML = '';

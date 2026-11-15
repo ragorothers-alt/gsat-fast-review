@@ -251,7 +251,28 @@ test('圖表題：題幹下面畫出圖或資料表，圖帶文字敘述；深�
       const box = await svg.boundingBox();
       expect(box.x).toBeGreaterThanOrEqual(0);
       expect(box.x + box.width).toBeLessThanOrEqual(page.viewportSize().width);
+      // 「放大」：面板裡的圖至少 34rem 寬（刻度約 14px 以上），下面列數據表；Esc 關掉後焦點回到按鈕
+      const zoom = fig.locator('.fig-zoom-btn');
+      await expect(zoom).toHaveAccessibleName('放大圖表、看數據');
+      await zoom.focus();
+      await page.keyboard.press('Enter');
+      const sheet = page.locator('#fig-sheet');
+      await expect(sheet).toBeVisible();
+      await expect(page.locator('#fig-sheet-close')).toBeFocused();
+      const tick = await sheet.locator('.fig-tick').first().evaluate((t) => parseFloat(getComputedStyle(t).fontSize) * t.closest('svg').getScreenCTM().a);
+      expect(tick).toBeGreaterThanOrEqual(14);
+      await expect(sheet.locator('#fig-data thead th')).toHaveText(['時間 (s)', '速度 (m/s)']);
+      await expect(sheet.locator('#fig-data tbody tr')).toHaveCount(4);
+      await expect(sheet.locator('#fig-data tbody tr').nth(1)).toHaveText('28');
+      await audit(page, '圖表放大');
+      await page.keyboard.press('Escape');
+      await expect(sheet).toBeHidden();
+      await expect(zoom).toBeFocused();
+      // 面板關掉後還在作答：Esc 沒有連帶結束這一輪
+      await expect(page.locator('#play')).toBeVisible();
     }
+    // 資料表本身不加放大
+    if (seen.at(-1) === 'table') await expect(fig.locator('.fig-zoom-btn')).toHaveCount(0);
     for (const scheme of ['light', 'dark']) {
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
       await expect(page.locator('html')).toHaveAttribute('data-theme', scheme);
@@ -414,6 +435,15 @@ test('小螢幕按「不會」看解答的長題：三個錯誤選項都收成�
     if (correct) expect(h).toBeGreaterThanOrEqual(44);
     else expect(h).toBeLessThanOrEqual(34);
   }
+  // 收起來的選項是停用的按鈕、Tab 不到：另有一顆「展開全部選項」，用鍵盤按得到
+  const unfold = page.locator('#answers .unfold-btn');
+  await expect(unfold).toHaveText('展開全部選項');
+  await unfold.focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#answers')).not.toHaveClass(/folded/);
+  await expect(unfold).toHaveCount(0);
+  await expect(page.locator('#answers')).toBeFocused();
+  await expect(page.locator('#answers .answer:disabled')).toHaveCount(4);
   // 換下一題（這裡是結算）不會把收起的狀態帶過去：再來一輪的選項是完整的
   await page.locator('#next').click();
   await page.locator('#r-again').click();

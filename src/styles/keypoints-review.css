@@ -445,3 +445,24 @@
   grid-column: 1 / 4;
 }
 
+/* 重點卡面板：這個單元不在目前範圍時的一行說明 */
+.kp-off {
+  margin-top: -4px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* 不在目前範圍的單元：虛線框、排在分隔標題下面 */
+.kp-unit.off {
+  border-style: dashed;
+  border-left-style: solid;
+  background: transparent;
+}
+
+.kp-unit-divider {
+  margin: 14px 2px 2px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+

@@ -103,6 +103,12 @@ export const SPOT_PER_ROUND = 1;
 /** 抽得到的題型，也是插進來當抽查的題型（是非題另外有 needsConfirm；非選擇題是自評） */
 const SPOT_TYPES = new Set(['mc', 'ms']);
 
+/**
+ * 要坐下來好好做的題目：要動筆的演算題、多選題、非選擇題、題組與圖表題。
+ * 設定「只出單題」（通勤、零碎時間）時一般練習不出這些（buildQueue 的 quickOnly），到期了也先擱著，首頁另外列出來
+ */
+export const isLongQuestion = (q) => !!(q.scratch || q.type === 'ms' || q.type === 'open' || q.group || q.fig);
+
 /** 題號的雜湊（FNV-1a）：抽不抽查只看題號 */
 function spotHash(id) {
   let h = 0x811c9dc5;
@@ -156,7 +162,8 @@ export function conceptQuestions(bank, key) {
  * 出題時插進來的（buildQueue）、照新題順序剛好輪到同考點第二題的，都算：作答畫面標「抽查」，答錯時拉回原本那題
  */
 export function spotSourceFor(bank, cards, q, now) {
-  if (!q?.kp || cards[q.id]?.seen) return null;
+  // 抽查本身只用單選、多選：同考點的是非題、非選題剛好輪到時不算抽查（是非題有自己的隔天確認）
+  if (!q?.kp || !SPOT_TYPES.has(q.type) || cards[q.id]?.seen) return null;
   let only = null;
   for (const x of conceptQuestions(bank, conceptKey(q))) {
     if (x.id === q.id || !cards[x.id]?.seen) continue;
@@ -318,7 +325,7 @@ export function buildQueue(
       (!only || only.has(key)) &&
       !skip.has(q.id) &&
       (!formulaOnly || q.formula) &&
-      !(quickOnly && (q.scratch || q.type === 'ms' || q.type === 'open' || q.group || q.fig)) &&
+      !(quickOnly && isLongQuestion(q)) &&
       !neverMissed(cards[q.id])
     );
   });

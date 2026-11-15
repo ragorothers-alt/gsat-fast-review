@@ -8,7 +8,7 @@ import { questionPrompt } from '../prompt.js';
 import { DAY, isWeak, mastery } from '../srs.js';
 import { MODES } from '../session.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
-import { UNITS, unitKey } from '../units.js';
+import { UNITS, unitKey, unitOutOfScope } from '../units.js';
 import { copyQuestion } from './clipboard.js';
 import { openKeypointsFrom } from './keypoints.js';
 import { fillConceptTags, practiceConceptFrom, reviewItem, speakItem, toggleMark } from './review-item.js';
@@ -66,6 +66,12 @@ export function initNotebook(ctx) {
   let items = [];
   let shown = 0;
   let hay = null;
+  /** @type {{ map: Map<string, string[]>, size: number, done: Promise<void> } | null} 正在分段建的索引 */
+  let building = null;
+  /** 已經在等索引建完（建完會重畫一次） */
+  let waiting = false;
+  /** 目前畫面上的搜尋結果是用哪個關鍵字搜的（還沒搜完是 null） */
+  let searched = null;
   let timer = 0;
 
   /** 錯題，最近錯的在前面；被回報的題目先不列 */
@@ -80,9 +86,10 @@ export function initNotebook(ctx) {
     return ctx.bank.filter((q) => stars[q.id]).sort((a, b) => stars[b.id] - stars[a.id]);
   }
 
-  /** 重點分頁的單元清單，依科目、單元的順序 */
+  /** 重點分頁的單元清單，依科目、單元的順序；不在目前範圍的（沒選的科、數 B 不考的單元…）照樣列、排在最後並標出來 */
   function unitItems() {
-    return SUBJECTS.flatMap((s) => (UNITS[s.id] ?? []).map((unit) => ({ subject: s.id, unit })));
+    const all = SUBJECTS.flatMap((s) => (UNITS[s.id] ?? []).map((unit) => ({ subject: s.id, unit, off: unitOutOfScope(ctx.state.settings, s.id, unit) })));
+    return [...all.filter((u) => !u.off), ...all.filter((u) => u.off)];
   }
 
   // 閱讀題組：題組代號算在題目裡，文章和解析一樣排在後面（搜文章裡的字找得到整組）
@@ -96,23 +103,34 @@ const indexEntry = (q) => [
    * 搜尋索引（每題正規化過的文字）：一打開搜尋分頁就趁空檔分段建立，第一次打字不會卡住畫面；
    * 離開錯題本就丟掉，不一直佔著記憶體。題庫補上其他科之後重建。
    */
+  /** @returns {Promise<void>|null} 還在建的話，建完時 resolve；已經建好是 null */
   function prepareIndex() {
-    if (hay && hay.size === ctx.bank.length) return;
+    if (hay && hay.size === ctx.bank.length) return null;
+    if (building && hay === building.map && building.size === ctx.bank.length) return building.done;
     const bank = ctx.bank;
     const map = new Map();
     hay = map;
     let i = 0;
-    const step = (deadline) => {
-      if (hay !== map) return;
-      const until = performance.now() + 8;
-      while (i < bank.length && (deadline?.timeRemaining?.() > 1 || performance.now() < until)) map.set(...indexEntry(bank[i++]));
-      if (i < bank.length) idle(step);
-    };
-    idle(step);
+    const done = new Promise((resolve) => {
+      const step = (deadline) => {
+        if (hay !== map) return resolve(); // 離開錯題本或題庫換了：這一份不用了
+        const until = performance.now() + 8;
+        while (i < bank.length && (deadline?.timeRemaining?.() > 1 || performance.now() < until)) map.set(...indexEntry(bank[i++]));
+        if (i < bank.length) idle(step);
+        else resolve();
+      };
+      idle(step);
+    });
+    building = { map, size: bank.length, done };
+    return done;
   }
   const idle = (fn) => (window.requestIdleCallback ? requestIdleCallback(fn, { timeout: 200 }) : setTimeout(fn, 0));
 
-  /** 每個詞都要出現；題幹、選項、單元裡就找得到的排前面，只在解析裡出現的排後面 */
+  /**
+   * 每個詞都要出現；題幹、選項、單元裡就找得到的排前面，只在解析裡出現的排後面。
+   * 索引還沒建完（剛打開就打字，或題庫剛補上其他科）回傳 null：不在這裡一口氣補完四萬題（畫面會卡一秒多），
+   * 等分段建完再畫
+   */
   function searchItems(query) {
     const terms = norm(query).split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
@@ -121,10 +139,16 @@ const indexEntry = (q) => [
       const exact = ctx.bank.find((q) => q.id === terms[0]);
       if (exact) return [exact];
     }
-    // 索引還沒建完（打字很快，或題庫剛補上其他科）：剩下的直接補完
-    if (!hay || hay.size < ctx.bank.length) {
-      hay ??= new Map();
-      for (const q of ctx.bank) if (!hay.has(q.id)) hay.set(...indexEntry(q));
+    const pending = prepareIndex();
+    if (pending) {
+      if (!waiting) {
+        waiting = true;
+        pending.then(() => {
+          waiting = false;
+          if (view === 'search' && !screen.hidden) render();
+        });
+      }
+      return null;
     }
     const front = [];
     const back = [];
@@ -150,7 +174,10 @@ const indexEntry = (q) => [
   }
 
   function render() {
-    all = view === 'wrong' ? wrongItems() : view === 'star' ? starItems() : view === 'cards' ? unitItems() : searchItems(input.value);
+    const found = view === 'wrong' ? wrongItems() : view === 'star' ? starItems() : view === 'cards' ? unitItems() : searchItems(input.value);
+    const loading = found === null;
+    all = found ?? [];
+    searched = view === 'search' && !loading ? input.value : null;
     const counts = new Map();
     for (const q of all) counts.set(q.subject, (counts.get(q.subject) || 0) + 1);
     if (filter !== 'all' && !counts.has(filter)) filter = 'all';
@@ -185,7 +212,8 @@ const indexEntry = (q) => [
     $('#notebook-tabs').hidden = all.length === 0;
     const empty = $('#notebook-empty');
     empty.hidden = all.length > 0;
-    empty.textContent = searching && query ? `找不到同時有「${query.split(/\s+/).join('」「')}」的題目，換個說法試試。` : v.empty;
+    empty.textContent = loading ? '搜尋中…' : searching && query ? `找不到同時有「${query.split(/\s+/).join('」「')}」的題目，換個說法試試。` : v.empty;
+    $('#notebook-count').parentElement.hidden ||= loading;
 
     const train = $('#notebook-train');
     train.parentElement.hidden = view === 'cards';
@@ -220,10 +248,11 @@ const indexEntry = (q) => [
       byUnit.get(key).push(q);
     }
     list.innerHTML = items
-      .map(({ subject, unit }) => {
+      .map(({ subject, unit, off }, i) => {
         const subj = SUBJECT_BY_ID[subject];
         const m = Math.round(mastery(byUnit.get(unitKey(subject, unit)) ?? [], ctx.state.cards) * 100);
-        return `<li><button type="button" class="kp-unit" data-kp="${subject}/${unit}" style="--c:${subj.color}"><span class="tag">${subj.name}</span><span class="kp-unit-name">${unit}</span><span class="kp-unit-meta">熟練 ${m}%</span><span class="unit-meter" aria-hidden="true"><i style="width:${m}%"></i></span></button></li>`;
+        const divider = off && !items[i - 1]?.off ? '<li class="kp-unit-divider">不在你選的範圍（照樣可以看、可以練）</li>' : '';
+        return `${divider}<li><button type="button" class="kp-unit${off ? ' off' : ''}" data-kp="${subject}/${unit}" style="--c:${subj.color}"><span class="tag">${subj.name}</span><span class="kp-unit-name">${unit}</span><span class="kp-unit-meta">${off ? `${off}・` : ''}熟練 ${m}%</span><span class="unit-meter" aria-hidden="true"><i style="width:${m}%"></i></span></button></li>`;
       })
       .join('');
     more.hidden = true;
@@ -277,6 +306,8 @@ const indexEntry = (q) => [
   input.addEventListener('input', () => {
     clearTimeout(timer);
     timer = setTimeout(render, SEARCH_DELAY);
+    // 列出來的還是上一個關鍵字的結果：先別讓人按「練搜尋到的題目」，搜完才恢復
+    $('#notebook-train').disabled = true;
   });
   input.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter') return;
@@ -313,6 +344,8 @@ const indexEntry = (q) => [
   });
 
   $('#notebook-train').addEventListener('click', () => {
+    // 按鈕停用之前就點到了（或用鍵盤）：畫面上的結果不是現在這個關鍵字的，不開練習
+    if (view === 'search' && searched !== input.value) return;
     // 錯題：照篩的科目（與單元）出錯題複習；收藏、搜尋：出篩出來的這些題
     if (view === 'wrong') ctx.startRound('review', { subjects: filter === 'all' ? SUBJECTS.map((s) => s.id) : [filter], units: unit === 'all' ? null : [unitKey(filter, unit)] });
     else ctx.startRound(view === 'star' ? 'starred' : 'picked', { ids: items.map((q) => q.id) });

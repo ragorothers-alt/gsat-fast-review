@@ -19,6 +19,7 @@ import { lvTag, openRefHTML } from './review-item.js';
 import { conceptOf, loadConcepts } from '../data/concepts.js';
 import { icon } from './icons.js';
 import { plainText, richHTML, stemHTML } from './rich.js';
+import { addFigZoom } from './fig-zoom.js';
 import { sfx } from './feedback.js';
 import { choicesClass, groupPosition, initReadFull, markUsed, showPassage } from './passage.js';
 import { answerButton as createAnswerButton, markChoices, markMultiChoices, markOpenPoints } from './play-answers.js';
@@ -355,6 +356,7 @@ export function initPlay(ctx) {
     useChoices = false;
     showPassage(el.passage, q, where);
     el.text.innerHTML = stemHTML(q);
+    addFigZoom(el.text, q.fig);
     // 作答後要標出這題的考點：考點清單先載好（每科一個小檔，載不下來就不標）
     loadConcepts(q.subject).catch(() => {});
     el.explain.hidden = true;
@@ -1000,7 +1002,14 @@ export function initPlay(ctx) {
   });
 }
 
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+/**
+ * 重播一段 CSS 動畫（拿掉 class、強制排版、再加回去）。系統設了減少動態時動畫只有 0.01ms、看不到，
+ * 就不做：強制排版在開始一輪、換題時要多花將近 0.1 秒（慢的手機）
+ */
 function restartAnimation(node, cls) {
+  if (!node || reducedMotion.matches) return;
   node.classList.remove(cls);
   void node.offsetWidth;
   node.classList.add(cls);

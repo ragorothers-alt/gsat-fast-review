@@ -1,5 +1,6 @@
 // 演算題填答的數字鍵盤：按鍵表、鍵盤的 HTML、按一個鍵之後答案字串怎麼變。
 // 只有字串處理，不碰作答狀態（填到哪、能不能按，由 ui/play.js 管）
+import { parseTyped } from '../numeric.js';
 
 /** 填答的按鍵（四欄）：[鍵, 顯示的字, 給螢幕閱讀器的名稱] */
 const FILL_KEYS = [
@@ -39,6 +40,18 @@ export function typeFillKey(text, k) {
     if (!part.includes('.')) t += part ? '.' : '0.';
   } else if (/^\d$/.test(k)) t += k;
   return t.length > FILL_MAX ? null : t;
+}
+
+/**
+ * 填了數字但還不是完整的數時，缺了什麼（給看得到的提示）；空的、已經是完整的數都是 null
+ * @param {string | null} text
+ */
+export function fillProblem(text) {
+  if (!text || !/\d/.test(text) || parseTyped(text) !== null) return null;
+  if (text.endsWith('/')) return '分數還缺分母';
+  if (text.endsWith('.')) return '小數點後面還沒填';
+  if (/\/[0.]+$/.test(text)) return '分母不能是 0';
+  return '還不是完整的數';
 }
 
 /**

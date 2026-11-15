@@ -165,6 +165,22 @@ describe('buildPaper', () => {
     }
   });
 
+  it('英文、社會卷只有單選：有多選題的題組整組不出；自然卷照樣出', () => {
+    const bank = fakeBank(20);
+    const group = (g, subject, types) =>
+      types.map((type, i) => ({ id: `${subject}-${g}${i}`, subject, topic: UNITS[subject][0], type, group: `${subject}-g${g}`, passage: 'p', choices: FIVE, answer: type === 'ms' ? [0, 1] : 0 }));
+    const withMs = group(901, 'history', ['mc', 'ms', 'mc']);
+    const plain = group(902, 'history', ['mc', 'mc']);
+    const sci = group(903, 'physics', ['mc', 'ms']);
+    const all = [...bank, ...withMs, ...plain, ...sci];
+    for (let seed = 1; seed <= 10; seed++) {
+      const social = buildPaper(all, PAPER_BY_ID.social, { rng: seeded(seed) }).ids;
+      expect(social.some((id) => id.startsWith('history-901'))).toBe(false);
+      expect(social).toEqual(expect.arrayContaining(plain.map((q) => q.id)));
+      expect(buildPaper(all, PAPER_BY_ID.science, { rng: seeded(seed) }).ids).toEqual(expect.arrayContaining(sci.map((q) => q.id)));
+    }
+  });
+
   it('數學卷約 FILL_SHARE 是選填題（選項都是數值的演算題，不給選項），其他卷沒有；能填答的題在數學卷一律是選填', () => {
     const big = fakeBank(20, 10);
     // 每個單元另有 10 題能填答的演算題

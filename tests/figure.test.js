@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkFigure, figureHTML, figureText, fmt, scale } from '../src/figure.js';
+import { checkFigure, figureHTML, figureRows, figureText, fmt, scale } from '../src/figure.js';
 import { questionPrompt } from '../src/prompt.js';
 import { buildQueue } from '../src/srs.js';
 
@@ -22,6 +22,20 @@ const climate = {
   rain: [80, 140, 170, 160, 230, 320, 240, 310, 250, 120, 70, 70],
 };
 const table = { type: 'table', title: '三種金屬的性質', cols: ['金屬', '密度 (g/cm³)', '熔點 (°C)'], rows: [['甲', 2.7, 660], ['乙', 7.9, 1538], ['丙', '$\\mathrm{19.3}$', 1064]] };
+
+describe('figureRows：放大圖表時的數據表', () => {
+  it('折線圖每個點一列；長條圖每個類別一列、每組一欄；氣候圖每月一列；資料表與曲線沒有', () => {
+    expect(figureRows(line)).toEqual({ cols: ['時間 (s)', '速度 (m/s)'], rows: [['0', '0'], ['2', '8'], ['6', '8'], ['8', '0']] });
+    expect(figureRows(bar)).toEqual({ cols: ['', '2000 年', '2020 年'], rows: [['甲', '30', '20'], ['乙', '45', '60'], ['丙', '12', '40']] });
+    const c = figureRows(climate);
+    expect(c.cols).toEqual(['月份', '月均溫 (°C)', '月降水量 (mm)']);
+    expect(c.rows).toHaveLength(12);
+    expect(c.rows[6]).toEqual(['7 月', '29', '240']);
+    expect(figureRows(table)).toBeNull();
+    const curve = { ...line, series: [{ smooth: true, points: Array.from({ length: 40 }, (_, i) => [i, i * i]) }] };
+    expect(figureRows(curve)).toBeNull();
+  });
+});
 
 describe('scale', () => {
   it('取整齊的範圍與刻度；資料不小於 0、最小值不到最大值一半時從 0 開始', () => {

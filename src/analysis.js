@@ -15,10 +15,18 @@ export const MIN_SEEN = 4;
  * @returns {{ subject: string, unit: string, key: string, total: number, seen: number, misses: number, open: number, weak: number, mastery: number }[]}
  */
 export function unitStats(bank, cards, subjects) {
+  // 先照單元分組、掃一次題庫（以前每個單元各 filter 一次整個題庫：一百多個單元 × 四萬多題）
+  const want = new Set(subjects);
+  const byUnit = new Map();
+  for (const q of bank) {
+    if (!want.has(q.subject)) continue;
+    const key = unitKey(q.subject, q.topic);
+    (byUnit.get(key) ?? byUnit.set(key, []).get(key)).push(q);
+  }
   const out = [];
   for (const subject of subjects) {
     for (const unit of UNITS[subject] ?? []) {
-      const qs = bank.filter((q) => q.subject === subject && q.topic === unit);
+      const qs = byUnit.get(unitKey(subject, unit)) ?? [];
       let seen = 0;
       let right = 0;
       let open = 0;

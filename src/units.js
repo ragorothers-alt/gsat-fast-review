@@ -151,6 +151,19 @@ export function withMathExam(excludedUnits, id) {
   return list.filter((k) => !MATH_EXAM_KEYS.has(k)).concat(exam.off.map((u) => unitKey('math', u)));
 }
 
+/**
+ * 這個單元在不在目前選的範圍裡（首頁選的科目、關掉的單元；數學照考哪一份）。
+ * 不在範圍的回傳原因（給重點卡標示），在範圍裡是 null
+ * @param {{ subjects?: string[], excludedUnits?: string[] }} settings
+ */
+export function unitOutOfScope(settings, subject, unit) {
+  if (!(settings.subjects ?? []).includes(subject)) return '沒選這科';
+  const off = settings.excludedUnits ?? [];
+  if (!off.includes(unitKey(subject, unit))) return null;
+  const exam = subject === 'math' && MATH_EXAM_KEYS.has(unitKey(subject, unit)) ? MATH_EXAMS.find((e) => e.id === mathExamOf(off)) : null;
+  return exam && exam.id !== 'AB' ? `${exam.name} 不考` : '單元已關掉';
+}
+
 /** 畫面上的單元名稱：跨單元題列出結合了哪幾個單元；閱讀題組裡沒寫 links 的跨單元題考的是整篇的閱讀理解 */
 export const topicLabel = (q) => (q.links?.length ? `跨單元：${q.links.join('＋')}` : q.group && q.topic === CROSS_UNIT ? '閱讀理解' : q.topic);
 

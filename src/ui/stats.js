@@ -45,13 +45,16 @@ export function initStats(ctx) {
     const week = dailySeries(daily, now, 7);
     const prev = dailySeries(daily, now - 7 * DAY, 7);
     const practiced = Object.keys(cards).filter((id) => known.has(id)).length;
-    // 題庫很大，剛開始練時熟練度很低；不到 10% 時多顯示一位小數，才看得出在進步
-    const m = mastery(ctx.bank, cards) * 100;
+    // 題庫很大，剛開始練時熟練度很低；不到 10% 時多顯示一位小數，才看得出在進步。
+    // 熟練度只算選的範圍（選了的科目、沒關掉的單元），和下面的考前規劃一致：沒選的科目不會把它拉低
+    const offUnits = new Set(settings.excludedUnits);
+    const inScope = ctx.bank.filter((q) => settings.subjects.includes(q.subject) && !isUnitOff(q, offUnits));
+    const m = mastery(inScope.length ? inScope : ctx.bank, cards) * 100;
     const tiles = [
       [`${practiced}`, '練過的題目'],
       [`${week.reduce((a, d) => a + d.answered, 0)}`, '近 7 天作答'],
       [pct(accuracyOf(week)), '近 7 天正確率'],
-      [`${m < 10 ? m.toFixed(1) : Math.round(m)}%`, '整體熟練度'],
+      [`${m < 10 ? m.toFixed(1) : Math.round(m)}%`, inScope.length && inScope.length < ctx.bank.length ? '範圍內熟練度' : '整體熟練度'],
     ];
     $('#stats-tiles').innerHTML = tiles.map(([v, k]) => `<div class="tile"><b>${v}</b><span>${k}</span></div>`).join('');
 
@@ -66,31 +69,39 @@ export function initStats(ctx) {
 
     renderChart(dailySeries(daily, now, 14), accuracyOf(week), accuracyOf(prev));
 
-    // 各科的題數不算關掉的單元（例如考數學 A 時的「數B 專屬主題」），和規劃、存量的範圍一致
+    // 各科的題數不算關掉的單元（例如考數學 A 時的「數B 專屬主題」），和規劃、存量的範圍一致。
+    // 列選了的科目；沒選的科目練過的話接在後面（標「沒選」，紀錄不會看起來不見了），沒選也沒練過的不列
     const off = new Set(settings.excludedUnits);
-    $('#stats-subjects').innerHTML = subjectStats(
+    const chosen = new Set(settings.subjects);
+    const all = subjectStats(
       ctx.bank.filter((q) => !isUnitOff(q, off)),
       cards,
       SUBJECTS.map((s) => s.id),
-    )
+    );
+    const rows = [...all.filter((s) => chosen.has(s.subject)), ...all.filter((s) => !chosen.has(s.subject) && s.practiced > 0)];
+    const hidden = all.length - rows.length;
+    $('#stats-subjects').innerHTML = rows
       .map((s) => {
         const subj = SUBJECT_BY_ID[s.subject];
         const m = Math.round(s.mastery * 100);
         return `<li style="--c:${subj.color}">
           <span class="tag">${subj.name}</span>
-          <span class="subject-meta"><span class="subject-done">練過 ${s.practiced}／${s.total} 題・正確率 ${pct(s.accuracy)}</span>${s.concepts.total ? `<span class="subject-kp">考點 ${s.concepts.touched}／${s.concepts.total}</span>` : ''}</span>
+          <span class="subject-meta"><span class="subject-done">${chosen.has(s.subject) ? '' : '沒選・'}練過 ${s.practiced}／${s.total} 題・正確率 ${pct(s.accuracy)}</span>${s.concepts.total ? `<span class="subject-kp">考點 ${s.concepts.touched}／${s.concepts.total}</span>` : ''}</span>
           <span class="unit-meter" role="img" aria-label="熟練度 ${m}%"><i style="width:${m}%"></i></span>
         </li>`;
       })
       .join('');
+    const note = $('#stats-subjects-note');
+    note.hidden = !hidden;
+    note.textContent = hidden ? `另外 ${hidden} 科沒選、也還沒練過，不列出來；在首頁選了就會出現。` : '';
 
-    renderVocab();
+    renderVocab(chosen.has('english'));
   }
 
-  /** 英文單字依詞彙表級數：練過題數、正確率、熟練度；「練這一級」出這一級還沒學會的題目 */
-  function renderVocab() {
+  /** 英文單字依詞彙表級數：練過題數、正確率、熟練度；「練這一級」出這一級還沒學會的題目。沒選英文、也沒練過單字題就不列 */
+  function renderVocab(english) {
     const levels = vocabLevelStats(ctx.bank, ctx.state.cards);
-    $('#stats-vocab').hidden = !levels.length;
+    $('#stats-vocab').hidden = !levels.length || (!english && !levels.some((r) => r.practiced > 0));
     const color = SUBJECT_BY_ID.english.color;
     $('#vocab-levels').innerHTML = levels
       .map((r) => {

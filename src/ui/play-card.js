@@ -17,6 +17,9 @@ export function initCardFit(el, active) {
     return el.card.scrollHeight - el.card.clientHeight > 2;
   }
 
+  /** 設定裡的字體大小（--fs）：1 是標準 */
+  const fontScale = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--fs')) || 1;
+
   /**
    * 題目卡照內容需要多高（含卡片上方留給貓的那一條），記在 --card-need。
    * 非選擇題的版面用它當題目卡高度的下限（answers.css）：內容短就只留內容的高度，其餘都給參考答案與評分要點。
@@ -56,7 +59,10 @@ export function initCardFit(el, active) {
     el.text.style.removeProperty('--fig-fit');
     el.card.classList.remove('tight');
     updateNeed();
-    if (overflowing()) {
+    // 非選題看了參考答案（評分要點占掉高度）：自己選了大字、特大字的，題幹不縮小，放不下就用「往下還有」捲著看——
+    // 選大字就是要讀得清楚，按了按鈕題幹突然小四分之一反而難讀
+    const keepSize = el.answers.classList.contains('open') && !!el.answers.querySelector('.answer') && fontScale() > 1;
+    if (overflowing() && !keepSize) {
       el.text.classList.add('compact');
       fitFigure();
       updateNeed();
@@ -77,10 +83,11 @@ export function initCardFit(el, active) {
     if (!el.answersMore) return;
     let n = 0;
     if (below) {
+      // 只露出一部分的也算：下緣在選項區外面就是沒看完整（以前用中心點判斷，露出大半的要點會漏算，提示整個不出現）
       const bottom = a.getBoundingClientRect().bottom;
       for (const b of a.querySelectorAll('.answer')) {
         const r = b.getBoundingClientRect();
-        if (r.height && r.top + r.height / 2 > bottom) n++;
+        if (r.height && r.bottom > bottom + 2) n++;
       }
     }
     el.answersMore.hidden = !n;
@@ -111,8 +118,27 @@ export function initCardFit(el, active) {
     else if (r.bottom > box.bottom) a.scrollTop += r.bottom - box.bottom + 8;
   }
 
+  /** 題目的圖表還在題目卡看得到的範圍下面（上半部都還沒露出來）：回傳那張圖 */
+  function figureBelow() {
+    const fig = el.text.querySelector('.fig-svg');
+    if (!fig) return null;
+    const r = fig.getBoundingClientRect();
+    return r.height && r.top + Math.min(r.height / 2, 60) > el.card.getBoundingClientRect().bottom ? fig : null;
+  }
+
+  /**
+   * 「往下還有」：題目卡還沒捲到底就顯示。圖表題的圖整個在下面時改寫「往下看圖」，點了直接捲到圖——
+   * 小手機上一開始只看得到文章和題幹，不說的話會以為題目沒有附圖
+   */
   function updateMore() {
     el.more.hidden = el.card.scrollHeight - el.card.clientHeight - el.card.scrollTop <= 6;
+    if (el.more.hidden) return;
+    const fig = !!figureBelow();
+    const btn = el.more.querySelector('button');
+    if (!btn || btn.dataset.fig === String(fig)) return;
+    btn.dataset.fig = String(fig);
+    btn.lastChild.nodeValue = fig ? '往下看圖' : '往下還有';
+    btn.setAttribute('aria-label', fig ? '往下看圖，捲到題目的圖表' : '往下還有，捲下去看完整題目');
   }
 
   /**
@@ -122,7 +148,28 @@ export function initCardFit(el, active) {
   function foldDim() {
     if (!overflowing() || !el.answers.querySelector('.answer.dim')) return false;
     el.answers.classList.add('folded');
+    // 收起來的選項是停用的按鈕，鍵盤與螢幕閱讀器碰不到：另外放一顆「展開全部選項」（換題時選項區整個重畫，它也跟著不見）
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'link-btn unfold-btn';
+    btn.textContent = '展開全部選項';
+    btn.addEventListener('click', unfold);
+    el.answers.append(btn);
     return true;
+  }
+
+  function unfold() {
+    const btn = el.answers.querySelector('.unfold-btn');
+    // 用鍵盤按的：按鈕消失後焦點留在選項區，往下讀就是展開的選項（不掉回頁首）
+    const keyboard = btn && document.activeElement === btn;
+    el.answers.classList.remove('folded');
+    btn?.remove();
+    if (keyboard) {
+      el.answers.tabIndex = -1;
+      el.answers.focus({ preventScroll: true });
+    }
+    updateMore();
+    updateAnswersMore();
   }
 
   // 點任何一個收起來的選項就全部展開。它們是停用的按鈕、收不到點擊（樣式裡也讓點擊穿過去），
@@ -133,13 +180,20 @@ export function initCardFit(el, active) {
       const r = b.getBoundingClientRect();
       return e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
     });
-    if (!hit) return;
-    el.answers.classList.remove('folded');
-    updateMore();
+    if (hit) unfold();
   });
 
   el.card.addEventListener('scroll', updateMore, { passive: true });
   el.answers.addEventListener('scroll', updateAnswersMore, { passive: true });
+  // 選項區的大小變了（轉向、視窗縮放、題目卡重新分配高度）：等版面排好的下一格再重算「還有 N 個」；
+  // resize 事件當下版面常常還沒排好，量到的是舊的高度
+  if (typeof ResizeObserver === 'function') {
+    let pending = 0;
+    new ResizeObserver(() => {
+      cancelAnimationFrame(pending);
+      pending = requestAnimationFrame(() => active() && updateAnswersMore());
+    }).observe(el.answers);
+  }
   el.answersMore?.addEventListener('click', () => {
     const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
     el.answers.scrollTo({ top: el.answers.scrollHeight, behavior: still ? 'auto' : 'smooth' });
@@ -151,7 +205,12 @@ export function initCardFit(el, active) {
       updateAnswersMore();
     }
   });
-  el.more.addEventListener('click', () => el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: 'smooth' }));
+  el.more.addEventListener('click', () => {
+    const fig = figureBelow();
+    if (fig) return reveal(fig);
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: still ? 'auto' : 'smooth' });
+  });
 
   /**
    * 把 target 捲進題目卡看得到的範圍（像 scrollIntoView 的 nearest），動畫自己用 requestAnimationFrame 做：

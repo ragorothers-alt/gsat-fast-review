@@ -2,7 +2,8 @@
 import { daysUntil, weakUnits } from '../analysis.js';
 import { currentUnit, pathUnits } from '../path.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
-import { dueFor, examStart, isWeak, mastery, neverMissed } from '../srs.js';
+import { MODES } from '../session.js';
+import { dueFor, examStart, isLongQuestion, isWeak, mastery, neverMissed } from '../srs.js';
 import { currentStreak, today } from '../stats.js';
 import { UNITS, isUnitOff, unitKey } from '../units.js';
 import { initPathSheet } from './path.js';
@@ -13,6 +14,8 @@ export function initHome(ctx) {
   const $ = (sel) => document.querySelector(sel);
   const chipsEl = $('#subject-chips');
   const settings = ctx.state.settings;
+  /** 「只出單題」時到期、但一般練習不出的長題（最早到期的在前） */
+  let longDue = [];
 
   // 舊存檔裡若有已不存在的科目就濾掉
   settings.subjects = settings.subjects.filter((id) => SUBJECTS.some((s) => s.id === id));
@@ -56,6 +59,8 @@ export function initHome(ctx) {
   $('#open-notebook').addEventListener('click', () => ctx.showNotebook());
   // 今日進度卡：左半直接開始今天的練習（自由練習），右半（學測倒數）進學習分析
   $('#daily-start').addEventListener('click', () => ctx.startRound('free'));
+  // 到期的長題：最早到期的先練，一輪最多 MODES.long.size 題（這一輪不受「只出單題」限制，設定本身不改）
+  $('#due-long').addEventListener('click', () => longDue.length && ctx.startRound('long', { ids: longDue.slice(0, MODES.long.size).map((q) => q.id) }));
   $('#daily').addEventListener('click', () => ctx.showStats());
   $('#open-stock').addEventListener('click', () => ctx.showStats('stock'));
 
@@ -103,11 +108,19 @@ export function initHome(ctx) {
     ring.style.opacity = day.answered ? '1' : '0'; // 0 題時圓頭線帽會留一個點
     // 旁邊就是「開始 ›」，還沒開始時這行寫短一點（窄螢幕才放得下）：有到期的複習就寫幾題該複習（開始後先出這些）
     const examAt = examStart(settings.examDate);
-    const due = inSelection.filter((q) => {
+    const dueList = inSelection.filter((q) => {
       const c = cards[q.id];
       return c && !neverMissed(c) && dueFor(q.id, c, examAt, now) <= now;
-    }).length;
+    });
+    // 「只出單題」時一般練習不出長題（演算、多選、題組…）：到期的長題不算在這一行，另外一行列出來、點了直接練
+    longDue = settings.quickOnly ? dueList.filter(isLongQuestion).sort((a, b) => dueFor(a.id, cards[a.id], examAt, now) - dueFor(b.id, cards[b.id], examAt, now)) : [];
+    const due = dueList.length - longDue.length;
     $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : due ? `${due} 題該複習` : '今天還沒開始';
+    const longBtn = $('#due-long');
+    longBtn.hidden = !longDue.length;
+    $('#daily-card').classList.toggle('has-long', longDue.length > 0);
+    if (longDue.length) longBtn.textContent = `到期的長題還有 ${longDue.length} 題（演算、多選、題組…）›`;
+    longBtn.title = '開著「只出單題」，一般練習不出這些；點了直接練最早到期的 10 題';
     $('#daily-card').classList.toggle('done', day.answered >= goal);
 
     // 考完就不再倒數

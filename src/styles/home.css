@@ -141,7 +141,25 @@
 .daily {
   width: 100%;
   display: flex;
+  flex-wrap: wrap;
   align-items: stretch;
+}
+
+/* 「只出單題」時到期的長題：今日卡下面整列一行，點了直接練 */
+.due-long {
+  flex: 1 0 100%;
+  min-height: 34px;
+  padding: 6px 14px;
+  border-top: 1.5px dashed var(--line-soft);
+  border-radius: 0 0 20px 20px;
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.daily.has-long .daily-start {
+  border-bottom-left-radius: 0;
 }
 
 .daily-start {

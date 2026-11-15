@@ -16,11 +16,17 @@
   color: var(--accent-2-ink);
 }
 
-.set-note {
+.set-note,
+.stats-note {
   margin-bottom: 10px;
   font-size: 0.78rem;
   line-height: 1.6;
   color: var(--muted);
+}
+
+/* 學習分析各科清單下面的一行說明（沒選的科目不列） */
+.stats-note {
+  margin: 8px 0 0;
 }
 
 .seg {

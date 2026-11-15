@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { buildQueue } from '../src/srs.js';
-import { CROSS_UNIT, MATH_EXAMS, UNITS, isUnitOff, mathExamOf, topicLabel, unitKey, withMathExam } from '../src/units.js';
+import { CROSS_UNIT, MATH_EXAMS, UNITS, isUnitOff, mathExamOf, topicLabel, unitKey, unitOutOfScope, withMathExam } from '../src/units.js';
 
 const cross = { id: 'math-9001', subject: 'math', topic: CROSS_UNIT, links: ['三角比', '平面向量'], formula: false };
 const plain = { id: 'math-9002', subject: 'math', topic: '三角比', formula: false };
@@ -52,6 +52,17 @@ describe('數學考哪一份', () => {
     expect(mathExamOf([...OTHER, B_ONLY])).toBe('A');
     expect(mathExamOf([SPACE, ...OTHER])).toBe('B');
     expect(mathExamOf([B_ONLY, SPACE])).toBeNull();
+  });
+
+  it('unitOutOfScope：沒選的科、考數 B 時的空間向量、自己關掉的單元各寫原因；範圍裡的是 null', () => {
+    const settings = { subjects: ['math'], excludedUnits: [SPACE, unitKey('math', '矩陣')] };
+    expect(unitOutOfScope(settings, 'math', '機率')).toBeNull();
+    expect(unitOutOfScope(settings, 'math', '空間向量與平面直線')).toBe('數學 B 不考');
+    expect(unitOutOfScope(settings, 'math', '矩陣')).toBe('單元已關掉');
+    expect(unitOutOfScope(settings, 'physics', '量子現象')).toBe('沒選這科');
+    expect(unitOutOfScope({ subjects: ['math'], excludedUnits: [B_ONLY] }, 'math', '數B 專屬主題')).toBe('數學 A 不考');
+    // 兩個都關掉：不是任何一份，只說關掉了
+    expect(unitOutOfScope({ subjects: ['math'], excludedUnits: [B_ONLY, SPACE] }, 'math', '數B 專屬主題')).toBe('單元已關掉');
   });
 
   it('換一份只動那兩個單元，其他關掉的單元照舊', () => {

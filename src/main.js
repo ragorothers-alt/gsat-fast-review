@@ -8,6 +8,7 @@ import { initAbout } from './ui/about.js';
 import { applyAppearance, watchSystemTheme } from './ui/appearance.js';
 import { initCloud } from './ui/cloud.js';
 import { initExam } from './ui/exam.js';
+import { initFigZoom } from './ui/fig-zoom.js';
 import { initHome } from './ui/home.js';
 import { initInstall } from './ui/install.js';
 import { initKeypoints } from './ui/keypoints.js';
@@ -44,6 +45,24 @@ const world = lazyWorld(document.querySelector('#world'), {
 applyAppearance(state.settings, world);
 watchSystemTheme(state.settings, world);
 const screens = [...document.querySelectorAll('.screen')];
+
+/**
+ * 換了畫面，焦點還留在剛藏起來的畫面（等於掉回頁首）時，移到新畫面標了 data-focus-start 的地方（標題、成績摘要、題目）：
+ * 鍵盤與螢幕閱讀器使用者從這裡接著往下。等這一輪程式跑完再看，畫面自己設了焦點（例如作答後的「繼續」）就不動；
+ * 開著面板（設定、題號一覽…）時也不動
+ */
+function focusScreen(id) {
+  requestAnimationFrame(() => {
+    const screen = document.getElementById(id);
+    if (!screen || screen.hidden) return;
+    const active = document.activeElement;
+    if (active && active !== document.body && (screen.contains(active) || active.closest('.sheet:not([hidden])'))) return;
+    const target = screen.querySelector('[data-focus-start]');
+    if (!target || target.closest('[hidden]')) return;
+    if (!target.hasAttribute('tabindex')) target.tabIndex = -1;
+    target.focus({ preventScroll: true });
+  });
+}
 const toastEl = document.querySelector('#toast');
 let toastTimer = 0;
 
@@ -75,8 +94,10 @@ const ctx = {
     ctx.toast('進度存不進這台裝置（空間不足或被封鎖），請到設定匯出備份');
   },
   show(id) {
+    const from = screens.find((el) => !el.hidden)?.id;
     for (const el of screens) el.hidden = el.id !== id;
     world.setScene(id);
+    if (from && from !== id) focusScreen(id);
   },
   toast(message) {
     toastEl.textContent = message;
@@ -176,6 +197,7 @@ function start(bank) {
   initReminder(ctx);
   initAbout(ctx);
   initKeypoints(ctx);
+  initFigZoom();
   initWelcome(ctx);
   initNews(ctx);
   for (const name of ['showStats', 'showNotebook', 'openKeypoints', 'openPath', 'openUnits', 'openExam']) needFullBank(name);

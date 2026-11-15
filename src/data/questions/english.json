@@ -51816,12 +51816,12 @@
     "q": "連日大雨導致道路封閉，這也影響了當地居民的生活。",
     "answer": "Days of heavy rain caused road closures, which also affected the lives of local residents.",
     "points": [
-      "這也影響了：, which also affected（非限定關係子句）",
+      "這也影響了：which also／and this also affected",
       "連日大雨：days of heavy rain",
       "導致道路封閉：caused road closures",
       "當地居民的生活：the lives of local residents"
     ],
-    "explain": "逗號後的 which 補充說明前面道路封閉的情況及其影響。常見錯誤是改用 that；非限定關係子句不能用 that。caused 與 affected 都表達過去的事件。",
+    "explain": "逗號後的 which 補充說明前面道路封閉的情況及其影響；也可用 and this also affected 另起一句。常見錯誤是改用 that；非限定關係子句不能用 that。caused 與 affected 都表達過去的事件。",
     "level": 2,
     "kp": "06-04"
   },
@@ -53075,12 +53075,12 @@
     "q": "妹妹在考試前常常緊張，我也有同樣的情況。",
     "answer": "My younger sister often feels nervous before exams, and so do I.",
     "points": [
-      "我也如此：so do I／so am I（依前句動詞）",
+      "我也如此：so do I／I do too（依前句動詞）",
       "妹妹：my younger sister",
       "常緊張：often feels／gets／is nervous",
       "考試前：before exams"
     ],
-    "explain": "so 加助動詞加主詞表示另一人也有同樣情況；前句用 feels 或 gets nervous，後句用 so do I；前句若用 is nervous，後句則用 so am I，須依動詞搭配。",
+    "explain": "so 加助動詞加主詞表示另一人也有同樣情況；前句用 feels 或 gets nervous，後句用 so do I；前句若用 is nervous，後句則用 so am I，須依動詞搭配。不用倒裝的 and I do too（is 則 and I am too）意思相同，也正確。",
     "level": 2,
     "kp": "08-14"
   },
@@ -53391,12 +53391,12 @@
     "q": "含有貴重金屬的舊手機不應該被隨意丟棄。",
     "answer": "Old phones that contain valuable metals should not be thrown away carelessly.",
     "points": [
-      "含有的：that／which contain（關係子句）",
+      "含有的：that／which contain 或 containing",
       "舊手機：old phones／old cell phones",
       "貴重金屬：valuable／precious metals",
       "勿亂丟：should not be thrown away carelessly"
     ],
-    "explain": "that 引導子句修飾 phones，也可用 which。phones 是複數，關係子句用 contain，不能加 s；手機是被丟棄的對象，因此用被動語態。",
+    "explain": "that 引導子句修飾 phones，也可用 which，或改用分詞片語 containing valuable metals。phones 是複數，關係子句用 contain，不能加 s；手機是被丟棄的對象，因此用被動語態。",
     "level": 2,
     "kp": "06-02"
   },

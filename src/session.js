@@ -20,6 +20,8 @@ export const MODES = {
   // 從錯題本的收藏、搜尋結果出發，練指定的題目（opts.ids）
   starred: { name: '收藏的題目', size: 20, explainAlways: true },
   picked: { name: '搜尋到的題目', size: 20, explainAlways: true },
+  // 設定「只出單題」時首頁另外列的到期長題（演算、多選、題組…）：最早到期的先練（opts.ids）
+  long: { name: '到期的長題', size: 10, explainAlways: true },
   // 學習分析「英文單字」的「練這一級」：這一級還沒學會的單字題（opts.ids）
   vocab: { name: '英文單字', size: 20, explainAlways: true },
   // 重點卡的考點、學習分析的弱點考點：只練一個考點（opts.concept＝「科目/考點代號」），錯題本裡的先出，再出沒做過的

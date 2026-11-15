@@ -1,7 +1,7 @@
 // 設定：每日目標、只出單題、主攻的考卷、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目、關於與診斷。底部彈出面板。
 import { daysUntil } from '../analysis.js';
 import { foldLegacy } from '../cloud.js';
-import { PAPERS } from '../exam.js';
+import { PAPERS, PAPER_BY_ID } from '../exam.js';
 import { GOALS, dayKey } from '../stats.js';
 import { DEFAULT_EXAM_DATE, mergeExtras } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
@@ -215,7 +215,17 @@ export function initSettings(ctx, onChange) {
   function render() {
     goalBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(GOALS[i] === settings.goal)));
     quickBtn.setAttribute('aria-checked', String(!!settings.quickOnly));
-    for (const [id, btn] of focusBtns) btn.setAttribute('aria-pressed', String((settings.focus ?? []).includes(id)));
+    // 一科都沒選的考卷主攻了也不會多出題（新題只從選了的科目出）：停用，說明要先去首頁選科
+    const off = [];
+    for (const [id, btn] of focusBtns) {
+      const usable = PAPER_BY_ID[id].subjects.some((s) => settings.subjects.includes(s));
+      btn.disabled = !usable;
+      btn.setAttribute('aria-pressed', String(usable && (settings.focus ?? []).includes(id)));
+      if (!usable) off.push(PAPER_BY_ID[id].name);
+    }
+    const focusNote = $('#focus-note');
+    focusNote.hidden = !off.length;
+    focusNote.textContent = off.length ? `${off.join('、')}：首頁還沒選這些科目，選了才能主攻。` : '';
     dateInput.value = settings.examDate;
     const left = daysUntil(settings.examDate, Date.now());
     $('#exam-left').textContent = left > 0 ? `還有 ${left} 天` : left === 0 ? '就是今天' : '已經考完了';

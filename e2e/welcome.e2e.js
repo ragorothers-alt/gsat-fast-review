@@ -345,6 +345,38 @@ test('設定的「只出單題」：開了以後 10 題一輪、自由練習不�
   expect(await total(page)).toBe(4);
 });
 
+test('「只出單題」開著：到期的長題（多選、圖表、演算）不算在「該複習」裡，今日卡另列一行，點了直接練那些題', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await mockPhysics(page, MIXED);
+  // 四題都練過、答錯過，今天都到期（due 在昨天）
+  await page.addInitScript((ids) => {
+    if (localStorage.getItem('gsat-quiz:v1')) return;
+    const now = Date.now();
+    const cards = {};
+    for (const id of ids) cards[id] = { box: 1, due: now - 86_400_000, seen: 1, right: 0, wrong: 1, parked: false, missed: 1, last: now - 2 * 86_400_000 };
+    for (let i = 0; i < 20; i++) cards[`seed-${900 + i}`] = { box: 2, due: now + 86_400_000, seen: 1, right: 1, wrong: 0, parked: false, missed: 0, last: now - 86_400_000 };
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: { subjects: ['physics'], quickOnly: true } }));
+  }, MIXED.map((q) => q.id));
+  await openHome(page);
+  await expect(page.locator('#daily-acc')).toHaveText('1 題該複習');
+  const long = page.locator('#due-long');
+  await expect(long).toHaveText('到期的長題還有 3 題（演算、多選、題組…）›');
+  await audit(page, '首頁：到期的長題');
+  await long.click();
+  await expect(page.locator('#play')).toBeVisible();
+  await expect(page.locator('#play-progress')).toHaveText('1 / 3');
+  await expect(page.locator('#q-text')).not.toHaveText(SINGLE.q);
+  // 這一輪不改設定
+  expect((await saved(page)).settings.quickOnly).toBe(true);
+  await page.locator('#quit').click();
+  // 關掉「只出單題」：一般練習本來就會出，不另外列
+  await page.locator('#open-settings').click();
+  await page.locator('#quick-toggle').click();
+  await page.locator('#settings-close').click();
+  await expect(long).toBeHidden();
+  await expect(page.locator('#daily-acc')).toHaveText('4 題該複習');
+});
+
 test('設定的「主攻的考卷」：可以複選、照考卷順序存起來；重新整理後還在，再按一次取消', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await seedVeteran(page);
@@ -369,4 +401,20 @@ test('設定的「主攻的考卷」：可以複選、照考卷順序存起來�
   await btn('數學').click();
   await expect(btn('數學')).toHaveAttribute('aria-pressed', 'false');
   expect((await saved(page)).settings.focus).toEqual(['science']);
+});
+
+test('主攻的考卷：首頁一科都沒選的考卷停用，寫明要先選科；選了的照常可以按', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await seedVeteran(page, { subjects: ['math', 'physics'] });
+  await openHome(page);
+  await page.locator('#open-settings').click();
+  const group = page.locator('#focus-options');
+  const btn = (name) => group.getByRole('button', { name, exact: true });
+  for (const name of ['國文', '英文', '社會']) await expect(btn(name)).toBeDisabled();
+  await expect(btn('數學')).toBeEnabled();
+  await expect(btn('自然')).toBeEnabled();
+  await expect(page.locator('#focus-note')).toHaveText('國文、英文、社會：首頁還沒選這些科目，選了才能主攻。');
+  await btn('自然').click();
+  expect((await saved(page)).settings.focus).toEqual(['science']);
+  await audit(page, '設定：主攻的考卷有停用的');
 });

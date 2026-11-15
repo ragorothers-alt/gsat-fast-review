@@ -268,12 +268,16 @@ describe('抽查第一次就答對的單選、多選題', () => {
   });
 
   it('spotSourceFor：沒做過、同考點唯一做過的那題可以抽查了才算；doubtCard 讓那題隔天再確認一次', () => {
-    const bank = [mc(S, 'k1'), mc('u1', 'k1'), mc('u2', 'k1')];
+    const bank = [mc(S, 'k1'), mc('u1', 'k1'), mc('u2', 'k1'), mc('t1', 'k1', { type: 'tf' }), mc('o1', 'k1', { type: 'open' }), mc('m1', 'k1', { type: 'ms' })];
     const cards = { [S]: first };
     expect(spotSourceFor(bank, cards, bank[1], ready)).toBe(S);
     expect(spotSourceFor(bank, cards, bank[1], ready - 1)).toBe(null);
     expect(spotSourceFor(bank, { ...cards, u2: first }, bank[1], ready)).toBe(null);
     expect(spotSourceFor(bank, { ...cards, u1: first }, bank[1], ready)).toBe(null);
+    // 同考點的是非題、非選題剛好輪到不算抽查（答「不會」也不會把原本那題拉回來）；多選算
+    expect(spotSourceFor(bank, cards, bank[3], ready)).toBe(null);
+    expect(spotSourceFor(bank, cards, bank[4], ready)).toBe(null);
+    expect(spotSourceFor(bank, cards, bank[5], ready)).toBe(S);
 
     // 抽查答錯：原本那題改成等確認、隔天到期，出題時當作複習出
     const now = ready + 3600_000;

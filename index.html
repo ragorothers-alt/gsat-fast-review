@@ -177,7 +177,7 @@
           <div class="brand">
             <img src="./icons/icon.svg" alt="" class="brand-icon" />
             <div>
-              <h1>學測快問快答</h1>
+              <h1 data-focus-start>學測快問快答</h1>
               <p class="tagline">免紙筆・單手・離線</p>
             </div>
           </div>
@@ -206,6 +206,7 @@
             <span class="countdown" id="countdown" hidden><small>距學測</small><span class="countdown-n"><b id="countdown-days">0</b><small>天</small></span></span>
             <span class="daily-more"><span class="sr-only">學習</span>分析 ›</span>
           </button>
+          <button class="due-long" id="due-long" type="button" hidden></button>
         </div>
 
         <div class="stage" aria-hidden="true"></div>
@@ -289,7 +290,7 @@
             </div>
             <!-- 閱讀題組的文章：可以自己捲動；換題時不念整篇（aria-live off），要讀時移到這個區塊 -->
             <div id="q-passage" class="passage" role="region" tabindex="0" aria-live="off" aria-label="文章" hidden></div>
-            <div id="q-text" class="q-text"></div>
+            <div id="q-text" class="q-text" data-focus-start></div>
             <div id="q-explain" class="explain" hidden></div>
             <p class="tf-hint" aria-hidden="true">← 左滑錯　・　右滑對 →</p>
             <div class="swipe-hint swipe-yes" aria-hidden="true"><svg class="ico" aria-hidden="true"><use href="#i-ok"/></svg>對</div>
@@ -364,7 +365,7 @@
       <!-- 結算 -->
       <section id="result" class="screen result" hidden>
         <div class="result-scroll">
-          <header class="result-head">
+          <header class="result-head" data-focus-start>
             <p id="r-mode" class="r-mode"></p>
             <p id="r-big" class="r-big"></p>
             <p id="r-badge" class="r-badge" hidden><svg class="ico" aria-hidden="true"><use href="#i-trophy"/></svg>新紀錄！</p>
@@ -388,7 +389,7 @@
       <!-- 模擬考成績 -->
       <section id="exam-report" class="screen result exam-report" hidden>
         <div class="result-scroll">
-          <header class="result-head">
+          <header class="result-head" data-focus-start>
             <p id="x-paper" class="r-mode"></p>
             <p id="x-big" class="r-big"></p>
             <p id="x-cheer" class="r-cheer"></p>
@@ -399,7 +400,7 @@
             </div>
           </header>
           <section class="stats-block paper">
-            <h3>各單元<small>答對／題數・平均每題秒數</small></h3>
+            <h3>各單元<small id="x-units-label">答對／題數・平均每題秒數</small></h3>
             <ul id="x-units" class="x-units"></ul>
           </section>
           <section class="stats-block paper">
@@ -420,7 +421,7 @@
       <section id="stats" class="screen stats" hidden>
         <header class="stats-bar">
           <button id="stats-back" class="icon-btn" type="button" aria-label="回首頁">‹</button>
-          <h2>學習分析</h2>
+          <h2 data-focus-start>學習分析</h2>
         </header>
         <div class="stats-scroll">
           <div class="stats-head" id="stats-tiles"></div>
@@ -476,6 +477,7 @@
           <section class="stats-block paper">
             <h3>各科<small>練過題數・正確率・考點・熟練度；不算關掉的單元</small></h3>
             <ul id="stats-subjects" class="subject-stats"></ul>
+            <p id="stats-subjects-note" class="stats-note" hidden></p>
           </section>
 
           <section id="stats-vocab" class="stats-block paper" hidden>
@@ -489,7 +491,7 @@
       <section id="notebook" class="screen notebook" hidden>
         <header class="stats-bar">
           <button id="notebook-back" class="icon-btn" type="button" aria-label="回首頁">‹</button>
-          <h2>錯題本</h2>
+          <h2 data-focus-start>錯題本</h2>
         </header>
         <div id="notebook-scroll" class="stats-scroll">
           <div class="nb-head paper">
@@ -520,6 +522,20 @@
     </main>
 
     <!-- 單元選擇 -->
+    <!-- 圖表放大：題目卡上的圖放大看、下面列數據（ui/fig-zoom.js） -->
+    <div id="fig-sheet" class="sheet fig-sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="fig-sheet-title">
+        <header class="sheet-head">
+          <h2 id="fig-sheet-title">圖表</h2>
+          <button id="fig-sheet-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <div class="settings-scroll fig-sheet-scroll">
+          <div id="fig-zoom" class="fig-zoom" tabindex="0" role="region" aria-label="放大的圖表，放不下時可以左右捲動"></div>
+          <table id="fig-data" class="fig-table fig-data" hidden></table>
+        </div>
+      </div>
+    </div>
+
     <div id="units-sheet" class="sheet" hidden>
       <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="units-title">
         <header class="sheet-head">
@@ -575,6 +591,7 @@
             <button id="exam-continue" class="primary-btn" type="button">接著考</button>
           </div>
         </div>
+        <button id="exam-history-jump" class="link-btn exam-history-jump" type="button" hidden></button>
         <div class="exam-lists">
           <ul id="exam-papers" class="exam-papers"></ul>
           <section id="exam-history" class="exam-history" aria-labelledby="exam-history-title" hidden>
@@ -594,7 +611,7 @@
         </header>
         <p id="exam-index-sum" class="sheet-tip"></p>
         <ol id="exam-grid" class="exam-grid"></ol>
-        <p class="exam-grid-legend" aria-hidden="true"><span class="cell done"></span>已作答<span class="cell marked"></span>標記<span class="cell"></span>沒作答</p>
+        <p class="exam-grid-legend" aria-hidden="true"><span class="cell done"></span>已作答<span class="cell marked"></span>標記<span class="cell"></span>沒作答<span id="exam-legend-half" hidden><span class="cell half"></span>沒填完</span></p>
         <nav class="sheet-foot">
           <button id="exam-pause" class="secondary-btn" type="button">先離開</button>
           <button id="exam-submit" class="primary-btn" type="button">交卷</button>
@@ -619,6 +636,7 @@
             <p id="quick-note" class="set-note quick-note">通勤、零碎時間用：不出題組、圖表題、多選、演算題與非選擇題。單元闖關、模擬考和指定的題目不受影響。</p>
             <h4 class="set-sub" id="focus-label">主攻的考卷<small>可以複選・新題多出一倍，其他考卷與到期的複習照常</small></h4>
             <div id="focus-options" class="seg" role="group" aria-labelledby="focus-label"></div>
+            <p id="focus-note" class="set-note" hidden></p>
           </section>
 
           <section class="set-group">
@@ -828,6 +846,7 @@
           <button id="kp-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
         </header>
         <p id="kp-meta" class="sheet-tip"></p>
+        <p id="kp-off" class="sheet-tip kp-off" hidden></p>
         <div id="kp-scroll" class="settings-scroll" tabindex="0" role="region" aria-labelledby="kp-title">
           <p id="kp-status" class="nb-empty"></p>
           <div id="kp-body" hidden>

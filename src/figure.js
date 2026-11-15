@@ -327,6 +327,28 @@ export function figureHTML(fig, rich = esc) {
   return `<figure class="fig">${title}<svg class="fig-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(figureText(fig))}">${inner}</svg>${legend}</figure>`;
 }
 
+/**
+ * 圖表的數據表（放大圖表時列在圖下面，讀確切的數值）：表頭與每一列的文字。
+ * 本來就是表的、只有曲線（很多點連成的函數圖形）的沒有表，回傳 null
+ * @param {Figure} fig
+ * @returns {{ cols: string[], rows: string[][] } | null}
+ */
+export function figureRows(fig) {
+  if (fig.type === 'table') return null;
+  if (fig.type === 'climate') return { cols: ['月份', '月均溫 (°C)', '月降水量 (mm)'], rows: fig.temp.map((t, i) => [`${i + 1} 月`, fmt(t), fmt(fig.rain[i])]) };
+  if (fig.type === 'bar') {
+    const name = (s, k) => s.name ?? (fig.series.length > 1 ? `第 ${k + 1} 組` : fig.y.label);
+    return { cols: [fig.x.label || '', ...fig.series.map(name)], rows: fig.x.cats.map((c, i) => [c, ...fig.series.map((s) => fmt(s.values[i]))]) };
+  }
+  const series = fig.series.filter((s) => hasDots(fig, s));
+  if (!series.length) return null;
+  const multi = series.length > 1;
+  return {
+    cols: [...(multi ? [''] : []), fig.x.label, fig.y.label],
+    rows: series.flatMap((s, k) => s.points.map((p) => [...(multi ? [s.name ?? `第 ${k + 1} 組`] : []), fmt(p[0]), fmt(p[1])])),
+  };
+}
+
 // ── 文字敘述 ─────────────────────────────────────────
 
 const KIND = { line: '折線圖', scatter: '散布圖', bar: '長條圖', climate: '氣候圖', table: '表' };

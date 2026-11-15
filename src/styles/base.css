@@ -120,9 +120,17 @@ button:disabled {
   cursor: default;
 }
 
-button:focus-visible {
+button:focus-visible,
+[data-focus-start]:focus-visible,
+#answers:focus-visible {
   outline: 2.5px dashed var(--accent-2-ink);
   outline-offset: 3px;
+}
+
+/* 換畫面時接焦點的標題、題目：用滑鼠、觸控時不畫框 */
+[data-focus-start]:focus:not(:focus-visible),
+#answers:focus:not(:focus-visible) {
+  outline: none;
 }
 
 h1,

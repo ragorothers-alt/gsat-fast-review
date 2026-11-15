@@ -87,9 +87,12 @@ test('模擬考：作答時不對答案，可以標記、跳題、回頭改；�
   await expect(page.locator('#past-back')).toHaveText('回到成績單');
   await page.locator('#past-back').click();
 
-  // 練這份的錯題：一般的作答畫面
+  // 練這份的錯題：練的就是成績單列的那些（含答對但標記過的），一般的作答畫面
+  const listed = await page.locator('#x-list .r-item').count();
+  await expect(page.locator('#x-train')).toHaveText(`練這份的錯題（${listed} 題）`);
   await page.locator('#x-train').click();
   await expect(page.locator('#play')).toBeVisible();
+  await expect(page.locator('#play-progress')).toHaveText(`1 / ${listed}`);
   await expect(page.locator('#play')).not.toHaveClass(/exam/);
   await expect(page.locator('#skip')).toBeVisible();
 
@@ -192,8 +195,11 @@ test('模擬考的選填題：不給選項，用數字鍵填數值、填好了�
   await page.keyboard.press('/');
   await page.keyboard.press('Enter');
   await expect(page.locator('#answer-status')).toHaveText('先填入答案：整數、小數或分數，例如 -3、2.5、7/4');
+  // 看得到的提示寫在填答框下面：缺的是分母
+  await expect(page.locator('#answers .fill-hint')).toHaveText('分數還缺分母：填整數、小數或分數，例如 -3、2.5、7/4');
   await expect(page.locator('#play-progress')).toHaveText('2 / 25');
   await page.keyboard.press('Backspace');
+  await expect(page.locator('#answers .fill-hint')).toHaveCount(0);
   await page.keyboard.press('Backspace');
   await page.keyboard.press('2');
   await page.keyboard.press('Enter');
@@ -204,16 +210,28 @@ test('模擬考的選填題：不給選項，用數字鍵填數值、填好了�
   await expect(page.locator('#answers .fill-value')).toHaveText('-5');
   await page.keyboard.press('ArrowRight');
   await expect(page.locator('#play-progress')).toHaveText('4 / 25');
+  // 第 4 題只填到「3/」就換題：存著，回來時直接說缺分母
+  await page.keyboard.press('3');
+  await page.keyboard.press('/');
+  await page.keyboard.press('ArrowRight');
+  await expect(page.locator('#play-progress')).toHaveText('5 / 25');
+  await page.keyboard.press('ArrowLeft');
+  await expect(page.locator('#answers .fill-value')).toHaveText('3/');
+  await expect(page.locator('#answers .fill-hint')).toHaveText('分數還缺分母');
 
-  // 回頭看：填的都還在，題號一覽算已作答
+  // 回頭看：填的都還在，題號一覽算已作答；沒填完的另外標出來，交卷前也提醒
   await page.keyboard.press('ArrowLeft');
   await expect(page.locator('#answers .fill-value')).toHaveText('-5');
   await page.keyboard.press('ArrowLeft');
   await expect(page.locator('#answers .fill-value')).toHaveText('2');
-  expect((await saved(page)).exam.answers.slice(0, 4)).toEqual(['1', '2', '-5', null]);
+  expect((await saved(page)).exam.answers.slice(0, 5)).toEqual(['1', '2', '-5', '3/', null]);
   await page.locator('#exam-index-btn').click();
   await expect(page.locator('#exam-grid .cell.done')).toHaveCount(3);
+  await expect(page.locator('#exam-grid .cell.half')).toHaveCount(1);
+  await expect(page.locator('#exam-grid .cell').nth(3)).toHaveAttribute('aria-label', '第 4 題，沒填完');
+  await expect(page.locator('#exam-index-sum')).toContainText('1 題選填沒填完');
   await page.locator('#exam-submit').click();
+  await expect(page.locator('#exam-submit')).toHaveText('還有 21 題沒作答、1 題沒填完，確定交卷');
   await page.locator('#exam-submit').click();
 
   // 成績單：填 1 的答對；填 2（等於另一個選項）與 -5（不是任何選項）答錯，列出你填的
@@ -222,8 +240,9 @@ test('模擬考的選填題：不給選項，用數字鍵填數值、填好了�
   await expect(page.locator('#x-list .r-mine').filter({ hasText: '你填：-5' })).toHaveCount(1);
   await expect(page.locator('#x-list .r-mine').filter({ hasText: /^你填：2$/ })).toHaveCount(1);
   const s = await saved(page);
-  expect(s.examLog[0]).toMatchObject({ paper: 'math', total: 25, right: 1, blank: 22 });
-  expect(Object.keys(s.cards)).toHaveLength(3);
+  // 沒填完的「3/」照學測算答錯（不是沒作答）
+  expect(s.examLog[0]).toMatchObject({ paper: 'math', total: 25, right: 1, blank: 21 });
+  expect(Object.keys(s.cards)).toHaveLength(4);
 });
 
 test('考過的卷：交卷後列在模擬考面板，點了重開那一份的成績單與錯題，不再記進今日題數', async ({ page }) => {
@@ -389,6 +408,29 @@ test('學習分析的考前規劃：三個數字方塊加一兩句話；範圍�
   await reopen({ subjects: [] }, 400);
   await expect(text).toHaveText('先在首頁選要練的科目。');
   await expect(page.locator('#plan-tiles')).toBeHidden();
+});
+
+test('學習分析只列選了的科目：沒選的科目練過的接在後面標「沒選」，沒練過的不列；沒選英文就不列單字級數', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(() => {
+    if (localStorage.getItem('gsat-quiz:v1')) return;
+    const now = Date.now();
+    // 練過一題歷史（現在沒選社會）
+    const cards = { 'history-001': { box: 2, due: now + 86_400_000, seen: 1, right: 1, wrong: 0, parked: false, missed: 0, last: now - 86_400_000 } };
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: { subjects: ['math', 'physics'] } }));
+  });
+  await openHome(page);
+  await page.locator('#daily').click();
+  const rows = page.locator('#stats-subjects li');
+  await expect(rows).toHaveCount(3, { timeout: 30_000 });
+  await expect(rows.nth(0)).toContainText('數學');
+  await expect(rows.nth(1)).toContainText('物理');
+  await expect(rows.nth(2)).toContainText('歷史');
+  await expect(rows.nth(2).locator('.subject-done')).toHaveText(/^沒選・練過 1／/);
+  await expect(page.locator('#stats-subjects-note')).toHaveText('另外 7 科沒選、也還沒練過，不列出來；在首頁選了就會出現。');
+  await expect(page.locator('#stats-vocab')).toBeHidden();
+  await expect(page.locator('#stats-tiles')).toContainText('範圍內熟練度');
+  await audit(page, '學習分析：只選兩科');
 });
 
 test('學習分析的英文單字：依詞彙表級數列出練過題數與正確率，「練這一級」只出那一級的單字題', async ({ page }) => {
