@@ -23,7 +23,8 @@ import {
   validExam,
 } from '../src/exam.js';
 import { fillable } from '../src/numeric.js';
-import { UNITS, unitKey } from '../src/units.js';
+import { UNITS, unitKey, withMathExam } from '../src/units.js';
+import { MATH_SHARE, unitShareOf } from '../src/blueprint.js';
 
 function seeded(seed = 1) {
   return () => {
@@ -82,6 +83,32 @@ describe('考卷設定', () => {
     const key = unitKey('math', '數B 專屬主題');
     expect(all[key]).toBeGreaterThan(0);
     expect(paperWeights(math, [key])[key]).toBeUndefined();
+  });
+
+  it('數學 A、B 各自的單元占比：單元都在清單裡、合計約 100；數 A 沒有數B 專屬主題、數 B 沒有空間向量；兩卷平均就是 UNIT_SHARE.math', () => {
+    for (const [id, shares] of Object.entries(MATH_SHARE)) {
+      for (const unit of Object.keys(shares)) expect(UNITS.math, `${id}：${unit}`).toContain(unit);
+      const total = Object.values(shares).reduce((a, b) => a + b, 0);
+      expect(total).toBeGreaterThanOrEqual(99);
+      expect(total).toBeLessThanOrEqual(101);
+    }
+    expect(MATH_SHARE.A['數B 專屬主題']).toBeUndefined();
+    expect(MATH_SHARE.B['空間向量與平面直線']).toBeUndefined();
+    for (const unit of UNITS.math) expect(UNIT_SHARE.math[unit] ?? 0).toBeCloseTo(((MATH_SHARE.A[unit] ?? 0) + (MATH_SHARE.B[unit] ?? 0)) / 2);
+    expect(unitShareOf('math', 'A')).toBe(MATH_SHARE.A);
+    expect(unitShareOf('math', 'AB')).toBe(UNIT_SHARE.math);
+    expect(unitShareOf('math', null)).toBe(UNIT_SHARE.math);
+    expect(unitShareOf('physics', 'A')).toBe(UNIT_SHARE.physics);
+  });
+
+  it('模擬考的數學卷照考哪一份的占比：考數 A 時空間向量的權重比兩卷平均高，考數 B 時數B 專屬主題比較高', () => {
+    const math = PAPER_BY_ID.math;
+    const space = unitKey('math', '空間向量與平面直線');
+    const bOnly = unitKey('math', '數B 專屬主題');
+    const both = paperWeights(math);
+    expect(paperWeights(math, withMathExam([], 'A'))[space]).toBeGreaterThan(both[space]);
+    expect(paperWeights(math, withMathExam([], 'B'))[bOnly]).toBeGreaterThan(both[bOnly]);
+    expect(paperWeights(math, withMathExam([], 'B'))[space]).toBeUndefined();
   });
 });
 

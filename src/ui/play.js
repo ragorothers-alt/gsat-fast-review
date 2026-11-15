@@ -560,7 +560,7 @@ export function initPlay(ctx) {
   }
 
   // ── 小螢幕：題目卡放不下時縮小字級、提示「往下還有」（play-card.js） ─────────────
-  const { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim } = initCardFit(
+  const { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim, reveal } = initCardFit(
     { card: el.card, text: el.text, answers: el.answers, more: el.more, answersMore: $('#answers-more') },
     () => !!q && !$('#play').hidden,
   );
@@ -687,7 +687,7 @@ export function initPlay(ctx) {
     // 多選題、共用選項、非選擇題的要點每一個都要對照著看，是非題只有一列，都不收
     if (q.type === 'mc' && !isBank(q)) foldDim();
     // 小螢幕上題目長時，解析可能在卡片可視範圍外
-    el.explain.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    reveal(el.explain);
     updateMore();
     // 題目卡加了解析會長高，作答區（非選擇題的要點、篇章結構的長句）可能變成要捲動：底部的淡出提示重算一次
     updateAnswersMore();

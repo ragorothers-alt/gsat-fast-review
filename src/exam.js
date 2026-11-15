@@ -1,10 +1,10 @@
 // 模擬考：依 111–115 學測各單元的出題占比抽一份卷，整卷計時，交卷後才對答案。純邏輯，不碰 DOM。
-import { SUBJECT_ITEMS, UNIT_SHARE } from './blueprint.js';
+import { SUBJECT_ITEMS, UNIT_SHARE, unitShareOf } from './blueprint.js';
 import { bundles, groupKind, isBank } from './groups.js';
 import { fillable, matchTyped, parseTyped } from './numeric.js';
 import { isCorrect, msScore } from './session.js';
 import { shuffle } from './srs.js';
-import { UNITS, isUnitOff, unitKey } from './units.js';
+import { UNITS, isUnitOff, mathExamOf, unitKey } from './units.js';
 
 export { UNIT_SHARE };
 
@@ -66,15 +66,17 @@ export function allocate(weights, n) {
   return out;
 }
 
-/** 這張考卷各單元（unitKey）的出題權重：合科試卷先乘上各科的比重；關掉的單元不出 */
+/** 這張考卷各單元（unitKey）的出題權重：合科試卷先乘上各科的比重；關掉的單元不出；數學卷照考哪一份的單元占比（MATH_SHARE） */
 export function paperWeights(paper, excludedUnits = []) {
   const off = new Set(excludedUnits);
+  const mathExam = mathExamOf(excludedUnits);
   const weights = {};
   for (const subject of paper.subjects) {
     const sw = SUBJECT_ITEMS[subject] ?? 1;
+    const shares = unitShareOf(subject, mathExam);
     for (const unit of UNITS[subject] ?? []) {
       const key = unitKey(subject, unit);
-      const share = UNIT_SHARE[subject]?.[unit] ?? 0;
+      const share = shares[unit] ?? 0;
       if (share && !off.has(key)) weights[key] = sw * share;
     }
   }

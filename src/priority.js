@@ -4,7 +4,7 @@
 //   還要加強的程度：這個單元練過的題目裡，會的比例越低，越要加強（答對過從沒失手的算會；失手過的照複習到哪一盒算，補穩了也算會）；
 //   探索加成：練得少的單元先多試幾題，才知道熟不熟。
 // 單元裡再依熟練度挑難度：還不熟先出基礎題，熟了改出難題與演算題。純邏輯，不碰 DOM。
-import { UNIT_SHARE, subjectWeights } from './blueprint.js';
+import { subjectWeights, unitShareOf } from './blueprint.js';
 import { bundles } from './groups.js';
 import { UNITS, unitKey } from './units.js';
 
@@ -20,14 +20,16 @@ const MIN_NEED = 0.08;
 /**
  * 選的科目裡，各單元在學測的分量（合計為 1）
  * @param {string[]} [focus] 主攻的考卷：新題多出（見 blueprint.js 的 subjectWeights）
+ * @param {string | null} [mathExam] 數學考哪一份（units.js 的 mathExamOf）：照那一卷的單元占比
  * @returns {Map<string, number>} unitKey → 分量
  */
-export function unitShares(subjects, focus = []) {
+export function unitShares(subjects, focus = [], mathExam = null) {
   const sw = subjectWeights(subjects, focus);
   const out = new Map();
   for (const subject of subjects) {
     const units = UNITS[subject] ?? [];
-    const pct = units.map((u) => Math.max(SHARE_FLOOR, UNIT_SHARE[subject]?.[u] ?? 0));
+    const share = unitShareOf(subject, mathExam);
+    const pct = units.map((u) => Math.max(SHARE_FLOOR, share[u] ?? 0));
     const total = pct.reduce((a, b) => a + b, 0);
     units.forEach((u, i) => out.set(unitKey(subject, u), ((sw[subject] ?? 0) * pct[i]) / total));
   }

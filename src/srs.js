@@ -1,7 +1,7 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
 import { bundles, takeBundles } from './groups.js';
 import { conceptKey, conceptStats, orderFresh, unitShares, unitSkill } from './priority.js';
-import { isUnitOff, unitKey } from './units.js';
+import { isUnitOff, mathExamOf, unitKey } from './units.js';
 
 export const MINUTE = 60_000;
 export const DAY = 86_400_000;
@@ -133,6 +133,24 @@ export function spotSources(bank, cards, now) {
   return out;
 }
 
+/** 題庫的考點索引（conceptKey → 題目），每個題庫陣列建一次；背景補載科目、題庫變長時重建 */
+const conceptIndex = new WeakMap();
+
+/** 這個考點的所有題目（spotSourceFor 每顯示、每作答一題都要查，不能每次掃四萬多題） */
+export function conceptQuestions(bank, key) {
+  let idx = conceptIndex.get(bank);
+  if (!idx || idx.size !== bank.length) {
+    const map = new Map();
+    for (const q of bank) {
+      const k = conceptKey(q);
+      if (k) (map.get(k) ?? map.set(k, []).get(k)).push(q);
+    }
+    idx = { size: bank.length, map };
+    conceptIndex.set(bank, idx);
+  }
+  return idx.map.get(key) ?? [];
+}
+
 /**
  * 沒做過的 q 是不是在抽查：同一個考點唯一做過的那題可以抽查了，就回傳那一題的 id。
  * 出題時插進來的（buildQueue）、照新題順序剛好輪到同考點第二題的，都算：作答畫面標「抽查」，答錯時拉回原本那題
@@ -140,8 +158,8 @@ export function spotSources(bank, cards, now) {
 export function spotSourceFor(bank, cards, q, now) {
   if (!q?.kp || cards[q.id]?.seen) return null;
   let only = null;
-  for (const x of bank) {
-    if (x.kp !== q.kp || x.subject !== q.subject || x.id === q.id || !cards[x.id]?.seen) continue;
+  for (const x of conceptQuestions(bank, conceptKey(q))) {
+    if (x.id === q.id || !cards[x.id]?.seen) continue;
     if (only) return null;
     only = x;
   }
@@ -347,7 +365,7 @@ export function buildQueue(
   const others = checks.length ? rest.filter((x) => !checks.includes(x)) : rest;
   const fresh = [
     ...checks.map((x) => [x]),
-    ...bundles(orderFresh(others, { shares: unitShares(subjects, focus), skill: unitSkill(bank, cards, subjects, cardSkill), concepts: conceptStats(bank, cards, subjects), size, rng })),
+    ...bundles(orderFresh(others, { shares: unitShares(subjects, focus, mathExamOf(excludedUnits)), skill: unitSkill(bank, cards, subjects, cardSkill), concepts: conceptStats(bank, cards, subjects), size, rng })),
   ];
   const later = bundles(shuffle(laterList, rng).sort((a, b) => dueAt.get(a.id) - dueAt.get(b.id)));
 

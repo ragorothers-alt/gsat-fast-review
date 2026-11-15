@@ -11,6 +11,8 @@ const SWIPE_THRESHOLD = 80;
  * @param {() => boolean} active 作答畫面上現在有題目（視窗大小改變時才需要重算提示）
  */
 export function initCardFit(el, active) {
+  let glide = 0; // reveal 的捲動動畫（requestAnimationFrame 的 id）
+
   function overflowing() {
     return el.card.scrollHeight - el.card.clientHeight > 2;
   }
@@ -46,6 +48,8 @@ export function initCardFit(el, active) {
   }
 
   function fitCard() {
+    // 上一題解析還在捲（reveal）就停掉，新題目從最上面開始
+    cancelAnimationFrame(glide);
     el.card.scrollTop = 0;
     stackTopic();
     el.text.classList.remove('compact');
@@ -149,7 +153,36 @@ export function initCardFit(el, active) {
   });
   el.more.addEventListener('click', () => el.card.scrollBy({ top: el.card.clientHeight * 0.7, behavior: 'smooth' }));
 
-  return { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim };
+  /**
+   * 把 target 捲進題目卡看得到的範圍（像 scrollIntoView 的 nearest），動畫自己用 requestAnimationFrame 做：
+   * 瀏覽器的 smooth scrollIntoView 換題時停不掉（直接設 scrollTop 也擋不住），看完解析馬上按「繼續」，
+   * 新題目會被上一題的捲動帶著往下捲一二十 px。題目卡本身不用捲時照舊交給瀏覽器（桌機上捲的是整頁）
+   */
+  function reveal(target) {
+    cancelAnimationFrame(glide);
+    const card = el.card;
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!overflowing()) return target.scrollIntoView({ block: 'nearest', behavior: still ? 'auto' : 'smooth' });
+    const c = card.getBoundingClientRect();
+    const t = target.getBoundingClientRect();
+    const delta = t.top < c.top ? t.top - c.top : t.bottom > c.bottom ? Math.min(t.bottom - c.bottom, t.top - c.top) : 0;
+    if (!delta) return;
+    const from = card.scrollTop;
+    const to = Math.max(0, Math.min(card.scrollHeight - card.clientHeight, from + delta));
+    if (still) {
+      card.scrollTop = to;
+      return;
+    }
+    const start = performance.now();
+    const step = (now) => {
+      const p = Math.min(1, (now - start) / 280);
+      card.scrollTop = from + (to - from) * (1 - (1 - p) ** 3);
+      if (p < 1) glide = requestAnimationFrame(step);
+    };
+    glide = requestAnimationFrame(step);
+  }
+
+  return { fitCard, updateMore, updateAnswersMore, updateNeed, showAnswer, foldDim, reveal };
 }
 
 /**

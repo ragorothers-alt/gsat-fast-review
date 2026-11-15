@@ -13,6 +13,15 @@ export const RECENT_DAYS = 7;
 /** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
 export const NEWS = [
   {
+    id: '2026-11-16-1',
+    title: '數學 A、B 各自的出題比例',
+    items: [
+      '數學 A、B 兩卷的歷屆試題逐題分開統計：新題、弱點單元與模擬考的數學卷，改照你考的那一份分配。',
+      '考數學 A 的人會多練空間向量（五年約占 15%），考數學 B 的人多練數 B 才考的單元。',
+      '看完解析馬上按「繼續」時，下一題不會再被往下捲。',
+    ],
+  },
+  {
     id: '2026-11-15-12',
     title: '主攻的考卷',
     items: [

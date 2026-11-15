@@ -1,10 +1,10 @@
 // 學習分析：各單元與各科的作答統計、弱點單元、題庫存量、每日走勢、學測倒數。純邏輯，不碰 DOM。
-import { UNIT_SHARE } from './blueprint.js';
+import { unitShareOf } from './blueprint.js';
 import { PATH_SIZE } from './path.js';
 import { unitShares } from './priority.js';
 import { cardSkill, isWeak, mastery, neverMissed } from './srs.js';
 import { dayKey, shiftDay } from './stats.js';
-import { UNITS, isUnitOff, unitKey } from './units.js';
+import { UNITS, isUnitOff, mathExamOf, unitKey } from './units.js';
 
 /** 作答（含看解答）少於這個次數的單元，資料太少，不列入弱點排名 */
 export const MIN_SEEN = 4;
@@ -48,14 +48,16 @@ export function unitStats(bank, cards, subjects) {
  */
 export function weakUnits(bank, cards, { subjects, excludedUnits = [], limit = 3 }) {
   const off = new Set(excludedUnits);
-  const shares = unitShares(subjects);
+  // 數學照考哪一份的單元占比（考數 A 的人，空間向量的分量比兩卷平均高）
+  const exam = mathExamOf(excludedUnits);
+  const shares = unitShares(subjects, [], exam);
   return unitStats(bank, cards, subjects)
     // 小數點後的零頭（快補穩的題目剩下的一點點）不算還有失誤
     .filter((u) => !off.has(u.key) && u.seen >= MIN_SEEN && u.open >= 0.5)
     .map((u) => ({
       ...u,
       rate: u.open / u.seen,
-      share: UNIT_SHARE[u.subject]?.[u.unit] ?? 0,
+      share: unitShareOf(u.subject, exam)[u.unit] ?? 0,
       score: ((u.open + 1) / (u.seen + 4)) * (shares.get(u.key) ?? 0),
     }))
     .sort((a, b) => b.score - a.score || b.weak - a.weak)
