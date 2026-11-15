@@ -148,7 +148,7 @@ test('模擬考：各張考卷標出含幾組題組', async ({ page }) => {
   await expect(page.locator('li:has([data-paper="social"]) .exam-paper-meta')).toContainText('含 3 組題組');
 });
 
-test('圖表題組：整組共用的圖放在文章框裡、題幹下面不重複畫，同組接著出時圖還在；結算的題組文章也附圖', async ({ page }) => {
+test('圖表題組：整組共用的圖和單題的圖表題一樣畫在題幹下面，文章框只放文字；同組下一題圖還在；結算每題也附圖', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const fig = {
     type: 'line',
@@ -174,23 +174,22 @@ test('圖表題組：整組共用的圖放在文章框裡、題幹下面不重�
   await page.locator('[data-mode="ten"]').click();
   await expect(page.locator('#play')).toBeVisible();
 
-  const card = page.locator('#card');
+  // 小手機上文章框只剩兩三行：圖放在框裡要捲很久才看得到，題幹還會被擠出卡片；畫在題幹下面，題目與圖一起看
   const box = page.locator('#q-passage');
-  await expect(card).toHaveClass(/figured/);
-  await expect(box).toHaveAttribute('aria-label', /文章與圖表/);
-  await expect(box.locator('.fig-svg')).toHaveCount(1);
-  await expect(page.locator('#q-text .fig-svg')).toHaveCount(0);
+  await expect(box).toContainText('速度與時間的關係如圖');
+  await expect(box.locator('.fig-svg')).toHaveCount(0);
+  await expect(page.locator('#q-text .fig-svg')).toHaveCount(1);
+  await expect(page.locator('#q-text')).toContainText('甲車的加速度大小');
   await audit(page, '圖表題組');
 
-  // 同組的下一題：文章框不重畫，圖還在
+  // 同組的下一題：文章框不重畫，題幹下面一樣有圖
   await page.locator('#skip').click();
   await page.locator('#next').click();
   await expect(page.locator('#q-topic')).toContainText('題組 2／2');
-  await expect(box.locator('.fig-svg')).toHaveCount(1);
-  await expect(card).toHaveClass(/figured/);
+  await expect(page.locator('#q-text .fig-svg')).toHaveCount(1);
+  await expect(box).toContainText('速度與時間的關係如圖');
 
   await skipToResult(page);
-  const details = page.locator('#r-list .r-passage').first();
-  await expect(details.locator('summary')).toHaveText('題組文章與圖表');
-  await expect(details.locator('.fig-svg')).toHaveCount(1);
+  await expect(page.locator('#r-list .r-passage summary').first()).toHaveText('題組文章');
+  await expect(page.locator('#r-list .r-q .fig-svg')).toHaveCount(2);
 });

@@ -1,7 +1,7 @@
 // 作答畫面：出題、點選／滑動作答、回饋、計時、收藏與回報題目
 import { conceptTodo, weakUnits } from '../analysis.js';
 import { SUBJECT_BY_ID, SUBJECTS } from '../subjects.js';
-import { buildQueue, examStart, isLeech, missCount, needsConfirm, neverMissed, schedule, shuffle } from '../srs.js';
+import { buildQueue, doubtCard, examStart, isLeech, missCount, needsConfirm, neverMissed, schedule, shuffle, spotSourceFor } from '../srs.js';
 import { recordPace } from '../pace.js';
 import { reportQuestion } from '../report.js';
 import { MODES, advance, createSession, current, extend, isCorrect, markLast, msNote, openNote, quickOnlyFor, submit, tick, multiplier } from '../session.js';
@@ -88,7 +88,8 @@ export function initPlay(ctx) {
   let fill = null; // 演算題填答中：{ text } 是目前填的字；改看選項或作答後為 null
   let useChoices = false; // 這題已經改用選項作答
   let pendingRelated = []; // 這題答錯後可以接著練的類似題
-  let lastRight = null; // 剛答對的那題 { id, before, at }：標成猜的時，從答題前的紀錄重新排程
+  let lastRight = null; // 剛答對的那題 { id, before, at, spot }：標成猜的時，從答題前的紀錄重新排程
+  let spotOf = null; // 這題在抽查哪一題（spotSourceFor）：同考點前幾天第一次就答對、等著抽查的那題 id
   let phase = 'idle'; // idle | answering | feedback
   let looking = false; // 正在回看剛剛的題目：暫停計時、不能作答
   // 這題花了多久（作答速度，見 pace.js）：切到背景或回看上一題的時間不算
@@ -119,6 +120,7 @@ export function initPlay(ctx) {
     const build = (quickOnly) =>
       buildQueue(ctx.bank, ctx.state.cards, {
         subjects,
+        focus: ctx.state.settings.focus,
         excludedUnits: allUnits ? [] : ctx.state.settings.excludedUnits,
         onlyUnits: units,
         exclude: [...exclude, ...Object.keys(ctx.state.flags)],
@@ -344,10 +346,11 @@ export function initPlay(ctx) {
     const where = pos ? `題組 ${pos.k}／${pos.n}` : '';
     // 題組：「題組 2／4」放最前面；單元名稱太長時截斷的是名稱，後面的「・類似題」「・多選」這些標記不拆開（play-card.js）
     const extra = s.extra.has(q.id);
+    spotOf = spotSourceFor(ctx.bank, ctx.state.cards, q, Date.now());
     el.topic.innerHTML = topicHTML({
       where,
       name: `${extra ? icon('loop') : ''}${topicLabel(q)}`,
-      kinds: [extra ? '類似題' : '', q.scratch ? '演算題' : q.type === 'ms' ? '多選' : q.type === 'open' ? '非選' : ''],
+      kinds: [extra ? '類似題' : '', spotOf ? '抽查' : '', q.scratch ? '演算題' : q.type === 'ms' ? '多選' : q.type === 'open' ? '非選' : ''],
     });
     useChoices = false;
     showPassage(el.passage, q, where);
@@ -598,10 +601,13 @@ export function initPlay(ctx) {
     const now = Date.now();
     const card = ctx.state.cards[q.id];
     s.reviewRun = card ? s.reviewRun + 1 : 0;
+    // 抽查（見 srs.js）：沒過的話，同考點前幾天第一次就答對的那題也拉回來，隔天再確認一次
+    const spot = !card && spotOf && ctx.state.cards[spotOf] ? { id: spotOf, before: ctx.state.cards[spotOf] } : null;
     ctx.state.cards[q.id] = schedule(card, outcome, now, { confirm: needsConfirm(q) });
+    if (spot && outcome !== 'right') ctx.state.cards[spot.id] = doubtCard(spot.before, now);
     const open = q.type === 'open';
     // 非選擇題是自評，寫到幾個要點已經表達了把握，不另外問「猜的／不太確定」
-    lastRight = outcome === 'right' && !open ? { id: q.id, before: card, at: now } : null;
+    lastRight = outcome === 'right' && !open ? { id: q.id, before: card, at: now, spot } : null;
     const before = today(ctx.state, now).answered;
     recordAnswer(ctx.state, outcome, now);
     recordPace(ctx.state, q, outcome, (now - shownAt - pausedMs - (pauseStart ? now - pauseStart : 0)) / 1000);
@@ -664,6 +670,7 @@ export function initPlay(ctx) {
     if (q.type === 'ms' && outcome === 'wrong') el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">${msNote(q, chosen)}</span>`);
     if (typed !== null && outcome === 'wrong' && displayValue === null) el.explain.insertAdjacentHTML('afterbegin', `<span class="ms-score">你填的 ${typed} 不是任何一個選項的值</span>`);
     if (s.path && outcome !== 'right') el.explain.insertAdjacentHTML('beforeend', `<span class="path-note">${icon('loop')}這關最後補了一題類似題</span>`);
+    if (spot && outcome !== 'right') el.explain.insertAdjacentHTML('beforeend', `<span class="path-note spot-note">${icon('loop')}這題是抽查：同一個考點前幾天第一次就答對的那題，明天也再考一次</span>`);
     // 卡關：同一題失手好幾次了，多半是背了答案又忘。提醒先回頭看這個單元的重點（快閃在計時，不打斷）
     const after = ctx.state.cards[q.id];
     if (outcome !== 'right' && s.timeLeft === null && isLeech(after)) {
@@ -754,6 +761,9 @@ export function initPlay(ctx) {
     const mark = was === kind ? null : kind;
     const now = Date.now();
     ctx.state.cards[lastRight.id] = schedule(lastRight.before, mark ?? 'right', now, { confirm: needsConfirm(q) });
+    // 抽查答對後標成猜的、不太確定：和答錯一樣拉回原本那題；取消標記就放回去（last 記成現在，同步才送得到另一台）
+    const spot = lastRight.spot;
+    if (spot && !!mark !== !!was) ctx.state.cards[spot.id] = mark ? doubtCard(spot.before, now) : { ...spot.before, last: now };
     if (!was && mark) adjustRight(ctx.state, -1, lastRight.at);
     if (was && !mark) adjustRight(ctx.state, 1, lastRight.at);
     markLast(s, mark);

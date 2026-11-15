@@ -65,8 +65,8 @@ test('模擬考：作答時不對答案，可以標記、跳題、回頭改；�
 
   await expect(page.locator('#exam-report')).toBeVisible();
   await expect(page.locator('#x-big')).toHaveText(/^\d+ \/ 40$/);
-  // 社會卷只有單選：得分就是答對題數
-  await expect(page.locator('#x-acc-label')).toHaveText('答對率');
+  // 社會卷的單題都是單選；抽到的題組偶爾有多選題（約 3% 的社會題組有，抽 3 組約一成機率），有的話照學測部分給分、改稱得分率
+  await expect(page.locator('#x-acc-label')).toHaveText(/^(答對率|得分率)$/);
   await expect(page.locator('#x-blank')).toHaveText('35');
   await expect(page.locator('#x-units li').first()).toBeVisible();
   await expect(page.locator('#x-slow li')).toHaveCount(5);

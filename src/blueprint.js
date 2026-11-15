@@ -33,18 +33,25 @@ export const UNIT_SHARE = {
   civics: { 公民身分與人權: 17, 社會與文化: 18, 民主政治與參與: 9, 政府與憲政: 12, 民法與生活: 6, 刑法與行政法: 11, 市場與價格: 16, 市場失靈與政府: 3, 國民所得與國際貿易: 8 },
 };
 
+/** 設定的「主攻的考卷」：新題的分量是其他考卷的幾倍 */
+export const FOCUS_BOOST = 2;
+
 /**
  * 選了這幾科時，各科在學測裡的分量：每張考卷一樣重（級分各占一份），合科試卷再依各科小題數分。
  * 例如選了數學和自然四科：數學 1/2，物理、化學、生物、地科合起來 1/2。
+ * focus：主攻的考卷（PAPER_SUBJECTS 的鍵），分量是其他考卷的 FOCUS_BOOST 倍；
+ * 例如五張卷都選、主攻數學與自然：這兩張各 2/7，其他三張各 1/7（主攻的合計約六成）。全部主攻等於沒有主攻
  * @returns {Record<string, number>} 合計為 1
  */
-export function subjectWeights(subjects) {
+export function subjectWeights(subjects, focus = []) {
   const papers = [...new Set(subjects.map((s) => PAPER_OF[s]).filter(Boolean))];
+  const weight = (paper) => (focus.includes(paper) ? FOCUS_BOOST : 1);
+  const sum = papers.reduce((a, p) => a + weight(p), 0);
   const out = {};
   for (const paper of papers) {
     const inPaper = PAPER_SUBJECTS[paper].filter((s) => subjects.includes(s));
     const total = inPaper.reduce((a, s) => a + (SUBJECT_ITEMS[s] ?? 1), 0);
-    for (const s of inPaper) out[s] = (SUBJECT_ITEMS[s] ?? 1) / total / papers.length;
+    for (const s of inPaper) out[s] = (((SUBJECT_ITEMS[s] ?? 1) / total) * weight(paper)) / sum;
   }
   return out;
 }

@@ -6,7 +6,7 @@ import { usedOptions } from '../groups.js';
 import { fillUnit, parseTyped } from '../numeric.js';
 import { questionPrompt } from '../prompt.js';
 import { msNote } from '../session.js';
-import { needsConfirm, schedule } from '../srs.js';
+import { doubtCard, needsConfirm, schedule, spotSourceFor } from '../srs.js';
 import { recordAnswer } from '../stats.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
 import { copyQuestion } from './clipboard.js';
@@ -515,7 +515,11 @@ export function initExam(ctx) {
     for (const it of result.items) {
       const outcome = examOutcome(it);
       if (!outcome) continue;
-      ctx.state.cards[it.id] = schedule(ctx.state.cards[it.id], outcome, now, { confirm: needsConfirm(byId.get(it.id)) });
+      const before = ctx.state.cards[it.id];
+      // 抽查（見 srs.js）：同考點前幾天第一次就答對、等著抽查的那題，這題沒答對就拉回來隔天再確認
+      const spot = before ? null : spotSourceFor(ctx.bank, ctx.state.cards, byId.get(it.id), now);
+      ctx.state.cards[it.id] = schedule(before, outcome, now, { confirm: needsConfirm(byId.get(it.id)) });
+      if (spot && outcome !== 'right') ctx.state.cards[spot] = doubtCard(ctx.state.cards[spot], now);
       recordAnswer(ctx.state, outcome, now);
     }
     const prev = logExam(ctx.state, paper.id, result, now);

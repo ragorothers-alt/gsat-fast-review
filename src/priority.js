@@ -19,10 +19,11 @@ const MIN_NEED = 0.08;
 
 /**
  * 選的科目裡，各單元在學測的分量（合計為 1）
+ * @param {string[]} [focus] 主攻的考卷：新題多出（見 blueprint.js 的 subjectWeights）
  * @returns {Map<string, number>} unitKey → 分量
  */
-export function unitShares(subjects) {
-  const sw = subjectWeights(subjects);
+export function unitShares(subjects, focus = []) {
+  const sw = subjectWeights(subjects, focus);
   const out = new Map();
   for (const subject of subjects) {
     const units = UNITS[subject] ?? [];

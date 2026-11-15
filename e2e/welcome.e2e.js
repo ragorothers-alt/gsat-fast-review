@@ -344,3 +344,29 @@ test('設定的「只出單題」：開了以後 10 題一輪、自由練習不�
   await page.locator('[data-mode="ten"]').click();
   expect(await total(page)).toBe(4);
 });
+
+test('設定的「主攻的考卷」：可以複選、照考卷順序存起來；重新整理後還在，再按一次取消', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await seedVeteran(page);
+  await openHome(page);
+  await page.locator('#open-settings').click();
+  const group = page.locator('#focus-options');
+  await expect(group).toHaveAccessibleName(/主攻的考卷/);
+  const btn = (name) => group.getByRole('button', { name, exact: true });
+  await expect(group.getByRole('button')).toHaveCount(5);
+  await btn('自然').click();
+  await btn('數學').click();
+  await expect(btn('數學')).toHaveAttribute('aria-pressed', 'true');
+  await expect(btn('自然')).toHaveAttribute('aria-pressed', 'true');
+  await expect(btn('國文')).toHaveAttribute('aria-pressed', 'false');
+  expect((await saved(page)).settings.focus).toEqual(['math', 'science']);
+  await audit(page, '設定：主攻的考卷');
+
+  await page.reload();
+  await waitForBoot(page);
+  await page.locator('#open-settings').click();
+  await expect(btn('數學')).toHaveAttribute('aria-pressed', 'true');
+  await btn('數學').click();
+  await expect(btn('數學')).toHaveAttribute('aria-pressed', 'false');
+  expect((await saved(page)).settings.focus).toEqual(['science']);
+});

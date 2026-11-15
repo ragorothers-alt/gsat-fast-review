@@ -1,4 +1,5 @@
 // 進度存在 localStorage。私密瀏覽或被清除時讀不到也要能正常玩，所以全部包 try/catch。
+import { PAPER_SUBJECTS } from './blueprint.js';
 import { SUBJECTS } from './subjects.js';
 import { rebuildDaily } from './cloud.js';
 import { mergeExams, mergePapers } from './exam.js';
@@ -46,6 +47,8 @@ export function freshState() {
       goal: 30,
       // quickOnly：只出單題（不出題組、圖表題、多選、演算題與非選擇題；見 session.js 的 quickOnlyFor）
       quickOnly: false,
+      // focus：主攻的考卷（blueprint.js 的 PAPER_SUBJECTS 的鍵），新題的分量加倍（subjectWeights）
+      focus: [],
       sound: false,
       scratch: true,
       // eraser：草稿區的橡皮擦 stroke（整條擦掉）／area（擦一塊）
@@ -91,7 +94,12 @@ export function parseState(raw) {
     pace: cleanPace(saved.pace),
     streak: { ...base.streak, ...saved.streak },
     best: { ...base.best, ...saved.best },
-    settings: { ...base.settings, ...saved.settings, reminder: { ...base.settings.reminder, ...saved.settings?.reminder } },
+    settings: {
+      ...base.settings,
+      ...saved.settings,
+      focus: Array.isArray(saved.settings?.focus) ? saved.settings.focus.filter((p) => Object.hasOwn(PAPER_SUBJECTS, p)) : [],
+      reminder: { ...base.settings.reminder, ...saved.settings?.reminder },
+    },
   };
 }
 

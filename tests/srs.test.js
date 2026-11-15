@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONFIRM_BOX, DAY, MAX_BOX, NEW_EVERY, RELEARN_BOX, SPRINT_DAYS, SPRINT_NEW_EVERY, awaitingConfirm, buildQueue, dayStart, dueAfter, dueFor, everMissed, examStart, inSprint, isWeak, mastery, needsConfirm, neverMissed, schedule } from '../src/srs.js';
+import { CONFIRM_BOX, DAY, MAX_BOX, NEW_EVERY, RELEARN_BOX, SPOT_DELAY, SPOT_EVERY, SPRINT_DAYS, SPRINT_NEW_EVERY, awaitingConfirm, buildQueue, dayStart, doubtCard, dueAfter, dueFor, everMissed, examStart, inSprint, isWeak, mastery, needsConfirm, neverMissed, schedule, spotSampled, spotSourceFor, spotSources } from '../src/srs.js';
 
 const NOW = 1_700_000_000_000;
 
@@ -211,6 +211,83 @@ describe('是非題第一次答對要再確認一次', () => {
     expect(neverMissed(c)).toBe(true);
     // 答錯過、後來升到第 3 盒的題目不是等確認
     expect(awaitingConfirm({ box: 3, seen: 3, right: 2, wrong: 1, missed: 1 })).toBe(false);
+  });
+});
+
+describe('抽查第一次就答對的單選、多選題', () => {
+  const mc = (id, kp, extra = {}) => q(id, 'math', { type: 'mc', kp, ...extra });
+  /** 找一個會被抽到（或不會）的題號 */
+  const idWhere = (want, prefix) => {
+    for (let i = 1; ; i++) if (spotSampled(mc(`${prefix}${i}`, 'k')) === want) return `${prefix}${i}`;
+  };
+  const S = idWhere(true, 's');
+  const P = idWhere(false, 'p');
+  const T0 = new Date(2026, 10, 10, 21).getTime();
+  const ready = dayStart(T0 + SPOT_DELAY);
+  const first = schedule(undefined, 'right', T0);
+
+  it(`有標考點的單選、多選題照題號約每 ${SPOT_EVERY} 題抽 1 題；是非題、非選擇題、沒標考點的不抽`, () => {
+    let n = 0;
+    for (let i = 0; i < 7000; i++) if (spotSampled(mc(`math-${i}`, 'k', { type: i % 2 ? 'mc' : 'ms' }))) n++;
+    expect(n / 7000).toBeGreaterThan(0.11);
+    expect(n / 7000).toBeLessThan(0.18);
+    expect(spotSampled(mc(S, 'k'))).toBe(true);
+    expect(spotSampled(mc(S, 'k', { type: 'tf' }))).toBe(false);
+    expect(spotSampled(mc(S, 'k', { type: 'open' }))).toBe(false);
+    expect(spotSampled(mc(S, undefined))).toBe(false);
+  });
+
+  it('考點裡只做過抽到的那一題、第一次就答對、隔了 3 天（那天一開始）才等著抽查', () => {
+    const bank = [mc(S, 'k1'), mc('u1', 'k1'), mc(P, 'k2'), mc('u2', 'k2')];
+    expect(spotSources(bank, { [S]: first }, ready - 1).size).toBe(0);
+    expect([...spotSources(bank, { [S]: first }, ready)]).toEqual([['math/k1', S]]);
+    // 沒抽到的題目不抽查
+    expect(spotSources(bank, { [P]: first }, ready + 10 * DAY).size).toBe(0);
+    // 考點裡做過兩題：有別的證據了
+    expect(spotSources(bank, { [S]: first, u1: schedule(undefined, 'right', T0 + DAY) }, ready).size).toBe(0);
+    // 第一次答錯、看解答，或之後又作答過的：不是第一次就答對
+    expect(spotSources(bank, { [S]: schedule(undefined, 'wrong', T0) }, ready).size).toBe(0);
+    expect(spotSources(bank, { [S]: schedule(first, 'right', T0 + 2 * DAY) }, ready + 5 * DAY).size).toBe(0);
+  });
+
+  it('出題時同考點沒做過的單選題插在新題最前面，一輪最多一題；題組、是非題不拿來抽查', () => {
+    const bank = [mc(S, 'k1'), mc('u1', 'k1'), mc('g1', 'k1', { group: 'math-g001', passage: 'x' }), mc('t1', 'k1', { type: 'tf' }), mc('v1', 'k2'), mc('v2', 'k3'), mc('v3', 'k4')];
+    const cards = { [S]: first };
+    const ids = (now, extra = {}) => buildQueue(bank, cards, { subjects: ['math'], size: 4, now, rng: seeded(3), ...extra }).map((x) => x.id);
+    expect(ids(ready)[0]).toBe('u1');
+    // 還沒到 3 天：照新題的順序，還沒練過的考點先出
+    expect(['v1', 'v2', 'v3']).toContain(ids(ready - 1)[0]);
+    // 兩個考點都等著抽查，一輪還是只插一題
+    const S2 = idWhere(true, 'z');
+    const two = [...bank, mc(S2, 'k5'), mc('w1', 'k5')];
+    const out = buildQueue(two, { ...cards, [S2]: first }, { subjects: ['math'], size: 2, now: ready, rng: seeded(5) }).map((x) => x.id);
+    expect(out.filter((id) => id === 'u1' || id === 'w1')).toHaveLength(1);
+    // 快閃不出多選：同考點只有多選題沒做過時就不插
+    const msBank = [mc(S, 'k1'), mc('u9', 'k1', { type: 'ms' }), mc('v1', 'k2')];
+    expect(buildQueue(msBank, cards, { subjects: ['math'], size: 3, now: ready, quickOnly: true, rng: seeded() }).map((x) => x.id)).toEqual(['v1']);
+  });
+
+  it('spotSourceFor：沒做過、同考點唯一做過的那題可以抽查了才算；doubtCard 讓那題隔天再確認一次', () => {
+    const bank = [mc(S, 'k1'), mc('u1', 'k1'), mc('u2', 'k1')];
+    const cards = { [S]: first };
+    expect(spotSourceFor(bank, cards, bank[1], ready)).toBe(S);
+    expect(spotSourceFor(bank, cards, bank[1], ready - 1)).toBe(null);
+    expect(spotSourceFor(bank, { ...cards, u2: first }, bank[1], ready)).toBe(null);
+    expect(spotSourceFor(bank, { ...cards, u1: first }, bank[1], ready)).toBe(null);
+
+    // 抽查答錯：原本那題改成等確認、隔天到期，出題時當作複習出
+    const now = ready + 3600_000;
+    const doubted = doubtCard(cards[S], now);
+    expect(doubted).toMatchObject({ box: CONFIRM_BOX, due: dueAfter(RELEARN_BOX, now), last: now, seen: 1, right: 1 });
+    expect(awaitingConfirm(doubted)).toBe(true);
+    expect(neverMissed(doubted)).toBe(false);
+    expect(isWeak(doubted)).toBe(false);
+    const after = { ...cards, [S]: doubted, u1: schedule(undefined, 'wrong', now) };
+    expect(buildQueue(bank, after, { subjects: ['math'], size: 3, now: doubted.due, rng: seeded() }).map((x) => x.id)).toEqual(expect.arrayContaining([S, 'u1']));
+    // 再答對一次就算會了，不再出
+    const again = schedule(doubted, 'right', doubted.due);
+    expect(neverMissed(again)).toBe(true);
+    expect(again.box).toBe(CONFIRM_BOX + 1);
   });
 });
 

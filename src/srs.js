@@ -1,6 +1,6 @@
 // 間隔重複（Leitner 盒子）與出題順序。純邏輯，不碰 DOM，方便測試。
 import { bundles, takeBundles } from './groups.js';
-import { conceptStats, orderFresh, unitShares, unitSkill } from './priority.js';
+import { conceptKey, conceptStats, orderFresh, unitShares, unitSkill } from './priority.js';
 import { isUnitOff, unitKey } from './units.js';
 
 export const MINUTE = 60_000;
@@ -78,13 +78,82 @@ export function schedule(card, outcome, now, { confirm = false } = {}) {
 }
 
 /**
- * 第一次就答對、還在等確認的題目（是非題）：只作答過一次、答對、放在第 CONFIRM_BOX 盒。
- * 其他題目第一次答對是第 2 盒、之後要作答兩次以上才升得到第 3 盒，所以這個組合只會是它，不必在卡片上多記一個欄位
+ * 第一次就答對、還在等確認的題目：只作答過一次、答對、放在第 CONFIRM_BOX 盒。會是這樣的只有兩種：
+ * 是非題第一次答對（schedule 的 confirm），以及抽查沒過、被拉回來再確認的單選多選題（doubtCard）。
+ * 其他題目第一次答對是第 2 盒、之後要作答兩次以上才升得到第 3 盒，所以不必在卡片上多記一個欄位
  * （同步的格式不變；規則上線前第一次就答對的是非題在第 2 盒，照舊算會了，不會一口氣全部回來要求確認）。
  * 到期後再答對一次就升到第 4 盒、算會了；答錯就和其他錯題一樣複習。
  */
 export function awaitingConfirm(card) {
   return !!card && card.box === CONFIRM_BOX && card.seen === 1 && card.right === 1 && !card.missed && !card.wrong && !card.parked;
+}
+
+// ── 抽查：第一次就答對的單選、多選題 ─────────────────────────
+// 單選、多選第一次就答對算會了、之後不再出（neverMissed），但四個選項刪掉兩個再猜，也有一半的機會猜對。
+// 照題號每 SPOT_EVERY 題抽 1 題（每台裝置抽到的一樣），隔 SPOT_DELAY 從同一個考點出一題沒做過的：
+// 答對就是真的會；答錯（或看解答、標成猜的、不太確定）時，原本那題也拉回來、隔天再確認一次（doubtCard）。
+// 只抽查「考點裡唯一做過的那一題」：做過兩題以上就有別的證據了。不是每題都重考，複習量只多一點點
+
+/** 第一次就答對的單選、多選題，每幾題抽 1 題 */
+export const SPOT_EVERY = 7;
+/** 抽查排在第一次答對之後第幾天（那一天一開始） */
+export const SPOT_DELAY = 3 * DAY;
+/** 一輪最多插幾題抽查 */
+export const SPOT_PER_ROUND = 1;
+/** 抽得到的題型，也是插進來當抽查的題型（是非題另外有 needsConfirm；非選擇題是自評） */
+const SPOT_TYPES = new Set(['mc', 'ms']);
+
+/** 題號的雜湊（FNV-1a）：抽不抽查只看題號 */
+function spotHash(id) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < id.length; i++) h = Math.imul(h ^ id.charCodeAt(i), 0x01000193) >>> 0;
+  return h;
+}
+
+/** 這題第一次答對後會被抽查：有標考點的單選、多選題，照題號每 SPOT_EVERY 題抽 1 題 */
+export const spotSampled = (q) => !!q?.kp && SPOT_TYPES.has(q.type) && spotHash(q.id) % SPOT_EVERY === 0;
+
+/** 可以抽查了：抽到的題目第一次就答對、之後沒再作答，而且已經隔了 SPOT_DELAY */
+const spotReady = (q, card, now) =>
+  spotSampled(q) && card.seen === 1 && card.right === 1 && neverMissed(card) && dayStart(card.last + SPOT_DELAY) <= now;
+
+/**
+ * 等著抽查的考點：考點裡只做過一題，而且那題可以抽查了（spotReady）。
+ * @returns {Map<string, string>} conceptKey → 那一題的 id
+ */
+export function spotSources(bank, cards, now) {
+  const only = new Map(); // conceptKey → 考點裡唯一做過的那題；做過兩題以上記 null
+  for (const q of bank) {
+    if (!q.kp || !cards[q.id]?.seen) continue;
+    const key = conceptKey(q);
+    only.set(key, only.has(key) ? null : q);
+  }
+  const out = new Map();
+  for (const [key, q] of only) if (q && spotReady(q, cards[q.id], now)) out.set(key, q.id);
+  return out;
+}
+
+/**
+ * 沒做過的 q 是不是在抽查：同一個考點唯一做過的那題可以抽查了，就回傳那一題的 id。
+ * 出題時插進來的（buildQueue）、照新題順序剛好輪到同考點第二題的，都算：作答畫面標「抽查」，答錯時拉回原本那題
+ */
+export function spotSourceFor(bank, cards, q, now) {
+  if (!q?.kp || cards[q.id]?.seen) return null;
+  let only = null;
+  for (const x of bank) {
+    if (x.kp !== q.kp || x.subject !== q.subject || x.id === q.id || !cards[x.id]?.seen) continue;
+    if (only) return null;
+    only = x;
+  }
+  return only && spotReady(only, cards[only.id], now) ? only.id : null;
+}
+
+/**
+ * 抽查沒過：原本第一次就答對的那題改成等確認（awaitingConfirm），隔天再考；再答對一次才算會，答錯就照錯題複習。
+ * last 記成現在：同步只送 last 有變的卡片（cloud.js），合併也以 last 較晚的為準，另一台才收得到
+ */
+export function doubtCard(card, now) {
+  return { ...card, box: CONFIRM_BOX, due: dueAfter(RELEARN_BOX, now), last: now };
 }
 
 /**
@@ -201,10 +270,12 @@ export const reviewShare = (every) => (every - 1) / every;
 /**
  * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。
  * 新題依學測分量與單元熟練度排（priority.js）：考得多、還不熟的單元先出；單元裡還沒練過的考點先出。
+ * 等著抽查的考點（第一次答對的單選多選題，見 spotSources）先插一題同考點沒做過的。
  * 答對過、從沒失手的題目不再出（neverMissed）。
  * @param {Question[]} bank
  * @param {Record<string, Card>} cards
- * @param {{ subjects: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, newEvery?: number, examAt?: number | null, size: number, now: number, rng?: () => number }} opts
+ * @param {{ subjects: string[], focus?: string[], excludedUnits?: string[], onlyUnits?: string[] | null, exclude?: Iterable<string>, formulaOnly?: boolean, quickOnly?: boolean, weakOnly?: boolean, streak?: number, newEvery?: number, examAt?: number | null, size: number, now: number, rng?: () => number }} opts
+ *   focus：設定的主攻考卷，新題的分量加倍（見 blueprint.js 的 subjectWeights）；到期的複習不受影響
  *   excludedUnits：關掉的單元（結合了它的跨單元題也不出，見 isUnitOff）；onlyUnits：只出這些單元（兩者都是 unitKey 格式）
  *   exclude：這次先不出的題目 id（例如剛答過的、被回報的）；quickOnly：不出要動筆的演算題（q.scratch）、多選題、非選擇題、閱讀題組和圖表題
  *   streak：這批之前剛連續做了幾題複習。自由練習一批出完再補下一批時接著算，兩批交界才不會一連出 4 題複習
@@ -215,7 +286,7 @@ export const reviewShare = (every) => (every - 1) / every;
 export function buildQueue(
   bank,
   cards,
-  { subjects, excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, streak = 0, newEvery = NEW_EVERY, examAt = null, size, now, rng = Math.random },
+  { subjects, focus = [], excludedUnits = [], onlyUnits = null, exclude = [], formulaOnly = false, quickOnly = false, weakOnly = false, streak = 0, newEvery = NEW_EVERY, examAt = null, size, now, rng = Math.random },
 ) {
   const wanted = new Set(subjects);
   const off = new Set(excludedUnits);
@@ -261,7 +332,23 @@ export function buildQueue(
   const rest = joining.length ? unseen.filter((q) => !dueGroups.has(q.group)) : unseen;
   // bundles 把同組的題目併到這組第一次出現的位置，也就是到期那題的位置
   const due = bundles([...shuffle(dueList, rng).sort((a, b) => cards[a.id].box - cards[b.id].box), ...joining]);
-  const fresh = bundles(orderFresh(rest, { shares: unitShares(subjects), skill: unitSkill(bank, cards, subjects, cardSkill), concepts: conceptStats(bank, cards, subjects), size, rng }));
+  // 抽查（spotSources）：等著抽查的考點裡挑沒做過的單選、多選單題，排在新題最前面，一輪最多 SPOT_PER_ROUND 題
+  const sources = spotSources(bank, cards, now);
+  const checks = [];
+  if (sources.size) {
+    const used = new Set();
+    for (const x of shuffle(rest.filter((x) => !x.group && SPOT_TYPES.has(x.type) && x.kp && sources.has(conceptKey(x))), rng)) {
+      if (checks.length >= SPOT_PER_ROUND) break;
+      if (used.has(conceptKey(x))) continue;
+      used.add(conceptKey(x));
+      checks.push(x);
+    }
+  }
+  const others = checks.length ? rest.filter((x) => !checks.includes(x)) : rest;
+  const fresh = [
+    ...checks.map((x) => [x]),
+    ...bundles(orderFresh(others, { shares: unitShares(subjects, focus), skill: unitSkill(bank, cards, subjects, cardSkill), concepts: conceptStats(bank, cards, subjects), size, rng })),
+  ];
   const later = bundles(shuffle(laterList, rng).sort((a, b) => dueAt.get(a.id) - dueAt.get(b.id)));
 
   // 第 newEvery、2×newEvery…題輪到新題；題組一包好幾題，所以照已經出了幾題新題來算輪到誰。

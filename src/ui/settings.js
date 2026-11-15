@@ -1,6 +1,7 @@
-// 設定：每日目標、只出單題、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目、關於與診斷。底部彈出面板。
+// 設定：每日目標、只出單題、主攻的考卷、學測日期、外觀、音效、每日提醒、安裝、進度備份與同步、回報的題目、關於與診斷。底部彈出面板。
 import { daysUntil } from '../analysis.js';
 import { foldLegacy } from '../cloud.js';
+import { PAPERS } from '../exam.js';
 import { GOALS, dayKey } from '../stats.js';
 import { DEFAULT_EXAM_DATE, mergeExtras } from '../storage.js';
 import { SUBJECT_BY_ID } from '../subjects.js';
@@ -56,6 +57,23 @@ export function initSettings(ctx, onChange) {
   quickBtn.addEventListener('click', () => {
     settings.quickOnly = !settings.quickOnly;
     commit();
+  });
+
+  // ── 主攻的考卷（可以複選）：新題的分量加倍（blueprint.js 的 subjectWeights）；到期的複習、模擬考不受影響 ──
+  const focusBtns = PAPERS.map((p) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'seg-btn';
+    btn.textContent = p.name;
+    btn.addEventListener('click', () => {
+      const on = new Set(settings.focus ?? []);
+      if (on.has(p.id)) on.delete(p.id);
+      else on.add(p.id);
+      settings.focus = PAPERS.map((x) => x.id).filter((id) => on.has(id));
+      commit();
+    });
+    $('#focus-options').append(btn);
+    return /** @type {[string, HTMLButtonElement]} */ ([p.id, btn]);
   });
 
   // ── 學測日期 ───────────────────────────────────────
@@ -197,6 +215,7 @@ export function initSettings(ctx, onChange) {
   function render() {
     goalBtns.forEach((b, i) => b.setAttribute('aria-pressed', String(GOALS[i] === settings.goal)));
     quickBtn.setAttribute('aria-checked', String(!!settings.quickOnly));
+    for (const [id, btn] of focusBtns) btn.setAttribute('aria-pressed', String((settings.focus ?? []).includes(id)));
     dateInput.value = settings.examDate;
     const left = daysUntil(settings.examDate, Date.now());
     $('#exam-left').textContent = left > 0 ? `還有 ${left} 天` : left === 0 ? '就是今天' : '已經考完了';

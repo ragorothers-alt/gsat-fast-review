@@ -23,6 +23,20 @@ describe('學測分量', () => {
     expect(w.physics).toBeGreaterThan(w.chemistry);
   });
 
+  it('主攻的考卷分量加倍：五張卷主攻數學與自然，這兩張各 2/7、其他各 1/7；全部主攻或沒選到的卷等於沒有主攻', () => {
+    const all = ['chinese', 'english', 'math', 'physics', 'chemistry', 'biology', 'earth', 'history', 'geography', 'civics'];
+    const w = subjectWeights(all, ['math', 'science']);
+    const paper = (ss) => ss.reduce((a, s) => a + w[s], 0);
+    expect(w.math).toBeCloseTo(2 / 7);
+    expect(paper(['physics', 'chemistry', 'biology', 'earth'])).toBeCloseTo(2 / 7);
+    expect(w.chinese).toBeCloseTo(1 / 7);
+    expect(paper(['history', 'geography', 'civics'])).toBeCloseTo(1 / 7);
+    expect(Object.values(w).reduce((a, b) => a + b, 0)).toBeCloseTo(1);
+    expect(subjectWeights(['math', 'english'], ['math', 'english'])).toEqual(subjectWeights(['math', 'english']));
+    expect(subjectWeights(['math', 'english'], ['social'])).toEqual(subjectWeights(['math', 'english']));
+    expect(sum(unitShares(all, ['math']))).toBeCloseTo(1);
+  });
+
   it('各單元的分量合計為 1；學測考得多的單元分量大', () => {
     const shares = unitShares(['physics', 'english']);
     expect(sum(shares)).toBeCloseTo(1);
