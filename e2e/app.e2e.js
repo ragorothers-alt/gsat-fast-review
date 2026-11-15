@@ -19,6 +19,34 @@ test('首頁今日卡：還沒開始時寫出幾題到期該複習（還沒到�
   await expect(page.locator('#daily-acc')).toHaveText('2 題該複習');
 });
 
+test('錯題本：選了一科可以再篩單元，題數跟著篩；練一輪只出那個單元的錯題', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (localStorage.getItem('gsat-quiz:v1')) return;
+    const now = Date.now();
+    const wrong = (k) => ({ box: 2, due: now + 86_400_000, seen: 1, right: 0, wrong: 1, parked: false, missed: 1, last: now - k * 60_000 });
+    const cards = { 'math-001': wrong(1), 'math-002': wrong(2), 'math-007': wrong(3), 'physics-001': wrong(4) };
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: {} }));
+  });
+  await openHome(page);
+  await page.locator('#open-notebook').click();
+  await expect(page.locator('#notebook-count')).toHaveText('4');
+  // 全部科目時不分單元
+  await expect(page.locator('#notebook-unit-tabs')).toBeHidden();
+  await page.locator('#notebook-tabs [data-filter="math"]').click();
+  const units = page.locator('#notebook-unit-tabs .sheet-tab');
+  await expect(units).toHaveText(['全部單元 3', '數與式 2', '多項式函數 1']);
+  await expect(page.locator('#notebook-count')).toHaveText('3');
+  await units.nth(2).click();
+  await expect(units.nth(2)).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#notebook-count')).toHaveText('1');
+  await expect(page.locator('#notebook-list .r-item')).toHaveCount(1);
+  await expect(page.locator('#notebook-train')).toHaveText('練一輪錯題（1 題）');
+  await page.locator('#notebook-train').click();
+  await expect(page.locator('#play')).toBeVisible();
+  await expect(page.locator('#play-progress')).toHaveText('1 / 1');
+  await expect(page.locator('#q-topic')).toContainText('多項式函數');
+});
+
 test('首頁的「還沒做過」題數作答後減少；「看存量」打開學習分析的題庫存量', async ({ page }) => {
   await openHome(page);
   const fresh = async () => Number((await page.locator('#bank-info').textContent()).match(/還沒做過 (\d+)／/)[1]);

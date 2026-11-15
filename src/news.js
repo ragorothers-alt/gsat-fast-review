@@ -13,6 +13,14 @@ export const RECENT_DAYS = 7;
 /** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
 export const NEWS = [
   {
+    id: '2026-11-15-6',
+    title: '錯題本可以篩單元',
+    items: [
+      '錯題、收藏選了某一科後，下面多一排單元，各附題數；點了只看那個單元。',
+      '篩了單元再按「練一輪錯題」，只出那個單元的錯題。',
+    ],
+  },
+  {
     id: '2026-11-15-5',
     title: '小手機與學習分析',
     items: [

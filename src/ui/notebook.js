@@ -60,6 +60,8 @@ export function initNotebook(ctx) {
   const viewBtns = [...document.querySelectorAll('#notebook-views [data-view]')];
   let view = 'wrong';
   let filter = 'all';
+  /** 錯題、收藏選了某一科時，再篩的單元（'all' 是這一科全部） */
+  let unit = 'all';
   let all = [];
   let items = [];
   let shown = 0;
@@ -152,7 +154,13 @@ const indexEntry = (q) => [
     const counts = new Map();
     for (const q of all) counts.set(q.subject, (counts.get(q.subject) || 0) + 1);
     if (filter !== 'all' && !counts.has(filter)) filter = 'all';
-    items = filter === 'all' ? all : all.filter((q) => q.subject === filter);
+    const inSubject = filter === 'all' ? all : all.filter((q) => q.subject === filter);
+    // 錯題、收藏選了某一科：各單元有幾題，兩個以上的單元有題目時可以再篩單元
+    const units = new Map();
+    if (filter !== 'all' && (view === 'wrong' || view === 'star')) for (const q of inSubject) units.set(q.topic, (units.get(q.topic) || 0) + 1);
+    if (unit !== 'all' && !units.has(unit)) unit = 'all';
+    items = unit === 'all' ? inSubject : inSubject.filter((q) => q.topic === unit);
+    renderUnitTabs(units, inSubject.length);
 
     for (const b of viewBtns) b.setAttribute('aria-pressed', String(b.dataset.view === view));
     $('#nb-n-wrong').textContent = view === 'wrong' ? all.length : wrongItems().length;
@@ -189,6 +197,18 @@ const indexEntry = (q) => [
     list.innerHTML = '';
     shown = 0;
     renderMore();
+  }
+
+  /** 單元的分頁：「全部單元」加上這一科有題目的單元（照單元順序），各附題數 */
+  function renderUnitTabs(units, total) {
+    const box = $('#notebook-unit-tabs');
+    box.hidden = units.size < 2;
+    if (box.hidden) return (box.innerHTML = '');
+    const color = SUBJECT_BY_ID[filter]?.color ?? 'var(--accent)';
+    const tabs = [['all', '全部單元', total], ...(UNITS[filter] ?? []).filter((u) => units.has(u)).map((u) => [u, u, units.get(u)])];
+    box.innerHTML = tabs
+      .map(([id, name, n]) => `<button type="button" class="sheet-tab on" data-unit="${id.replace(/"/g, '&quot;')}" aria-pressed="${id === unit}" style="--c:${color}">${name} ${n}</button>`)
+      .join('');
   }
 
   /** 重點分頁：單元清單，附上熟練度 */
@@ -228,6 +248,7 @@ const indexEntry = (q) => [
   function setView(next) {
     view = next;
     filter = 'all';
+    unit = 'all';
     render();
     $('#notebook-scroll').scrollTop = 0;
     if (view === 'search') {
@@ -240,6 +261,7 @@ const indexEntry = (q) => [
   ctx.showNotebook = (initial) => {
     if (initial) view = initial;
     filter = 'all';
+    unit = 'all';
     if (view === 'search') prepareIndex();
     render();
     // 錯最多的科目，牠們的貓趴在最上面的卡片上
@@ -267,6 +289,13 @@ const indexEntry = (q) => [
     const tab = e.target.closest('[data-filter]');
     if (!tab) return;
     filter = tab.dataset.filter;
+    unit = 'all';
+    render();
+  });
+  $('#notebook-unit-tabs').addEventListener('click', (e) => {
+    const tab = e.target.closest('[data-unit]');
+    if (!tab) return;
+    unit = tab.dataset.unit;
     render();
   });
   more.addEventListener('click', renderMore);
@@ -284,7 +313,8 @@ const indexEntry = (q) => [
   });
 
   $('#notebook-train').addEventListener('click', () => {
-    if (view === 'wrong') ctx.startRound('review', { subjects: filter === 'all' ? SUBJECTS.map((s) => s.id) : [filter] });
+    // 錯題：照篩的科目（與單元）出錯題複習；收藏、搜尋：出篩出來的這些題
+    if (view === 'wrong') ctx.startRound('review', { subjects: filter === 'all' ? SUBJECTS.map((s) => s.id) : [filter], units: unit === 'all' ? null : [unitKey(filter, unit)] });
     else ctx.startRound(view === 'star' ? 'starred' : 'picked', { ids: items.map((q) => q.id) });
   });
   $('#notebook-back').addEventListener('click', () => ctx.goHome());
