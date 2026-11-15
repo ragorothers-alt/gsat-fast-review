@@ -402,6 +402,22 @@ test('背景動畫關閉：不載入背景場景的程式', async ({ page }) => 
   await expect.poll(() => scene.length).toBeGreaterThan(0);
 });
 
+test('設定裡切換背景動畫：省電時畫布的解析度跟著降低，切回完整再調回來', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('gsat-quiz:v1')) localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, settings: { motion: 'on' } }));
+  });
+  await openHome(page);
+  const { css, dpr } = await page.evaluate(() => ({ css: innerWidth, dpr: devicePixelRatio }));
+  const width = () => page.locator('#world').evaluate((c) => c.width);
+  // three.js 的畫布寬度 = CSS 寬度 × 像素比（完整最多 2 倍、省電最多 1.25 倍），取整數
+  await expect.poll(width, { timeout: 15_000 }).toBe(Math.floor(css * Math.min(dpr, 2)));
+  await page.locator('#open-settings').click();
+  await page.locator('#motion-options button', { hasText: '省電' }).click();
+  await expect.poll(width).toBe(Math.floor(css * Math.min(dpr, 1.25)));
+  await page.locator('#motion-options button', { hasText: '完整' }).click();
+  await expect.poll(width).toBe(Math.floor(css * Math.min(dpr, 2)));
+});
+
 test('320px 寬的小手機：首頁不會左右捲動，設定齒輪在畫面內', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 640 });
   await openHome(page);

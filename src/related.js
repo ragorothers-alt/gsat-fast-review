@@ -4,11 +4,25 @@
 // 同考點（或都不同考點）的題目之間，比較題幹與解析的字詞重疊（中文取相鄰兩字、英文取單字），
 // 單元裡到處都有的詞（「下列」「何者」）權重低，真正的關鍵詞權重高。
 
-const cache = new WeakMap();
+/**
+ * 字詞集合的快取只留最近用到的這麼多題（約幾個單元，比最大的單元還多）：
+ * 題庫的題目一直都在，全部留著的話練幾百題、碰過幾十個單元後常駐三十幾 MB
+ */
+export const CACHE_MAX = 4000;
+/** 題目 → 字詞集合；Map 照加入順序排，最前面的是最久沒用到的 */
+const cache = new Map();
+
+/** 目前快取了幾題的字詞（測試用） */
+export const cachedCount = () => cache.size;
 
 function grams(q) {
   let g = cache.get(q);
-  if (g) return g;
+  if (g) {
+    // 用到了就移到最後面：清的時候從最久沒用的開始
+    cache.delete(q);
+    cache.set(q, g);
+    return g;
+  }
   // 拿掉 LaTeX 指令名（\frac、\mathrm），只留內容
   const text = `${q.q} ${q.explain}`.replace(/\\[a-zA-Z]+/g, ' ').toLowerCase();
   g = new Set(text.match(/[a-z]{3,}/g) ?? []);
@@ -16,6 +30,7 @@ function grams(q) {
     for (let i = 0; i + 1 < run.length; i++) g.add(run.slice(i, i + 2));
   }
   cache.set(q, g);
+  if (cache.size > CACHE_MAX) cache.delete(cache.keys().next().value);
   return g;
 }
 

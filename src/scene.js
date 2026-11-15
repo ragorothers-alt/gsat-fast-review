@@ -64,7 +64,8 @@ export function createWorld(canvas, anchors, { motion = 'on' } = {}) {
   reducedQuery.addEventListener?.('change', () => (reduced = reducedQuery.matches));
   let level = motion;
   // 高解析度螢幕的像素數是 CSS 尺寸的好幾倍；省電模式解析度降一點，線條稍微軟一些但少畫很多像素
-  const pixelRatio = Math.min(window.devicePixelRatio || 1, motion === 'lite' ? 1.25 : 2);
+  const ratioFor = (m) => Math.min(window.devicePixelRatio || 1, m === 'lite' ? 1.25 : 2);
+  let pixelRatio = ratioFor(motion);
   renderer.setPixelRatio(pixelRatio);
   renderer.setClearColor(0x000000, 0);
 
@@ -384,9 +385,18 @@ export function createWorld(canvas, anchors, { motion = 'on' } = {}) {
       if (cat) cat.excite = Math.min(n / 8, 1);
       if (!n) for (const c of cats) c.excite = 0;
     },
-    /** 背景動畫等級：on／lite 只改每秒畫幾張；off 停止繪圖、藏起畫布 */
+    /**
+     * 背景動畫等級：on／lite 改每秒畫幾張與解析度（在設定裡切換也跟著變，不只開機時決定）；off 停止繪圖、藏起畫布。
+     * 科目名的字貼圖不重畫：大小照 CSS px 算，只是清晰度不同
+     */
     setMotion(m) {
       level = m;
+      const ratio = ratioFor(m);
+      if (m !== 'off' && ratio !== pixelRatio) {
+        pixelRatio = ratio;
+        renderer.setPixelRatio(ratio);
+        particles.setRatio(ratio);
+      }
       syncLoop();
     },
     /** 當前科目的貓對作答結果做反應 */

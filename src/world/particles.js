@@ -80,6 +80,10 @@ export function createParticles(scene, pixelRatio) {
   const white = new THREE.Color('#ffffff');
 
   return {
+    /** 畫布的解析度換了（設定裡切換省電模式）：點的大小照新的像素比，畫面上的大小才不變 */
+    setRatio(ratio) {
+      material.uniforms.uRatio.value = ratio;
+    },
     /** x, y 為螢幕座標（CSS px） */
     burst(x, y, color, count) {
       const base = new THREE.Color(color);

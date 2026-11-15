@@ -13,6 +13,15 @@ export const RECENT_DAYS = 7;
 /** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
 export const NEWS = [
   {
+    id: '2026-11-15-9',
+    title: '更省電、更順',
+    items: [
+      '設定裡把背景動畫切成「省電」，畫面解析度立刻跟著降低（以前要重新開啟 App 才會降），手機比較不燙。',
+      '一次練很多單元時，「練類似題」用的暫存會自動清掉舊的，長時間刷題不會越用越占記憶體。',
+      '兩則考點重點補上漏掉的內容：英文 behavior、misconduct 的詞義，國文的誇飾。',
+    ],
+  },
+  {
     id: '2026-11-15-8',
     title: '模擬考的選填題',
     items: [

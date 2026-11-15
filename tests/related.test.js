@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { relatedQuestions, relatedQueue } from '../src/related.js';
+import { CACHE_MAX, cachedCount, relatedQuestions, relatedQueue } from '../src/related.js';
 
 const q = (id, topic, text, explain = '') => ({ id, subject: 'chemistry', topic, q: text, explain });
 
@@ -48,6 +48,22 @@ describe('relatedQuestions：考點', () => {
   it('沒標考點的題目照舊只在同單元裡比字詞', () => {
     const plain = { ...kb[1], kp: undefined };
     expect(relatedQuestions([...kb.slice(0, 1), plain, ...kb.slice(2)], plain, { count: 5 }).map((x) => x.id).sort()).toEqual(['m1', 'm3']);
+  });
+});
+
+describe('字詞快取', () => {
+  it(`只留最近用到的 ${CACHE_MAX} 題：練過很多單元也不會一直變大，換回來的單元照樣找得到`, () => {
+    // 60 個單元、每單元 100 題（共 6000 題，比快取多）
+    const big = [];
+    for (let u = 0; u < 60; u++) {
+      for (let i = 0; i < 100; i++) big.push({ id: `u${u}-${i}`, subject: 'chemistry', topic: `單元${u}`, q: `第${u}單元第${i}題：鹽酸${i % 7}號樣品的濃度`, explain: `樣品${i % 5}號` });
+    }
+    const first = relatedQuestions(big, big[0], { count: 3 }).map((x) => x.id);
+    for (let u = 1; u < 60; u++) relatedQuestions(big, big[u * 100], { count: 3 });
+    expect(cachedCount()).toBeLessThanOrEqual(CACHE_MAX);
+    expect(cachedCount()).toBeGreaterThan(CACHE_MAX - 100);
+    // 第一個單元早就被清掉了：重新算，結果一樣
+    expect(relatedQuestions(big, big[0], { count: 3 }).map((x) => x.id)).toEqual(first);
   });
 });
 
