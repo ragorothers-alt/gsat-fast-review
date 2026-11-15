@@ -221,11 +221,13 @@ for (const file of files) {
     if (it.fig !== undefined) {
       stats.fig++;
       if (it.type !== 'mc' && it.type !== 'ms') err('圖表題（fig）只能是單選或多選題');
-      if (it.group !== undefined) err('題組的題目不可有 fig');
       for (const m of checkFigure(it.fig)) err(m);
-      if (typeof it.q === 'string' && it.q.length > FIG_Q) err(`圖表題的題幹上限 ${FIG_Q} 字（現在 ${it.q.length} 字）：數據放在圖裡，題幹只寫情境與要問的`);
-      const word = it.fig?.type === 'table' ? '表' : '圖';
-      if (typeof it.q === 'string' && !it.q.includes(word)) err(`圖表題的題幹要指出要看${word}（例如「如${word}」）`);
+      // 圖表題組：圖和文章一起放在文章框，題幹只問問題（同組的圖要一樣、文章要指出看圖，在下面的題組檢查）
+      if (it.group === undefined) {
+        if (typeof it.q === 'string' && it.q.length > FIG_Q) err(`圖表題的題幹上限 ${FIG_Q} 字（現在 ${it.q.length} 字）：數據放在圖裡，題幹只寫情境與要問的`);
+        const word = it.fig?.type === 'table' ? '表' : '圖';
+        if (typeof it.q === 'string' && !it.q.includes(word)) err(`圖表題的題幹要指出要看${word}（例如「如${word}」）`);
+      }
     } else if (it.group === undefined && typeof it.q === 'string' && FIG_REF.test(it.q)) {
       err('題幹提到圖或表，但沒有 fig：要讀圖表的題目用 fig 欄位給資料');
     }
@@ -297,6 +299,14 @@ for (const file of files) {
     if (typeof passage !== 'string') continue;
     const differ = members.filter((m) => m.passage !== passage).map((m) => m.id);
     if (differ.length) err(`同組的 passage 必須逐字相同（${differ.join('、')} 不同）`);
+    // 圖表題組：整組共用一張圖（每一題的 fig 都要一樣），文章要指出要看圖或表
+    if (members.some((m) => m.fig !== undefined)) {
+      const fig = JSON.stringify(members[0].fig);
+      if (members.some((m) => JSON.stringify(m.fig) !== fig)) err('圖表題組的每一題都要有 fig，而且整組逐字相同（共用同一張圖）');
+      const word = members[0].fig?.type === 'table' ? '表' : '圖';
+      if (!passage.includes(word)) err(`圖表題組的文章要指出要看${word}（例如「如${word}」）`);
+      if (blanksIn(passage).length) err('圖表題組不出克漏字空格');
+    }
     const blanks = blanksIn(passage);
     if (blanks.some((n, i) => n !== i + 1)) err(`文章的空格要從 __1__ 起依序編號（現在是 ${blanks.join('、')}）`);
     const asked = [];

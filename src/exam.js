@@ -282,6 +282,70 @@ export function gradeExam(exam, byId) {
 /** 模擬考紀錄只留最近幾次 */
 export const KEEP_EXAMS = 30;
 
+/** 交卷後整份卷（題號、選項順序、作答、標記、每題秒數）留在這台裝置的份數：可以隔天重開成績單、練同一份的錯題 */
+export const KEEP_PAPERS = 10;
+
+/** 題目內容的指紋（題幹、選項、答案、文章、圖表）：考完之後題目修正過的話，重開成績單時標出來 */
+export function questionHash(q) {
+  const text = JSON.stringify([q.q, q.choices ?? null, q.answer, q.passage ?? null, q.fig ?? null]);
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193) >>> 0;
+  }
+  return h.toString(36);
+}
+
+/** 交卷：把這份卷存起來（最新的在最後，只留 KEEP_PAPERS 份）；at 和成績紀錄（logExam）同一個時間，兩邊對得起來 */
+export function keepPaper(state, exam, byId, now) {
+  const list = (state.examPapers ||= []);
+  list.push({
+    paper: exam.paper,
+    at: now,
+    ids: exam.ids,
+    orders: exam.orders,
+    fills: exam.fills ?? exam.ids.map(() => false),
+    answers: exam.answers,
+    marks: exam.marks,
+    spent: exam.spent.map((s) => Math.round(s * 10) / 10),
+    elapsed: Math.round(exam.elapsed),
+    limit: exam.limit,
+    hashes: exam.ids.map((id) => questionHash(byId.get(id))),
+  });
+  if (list.length > KEEP_PAPERS) list.splice(0, list.length - KEEP_PAPERS);
+}
+
+/**
+ * 存著的卷能不能重開：格式對、題目都還在題庫裡（作答的選項也還在）。
+ * @returns {{ ok: false } | { ok: true, changed: Set<string> }} changed：考完之後內容改過的題目
+ */
+export function paperStatus(saved, byId) {
+  if (!saved || typeof saved !== 'object' || !Number.isFinite(saved.at) || !validExam({ ...saved, index: 0 }, byId)) return { ok: false };
+  const hashes = Array.isArray(saved.hashes) ? saved.hashes : [];
+  return { ok: true, changed: new Set(saved.ids.filter((id, i) => hashes[i] !== undefined && hashes[i] !== questionHash(byId.get(id)))) };
+}
+
+/**
+ * 併進備份檔裡的卷（同一時間、同一張卷是同一份），依時間排好、只留最近 KEEP_PAPERS 份；回傳新增幾份。
+ * 格式在這裡只粗略檢查，重開前還會用 paperStatus 對照題庫
+ */
+export function mergePapers(state, incoming) {
+  const list = (state.examPapers ||= []);
+  const seen = new Set(list.map((p) => `${p.at}|${p.paper}`));
+  let added = 0;
+  for (const p of Array.isArray(incoming) ? incoming : []) {
+    if (!p || typeof p !== 'object' || !PAPER_BY_ID[p.paper] || !Number.isSafeInteger(p.at) || !Array.isArray(p.ids) || !Array.isArray(p.answers)) continue;
+    if (seen.has(`${p.at}|${p.paper}`)) continue;
+    seen.add(`${p.at}|${p.paper}`);
+    list.push(p);
+    added++;
+  }
+  if (!added) return 0;
+  list.sort((a, b) => a.at - b.at);
+  if (list.length > KEEP_PAPERS) list.splice(0, list.length - KEEP_PAPERS);
+  return added;
+}
+
 /** 記下這次的成績（最新的在最後），回傳上一次同一張卷的成績（沒有則為 null） */
 export function logExam(state, paperId, result, now) {
   const log = (state.examLog ||= []);

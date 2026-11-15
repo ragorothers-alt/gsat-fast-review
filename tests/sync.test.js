@@ -10,10 +10,11 @@ function state(patch) {
 }
 
 describe('backup', () => {
-  it('匯出再讀回，進度欄位不變；闖關進度與模擬考成績也在裡面，設定與作答速度不匯出', () => {
+  it('匯出再讀回，進度欄位不變；闖關進度、模擬考成績與存著的卷也在裡面，設定與作答速度不匯出', () => {
     const path = { math: { cleared: ['數與式'], clearedAt: { 數與式: 50 }, runs: {} } };
     const examLog = [{ paper: 'math', at: 60, total: 25, right: 12, points: 13.5, blank: 1, secs: 1500 }];
-    const s = state({ cards: { a: card(5) }, flags: { b: 9 }, stars: { c: 7 }, starsOff: { d: 8 }, path, examLog, pace: { 'math/數與式': { n: 9, t: 90, rn: 8, rt: 70 } } });
+    const examPapers = [{ paper: 'math', at: 60, ids: ['math-001'], orders: [[0, 1, 2, 3]], fills: [false], answers: [2], marks: [false], spent: [30], elapsed: 30, limit: 1920, hashes: ['abc'] }];
+    const s = state({ cards: { a: card(5) }, flags: { b: 9 }, stars: { c: 7 }, starsOff: { d: 8 }, path, examLog, examPapers, pace: { 'math/數與式': { n: 9, t: 90, rn: 8, rt: 70 } } });
     const back = parseBackup(exportBackup(s, 100));
     expect(back.cards).toEqual(s.cards);
     expect(back.flags).toEqual({ b: 9 });
@@ -21,6 +22,7 @@ describe('backup', () => {
     expect(back.starsOff).toEqual({ d: 8 });
     expect(back.path).toEqual(path);
     expect(back.examLog).toEqual(examLog);
+    expect(back.examPapers).toEqual(examPapers);
     expect(back.settings).toBeUndefined();
     expect(back.pace).toBeUndefined();
   });

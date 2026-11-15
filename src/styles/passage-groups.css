@@ -116,6 +116,20 @@
   margin-bottom: 8px;
 }
 
+/* 圖表題組：文章框裡接著整組共用的圖，框留高一點才看得到圖；圖照框的寬度縮放（figure.css） */
+.card.grouped.figured .passage {
+  min-height: min(15em, 40vh);
+}
+
+.card.grouped.figured.tight .passage {
+  min-height: min(11em, 32vh);
+}
+
+.passage .fig,
+.passage-body .fig {
+  margin-top: 8px;
+}
+
 /* 結算、錯題本、回看上一題：文章收起來，要看再展開 */
 .r-passage {
   margin: 0 0 8px;

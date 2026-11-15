@@ -1,7 +1,7 @@
 // 閱讀題組的文章框（作答畫面與模擬考共用）：放在題目卡上方、可以自己捲動。
 // 換到新的題組才重畫（同組的下一題保留捲動位置）；克漏字標出這題問的空格，捲到看得見的地方。
 import { blankOf, isBank } from '../groups.js';
-import { passageHTML, visibleLength } from './rich.js';
+import { materialHTML, visibleLength } from './rich.js';
 
 /**
  * 單選題選項區的 class：短選項排兩欄；共用選項（文意選填、篇章結構）的字詞排兩欄、句子排一欄並縮小字級
@@ -41,17 +41,19 @@ export function showPassage(box, q, label = '') {
     box.hidden = true;
     box.replaceChildren();
     delete box.dataset.group;
-    card?.classList.remove('grouped');
+    card?.classList.remove('grouped', 'figured');
     return false;
   }
   const fresh = box.dataset.group !== q.group;
   if (fresh) {
-    box.innerHTML = passageHTML(q.passage);
+    box.innerHTML = materialHTML(q);
     box.dataset.group = q.group;
   }
   box.hidden = false;
   card?.classList.add('grouped');
-  box.setAttribute('aria-label', `文章${label ? `（${label}）` : ''}`);
+  // 圖表題組：文章框裡有圖，框可以高一點（styles 的 .card.figured）
+  card?.classList.toggle('figured', !!q.fig);
+  box.setAttribute('aria-label', `${q.fig ? '文章與圖表' : '文章'}${label ? `（${label}）` : ''}`);
   if (fresh) box.scrollTop = 0;
   const n = blankOf(q);
   for (const b of box.querySelectorAll('.blank')) {
@@ -94,8 +96,9 @@ export function initReadFull() {
 export function passageDetails(q) {
   if (!q.group) return '';
   const n = blankOf(q);
-  const html = passageHTML(q.passage).replace(`class="blank" data-blank="${n}"`, `class="blank on" data-blank="${n}"`);
-  return `<details class="r-passage"><summary>題組文章</summary><div class="passage-body" role="region" tabindex="0" aria-label="題組文章">${html}</div></details>`;
+  const html = materialHTML(q).replace(`class="blank" data-blank="${n}"`, `class="blank on" data-blank="${n}"`);
+  const name = q.fig ? '題組文章與圖表' : '題組文章';
+  return `<details class="r-passage"><summary>${name}</summary><div class="passage-body" role="region" tabindex="0" aria-label="${name}">${html}</div></details>`;
 }
 
 /** 題組裡的第幾題：queue 裡同組、相鄰的題目 → { k, n }；不是題組就是 null */

@@ -144,6 +144,7 @@ test('模擬考的多選題：題目卡標「多選題」，點選項切換、�
 });
 
 test('模擬考的選填題：不給選項，用數字鍵填數值、填好了換下一題，回頭看填的還在；交卷後照填的值對答案', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   // 數學題庫換成 30 題能填答的演算題（選項 1、2、3、4，正解 1）：這份卷每題都是選填題
   const samples = Array.from({ length: 30 }, (_, i) => ({
     id: `math-${9001 + i}`,
@@ -223,6 +224,41 @@ test('模擬考的選填題：不給選項，用數字鍵填數值、填好了�
   const s = await saved(page);
   expect(s.examLog[0]).toMatchObject({ paper: 'math', total: 25, right: 1, blank: 22 });
   expect(Object.keys(s.cards)).toHaveLength(3);
+});
+
+test('考過的卷：交卷後列在模擬考面板，點了重開那一份的成績單與錯題，不再記進今日題數', async ({ page }) => {
+  // 面板滑上來的動畫中途顏色是半透明的：無障礙檢查要在減少動態下跑
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await openHome(page);
+  await startPaper(page, 'social');
+  for (let i = 1; i <= 3; i++) {
+    await page.locator('#answers .answer').first().click();
+    await expect(page.locator('#play-progress')).toHaveText(`${i + 1} / 40`);
+  }
+  await page.locator('#exam-index-btn').click();
+  await page.locator('#exam-submit').click();
+  await page.locator('#exam-submit').click();
+  await expect(page.locator('#exam-report')).toBeVisible();
+  const big = await page.locator('#x-big').textContent();
+  const listed = await page.locator('#x-list .r-item').count();
+  const answered = Object.values((await saved(page)).daily)[0].answered;
+  expect((await saved(page)).examPapers).toHaveLength(1);
+
+  await page.locator('#x-home').click();
+  await page.locator('#open-exam').click();
+  await expect(page.locator('#exam-history')).toBeVisible();
+  await expect(page.locator('#exam-past li')).toHaveCount(1);
+  await expect(page.locator('#exam-past button')).toContainText('社會');
+  await audit(page, '模擬考面板（考過的卷）');
+  await page.locator('#exam-past button').click();
+  await expect(page.locator('#exam-report')).toBeVisible();
+  await expect(page.locator('#x-paper')).toHaveText(/^社會模擬考・\d+\/\d+ 考的$/);
+  await expect(page.locator('#x-big')).toHaveText(big);
+  await expect(page.locator('#x-list .r-item')).toHaveCount(listed);
+  // 重開是回頭訂正：不再寫進排程、今日題數與成績紀錄
+  const after = await saved(page);
+  expect(Object.values(after.daily)[0].answered).toBe(answered);
+  expect(after.examLog).toHaveLength(1);
 });
 
 test('模擬考：先離開之後接著考，作答和剩餘時間都還在；時間到自動交卷', async ({ page }) => {

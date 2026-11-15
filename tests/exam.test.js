@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   FILL_SHARE,
   KEEP_EXAMS,
+  KEEP_PAPERS,
   MS_SHARE,
   PAPERS,
   PAPER_BY_ID,
@@ -12,9 +13,13 @@ import {
   examOutcome,
   examPoints,
   gradeExam,
+  keepPaper,
   logExam,
+  mergePapers,
   newExam,
+  paperStatus,
   paperWeights,
+  questionHash,
   validExam,
 } from '../src/exam.js';
 import { fillable } from '../src/numeric.js';
@@ -299,6 +304,51 @@ describe('對答案與紀錄', () => {
     for (let i = 0; i < KEEP_EXAMS + 5; i++) logExam(state, 'math', r, 10 + i);
     expect(state.examLog).toHaveLength(KEEP_EXAMS);
     expect(state.examLog.at(-1).at).toBe(10 + KEEP_EXAMS + 4);
+  });
+
+  it('keepPaper：交卷後整份卷留在這台，重開時重算出一樣的成績；只留最近 KEEP_PAPERS 份', () => {
+    const state = {};
+    const exam = sat();
+    keepPaper(state, exam, byId, 5000);
+    const saved = state.examPapers[0];
+    expect(saved).toMatchObject({ paper: 'math', at: 5000, ids: exam.ids, answers: exam.answers, marks: exam.marks, limit: exam.limit });
+    expect(saved.hashes).toHaveLength(exam.ids.length);
+    const status = paperStatus(saved, byId);
+    expect(status.ok).toBe(true);
+    expect(status.changed.size).toBe(0);
+    const again = gradeExam(saved, byId);
+    const first = gradeExam(exam, byId);
+    expect([again.right, again.wrong, again.blank, again.points]).toEqual([first.right, first.wrong, first.blank, first.points]);
+    for (let i = 0; i < KEEP_PAPERS + 3; i++) keepPaper(state, sat(), byId, 6000 + i);
+    expect(state.examPapers).toHaveLength(KEEP_PAPERS);
+    expect(state.examPapers.at(-1).at).toBe(6000 + KEEP_PAPERS + 2);
+  });
+
+  it('paperStatus：考完之後題目改過的標出來；題目已經不在題庫就不能重開', () => {
+    const state = {};
+    const exam = sat();
+    keepPaper(state, exam, byId, 5000);
+    const saved = state.examPapers[0];
+    const id = saved.ids[3];
+    const edited = new Map(byId);
+    edited.set(id, { ...byId.get(id), q: '題目修正過了' });
+    expect([...paperStatus(saved, edited).changed]).toEqual([id]);
+    expect(questionHash(byId.get(id))).not.toBe(questionHash(edited.get(id)));
+    const removed = new Map(byId);
+    removed.delete(id);
+    expect(paperStatus(saved, removed).ok).toBe(false);
+    expect(paperStatus({ ...saved, at: 'x' }, byId).ok).toBe(false);
+  });
+
+  it('mergePapers：備份檔裡的卷併進來，同一份不重複，依時間排、只留最近幾份；格式不對的略過', () => {
+    const state = {};
+    keepPaper(state, sat(), byId, 100);
+    const theirs = { examPapers: [] };
+    keepPaper(theirs, sat(), byId, 50);
+    keepPaper(theirs, sat(), byId, 100);
+    expect(mergePapers(state, [...theirs.examPapers, { paper: 'nope', at: 1, ids: [], answers: [] }, null])).toBe(1);
+    expect(state.examPapers.map((p) => p.at)).toEqual([50, 100]);
+    expect(mergePapers(state, theirs.examPapers)).toBe(0);
   });
 
   it('logExam 記下得分；有多選題以前的舊紀錄沒有得分，就用答對題數', () => {

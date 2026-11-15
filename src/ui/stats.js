@@ -421,8 +421,8 @@ export function initStats(ctx) {
         const share = s.exam ? Math.min(100, (s.avg / s.exam) * 100) : 0;
         return `<li style="--c:${subj.color}">
           <span class="tag">${subj.name}</span>
-          <span class="subject-meta">平均每題 ${sec(s.avg)}・計時 ${s.n} 題${s.exam ? `・學測每題約 ${sec(s.exam)}` : ''}</span>
-          <span class="unit-meter" role="img" aria-label="${s.exam ? `是學測每題時間的 ${Math.round((s.avg / s.exam) * 100)}%` : ''}"><i style="width:${share}%"></i></span>
+          <span class="subject-meta">平均每題 ${sec(s.avg)}・計時 ${s.n} 題${s.exam ? `・模擬考每題約 ${sec(s.exam)}` : ''}</span>
+          <span class="unit-meter" role="img" aria-label="${s.exam ? `是模擬考每題時間的 ${Math.round((s.avg / s.exam) * 100)}%` : ''}"><i style="width:${share}%"></i></span>
         </li>`;
       })
       .join('');

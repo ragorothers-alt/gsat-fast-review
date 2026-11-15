@@ -1,7 +1,7 @@
 // 更新說明：App 在背景換上新版後，下次打開首頁時跳出一次「這次多了什麼」，只列這台裝置還沒看過的；
 // 設定的「關於與診斷」可以隨時打開全部的更新紀錄。純邏輯與資料，不碰 DOM；畫面在 ui/news.js。
 //
-// 加一筆：在 NEWS 最前面插入 { id, title, items }。id 是「日期-當天第幾筆」（YYYY-MM-DD-N），字串比大小就是先後；
+// 加一筆：在 NEWS 最前面插入 { id, title, items }。id 是「日期-當天第幾筆」（YYYY-MM-DD-N），先後照數字比（newerThan）；
 // 寫給學生看的話（做了什麼、怎麼用、在哪裡），不寫實作細節。每筆 1–4 點，每點 70 字內（tests/news.test.js 會檢查）。
 
 /** localStorage：這台裝置看過的最新一筆 id */
@@ -12,6 +12,15 @@ export const RECENT_DAYS = 7;
 
 /** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
 export const NEWS = [
+  {
+    id: '2026-11-15-10',
+    title: '模擬考可以回頭看',
+    items: [
+      '模擬考面板多了「考過的卷」：最近 10 份都能重開成績單、看當時的作答與錯題，隔天也能訂正同一份。',
+      '重開的成績單不會再算進今日題數；考完之後修正過的題目會標出來。',
+      '選卷時寫明這是短卷練習：題目比學測短、時間照比例縮小，分數不換算級分。',
+    ],
+  },
   {
     id: '2026-11-15-9',
     title: '更省電、更順',
@@ -138,6 +147,17 @@ export const NEWS = [
 /** 最新一筆的 id（沒有任何一筆時是空字串） */
 export const latestNews = (list = NEWS) => list[0]?.id ?? '';
 
+/**
+ * a 是不是比 b 新。id 拆成 [年, 月, 日, 當天第幾筆] 逐項照數字比：當天第 10 筆在第 9 筆之後
+ * （照字串比 '…-10' 會排在 '…-9' 前面，看過第 10 筆的人又會跳出第 9 筆）。b 不是這種格式時當作都看過了
+ */
+export function newerThan(a, b) {
+  const x = String(a).split('-').map(Number);
+  const y = String(b).split('-').map(Number);
+  for (let i = 0; i < 4; i++) if (x[i] !== y[i]) return x[i] > y[i];
+  return false;
+}
+
 /** id 開頭的日期（當地時間那天 0 點） */
 const dateOf = (id) => {
   const [y, m, d] = id.split('-').map(Number);
@@ -151,7 +171,7 @@ const dateOf = (id) => {
  */
 export function unseenNews(seen, now, list = NEWS) {
   if (seen === null) return list.filter((n) => now - dateOf(n.id) <= RECENT_DAYS * 86_400_000);
-  return list.filter((n) => n.id > seen);
+  return list.filter((n) => newerThan(n.id, seen));
 }
 
 /**

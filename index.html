@@ -567,7 +567,7 @@
           <h2 id="exam-title">模擬考</h2>
           <button id="exam-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
         </header>
-        <p class="sheet-tip">照 111–115 學測各單元的出題比例抽一份卷（國文、數學、自然卷含多選題；數學卷另有不給選項、自己算出數值填進去的選填題），整卷計時。作答時不對答案，可以跳題、標記、回頭改；交卷後才看成績、各單元得分與時間分配，答錯的題目加入錯題複習。</p>
+        <p class="sheet-tip">照 111–115 學測各單元的出題比例抽一份卷（國文、數學、自然卷含多選題；數學卷另有不給選項、自己算出數值填進去的選填題），整卷計時。這是短卷練習：題目比學測短，題數與時間照比例縮小，分數不換算級分。作答時不對答案，可以跳題、標記、回頭改；交卷後才看成績、各單元得分與時間分配，答錯的題目加入錯題複習。</p>
         <div id="exam-resume" class="exam-resume" hidden>
           <p id="exam-resume-text"></p>
           <div class="exam-resume-actions">
@@ -575,7 +575,13 @@
             <button id="exam-continue" class="primary-btn" type="button">接著考</button>
           </div>
         </div>
-        <ul id="exam-papers" class="exam-papers"></ul>
+        <div class="exam-lists">
+          <ul id="exam-papers" class="exam-papers"></ul>
+          <section id="exam-history" class="exam-history" aria-labelledby="exam-history-title" hidden>
+            <h3 id="exam-history-title">考過的卷 <small>最近 10 份，點了重開成績單與錯題</small></h3>
+            <ol id="exam-past" class="exam-past"></ol>
+          </section>
+        </div>
       </div>
     </div>
 

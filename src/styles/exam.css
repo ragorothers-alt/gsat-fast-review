@@ -87,15 +87,88 @@
   color: var(--card);
 }
 
-/* 選考卷 */
-.exam-papers {
-  list-style: none;
-  margin: 0;
-  padding: 2px;
+/* 選考卷：五張卷和「考過的卷」一起捲動 */
+.exam-lists {
+  min-height: 0;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  gap: 14px;
+  padding: 2px;
+}
+
+.exam-papers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   gap: 8px;
+}
+
+.exam-history[hidden] {
+  display: none;
+}
+
+.exam-history h3 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+}
+
+.exam-history h3 small {
+  margin-left: 4px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.exam-past {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.exam-past button {
+  width: 100%;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0 10px;
+  padding: 7px 12px;
+  border: 1.5px solid var(--line-soft);
+  border-left: 6px solid var(--c);
+  border-radius: var(--hand-sm);
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.exam-past button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.exam-past-name {
+  font-weight: 800;
+}
+
+.exam-past-when {
+  grid-column: 1;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.exam-past-score {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  font-weight: 900;
+  font-size: 1.05rem;
 }
 
 .exam-papers li {

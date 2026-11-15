@@ -1,7 +1,7 @@
 // 進度存在 localStorage。私密瀏覽或被清除時讀不到也要能正常玩，所以全部包 try/catch。
 import { SUBJECTS } from './subjects.js';
 import { rebuildDaily } from './cloud.js';
-import { mergeExams } from './exam.js';
+import { mergeExams, mergePapers } from './exam.js';
 import { cleanPace, mergePace } from './pace.js';
 import { applyPathRows, pathRows } from './path.js';
 import { RELEARN_BOX } from './srs.js';
@@ -30,9 +30,11 @@ export function freshState() {
     // 單元闖關的進度：科目 → { cleared, runs, clearedAt, resetAt }（見 path.js），會線上同步；pathLast 是這台最近闖的科目
     path: {},
     pathLast: null,
-    // 模擬考：考到一半的卷（見 exam.js 的 newExam）只存在這台；最近的成績（logExam）會線上同步
+    // 模擬考：考到一半的卷（見 exam.js 的 newExam）只存在這台；最近的成績（logExam）會線上同步；
+    // 交卷後的整份卷（keepPaper，最近 10 份，可以重開成績單）存在這台、跟著進度備份，不線上同步
     exam: null,
     examLog: [],
+    examPapers: [],
     // 作答速度：單元 → 計時的題數與秒數（見 pace.js），只存在這台
     pace: {},
     // scratch：平板上草稿區要不要展開（手機上一律收起）
@@ -84,6 +86,8 @@ export function parseState(raw) {
     // 考到一半的卷開考前會再檢查一次（ui/exam.js）；成績紀錄壞掉的筆數丟掉
     exam: saved.exam && typeof saved.exam === 'object' && !Array.isArray(saved.exam) ? saved.exam : null,
     examLog: Array.isArray(saved.examLog) ? saved.examLog.filter((e) => e && typeof e.paper === 'string' && num(e.at) && num(e.right) && num(e.total) && e.total > 0) : [],
+    // 存著的卷重開前還會對照題庫檢查（exam.js 的 paperStatus）；這裡只丟掉明顯壞掉的
+    examPapers: Array.isArray(saved.examPapers) ? saved.examPapers.filter((p) => p && typeof p.paper === 'string' && num(p.at) && Array.isArray(p.ids) && Array.isArray(p.answers)) : [],
     pace: cleanPace(saved.pace),
     streak: { ...base.streak, ...saved.streak },
     best: { ...base.best, ...saved.best },
@@ -158,12 +162,12 @@ function cleanPath(path) {
 }
 
 /**
- * 闖關進度、模擬考成績：跟線上同步用同一套規則併進 state（重新闖、做到一半的關都比時間；同一筆成績不重複），
- * 重複併同一份不會變。另一個分頁存檔、匯入備份檔時用；回傳改變了幾個單元加幾筆成績
+ * 闖關進度、模擬考成績與存著的卷：跟線上同步用同一套規則併進 state（重新闖、做到一半的關都比時間；同一筆成績、同一份卷不重複），
+ * 重複併同一份不會變。另一個分頁存檔、匯入備份檔時用；回傳改變了幾個單元加幾筆成績與卷
  */
 export function mergeExtras(state, incoming) {
   const path = (state.path ||= {});
-  return applyPathRows(path, pathRows(cleanPath(incoming?.path))) + mergeExams(state, incoming?.examLog);
+  return applyPathRows(path, pathRows(cleanPath(incoming?.path))) + mergeExams(state, incoming?.examLog) + mergePapers(state, incoming?.examPapers);
 }
 
 /** 兩個分頁的同步狀態：同一組同步碼時，各台裝置的每日題數取較大值（同一台的兩個分頁各記了一部分） */

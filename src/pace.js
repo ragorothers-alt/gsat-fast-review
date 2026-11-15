@@ -47,7 +47,7 @@ export function mergePace(mine, other) {
   return out;
 }
 
-/** 學測這科平均每題有幾秒（模擬考各卷的時間 ÷ 題數，和學測的節奏相同） */
+/** 這科模擬考平均每題有幾秒（各卷的時間 ÷ 題數）：App 的題目比學測短，題數與時間照比例縮小，是短卷的參考節奏 */
 export function examPace(subject) {
   const paper = PAPERS.find((p) => p.subjects.includes(subject));
   return paper ? Math.round((paper.minutes * 60) / paper.size) : null;

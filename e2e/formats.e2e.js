@@ -169,7 +169,7 @@ test('作答速度：一般題記下每題花的秒數，學習分析列出各�
   await openHome(page);
   await page.locator('#daily').click();
   await expect(page.locator('#stats-pace')).toBeVisible();
-  await expect(page.locator('#pace-subjects li')).toHaveText(/數學\s*平均每題 21 秒・計時 40 題・學測每題約 77 秒/);
+  await expect(page.locator('#pace-subjects li')).toHaveText(/數學\s*平均每題 21 秒・計時 40 題・模擬考每題約 77 秒/);
   await expect(page.locator('#pace-slow li')).toHaveText(/數學\s*機率\s*答對平均 40 秒（這科 20 秒）/);
   await audit(page, '作答速度');
 

@@ -1,5 +1,5 @@
 // 閱讀題組：文章框、克漏字空格、同組接著出、展開文章、結算畫面的文章
-import { audit, expect, openHome, test } from './fixtures.js';
+import { audit, expect, openHome, seedVeteran, skipToResult, test } from './fixtures.js';
 
 // 英文克漏字（一篇 5 個空格）與國文現代文題組
 const CLOZE = { group: 'english-g001', size: 5 };
@@ -146,4 +146,51 @@ test('模擬考：各張考卷標出含幾組題組', async ({ page }) => {
   await expect(page.locator('li:has([data-paper="math"]) .exam-paper-meta')).toContainText('含 1 組混合題組');
   await expect(page.locator('li:has([data-paper="science"]) .exam-paper-meta')).toContainText('含 3 組題組');
   await expect(page.locator('li:has([data-paper="social"]) .exam-paper-meta')).toContainText('含 3 組題組');
+});
+
+test('圖表題組：整組共用的圖放在文章框裡、題幹下面不重複畫，同組接著出時圖還在；結算的題組文章也附圖', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const fig = {
+    type: 'line',
+    x: { label: '時間 (s)', min: 0, max: 4, step: 1 },
+    y: { label: '速度 (m/s)', min: 0, max: 8, step: 2 },
+    series: [{ name: '甲車', points: [[0, 0], [2, 4], [4, 8]] }],
+  };
+  const passage = '某生用感測器記錄甲車在水平直線道路上的運動，得到速度與時間的關係如圖。實驗時道路平直，甲車始終朝同一方向前進，車上的乘客也隨車一起運動。';
+  const base = { subject: 'physics', topic: '牛頓運動定律', type: 'mc', level: 2, group: 'physics-g901', passage, fig };
+  const samples = [
+    { ...base, id: 'physics-9901', q: '甲車的加速度大小為多少？', choices: ['1 m/s²', '2 m/s²', '4 m/s²', '8 m/s²'], answer: 1, explain: '斜率 8/4＝2 m/s²。' },
+    { ...base, id: 'physics-9902', q: '0 到 4 秒內，甲車所受合力的方向為何？', choices: ['與運動方向相同', '與運動方向相反', '與運動方向垂直', '合力為零'], answer: 0, explain: '速度越來越大，加速度與運動同向，所以合力也同向。' },
+  ];
+  await page.route('**/assets/physics-*.json', async (route) => {
+    const res = await route.fetch();
+    const body = await res.json();
+    // 同樣開頭的還有重點卡的檔案：只換題庫
+    if (Array.isArray(body) && body[0]?.id?.startsWith('physics-')) await route.fulfill({ response: res, json: samples });
+    else await route.fulfill({ response: res });
+  });
+  await seedVeteran(page, { subjects: ['physics'] });
+  await openHome(page);
+  await page.locator('[data-mode="ten"]').click();
+  await expect(page.locator('#play')).toBeVisible();
+
+  const card = page.locator('#card');
+  const box = page.locator('#q-passage');
+  await expect(card).toHaveClass(/figured/);
+  await expect(box).toHaveAttribute('aria-label', /文章與圖表/);
+  await expect(box.locator('.fig-svg')).toHaveCount(1);
+  await expect(page.locator('#q-text .fig-svg')).toHaveCount(0);
+  await audit(page, '圖表題組');
+
+  // 同組的下一題：文章框不重畫，圖還在
+  await page.locator('#skip').click();
+  await page.locator('#next').click();
+  await expect(page.locator('#q-topic')).toContainText('題組 2／2');
+  await expect(box.locator('.fig-svg')).toHaveCount(1);
+  await expect(card).toHaveClass(/figured/);
+
+  await skipToResult(page);
+  const details = page.locator('#r-list .r-passage').first();
+  await expect(details.locator('summary')).toHaveText('題組文章與圖表');
+  await expect(details.locator('.fig-svg')).toHaveCount(1);
 });

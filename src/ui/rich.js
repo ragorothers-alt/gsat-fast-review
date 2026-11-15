@@ -27,8 +27,11 @@ export const passageHTML = (text) =>
     .map((p) => `<p>${blanksHTML(richHTML(p))}</p>`)
     .join('');
 
-/** 題幹：題組的題目把 __n__ 換成空格；圖表題（q.fig）的圖接在題幹下面 */
-export const stemHTML = (q) => (q.group ? blanksHTML(richHTML(q.q)) : richHTML(q.q)) + (q.fig ? figureHTML(q.fig, richHTML) : '');
+/** 題幹：題組的題目把 __n__ 換成空格；圖表題（q.fig）的圖接在題幹下面（圖表題組的圖在文章框裡，見 materialHTML） */
+export const stemHTML = (q) => (q.group ? blanksHTML(richHTML(q.q)) : richHTML(q.q)) + (q.fig && !q.group ? figureHTML(q.fig, richHTML) : '');
+
+/** 題組的共用材料：文章，圖表題組再接上整組共用的圖 */
+export const materialHTML = (q) => passageHTML(q.passage) + (q.fig ? figureHTML(q.fig, richHTML) : '');
 
 // ── 公式的純文字念法 ─────────────────────────────
 // Chrome 算按鈕名稱時不讀 <math> 裡的字，只有公式的選項按鈕會變成沒有名字，

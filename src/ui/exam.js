@@ -1,7 +1,7 @@
 // 模擬考：選考卷、作答、題號一覽與交卷、成績單。
 // 作答時借用作答畫面（#play 加上 .exam）：題目卡、選項、草稿區與橫放版面都一樣，只是不對答案，
 // 可以跳題、標記、回頭改，整卷計時。考到一半的卷存在 state.exam，離開後可以接著考。
-import { FILL_SHARE, PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, logExam, newExam, validExam } from '../exam.js';
+import { FILL_SHARE, PAPERS, PAPER_BY_ID, buildPaper, examOutcome, examPoints, gradeExam, keepPaper, logExam, newExam, paperStatus, validExam } from '../exam.js';
 import { usedOptions } from '../groups.js';
 import { fillUnit, parseTyped } from '../numeric.js';
 import { questionPrompt } from '../prompt.js';
@@ -106,6 +106,44 @@ export function initExam(ctx) {
         <button type="button" class="secondary-btn exam-start" data-paper="${p.id}"${saved ? ' disabled' : ''} aria-label="開始${p.name}模擬考">開始</button>
       </li>`;
     }).join('');
+    renderHistory();
+  }
+
+  /** 考過的卷（新的在上）：點了重開那一份的成績單；題目已經不在題庫裡的不能重開 */
+  function renderHistory() {
+    const papers = [...(ctx.state.examPapers ?? [])].reverse();
+    $('#exam-history').hidden = !papers.length;
+    $('#exam-past').innerHTML = papers
+      .map((p) => {
+        const paper = PAPER_BY_ID[p.paper];
+        if (!paper) return '';
+        const status = paperStatus(p, byId);
+        const color = SUBJECT_BY_ID[paper.subjects[0]].color;
+        const score = status.ok ? gradeExam(p, byId) : null;
+        const when = `${md(p.at)} ${new Date(p.at).toTimeString().slice(0, 5)}・用時 ${clock(p.elapsed)}`;
+        return `<li><button type="button" data-at="${p.at}" style="--c:${color}"${status.ok ? '' : ' disabled'}>
+          <span class="exam-past-name">${paper.name}</span>
+          <span class="exam-past-when">${status.ok ? when : '題目改版後已不在題庫，不能重開'}</span>
+          <span class="exam-past-score">${score ? `${pct(score.points, score.total)}%` : '—'}</span>
+        </button></li>`;
+      })
+      .join('');
+  }
+
+  $('#exam-past').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-at]');
+    if (btn && !btn.disabled) reopen(Number(btn.dataset.at));
+  });
+
+  /** 重開存著的卷：成績單照當時的作答重算（不再寫進排程與今日題數），跟前一次同一張卷比 */
+  function reopen(at) {
+    const saved = (ctx.state.examPapers ?? []).find((p) => p.at === at);
+    const status = saved && paperStatus(saved, byId);
+    if (!status?.ok) return renderPicker();
+    const paper = PAPER_BY_ID[saved.paper];
+    const prev = [...(ctx.state.examLog ?? [])].reverse().find((e) => e.paper === saved.paper && e.at < at) ?? null;
+    closeSheet(sheet);
+    showReport(paper, gradeExam(saved, byId), prev, false, { at, changed: status.changed });
   }
 
   $('#exam-papers').addEventListener('click', (e) => {
@@ -481,6 +519,7 @@ export function initExam(ctx) {
       recordAnswer(ctx.state, outcome, now);
     }
     const prev = logExam(ctx.state, paper.id, result, now);
+    keepPaper(ctx.state, done, byId, now);
     ctx.state.exam = null;
     ctx.save();
     ctx.scratch.forgetExams();
@@ -490,12 +529,15 @@ export function initExam(ctx) {
     ctx.reminder?.sync();
   }
 
-  function showReport(paper, result, prev, timeUp) {
-    report = { paper, result };
+  /**
+   * @param {{ at: number, changed: Set<string> } | null} past 重開考過的卷：哪一天考的、考完之後修正過的題目
+   */
+  function showReport(paper, result, prev, timeUp, past = null) {
+    report = { paper, result, changed: past?.changed ?? new Set() };
     const { total, right, points, blank, secs, limit } = result;
     // 有多選題的卷照學測部分給分：大字是得分，不是答對題數
     const hasMs = result.items.some((it) => it.q.type === 'ms');
-    $('#x-paper').textContent = `${paper.name}模擬考${timeUp ? '・時間到，自動交卷' : ''}`;
+    $('#x-paper').textContent = `${paper.name}模擬考${past ? `・${md(past.at)} 考的` : timeUp ? '・時間到，自動交卷' : ''}`;
     $('#x-big').textContent = `${fmt(points)} / ${total}`;
     $('#x-acc').textContent = `${pct(points, total)}%`;
     $('#x-acc-label').textContent = hasMs ? '得分率' : '答對率';
@@ -569,6 +611,8 @@ export function initExam(ctx) {
     ctx.world.setCast(paper.subjects);
     ctx.show('exam-report');
     $('#exam-report .result-scroll').scrollTop = 0;
+    // 重開考過的卷是回頭訂正，不再放交卷的音效與慶祝
+    if (past) return;
     sfx.finish();
     if (points / total >= 0.9) ctx.world.celebrate();
   }
@@ -577,10 +621,12 @@ export function initExam(ctx) {
   const missed = () => report.result.items.filter((it) => !it.right || it.marked);
 
   function mine(it) {
-    if (it.blank) return '<span class="r-mine skip">沒作答</span>';
-    if (it.right) return '<span class="r-mine skip">答對了，但你標記了這題</span>';
+    // 重開考過的卷時，考完之後修正過的題目要標出來：現在看到的題目和當時不完全一樣
+    const fixed = report.changed.has(it.id) ? '<span class="r-mine skip">這題在你考完之後修正過，題目與當時略有不同</span>' : '';
+    if (it.blank) return `<span class="r-mine skip">沒作答</span>${fixed}`;
+    if (it.right) return `<span class="r-mine skip">答對了，但你標記了這題</span>${fixed}`;
     const note = it.q.type === 'ms' ? `<span class="r-mine skip">${msNote(it.q, it.answer)}</span>` : '';
-    return `<span class="r-mine">${mineHTML(it.q, entryOf(it))}</span>${note}`;
+    return `<span class="r-mine">${mineHTML(it.q, entryOf(it))}</span>${note}${fixed}`;
   }
 
   /** 這題在成績單上的作答紀錄（回看、複製題目用；選項照當時的順序；選填題附上填的字） */
