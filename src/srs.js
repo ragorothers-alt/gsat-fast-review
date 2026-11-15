@@ -181,8 +181,8 @@ export function mastery(questions, cards) {
  * 自由練習再多出一些新題（MODES.free.newEvery = 2，複習和新題一題一題輪流），考前能練到的題目比較多。
  */
 export const NEW_EVERY = 3;
-/** 到期的複習和新題都夠時，複習占一輪的比例（forecast.js 推演用） */
-export const REVIEW_SHARE = (NEW_EVERY - 1) / NEW_EVERY;
+/** 每 every 題留一題給新題時，到期的複習和新題都夠的話複習占一輪的比例（forecast.js 推演用） */
+export const reviewShare = (every) => (every - 1) / every;
 
 /**
  * 組出一輪的題目順序：到期該複習的題目優先，每 NEW_EVERY 題穿插一題新題，其餘依到期時間補上。

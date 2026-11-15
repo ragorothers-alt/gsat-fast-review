@@ -729,5 +729,7 @@ test('非選擇題的鍵盤操作：Enter 看參考答案、數字鍵勾要點�
   await expect(page.locator('#answer-status')).toHaveText(`參考答案：${second.answer}`);
   await page.keyboard.press('Enter');
   await expect(page.locator('#result')).toBeVisible();
-  await expect(page.locator('#r-big')).toHaveText('0 / 2');
+  // 看解答的那題不算進分母，另外寫出來
+  await expect(page.locator('#r-big')).toHaveText('0 / 1');
+  await expect(page.locator('#r-cheer')).toContainText('另外 1 題看了解答。');
 });

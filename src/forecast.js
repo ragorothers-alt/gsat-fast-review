@@ -1,6 +1,14 @@
 // 複習負荷預報與考前排程：依每張卡片的到期日與盒子，推估之後每天要複習幾題、扣掉複習還能做幾題新題。
 // 純邏輯，不碰 DOM。用期望值逐日推演，所以題數可以是小數，顯示時再四捨五入。
-import { DAY, INTERVALS, MAX_BOX, REVIEW_SHARE, neverMissed } from './srs.js';
+import { MODES } from './session.js';
+import { DAY, INTERVALS, MAX_BOX, SPRINT_DAYS, SPRINT_NEW_EVERY, neverMissed, reviewShare } from './srs.js';
+
+/**
+ * 推演用的複習比例：照首頁「開始 ›」的自由練習（MODES.free.newEvery：到期的複習和新題一題一題輪流）；
+ * 考前衝刺期間不管哪個模式都是每 SPRINT_NEW_EVERY − 1 題複習才配 1 題新題（srs.js 的 buildQueue）
+ */
+export const SHARE = reviewShare(MODES.free.newEvery);
+export const SPRINT_SHARE = reviewShare(SPRINT_NEW_EVERY);
 
 // 答錯（或看解答、標成猜的）不在當天重考，隔天從第 2 盒再複習（srs.js 的 RELEARN_BOX）：每張到期的卡、每題新題都只算作答一次
 /** 資料太少時用的預設值：複習時答對的比例、新題第一次就答對（之後不再出）的比例 */
@@ -22,6 +30,16 @@ function startOfDay(ts) {
 /** 某個時間點是從今天算起的第幾天（今天是 0；已經過期的也算今天） */
 export function dayIndex(ts, now) {
   return Math.max(0, Math.round((startOfDay(ts) - startOfDay(now)) / DAY));
+}
+
+/**
+ * 考前衝刺是從今天算起的第幾天到第幾天（第 from 天起、第 to 天考試，那天不算）：給 simulate 的 sprint；
+ * 沒設定考試日期或已經考完時為 null
+ * @param {number | null} examAt 考試那天 0 點（srs.js 的 examStart）
+ */
+export function sprintDays(examAt, now) {
+  if (!examAt || now >= examAt) return null;
+  return { from: dayIndex(examAt - SPRINT_DAYS * DAY, now), to: dayIndex(examAt, now) };
 }
 
 /**
@@ -54,19 +72,20 @@ export function dueBuckets(cards, now, dueOf = (c) => c.due) {
 }
 
 /**
- * 逐日推演，照 App 實際的出題方式（srs.js 的 buildQueue）：到期的複習先出，但每 2 題複習配 1 題新題，
+ * 逐日推演，照 App 實際的出題方式（srs.js 的 buildQueue）：到期的複習和新題輪流出（SHARE；考前衝刺 SPRINT_SHARE），
  * 一邊不夠時由另一邊補上；當天沒輪到的複習留到隔天，越積越多。
  * 複習答對升一盒、隔那一盒的天數再出；答錯隔天從第 2 盒再來。
  * 新題第一次就答對的不再出；答錯的隔天開始複習。
  * @param {Map<number, number[]>} buckets dueBuckets 的結果
- * @param {{ days: number, budget: (day: number) => number, fresh: number, recall: number, first: number, newReturns?: boolean }} opts
+ * @param {{ days: number, budget: (day: number) => number, fresh: number, recall: number, first: number, newReturns?: boolean, sprint?: { from: number, to: number } | null }} opts
  *   budget：第幾天能作答幾題；fresh：還沒做過的題目數，做完就沒有新題可做；
  *   newReturns：新題答錯的之後要不要回來複習。預報「已經練過的題目」每天到期幾題時設成 false，
- *   不然新題補滿空檔、答錯的又回來，複習量會跟著每日目標一起變大，看不出現有的複習跟不跟得上
+ *   不然新題補滿空檔、答錯的又回來，複習量會跟著每日目標一起變大，看不出現有的複習跟不跟得上；
+ *   sprint：考前衝刺的日子（從今天算第 from 天到第 to − 1 天，見 sprintDays），這幾天複習占得比較多
  * @returns {{ due: number, review: number, fresh: number, carry: number }[]}
  *   每天：到期的題數（含之前沒做完的）、複習的作答數、新題數、沒輪到而留到隔天的題數
  */
-export function simulate(buckets, { days, budget, fresh, recall, first, newReturns = true }) {
+export function simulate(buckets, { days, budget, fresh, recall, first, newReturns = true, sprint = null }) {
   const due = new Map([...buckets].map(([d, boxes]) => [d, [...boxes]]));
   const add = (d, box, n) => {
     if (d >= days || !n) return;
@@ -80,8 +99,9 @@ export function simulate(buckets, { days, budget, fresh, recall, first, newRetur
     const cards = boxes.reduce((a, n) => a + n, 0);
     const need = cards;
     const b = budget(d);
-    // 複習最多占 REVIEW_SHARE，新題做完了就全給複習；複習不夠時剩下的給新題
-    const spend = Math.min(need, Math.max(b * REVIEW_SHARE, b - left));
+    // 複習最多占 share，新題做完了就全給複習；複習不夠時剩下的給新題
+    const share = sprint && d >= sprint.from && d < sprint.to ? SPRINT_SHARE : SHARE;
+    const spend = Math.min(need, Math.max(b * share, b - left));
     const done = need ? spend / need : 0;
     let carry = 0;
     boxes.forEach((n, box) => {
@@ -105,11 +125,11 @@ export function simulate(buckets, { days, budget, fresh, recall, first, newRetur
 /**
  * 已經練過的題目接下來 days 天的複習預報（新題答錯的不算回來，見 simulate 的 newReturns）
  * @param {Map<number, number[]>} buckets dueBuckets 的結果
- * @param {{ days: number, goal: number, fresh: number, recall: number, first: number, today?: number }} opts
- *   goal：每日目標；today：今天已經作答幾題（今天只剩目標減掉這些）
+ * @param {{ days: number, goal: number, fresh: number, recall: number, first: number, today?: number, sprint?: { from: number, to: number } | null }} opts
+ *   goal：每日目標；today：今天已經作答幾題（今天只剩目標減掉這些）；sprint：考前衝刺的日子（sprintDays）
  */
-export function reviewForecast(buckets, { days, goal, fresh, recall, first, today = 0 }) {
-  return simulate(buckets, { days, budget: (d) => (d ? goal : Math.max(0, goal - today)), fresh, recall, first, newReturns: false });
+export function reviewForecast(buckets, { days, goal, fresh, recall, first, today = 0, sprint = null }) {
+  return simulate(buckets, { days, budget: (d) => (d ? goal : Math.max(0, goal - today)), fresh, recall, first, newReturns: false, sprint });
 }
 
 /** 從明天起都沒有複習留到隔天：每日目標跟得上已經練過的題目 */
@@ -147,15 +167,15 @@ const freshSum = (rows) => rows.reduce((a, r) => a + r.fresh, 0);
 
 /**
  * 考前規劃：照每天 pace 題的步調推演到考前，扣掉複習後還能做到幾題新題；想在考前全部做過一輪，每天要做幾題。
- * @param {{ buckets: Map<number, number[]>, total: number, fresh: number, daysLeft: number, pace: number, goals: number[], recall: number, first: number }} opts
- *   total：選的範圍有幾題；fresh：其中還沒做過的；pace：每天作答幾題（近來的平均或每日目標）
+ * @param {{ buckets: Map<number, number[]>, total: number, fresh: number, daysLeft: number, pace: number, goals: number[], recall: number, first: number, sprint?: { from: number, to: number } | null }} opts
+ *   total：選的範圍有幾題；fresh：其中還沒做過的；pace：每天作答幾題（近來的平均或每日目標）；sprint：考前衝刺的日子（sprintDays）
  * @returns {{ remaining: number, projected: number, coverage: number, projectedCoverage: number, needDaily: number | null, needReview: number, suggest: number | null }}
  *   projected：照目前步調考前還能做到的新題數；needDaily：全部做過一輪每天要做幾題（做不完時為 null），
  *   needReview：照 needDaily 的步調，平均每天其中有幾題是複習；suggest：建議的每日目標（選項裡最小夠用的）
  */
-export function studyPlan({ buckets, total, fresh, daysLeft, pace, goals, recall, first }) {
+export function studyPlan({ buckets, total, fresh, daysLeft, pace, goals, recall, first, sprint = null }) {
   const days = Math.max(1, daysLeft);
-  const run = (daily) => simulate(buckets, { days, budget: () => daily, fresh, recall, first });
+  const run = (daily) => simulate(buckets, { days, budget: () => daily, fresh, recall, first, sprint });
   const enough = (daily) => freshSum(run(daily)) >= fresh - 0.5;
   const projected = Math.min(fresh, Math.round(freshSum(run(pace))));
   let needDaily = 0;

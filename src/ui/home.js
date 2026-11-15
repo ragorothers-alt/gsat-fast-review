@@ -2,7 +2,7 @@
 import { daysUntil, weakUnits } from '../analysis.js';
 import { currentUnit, pathUnits } from '../path.js';
 import { SUBJECTS, SUBJECT_BY_ID } from '../subjects.js';
-import { isWeak, mastery } from '../srs.js';
+import { dueFor, examStart, isWeak, mastery, neverMissed } from '../srs.js';
 import { currentStreak, today } from '../stats.js';
 import { UNITS, isUnitOff, unitKey } from '../units.js';
 import { initPathSheet } from './path.js';
@@ -101,8 +101,13 @@ export function initHome(ctx) {
     const ring = $('#daily-ring');
     ring.style.strokeDasharray = `${Math.min(100, (day.answered / goal) * 100)} 100`;
     ring.style.opacity = day.answered ? '1' : '0'; // 0 題時圓頭線帽會留一個點
-    // 旁邊就是「開始 ›」，還沒開始時這行寫短一點（窄螢幕才放得下）
-    $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : '今天還沒開始';
+    // 旁邊就是「開始 ›」，還沒開始時這行寫短一點（窄螢幕才放得下）：有到期的複習就寫幾題該複習（開始後先出這些）
+    const examAt = examStart(settings.examDate);
+    const due = inSelection.filter((q) => {
+      const c = cards[q.id];
+      return c && !neverMissed(c) && dueFor(q.id, c, examAt, now) <= now;
+    }).length;
+    $('#daily-acc').textContent = day.answered ? `正確率 ${Math.round((day.right / day.answered) * 100)}%` : due ? `${due} 題該複習` : '今天還沒開始';
     $('#daily-card').classList.toggle('done', day.answered >= goal);
 
     // 考完就不再倒數

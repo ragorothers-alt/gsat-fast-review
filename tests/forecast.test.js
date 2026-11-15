@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PLAN_STRETCH, dayIndex, dueBuckets, estimateRates, keepUpGoal, planVerdict, reviewForecast, simulate, studyPlan } from '../src/forecast.js';
+import { PLAN_STRETCH, SHARE, SPRINT_SHARE, dayIndex, dueBuckets, estimateRates, keepUpGoal, planVerdict, reviewForecast, simulate, sprintDays, studyPlan } from '../src/forecast.js';
 import { DAY, schedule } from '../src/srs.js';
 import { GOALS } from '../src/stats.js';
 
@@ -68,16 +68,37 @@ describe('simulate', () => {
     ]);
   });
 
-  it('到期的太多：複習先出、每 2 題複習配 1 題新題，沒輪到的複習留到隔天', () => {
+  it('到期的太多：照自由練習，複習和新題輪流出，沒輪到的複習留到隔天', () => {
     const many = dueBuckets(Array.from({ length: 40 }, () => card(2, 0)), NOW);
     const [day0, day1] = simulate(many, { days: 2, budget: () => 30, fresh: 100, recall: 1, first: 1 });
     const fix = (r) => Object.fromEntries(Object.entries(r).map(([k, v]) => [k, +v.toFixed(6)]));
-    // 30 題裡複習占 2/3 = 20 題，新題 10 題；沒輪到的 20 題留到隔天
-    expect(fix(day0)).toEqual({ due: 40, review: 20, fresh: 10, carry: 20 });
-    expect(fix(day1)).toEqual({ due: 20, review: 20, fresh: 10, carry: 0 });
+    // 30 題裡複習占一半 15 題，新題 15 題；沒輪到的 25 題留到隔天
+    expect(SHARE).toBe(0.5);
+    expect(fix(day0)).toEqual({ due: 40, review: 15, fresh: 15, carry: 25 });
+    expect(fix(day1)).toEqual({ due: 25, review: 15, fresh: 15, carry: 10 });
     // 新題做完了：作答量全部給複習
     const [only] = simulate(many, { days: 1, budget: () => 30, fresh: 0, recall: 1, first: 1 });
     expect(only).toEqual({ due: 40, review: 30, fresh: 0, carry: 10 });
+  });
+
+  it('考前衝刺的日子：每 4 題複習才配 1 題新題', () => {
+    const many = dueBuckets(Array.from({ length: 40 }, () => card(2, 0)), NOW);
+    const [day0, day1] = simulate(many, { days: 2, budget: () => 30, fresh: 100, recall: 1, first: 1, sprint: { from: 1, to: 5 } });
+    expect(SPRINT_SHARE).toBe(0.8);
+    // 第 0 天還沒衝刺：一半；第 1 天衝刺：30 題裡複習 24 題
+    expect(day0.review).toBe(15);
+    expect(day1).toMatchObject({ due: 25, review: 24, fresh: 6 });
+  });
+});
+
+describe('sprintDays', () => {
+  it('考前衝刺是從今天算起的第幾天到考試前一天；考完或沒設定時為 null', () => {
+    const exam = new Date(2026, 10, 30).getTime();
+    expect(sprintDays(exam, NOW)).toEqual({ from: 12, to: 26 });
+    // 已經在衝刺期間：從今天算起
+    expect(sprintDays(new Date(2026, 10, 10).getTime(), NOW)).toEqual({ from: 0, to: 6 });
+    expect(sprintDays(new Date(2026, 10, 1).getTime(), NOW)).toBeNull();
+    expect(sprintDays(null, NOW)).toBeNull();
   });
 });
 
@@ -95,8 +116,8 @@ describe('reviewForecast', () => {
 describe('keepUpGoal', () => {
   it('選項裡最小的、讓到期的複習每天都做得完的每日目標', () => {
     const buckets = dueBuckets(Array.from({ length: 20 }, () => card(2, 1)), NOW);
-    // 還有新題時複習最多分到四分之三：明天 20 題到期，目標要 27 題以上，選項裡是 30
-    expect(keepUpGoal(buckets, { days: 14, goals: GOALS, fresh: 1000, recall: 1, first: 1 })).toBe(30);
+    // 還有新題時複習最多分到一半：明天 20 題到期，目標要 40 題以上，選項裡是 50
+    expect(keepUpGoal(buckets, { days: 14, goals: GOALS, fresh: 1000, recall: 1, first: 1 })).toBe(50);
     expect(keepUpGoal(buckets, { days: 14, goals: GOALS, fresh: 0, recall: 1, first: 1 })).toBe(20);
     expect(keepUpGoal(dueBuckets(Array.from({ length: 500 }, () => card(2, 1)), NOW), { days: 14, goals: GOALS, fresh: 1000, recall: 1, first: 1 })).toBeNull();
   });
@@ -114,7 +135,8 @@ describe('studyPlan', () => {
   it('新題常答錯時要複習的變多，每天要做的題數也跟著變多', () => {
     const easy = studyPlan({ ...base, total: 1000, fresh: 800, daysLeft: 40, pace: 30 });
     const hard = studyPlan({ ...base, total: 1000, fresh: 800, daysLeft: 40, pace: 30, recall: 0.7, first: 0.4 });
-    expect(hard.needDaily).toBeGreaterThan(easy.needDaily * 2);
+    // 複習最多占一半（自由練習），新題照樣每天推進：要做的題數約是兩倍
+    expect(hard.needDaily).toBeGreaterThan(easy.needDaily * 1.5);
     expect(hard.needReview).toBeGreaterThan(0);
     expect(hard.projected).toBeLessThan(easy.projected);
   });

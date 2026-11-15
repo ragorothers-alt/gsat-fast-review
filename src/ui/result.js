@@ -28,12 +28,14 @@ export function initResult(ctx) {
     const { path } = s;
     $('#r-mode').textContent = path ? `${MODES.path.name}・${path.unit}` : MODES[s.mode].name;
     if (s.mode === 'concept') conceptTitle(s.opts.concept);
-    $('#r-big').textContent = isBlitz ? `${s.score} 分` : path?.done ? '過關！' : `${s.right} / ${s.log.length}`;
+    // 大字、正確率、今日題數都不算看解答的題目（分母一致）；看了幾題解答另外寫在下面那句
+    const skipped = s.log.length - answered;
+    $('#r-big').textContent = isBlitz ? `${s.score} 分` : path?.done ? '過關！' : answered ? `${s.right} / ${answered}` : '—';
     $('#r-badge').hidden = !record;
     $('#r-acc').textContent = answered ? `${Math.round((s.right / answered) * 100)}%` : '—';
     $('#r-combo').textContent = s.maxCombo;
     $('#r-today').textContent = today(ctx.state, Date.now()).answered;
-    $('#r-cheer').textContent = path ? pathCheer(path) : cheer(s, answered);
+    $('#r-cheer').textContent = (skipped && answered ? `另外 ${skipped} 題看了解答。` : '') + (path ? pathCheer(path) : cheer(s, answered));
     $('#r-again').textContent = path ? (path.done ? (path.next ? `下一關：${path.next}` : '這科全部過關！') : '繼續這一關') : '再來一輪';
 
     misses = s.log.filter((e) => e.outcome !== 'right' || e.mark);

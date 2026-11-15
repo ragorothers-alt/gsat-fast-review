@@ -7,6 +7,18 @@ test('首頁載入題庫，十個科目都在', async ({ page }) => {
   await expect(page.locator('#bank-info')).toContainText(/還沒做過 \d+／\d+ 題/);
 });
 
+test('首頁今日卡：還沒開始時寫出幾題到期該複習（還沒到期、答對過從沒失手的不算）', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (localStorage.getItem('gsat-quiz:v1')) return;
+    const now = Date.now();
+    const card = (extra) => ({ box: 2, due: now - 3_600_000, seen: 2, right: 1, wrong: 1, parked: false, missed: 1, last: now - 86_400_000, ...extra });
+    const cards = { 'math-001': card(), 'math-002': card(), 'physics-001': card({ due: now + 86_400_000 }), 'chemistry-001': card({ box: 4, seen: 1, wrong: 0, missed: 0 }) };
+    localStorage.setItem('gsat-quiz:v1', JSON.stringify({ version: 1, cards, settings: {} }));
+  });
+  await openHome(page);
+  await expect(page.locator('#daily-acc')).toHaveText('2 題該複習');
+});
+
 test('首頁的「還沒做過」題數作答後減少；「看存量」打開學習分析的題庫存量', async ({ page }) => {
   await openHome(page);
   const fresh = async () => Number((await page.locator('#bank-info').textContent()).match(/還沒做過 (\d+)／/)[1]);
