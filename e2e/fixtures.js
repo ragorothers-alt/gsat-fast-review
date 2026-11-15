@@ -43,10 +43,14 @@ export const test = base.extend({
 
 export { expect };
 
-/** 當成已經看過第一次開啟的設定（給 page.addInitScript；自己開 context 的測試也要呼叫） */
+/**
+ * 當成已經看過第一次開啟的設定與所有更新說明（給 page.addInitScript；自己開 context 的測試也要呼叫）。
+ * 更新說明記成 '9999'：比任何一筆的 id（日期開頭）都大，放了作答紀錄的測試開機時也不會跳出來
+ */
 export function skipWelcome() {
   try {
     localStorage.setItem('gsat-quiz:welcome', '1');
+    if (!localStorage.getItem('gsat-quiz:news')) localStorage.setItem('gsat-quiz:news', '9999');
   } catch {
     // 存不了就算了
   }

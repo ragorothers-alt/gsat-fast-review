@@ -113,6 +113,52 @@
   flex: none;
 }
 
+/* 更新說明：一筆一張紙卡，標題前面是日期 */
+.news-list {
+  display: grid;
+  gap: 10px;
+  padding-bottom: 4px;
+}
+
+.news-item {
+  padding: 10px 12px;
+  border: 1.5px solid var(--line-soft);
+  border-radius: var(--hand-sm);
+  background: var(--card);
+}
+
+.news-item h3 {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-size: calc(0.95rem * var(--fs, 1));
+  font-weight: 900;
+}
+
+.news-item h3 small {
+  flex: none;
+  padding: 0 7px;
+  border: 1.5px solid var(--ink);
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.6;
+}
+
+.news-item ul {
+  margin: 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 4px;
+  font-size: calc(0.88rem * var(--fs, 1));
+  line-height: 1.6;
+}
+
+#open-news {
+  margin-top: 8px;
+}
+
 .set-sub {
   margin: 14px 0 8px;
   font-size: 0.82rem;

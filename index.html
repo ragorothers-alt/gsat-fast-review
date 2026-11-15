@@ -709,6 +709,7 @@
             </button>
             <p class="set-note">開著時，程式出錯會自動把錯誤訊息、版本和瀏覽器型號送給開發者；按旗子回報題目時，也會送出那一題的題號。都不含作答紀錄與同步碼。遇到問題時，按下面的按鈕複製這些資訊，貼給開發者就好。</p>
             <button id="about-copy" class="secondary-btn" type="button">複製診斷資訊</button>
+            <button id="open-news" class="secondary-btn" type="button">更新紀錄</button>
           </section>
         </div>
       </div>
@@ -767,6 +768,23 @@
         </div>
         <nav class="welcome-foot">
           <button id="welcome-start" class="primary-btn" type="button">開始練習</button>
+        </nav>
+      </div>
+    </div>
+
+    <!-- 更新說明：換上新版後開機時跳出一次，列這台裝置還沒看過的更新；設定的「更新紀錄」打開全部（src/news.js） -->
+    <div id="news-sheet" class="sheet" hidden>
+      <div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="news-title">
+        <header class="sheet-head">
+          <h2 id="news-title">更新說明</h2>
+          <button id="news-close" class="icon-btn" type="button" aria-label="關閉">✕</button>
+        </header>
+        <p id="news-tip" class="sheet-tip"></p>
+        <div id="news-scroll" class="settings-scroll" tabindex="0" role="region" aria-labelledby="news-title">
+          <div id="news-list" class="news-list"></div>
+        </div>
+        <nav class="welcome-foot">
+          <button id="news-ok" class="primary-btn" type="button">知道了</button>
         </nav>
       </div>
     </div>

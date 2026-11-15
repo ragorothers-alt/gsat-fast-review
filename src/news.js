@@ -1,0 +1,87 @@
+// 更新說明：App 在背景換上新版後，下次打開首頁時跳出一次「這次多了什麼」，只列這台裝置還沒看過的；
+// 設定的「關於與診斷」可以隨時打開全部的更新紀錄。純邏輯與資料，不碰 DOM；畫面在 ui/news.js。
+//
+// 加一筆：在 NEWS 最前面插入 { id, title, items }。id 是「日期-當天第幾筆」（YYYY-MM-DD-N），字串比大小就是先後；
+// 寫給學生看的話（做了什麼、怎麼用、在哪裡），不寫實作細節。每筆 1–4 點，每點 70 字內（tests/news.test.js 會檢查）。
+
+/** localStorage：這台裝置看過的最新一筆 id */
+export const NEWS_KEY = 'gsat-quiz:news';
+
+/** 從沒記過看到哪裡的舊使用者（這個功能上線前就在用的）：只列最近幾天的，不把整串歷史倒出來 */
+export const RECENT_DAYS = 7;
+
+/** @type {{ id: string, title: string, items: string[] }[]} 新的在前 */
+export const NEWS = [
+  {
+    id: '2026-11-13-3',
+    title: '早期題目重新驗證',
+    items: [
+      '早期 3,399 題拿掉答案請另一個模型重新作答，只有 1 題要改；另外修正 7 題的敘述、刪掉 2 題超出必修的題目。',
+      '用語統一成台灣課本的說法：伽瑪射線、應變變因、開發中國家。',
+    ],
+  },
+  {
+    id: '2026-11-13-2',
+    title: '考點重點',
+    items: [
+      '每個考點都有一句該記住的重點（例如「1 m/s＝3.6 km/h」）：答錯或按「不會」時出現在解析下面。',
+      '重點卡的考點清單下面可以展開「各考點的重點」，一次看完一個單元，有錯題的考點會標紅。',
+      '結算畫面與錯題本的題目卡也看得到。',
+    ],
+  },
+  {
+    id: '2026-11-13-1',
+    title: '題庫增加到 4 萬多題',
+    items: [
+      '新增各科模擬考類題 5,827 題（國綜、英文、自然、社會、數學 B），數學 A 另有 1,005 題。',
+      '題目太少的 391 個考點各補到 10 題。',
+    ],
+  },
+  {
+    id: '2026-11-12-1',
+    title: '考點練習',
+    items: [
+      '重點卡上的考點可以點：點了只練這個考點，錯題先出。',
+      '學習分析列出「弱點考點」；結算畫面、錯題本的正解旁也標出考點，點了一樣只練那個考點。',
+      '數學可以直接選考 A 或 B（單元面板的數學分頁），另一份才考的單元就不出。',
+    ],
+  },
+  {
+    id: '2026-11-11-1',
+    title: '每題標上考點',
+    items: [
+      '每一題都標了考點（十科共 1,982 個）：出新題時先出還沒練過的考點，同樣的題數能碰到更多觀念。',
+      '答錯的題目改成隔天再考，不再 10 分鐘後馬上重考。',
+    ],
+  },
+];
+
+/** 最新一筆的 id（沒有任何一筆時是空字串） */
+export const latestNews = (list = NEWS) => list[0]?.id ?? '';
+
+/** id 開頭的日期（當地時間那天 0 點） */
+const dateOf = (id) => {
+  const [y, m, d] = id.split('-').map(Number);
+  return new Date(y, m - 1, d).getTime();
+};
+
+/**
+ * 還沒看過的更新（新的在前）。
+ * @param {string | null} seen 這台裝置看過的最新一筆 id；null 是從沒記過（這個功能上線前就在用的人），只列最近 RECENT_DAYS 天的
+ * @param {number} now
+ */
+export function unseenNews(seen, now, list = NEWS) {
+  if (seen === null) return list.filter((n) => now - dateOf(n.id) <= RECENT_DAYS * 86_400_000);
+  return list.filter((n) => n.id > seen);
+}
+
+/**
+ * 開機時要不要跳出更新說明：有作答紀錄（新使用者先走第一次開啟的設定，舊的更新跟他無關）而且有沒看過的。
+ * @param {{ cards: Record<string, unknown> }} state
+ * @param {string | null} seen
+ * @param {number} now
+ */
+export function newsToShow(state, seen, now, list = NEWS) {
+  if (!Object.keys(state.cards ?? {}).length) return [];
+  return unseenNews(seen, now, list);
+}

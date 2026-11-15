@@ -19,6 +19,7 @@ import { initResult } from './ui/result.js';
 import { initScratch } from './ui/scratch.js';
 import { topSheet } from './ui/sheet.js';
 import { initStats } from './ui/stats.js';
+import { initNews } from './ui/news.js';
 import { initWelcome } from './ui/welcome.js';
 
 const UPDATED_KEY = 'gsat-quiz:updated';
@@ -176,13 +177,16 @@ function start(bank) {
   initAbout(ctx);
   initKeypoints(ctx);
   initWelcome(ctx);
+  initNews(ctx);
   for (const name of ['showStats', 'showNotebook', 'openKeypoints', 'openPath', 'openUnits', 'openExam']) needFullBank(name);
   ctx.goHome();
   document.querySelector('#boot').hidden = true;
   ctx.cloudSync();
   ctx.reminder.sync();
-  // 第一次開啟（這台還沒有作答紀錄）：先問考哪些科、學測日期與每日目標；從捷徑直接開始一輪的就不打斷
-  if (!openShortcut()) ctx.welcome.open();
+  // 第一次開啟（這台還沒有作答紀錄）：先問考哪些科、學測日期與每日目標；舊使用者有沒看過的更新就列出來。
+  // 從捷徑直接開始一輪的都不打斷
+  let newsShown = false;
+  if (!openShortcut() && !ctx.welcome.open()) newsShown = ctx.news.open();
   loadRest();
   // 首頁能操作了才載入背景場景（three.js 很大，不擋題庫下載與開機）
   world.load();
@@ -190,7 +194,8 @@ function start(bank) {
   try {
     if (sessionStorage.getItem(UPDATED_KEY)) {
       sessionStorage.removeItem(UPDATED_KEY);
-      ctx.toast('已更新到最新版本');
+      // 有更新說明的話面板已經寫了更新了什麼，不再另外提示
+      if (!newsShown) ctx.toast('已更新到最新版本');
     }
   } catch {
     // 私密瀏覽等情況讀不到 sessionStorage，略過提示

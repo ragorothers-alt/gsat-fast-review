@@ -143,6 +143,8 @@ test.describe('第一次開啟的設定', () => {
 
   test('已經有作答紀錄（舊使用者、從同步或匯入還原進度）就不出現', async ({ page }) => {
     await seedVeteran(page, {}, 1);
+    // 這裡只看第一次開啟的設定：更新說明（舊使用者沒看過的會跳）記成都看過了，另見 news.e2e.js
+    await page.addInitScript(() => localStorage.setItem('gsat-quiz:news', '9999'));
     await openHome(page);
     await expect(page.locator('#welcome-sheet')).toBeHidden();
     await expect(page.locator('#app')).not.toHaveAttribute('inert', '');
